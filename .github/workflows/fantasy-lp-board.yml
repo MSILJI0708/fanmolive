@@ -1,0 +1,93 @@
+name: KBO/MLB 판타지 LP 보드 자동 갱신
+
+# 사람이 매번 실행하지 않아도, 정해진 주기로:
+#   1) 오늘 KBO 경기(collect_date가 알아서 시작 전 경기는 건너뜀)를 수집하고
+#   2) 테스트로 오늘 MLB 경기도 같이 수집해보고
+#   3) 두 보드를 다시 빌드해서
+#   4) 수집 데이터는 저장소에 커밋, 완성된 HTML은 GitHub Pages로 배포한다.
+#
+# 실행 빈도는 아래 cron 하나로 전부 조절한다. 지금은 30분 간격(하루 48회)으로 잡아뒀는데,
+# private 저장소는 매달 Actions 무료 사용량(기본 2,000분)이 있으니 너무 잦으면 넘칠 수 있다.
+# public 저장소는 Actions 사용량 제한이 없으니 더 자주 돌려도 된다.
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch: {} # Actions 탭에서 수동으로도 실행 가능
+
+permissions:
+  contents: write # 수집한 데이터/보드를 저장소에 커밋하기 위해 필요
+  pages: write # GitHub Pages 배포에 필요
+  id-token: write # GitHub Pages 배포(OIDC)에 필요
+
+concurrency:
+  group: fantasy-lp-board
+  cancel-in-progress: false # 겹치면 취소하지 않고 순서대로(커밋 충돌 방지)
+
+jobs:
+  collect-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 저장소 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Python 설치
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      # 전부 표준 라이브러리만 쓰므로(urllib, json, ssl, http.server 등) pip install 단계가 필요 없다.
+
+      - name: "KBO 오늘 경기 수집 (기준일: KST 오늘)"
+        working-directory: fanmo
+        run: |
+          TODAY_KST=$(TZ=Asia/Seoul date +%F)
+          echo "TODAY_KST=$TODAY_KST" >> "$GITHUB_ENV"
+          python daily_pipeline.py --date "$TODAY_KST"
+
+      - name: MLB 오늘 경기 수집 (테스트, 실패해도 KBO 파이프라인은 계속)
+        working-directory: fanmo
+        continue-on-error: true
+        run: |
+          TODAY_KST=$(TZ=Asia/Seoul date +%F)
+          python mlb_fantasy_score.py --date "$TODAY_KST"
+
+      - name: 보드 HTML 빌드
+        working-directory: fanmo
+        run: |
+          python build_board.py --date "$TODAY_KST"
+          python build_mlb_board.py --date "$TODAY_KST" || true
+
+      - name: 수집 결과 커밋 & 푸시
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add fanmo/data_*.json fanmo/position_db.json fanmo/lp_board.html fanmo/lp_board_mlb.html
+          if git diff --cached --quiet; then
+            echo "변경 사항 없음, 커밋 생략"
+          else
+            git commit -m "chore: auto-update LP board ($(date -u +'%Y-%m-%dT%H:%MZ'))"
+            git push
+          fi
+
+      - name: Pages 배포용 폴더 구성
+        run: |
+          mkdir -p _site
+          cp fanmo/lp_board.html _site/index.html
+          if [ -f fanmo/lp_board_mlb.html ]; then
+            cp fanmo/lp_board_mlb.html _site/mlb.html
+          fi
+
+      - name: Pages 아티팩트 업로드
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: collect-and-build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: GitHub Pages로 배포
+        id: deployment
+        uses: actions/deploy-pages@v4

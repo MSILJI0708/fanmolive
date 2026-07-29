@@ -1,0 +1,801 @@
+<!doctype html>
+<title>KBO 판타지 LP 보드 · 2026-07-28</title>
+<style>
+:root {
+  --paper-0: #f3f1ea;
+  --paper-1: #ffffff;
+  --ink-0: #1c1a15;
+  --ink-1: #58554a;
+  --line: #dcd8cc;
+  --accent: #b9822f;
+  --accent-ink: #6b4e1c;
+  --hot: #b6402f;
+  --warm: #c17a1f;
+  --cool: #3a5f9e;
+  --chip-bg: #efe9d8;
+  --row-alt: #ebe8de;
+  --shadow: 0 1px 2px rgba(28,26,21,.06), 0 8px 24px -12px rgba(28,26,21,.18);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper-0: #14120d;
+    --paper-1: #1c1a14;
+    --ink-0: #ede8db;
+    --ink-1: #a9a290;
+    --line: #38352a;
+    --accent: #d9a24d;
+    --accent-ink: #f2cf95;
+    --hot: #e2695a;
+    --warm: #dda23f;
+    --cool: #7ea3e0;
+    --chip-bg: #262218;
+    --row-alt: #1f1c15;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"] {
+  --paper-0: #14120d; --paper-1: #1c1a14; --ink-0: #ede8db; --ink-1: #a9a290;
+  --line: #38352a; --accent: #d9a24d; --accent-ink: #f2cf95; --hot: #e2695a;
+  --warm: #dda23f; --cool: #7ea3e0; --chip-bg: #262218; --row-alt: #1f1c15;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+}
+:root[data-theme="light"] {
+  --paper-0: #f3f1ea; --paper-1: #ffffff; --ink-0: #1c1a15; --ink-1: #58554a;
+  --line: #dcd8cc; --accent: #b9822f; --accent-ink: #6b4e1c; --hot: #b6402f;
+  --warm: #c17a1f; --cool: #3a5f9e; --chip-bg: #efe9d8; --row-alt: #ebe8de;
+  --shadow: 0 1px 2px rgba(28,26,21,.06), 0 8px 24px -12px rgba(28,26,21,.18);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--paper-0);
+  color: var(--ink-0);
+  font-family: "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
+  padding: 0 0 64px;
+}
+.num { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
+
+header.top {
+  padding: 32px 24px 20px;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+h1 {
+  font-size: clamp(22px, 3vw, 30px);
+  margin: 0 0 6px;
+  text-wrap: balance;
+  letter-spacing: -.01em;
+}
+.sub {
+  color: var(--ink-1);
+  font-size: 13px;
+  margin: 0;
+}
+.sub code {
+  background: var(--chip-bg);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 12px;
+}
+
+.tiles {
+  max-width: 1180px;
+  margin: 20px auto 0;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+}
+.tile {
+  background: var(--paper-1);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 14px 16px;
+  box-shadow: var(--shadow);
+}
+.tile .label { font-size: 11px; color: var(--ink-1); letter-spacing: .04em; text-transform: uppercase; }
+.tile .value { font-size: 22px; font-weight: 700; margin-top: 4px; }
+.tile .value.hot { color: var(--hot); }
+.tile .meta { font-size: 12px; color: var(--ink-1); margin-top: 2px; }
+
+main {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+nav.chapters {
+  display: flex;
+  gap: 4px;
+  margin-top: 30px;
+  border-bottom: 2px solid var(--ink-0);
+}
+nav.chapters button {
+  font: inherit;
+  font-weight: 700;
+  font-size: 15px;
+  padding: 10px 20px 12px;
+  background: none;
+  border: none;
+  color: var(--ink-1);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+}
+nav.chapters button.active {
+  color: var(--ink-0);
+  border-bottom-color: var(--accent);
+}
+nav.chapters button .n {
+  color: var(--ink-1);
+  font-weight: 500;
+  font-size: 12px;
+}
+
+section.board { display: none; margin-top: 18px; }
+section.board.active { display: block; }
+
+.board-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.board-head .count { font-size: 12px; color: var(--ink-1); }
+.search {
+  padding: 7px 10px;
+  border-radius: 7px;
+  border: 1px solid var(--line);
+  background: var(--paper-1);
+  color: var(--ink-0);
+  font-size: 13px;
+  outline: none;
+  min-width: 180px;
+}
+.search:focus { border-color: var(--accent); }
+
+.chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.chip {
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--paper-1);
+  color: var(--ink-1);
+  cursor: pointer;
+}
+.chip.active {
+  background: var(--ink-0);
+  color: var(--paper-1);
+  border-color: var(--ink-0);
+}
+
+.info-tip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 13px;
+  height: 13px;
+  margin-left: 5px;
+  border-radius: 50%;
+  background: var(--line);
+  color: var(--paper-1);
+  font-size: 9px;
+  font-weight: 700;
+  font-style: normal;
+  text-transform: none;
+  letter-spacing: 0;
+  cursor: help;
+  vertical-align: middle;
+}
+.info-tip .bubble {
+  display: none;
+  position: absolute;
+  bottom: 130%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 250px;
+  background: var(--ink-0);
+  color: var(--paper-0);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.65;
+  padding: 10px 12px;
+  border-radius: 8px;
+  text-align: left;
+  white-space: normal;
+  z-index: 30;
+  box-shadow: var(--shadow);
+  pointer-events: none;
+}
+.info-tip .bubble b { color: var(--accent); }
+.info-tip:hover .bubble, .info-tip:focus .bubble { display: block; }
+
+.rule-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 12px;
+  padding: 10px 14px;
+  background: var(--chip-bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 12.5px;
+}
+.rule-bar label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+.rule-bar select {
+  font: inherit;
+  font-size: 12.5px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--paper-1);
+  color: var(--ink-0);
+}
+.rule-bar label.toggle { font-weight: 500; cursor: pointer; }
+.rule-bar input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--accent); cursor: pointer; }
+.rule-bar .rule-note { color: var(--ink-1); font-size: 11px; margin-left: auto; }
+
+.tablewrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  background: var(--paper-1);
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 12.5px;
+  min-width: 920px;
+}
+thead th {
+  position: sticky;
+  top: 0;
+  background: var(--paper-1);
+  border-bottom: 1px solid var(--line);
+  color: var(--ink-1);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  padding: 9px 10px;
+  text-align: right;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+}
+thead th.left, td.left { text-align: left; }
+thead th:hover { color: var(--ink-0); }
+thead th.sorted { color: var(--accent-ink); }
+tbody td {
+  padding: 7px 10px;
+  text-align: right;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--line);
+}
+tbody tr:nth-child(even) { background: var(--row-alt); }
+tbody tr:hover { background: var(--chip-bg); }
+td.name { text-align: left; font-weight: 600; }
+td.rank { text-align: left; color: var(--ink-1); width: 28px; }
+.lp {
+  display: inline-block;
+  min-width: 44px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-weight: 700;
+  background: var(--chip-bg);
+}
+.lp.hot { color: #fff; background: var(--hot); }
+.lp.warm { color: #fff; background: var(--warm); }
+.lp.cool { color: #fff; background: var(--cool); }
+.tag { display: inline-block; color: var(--accent-ink); font-weight: 700; }
+.posbadge { font-size: 11px; }
+.posbadge .override { color: var(--accent-ink); font-weight: 700; margin-left: 2px; }
+.role { font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 5px; }
+.role.starter { background: var(--chip-bg); color: var(--accent-ink); }
+.role.reliever { color: var(--ink-1); }
+
+footer.notes {
+  max-width: 1180px;
+  margin: 28px auto 0;
+  padding: 14px 24px 0;
+  border-top: 1px solid var(--line);
+  font-size: 11.5px;
+  color: var(--ink-1);
+  line-height: 1.7;
+}
+footer.notes b { color: var(--ink-0); }
+
+@media (prefers-reduced-motion: no-preference) {
+  tbody tr { transition: background .1s ease; }
+}
+</style>
+
+<header class="top">
+  <p class="eyebrow">KBO 판타지 모드 · 라이브 포인트</p>
+  <h1>선수 카드 LP 보드</h1>
+  <p class="sub">기준일 <code class="num">2026-07-28</code> · 데이터 출처 <code>api-gw.sports.naver.com</code> (Selenium 불필요, 공개 JSON 응답 직접 호출)</p>
+</header>
+
+
+
+<div class="tiles">
+  <div class="tile">
+    <div class="label">경기 수</div>
+    <div class="value num">5</div>
+    <div class="meta">2026-07-28 KBO 전 경기</div>
+  </div>
+  <div class="tile">
+    <div class="label">타자 최고 LP</div>
+    <div class="value hot num">218</div>
+    <div class="meta">이재현 · 삼성</div>
+  </div>
+  <div class="tile">
+    <div class="label">투수 최고 LP</div>
+    <div class="value hot num">370</div>
+    <div class="meta">고영표 · KT</div>
+  </div>
+  <div class="tile">
+    <div class="label">집계 선수</div>
+    <div class="value num">177</div>
+    <div class="meta">타자 127 · 투수 50</div>
+  </div>
+</div>
+
+<main>
+  <nav class="chapters">
+    <button class="chip-tab active" data-chapter="batters">타자 <span class="n">127명</span></button>
+    <button class="chip-tab" data-chapter="pitchers">투수 <span class="n">50명</span></button>
+  </nav>
+
+  <section class="board active" id="chapter-batters">
+    <div class="board-head">
+      <input class="search" id="search-b" placeholder="이름·소속 검색" />
+      <span class="count" id="count-b"></span>
+    </div>
+    <div class="chips" id="pos-chips"></div>
+    <div class="rule-bar">
+      <label>타 포지션 수비기록 인정
+        <select id="pos-mode">
+          <option value="1">그 포지션에서만</option>
+          <option value="2">내야는 내야끼리, 외야는 외야끼리 허용</option>
+          <option value="3" selected>제약 없음</option>
+        </select>
+      </label>
+      <label class="toggle">
+        <input type="checkbox" id="dh-defense-toggle" />
+        지명타자 등록 선수의 수비기록도 인정
+      </label>
+      <span class="rule-note">보살·외야보살·병살가담·삼중살가담·도루저지(포)·도루허용(포)에만 적용됨</span>
+    </div>
+    <div class="tablewrap"><table id="tbl-b"></table></div>
+  </section>
+
+  <section class="board" id="chapter-pitchers">
+    <div class="board-head">
+      <input class="search" id="search-p" placeholder="이름·소속 검색" />
+      <span class="count" id="count-p"></span>
+    </div>
+    <div class="chips" id="role-chips"></div>
+    <div class="tablewrap"><table id="tbl-p"></table></div>
+  </section>
+</main>
+
+<footer class="notes">
+  <b>포지션 판정.</b> 기준일 이전 최근 14일간 수비 출전 기록(포지션별 수비 이닝 추정)에서
+  가장 많이 뛴 포지션을 자동 배정하며(9UP 방식과 동일한 로직), 유저가
+  <code>position_admin_server.py</code>의 폼을 통해 직접 재지정하면 <span class="posbadge">
+  <span class="override">●</span></span> 표시와 함께 그 값이 우선 적용된다(로컬
+  <code>position_db.json</code>에 저장·보존).<br>
+  <b>텍스트 중계(relay) 기반 심화 기록.</b> 박스스코어에는 없지만 네이버의 타석별 텍스트 중계(주자
+  상황·포지션 교체·수비 체인이 문장으로 기록됨)를 별도로 파싱해 다음을 채운다 — 보살/외야수 보살/
+  병살·삼중살 가담(아웃 처리에 관여한 수비수를 "OO→OO 송구아웃" 체인에서 추출), 포수·투수 양쪽의
+  도루 저지·허용(그 시점의 포수·투수를 각각 추적), 투수의 견제사(투수가 직접 던진 견제만 인정,
+  포수의 견제 송구는 제외), 투수의 피2루타·피3루타(그 시점의 투수를 추적), 승계주자 실점 허용·막음
+  (교체 시점의 주자를 물려받아 그 하프이닝이 끝날 때까지 득점 여부 추적), 타자의 진루타(번트든
+  아니든 그 타구로 아웃되면서 다른 주자를 진루시켰는지를 판정 — 원래 규정이 "번트를 포함해 진루를
+  시키는 타구 모두 포함"이라 명시하고 있어, 박스스코어의 '번트' 표기 여부보다 이 판정이 규정에 더
+  가깝다). 위치 추적은 중계 텍스트의 교체 이벤트만으로 재구성한 근사치라, 아주 드물게 동명이인
+  겹침이나 누락된 중계 이벤트가 있으면 오차가 날 수 있다.<br>
+  <b>표시 병합(집계는 그대로).</b> 사사구(볼넷+사구), 주루사(도루실패+견제사, 타자), 도루저지+견제
+  (투수)는 화면에서만 합쳐 보여주고, 실제 LP 계산과 저장 데이터는 원래 항목별 가중치(예: 도루실패
+  -15 / 견제사 -10)를 그대로 각각 적용한다 — 합친 숫자에 마우스를 올리면 항목별 내역이 뜬다.<br>
+  <b>타 포지션 수비기록 규칙.</b> 등록 포지션과 다른 자리에서 난 보살·외야보살·병살/삼중살 가담·
+  도루 저지·허용(포수)은 타자 탭 상단 드롭다운으로 즉시 바꿔볼 수 있다 — ① 그 포지션에서만 인정
+  ② 내야는 내야끼리·외야는 외야끼리만 인정 ③ 제약 없음(기본값). 지명타자로 등록된 선수의 수비
+  기록은 이 드롭다운과 별개로 옆 토글로 켜고 끌 수 있으며, 기본값은 카드 각주("지명타자 슬롯에
+  들어간 선수의 수비 기록은 인정하지 않는다")를 따라 꺼져 있다.<br>
+  <b>여전히 못 채우는 항목.</b> 삼중살 가담은 로직은 있지만 실제 경기에서 발생 예시를 못 봐 검증되지
+  않았고(사실상 발생 극히 드묾), 일반 아웃에서 포구만 하고 어시스트 없이 끝나는 단독 수비(보살 없음)는
+  정확히 구분해 0으로 처리한다. 중계 텍스트 자체가 없거나 형식이 다른 경기(우천 콜드, 예년 이전 경기 등)는
+  이 심화 기록 없이 기본 박스스코어 점수만 반영된다.<br>
+  사이클히트·만루홈런·병살·실책·폭투·보크·홀드·세이브·블론세이브·QS·QS+·완투·완봉·노히트·퍼펙트는
+  박스스코어와 경기 특이기록(etcRecords)에서 자동 판별함.
+</footer>
+
+<script id="lp-data" type="application/json">{"batters": [{"name": "이재현", "team": "삼성", "opponent": "KIA", "date": "07월 28일", "stadium": "대구", "pos": "유", "position": "유격수", "position_override": false, "ab": 2, "stat": {"R": 1, "H": 1, "BB": 2, "2B": 0, "3B": 0, "HR": 1, "RBI": 3, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 1, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 3, "OF_ASSIST": 0, "DP_FIELD": 1, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 218, "position_events": [{"type": "ASSIST", "pos": "유격수"}, {"type": "DP", "pos": "유격수"}, {"type": "ASSIST", "pos": "유격수"}, {"type": "ASSIST", "pos": "유격수"}]}, {"name": "김지찬", "team": "삼성", "opponent": "KIA", "date": "07월 28일", "stadium": "대구", "pos": "중", "position": "중견수", "position_override": false, "ab": 5, "stat": {"R": 3, "H": 4, "BB": 1, "2B": 2, "3B": 0, "HR": 0, "RBI": 2, "FO": 1, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 1, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 195}, {"name": "김현수", "team": "KT", "opponent": "NC", "date": "07월 28일", "stadium": "창원", "pos": "一", "position": "1루수", "position_override": false, "ab": 2, "stat": {"R": 1, "H": 1, "BB": 2, "2B": 0, "3B": 0, "HR": 1, "RBI": 3, "FO": 0, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 190}, {"name": "문정빈", "team": "LG", "opponent": "키움", "date": "07월 28일", "stadium": "잠실", "pos": "一", "position": "1루수", "position_override": false, "ab": 3, "stat": {"R": 2, "H": 2, "BB": 1, "2B": 0, "3B": 0, "HR": 1, "RBI": 2, "FO": 1, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 1, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 190, "position_events": [{"type": "DP", "pos": "1루수"}]}, {"name": "카스트로", "team": "KIA", "opponent": "삼성", "date": "07월 28일", "stadium": "대구", "pos": "좌", "position": "좌익수", "position_override": false, "ab": 4, "stat": {"R": 1, "H": 1, "BB": 0, "2B": 0, "3B": 0, "HR": 1, "RBI": 3, "FO": 1, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 1, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 155}, {"name": "김도환", "team": "삼성", "opponent": "KIA", "date": "07월 28일", "stadium": "대구", "pos": "포", "position": "포수", "position_override": false, "ab": 2, "stat": {"R": 2, "H": 1, "BB": 1, "2B": 0, "3B": 0, "HR": 1, "RBI": 1, "FO": 0, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 145}, {"name": "황성빈", "team": "롯데", "opponent": "한화", "date": "07월 28일", "stadium": "대전", "pos": "중좌", "position": "중견수", "position_override": false, "ab": 6, "stat": {"R": 2, "H": 4, "BB": 0, "2B": 1, "3B": 1, "HR": 0, "RBI": 2, "FO": 2, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 145}, {"name": "박찬혁", "team": "키움", "opponent": "LG", "date": "07월 28일", "stadium": "잠실", "pos": "우", "position": "우익수", "position_override": false, "ab": 3, "stat": {"R": 1, "H": 1, "BB": 1, "2B": 0, "3B": 0, "HR": 1, "RBI": 2, "FO": 0, "GO": 2, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 145}, {"name": "힐리어드", "team": "KT", "opponent": "NC", "date": "07월 28일", "stadium": "창원", "pos": "좌", "position": "좌익수", "position_override": false, "ab": 5, "stat": {"R": 2, "H": 3, "BB": 0, "2B": 1, "3B": 0, "HR": 0, "RBI": 3, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 2, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 120}, {"name": "구자욱", "team": "삼성", "opponent": "KIA", "date": "07월 28일", "stadium": "대구", "pos": "좌", "position": "좌익수", "position_override": false, "ab": 3, "stat": {"R": 1, "H": 3, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 2, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 95}, {"name": "문성주", "team": "LG", "opponent": "키움", "date": "07월 28일", "stadium": "잠실", "pos": "좌", "position": "좌익수", "position_override": false, "ab": 3, "stat": {"R": 0, "H": 3, "BB": 1, "2B": 1, "3B": 0, "HR": 0, "RBI": 1, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 80}, {"name": "노진혁", "team": "롯데", "opponent": "한화", "date": "07월 28일", "stadium": "대전", "pos": "三", "position": "3루수", "position_override": false, "ab": 4, "stat": {"R": 1, "H": 2, "BB": 0, "2B": 2, "3B": 0, "HR": 0, "RBI": 1, "FO": 2, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 4, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 74, "position_events": [{"type": "ASSIST", "pos": "3루수"}, {"type": "ASSIST", "pos": "3루수"}, {"type": "ASSIST", "pos": "3루수"}, {"type": "ASSIST", "pos": "3루수"}]}, {"name": "박준순", "team": "두산", "opponent": "SSG", "date": "07월 28일", "stadium": "문학", "pos": "二", "position": "2루수", "position_override": false, "ab": 5, "stat": {"R": 1, "H": 1, "BB": 0, "2B": 0, "3B": 0, "HR": 1, "RBI": 1, "FO": 1, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 2, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 1, "ASSIST": 1, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 71, "position_events": [{"type": "ASSIST", "pos": "2루수"}]}, {"name": "김성윤", "team": "삼성", "opponent": "KIA", "date": "07월 28일", "stadium": "대구", "pos": "우", "position": "우익수", "position_override": false, "ab": 3, "stat": {"R": 1, "H": 1, "BB": 3, "2B": 1, "3B": 0, "HR": 0, "RBI": 1, "FO": 0, "GO": 0, "GDP": 1, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 70}, {"name": "최원준", "team": "KT", "opponent": "NC", "date": "07월 28일", "stadium": "창원", "pos": "중우", "position": "우익수", "position_override": false, "ab": 4, "stat": {"R": 2, "H": 2, "BB": 1, "2B": 2, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 70}, {"name": "디아즈", "team": "삼성", "opponent": "KIA", "date": "07월 28일", "stadium": "대구", "pos": "一", "position": "1루수", "position_override": false, "ab": 5, "stat": {"R": 1, "H": 3, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 2, "FO": 0, "GO": 1, "GDP": 1, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 1, "ASSIST": 1, "OF_ASSIST": 0, "DP_FIELD": 1, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 61, "position_events": [{"type": "ASSIST", "pos": "1루수"}, {"type": "DP", "pos": "1루수"}, {"type": "DP", "pos": "1루수"}]}, {"name": "전민재", "team": "롯데", "opponent": "한화", "date": "07월 28일", "stadium": "대전", "pos": "유", "position": "유격수", "position_override": false, "ab": 3, "stat": {"R": 2, "H": 2, "BB": 2, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 1, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 61, "position_events": [{"type": "ASSIST", "pos": "유격수"}]}, {"name": "이정훈", "team": "KT", "opponent": "NC", "date": "07월 28일", "stadium": "창원", "pos": "타", "position": "지명타자", "position_override": false, "ab": 1, "stat": {"R": 0, "H": 1, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 2, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 60}, {"name": "손성빈", "team": "롯데", "opponent": "한화", "date": "07월 28일", "stadium": "대전", "pos": "포", "position": "포수", "position_override": false, "ab": 5, "stat": {"R": 1, "H": 2, "BB": 0, "2B": 1, "3B": 0, "HR": 0, "RBI": 2, "FO": 0, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 2, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 60}, {"name": "박동원", "team": "LG", "opponent": "키움", "date": "07월 28일", "stadium": "잠실", "pos": "포", "position": "포수", "position_override": false, "ab": 3, "stat": {"R": 0, "H": 1, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 2, "FO": 1, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 1, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 60}, {"name": "배정대", "team": "KT", "opponent": "NC", "date": "07월 28일", "stadium": "창원", "pos": "주중", "position": "중견수", "position_override": false, "ab": 0, "stat": {"R": 1, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 1, "CS": 0, "HBP": 1, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 50}, {"name": "나승엽", "team": "롯데", "opponent": "한화", "date": "07월 28일", "stadium": "대전", "pos": "一", "position": "1루수", "position_override": false, "ab": 4, "stat": {"R": 1, "H": 2, "BB": 2, "2B": 1, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 50}, {"name": "채은성", "team": "한화", "opponent": "롯데", "date": "07월 28일", "stadium": "대전", "pos": "지", "position": "지명타자", "position_override": false, "ab": 5, "stat": {"R": 0, "H": 2, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 2, "FO": 0, "GO": 2, "GDP": 0, "SACFLY": 0, "SACBUNT": 1, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 45}, {"name": "하주석", "team": "KIA", "opponent": "삼성", "date": "07월 28일", "stadium": "대구", "pos": "二", "position": "2루수", "position_override": false, "ab": 4, "stat": {"R": 1, "H": 1, "BB": 0, "2B": 1, "3B": 0, "HR": 0, "RBI": 1, "FO": 2, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 4, "OF_ASSIST": 0, "DP_FIELD": 1, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 44, "position_events": [{"type": "ASSIST", "pos": "2루수"}, {"type": "ASSIST", "pos": "2루수"}, {"type": "ASSIST", "pos": "2루수"}, {"type": "ASSIST", "pos": "2루수"}, {"type": "DP", "pos": "2루수"}]}, {"name": "류지혁", "team": "삼성", "opponent": "KIA", "date": "07월 28일", "stadium": "대구", "pos": "二", "position": "2루수", "position_override": false, "ab": 5, "stat": {"R": 0, "H": 2, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 3, "GDP": 0, "SACFLY": 0, "SACBUNT": 2, "SB": 1, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 2, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 42, "position_events": [{"type": "ASSIST", "pos": "2루수"}, {"type": "ASSIST", "pos": "2루수"}]}, {"name": "최지훈", "team": "SSG", "opponent": "두산", "date": "07월 28일", "stadium": "문학", "pos": "중", "position": "중견수", "position_override": false, "ab": 3, "stat": {"R": 0, "H": 1, "BB": 1, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 1, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 40}, {"name": "한승택", "team": "KT", "opponent": "NC", "date": "07월 28일", "stadium": "창원", "pos": "포", "position": "포수", "position_override": false, "ab": 2, "stat": {"R": 0, "H": 0, "BB": 1, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 1, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 1, "SB_ALLOWED_CATCHER": 0}, "lp": 35, "position_events": [{"type": "CS_CATCHER", "pos": "포수"}]}, {"name": "안재석", "team": "두산", "opponent": "SSG", "date": "07월 28일", "stadium": "문학", "pos": "三", "position": "3루수", "position_override": false, "ab": 2, "stat": {"R": 0, "H": 1, "BB": 3, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 3, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 33, "position_events": [{"type": "ASSIST", "pos": "3루수"}, {"type": "ASSIST", "pos": "3루수"}, {"type": "ASSIST", "pos": "3루수"}]}, {"name": "윤동희", "team": "롯데", "opponent": "한화", "date": "07월 28일", "stadium": "대전", "pos": "우", "position": "우익수", "position_override": false, "ab": 6, "stat": {"R": 1, "H": 4, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 30}, {"name": "박재현", "team": "KIA", "opponent": "삼성", "date": "07월 28일", "stadium": "대구", "pos": "중", "position": "좌익수", "position_override": false, "ab": 5, "stat": {"R": 1, "H": 3, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 2, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 25}, {"name": "류현인", "team": "KT", "opponent": "NC", "date": "07월 28일", "stadium": "창원", "pos": "타二", "position": "2루수", "position_override": false, "ab": 0, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 1, "FO": 1, "GO": 0, "GDP": 0, "SACFLY": 1, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 25}, {"name": "문현빈", "team": "한화", "opponent": "롯데", "date": "07월 28일", "stadium": "대전", "pos": "중좌", "position": "중견수", "position_override": false, "ab": 4, "stat": {"R": 1, "H": 2, "BB": 1, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 25}, {"name": "김대한", "team": "두산", "opponent": "SSG", "date": "07월 28일", "stadium": "문학", "pos": "우", "position": "우익수", "position_override": false, "ab": 3, "stat": {"R": 1, "H": 1, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 2, "GDP": 0, "SACFLY": 0, "SACBUNT": 2, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 25}, {"name": "권혁빈", "team": "키움", "opponent": "LG", "date": "07월 28일", "stadium": "잠실", "pos": "유", "position": "유격수", "position_override": false, "ab": 4, "stat": {"R": 0, "H": 2, "BB": 0, "2B": 1, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 2, "GDP": 0, "SACFLY": 0, "SACBUNT": 1, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 25}, {"name": "서건창", "team": "키움", "opponent": "LG", "date": "07월 28일", "stadium": "잠실", "pos": "二", "position": "2루수", "position_override": false, "ab": 4, "stat": {"R": 0, "H": 1, "BB": 1, "2B": 1, "3B": 0, "HR": 0, "RBI": 1, "FO": 0, "GO": 3, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 1, "ASSIST": 1, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 21, "position_events": [{"type": "ASSIST", "pos": "2루수"}]}, {"name": "김민혁", "team": "KT", "opponent": "NC", "date": "07월 28일", "stadium": "창원", "pos": "타지", "position": "좌익수", "position_override": false, "ab": 3, "stat": {"R": 1, "H": 2, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 20}, {"name": "김태연", "team": "한화", "opponent": "롯데", "date": "07월 28일", "stadium": "대전", "pos": "一", "position": "1루수", "position_override": false, "ab": 2, "stat": {"R": 1, "H": 1, "BB": 2, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 1, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 20}, {"name": "김민석", "team": "두산", "opponent": "SSG", "date": "07월 28일", "stadium": "문학", "pos": "좌", "position": "좌익수", "position_override": false, "ab": 2, "stat": {"R": 0, "H": 1, "BB": 1, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 1, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 20}, {"name": "김상수", "team": "KT", "opponent": "NC", "date": "07월 28일", "stadium": "창원", "pos": "二", "position": "2루수", "position_override": false, "ab": 4, "stat": {"R": 0, "H": 1, "BB": 0, "2B": 1, "3B": 0, "HR": 0, "RBI": 1, "FO": 2, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 4, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 19, "position_events": [{"type": "ASSIST", "pos": "2루수"}, {"type": "ASSIST", "pos": "2루수"}, {"type": "ASSIST", "pos": "2루수"}, {"type": "ASSIST", "pos": "2루수"}]}, {"name": "양우현", "team": "삼성", "opponent": "KIA", "date": "07월 28일", "stadium": "대구", "pos": "주유", "position": "유격수", "position_override": false, "ab": 0, "stat": {"R": 1, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 15}, {"name": "장진혁", "team": "KT", "opponent": "NC", "date": "07월 28일", "stadium": "창원", "pos": "주우", "position": "우익수", "position_override": false, "ab": 0, "stat": {"R": 1, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 15}, {"name": "김도영", "team": "KIA", "opponent": "삼성", "date": "07월 28일", "stadium": "대구", "pos": "三", "position": "3루수", "position_override": false, "ab": 3, "stat": {"R": 1, "H": 1, "BB": 1, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 1, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 11, "position_events": [{"type": "ASSIST", "pos": "3루수"}]}, {"name": "장준원", "team": "KT", "opponent": "NC", "date": "07월 28일", "stadium": "창원", "pos": "三", "position": "유격수", "position_override": false, "ab": 0, "stat": {"R": 0, "H": 0, "BB": 1, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 1, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 11, "position_events": [{"type": "ASSIST", "pos": "3루수"}]}, {"name": "최형우", "team": "삼성", "opponent": "KIA", "date": "07월 28일", "stadium": "대구", "pos": "지", "position": "지명타자", "position_override": false, "ab": 5, "stat": {"R": 1, "H": 2, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 1, "FO": 1, "GO": 0, "GDP": 1, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 10}, {"name": "박정현", "team": "한화", "opponent": "롯데", "date": "07월 28일", "stadium": "대전", "pos": "유", "position": "3루수", "position_override": false, "ab": 1, "stat": {"R": 0, "H": 1, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 10}, {"name": "세베리노", "team": "두산", "opponent": "SSG", "date": "07월 28일", "stadium": "문학", "pos": "지", "position": "1루수", "position_override": false, "ab": 5, "stat": {"R": 0, "H": 2, "BB": 0, "2B": 1, "3B": 0, "HR": 0, "RBI": 1, "FO": 0, "GO": 1, "GDP": 1, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 10}, {"name": "노시환", "team": "한화", "opponent": "롯데", "date": "07월 28일", "stadium": "대전", "pos": "三", "position": "3루수", "position_override": false, "ab": 3, "stat": {"R": 0, "H": 0, "BB": 1, "2B": 0, "3B": 0, "HR": 0, "RBI": 1, "FO": 1, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 1, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 3, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 8, "position_events": [{"type": "ASSIST", "pos": "3루수"}, {"type": "ASSIST", "pos": "3루수"}, {"type": "ASSIST", "pos": "3루수"}]}, {"name": "김규성", "team": "KIA", "opponent": "삼성", "date": "07월 28일", "stadium": "대구", "pos": "유", "position": "유격수", "position_override": false, "ab": 3, "stat": {"R": 1, "H": 1, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 1, "ASSIST": 3, "OF_ASSIST": 0, "DP_FIELD": 1, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 3, "position_events": [{"type": "ASSIST", "pos": "유격수"}, {"type": "DP", "pos": "유격수"}, {"type": "ASSIST", "pos": "유격수"}, {"type": "DP", "pos": "유격수"}, {"type": "ASSIST", "pos": "유격수"}, {"type": "DP", "pos": "유격수"}]}, {"name": "박성한", "team": "SSG", "opponent": "두산", "date": "07월 28일", "stadium": "문학", "pos": "유", "position": "유격수", "position_override": false, "ab": 4, "stat": {"R": 1, "H": 1, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 3, "OF_ASSIST": 0, "DP_FIELD": 1, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 3, "position_events": [{"type": "ASSIST", "pos": "유격수"}, {"type": "DP", "pos": "유격수"}, {"type": "ASSIST", "pos": "유격수"}, {"type": "ASSIST", "pos": "유격수"}]}, {"name": "신민재", "team": "LG", "opponent": "키움", "date": "07월 28일", "stadium": "잠실", "pos": "二", "position": "2루수", "position_override": false, "ab": 1, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 2, "OF_ASSIST": 0, "DP_FIELD": 1, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 2, "position_events": [{"type": "ASSIST", "pos": "2루수"}, {"type": "ASSIST", "pos": "2루수"}, {"type": "DP", "pos": "2루수"}]}, {"name": "윤도현", "team": "KIA", "opponent": "삼성", "date": "07월 28일", "stadium": "대구", "pos": "一", "position": "2루수", "position_override": false, "ab": 1, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 1, "OF_ASSIST": 0, "DP_FIELD": 1, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 1, "position_events": [{"type": "ASSIST", "pos": "1루수"}, {"type": "DP", "pos": "1루수"}, {"type": "DP", "pos": "1루수"}, {"type": "DP", "pos": "1루수"}]}, {"name": "김한별", "team": "NC", "opponent": "KT", "date": "07월 28일", "stadium": "창원", "pos": "二", "position": "2루수", "position_override": false, "ab": 0, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 1, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 1, "position_events": [{"type": "ASSIST", "pos": "2루수"}]}, {"name": "고승민", "team": "롯데", "opponent": "한화", "date": "07월 28일", "stadium": "대전", "pos": "二一", "position": "2루수", "position_override": false, "ab": 6, "stat": {"R": 0, "H": 1, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 2, "FO": 2, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 2, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 1, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 1, "position_events": [{"type": "ASSIST", "pos": "2루수"}]}, {"name": "심재훈", "team": "삼성", "opponent": "KIA", "date": "07월 28일", "stadium": "대구", "pos": "주", "position": "유격수", "position_override": false, "ab": 0, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 0}, {"name": "주효상", "team": "KIA", "opponent": "삼성", "date": "07월 28일", "stadium": "대구", "pos": "포", "position": "포수", "position_override": false, "ab": 0, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 0}, {"name": "조대현", "team": "KT", "opponent": "NC", "date": "07월 28일", "stadium": "창원", "pos": "포", "position": "포수", "position_override": false, "ab": 0, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 0}, {"name": "최인호", "team": "한화", "opponent": "롯데", "date": "07월 28일", "stadium": "대전", "pos": "우", "position": "우익수", "position_override": false, "ab": 0, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 0}, {"name": "이진영", "team": "한화", "opponent": "롯데", "date": "07월 28일", "stadium": "대전", "pos": "주", "position": "지명타자", "position_override": false, "ab": 0, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 0}, {"name": "이원석", "team": "한화", "opponent": "롯데", "date": "07월 28일", "stadium": "대전", "pos": "주중", "position": "우익수", "position_override": false, "ab": 0, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 0}, {"name": "김동혁", "team": "롯데", "opponent": "한화", "date": "07월 28일", "stadium": "대전", "pos": "주중", "position": "중견수", "position_override": false, "ab": 0, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 0}, {"name": "한동희", "team": "롯데", "opponent": "한화", "date": "07월 28일", "stadium": "대전", "pos": "지", "position": "지명타자", "position_override": false, "ab": 5, "stat": {"R": 0, "H": 1, "BB": 1, "2B": 0, "3B": 0, "HR": 0, "RBI": 1, "FO": 2, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 0}, {"name": "김한홀", "team": "롯데", "opponent": "한화", "date": "07월 28일", "stadium": "대전", "pos": "주", "position": "좌익수", "position_override": false, "ab": 0, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 0}, {"name": "박승욱", "team": "롯데", "opponent": "한화", "date": "07월 28일", "stadium": "대전", "pos": "주二", "position": "3루수", "position_override": false, "ab": 0, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 0}, {"name": "김세민", "team": "롯데", "opponent": "한화", "date": "07월 28일", "stadium": "대전", "pos": "주三", "position": "3루수", "position_override": false, "ab": 2, "stat": {"R": 1, "H": 1, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 1, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 0}, {"name": "이유찬", "team": "두산", "opponent": "SSG", "date": "07월 28일", "stadium": "문학", "pos": "二", "position": "2루수", "position_override": false, "ab": 0, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 0}, {"name": "김건희", "team": "키움", "opponent": "LG", "date": "07월 28일", "stadium": "잠실", "pos": "포", "position": "포수", "position_override": false, "ab": 4, "stat": {"R": 0, "H": 1, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 0, "GDP": 1, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 1, "SB_ALLOWED_CATCHER": 0}, "lp": 0, "position_events": [{"type": "CS_CATCHER", "pos": "포수"}]}, {"name": "임병욱", "team": "키움", "opponent": "LG", "date": "07월 28일", "stadium": "잠실", "pos": "중", "position": "중견수", "position_override": false, "ab": 3, "stat": {"R": 1, "H": 1, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 0}, {"name": "박채울", "team": "키움", "opponent": "LG", "date": "07월 28일", "stadium": "잠실", "pos": "주", "position": "중견수", "position_override": false, "ab": 0, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": 0}, {"name": "오지환", "team": "LG", "opponent": "키움", "date": "07월 28일", "stadium": "잠실", "pos": "유", "position": "유격수", "position_override": false, "ab": 4, "stat": {"R": 1, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 2, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 4, "OF_ASSIST": 0, "DP_FIELD": 1, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -1, "position_events": [{"type": "ASSIST", "pos": "유격수"}, {"type": "ASSIST", "pos": "유격수"}, {"type": "ASSIST", "pos": "유격수"}, {"type": "ASSIST", "pos": "유격수"}, {"type": "DP", "pos": "유격수"}]}, {"name": "허인서", "team": "한화", "opponent": "롯데", "date": "07월 28일", "stadium": "대전", "pos": "포", "position": "포수", "position_override": false, "ab": 4, "stat": {"R": 0, "H": 1, "BB": 1, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -5}, {"name": "레이예스", "team": "롯데", "opponent": "한화", "date": "07월 28일", "stadium": "대전", "pos": "좌", "position": "좌익수", "position_override": false, "ab": 6, "stat": {"R": 0, "H": 1, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 1, "FO": 2, "GO": 3, "GDP": 0, "SACFLY": 0, "SACBUNT": 1, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -5}, {"name": "김재환", "team": "SSG", "opponent": "두산", "date": "07월 28일", "stadium": "문학", "pos": "지", "position": "좌익수", "position_override": false, "ab": 3, "stat": {"R": 0, "H": 1, "BB": 1, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -5}, {"name": "정수빈", "team": "두산", "opponent": "SSG", "date": "07월 28일", "stadium": "문학", "pos": "중", "position": "중견수", "position_override": false, "ab": 4, "stat": {"R": 0, "H": 2, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -5}, {"name": "박해민", "team": "LG", "opponent": "키움", "date": "07월 28일", "stadium": "잠실", "pos": "중", "position": "중견수", "position_override": false, "ab": 3, "stat": {"R": 0, "H": 1, "BB": 2, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 1, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -5}, {"name": "김웅빈", "team": "키움", "opponent": "LG", "date": "07월 28일", "stadium": "잠실", "pos": "三", "position": "3루수", "position_override": false, "ab": 3, "stat": {"R": 1, "H": 1, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 2, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -5}, {"name": "구본혁", "team": "LG", "opponent": "키움", "date": "07월 28일", "stadium": "잠실", "pos": "二", "position": "2루수", "position_override": false, "ab": 2, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 2, "GDP": 0, "SACFLY": 0, "SACBUNT": 1, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 3, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -7, "position_events": [{"type": "ASSIST", "pos": "2루수"}, {"type": "ASSIST", "pos": "2루수"}, {"type": "ASSIST", "pos": "2루수"}]}, {"name": "김휘집", "team": "NC", "opponent": "KT", "date": "07월 28일", "stadium": "창원", "pos": "三", "position": "3루수", "position_override": false, "ab": 2, "stat": {"R": 0, "H": 0, "BB": 1, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 2, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -8, "position_events": [{"type": "ASSIST", "pos": "3루수"}, {"type": "ASSIST", "pos": "3루수"}]}, {"name": "허경민", "team": "KT", "opponent": "NC", "date": "07월 28일", "stadium": "창원", "pos": "三", "position": "3루수", "position_override": false, "ab": 4, "stat": {"R": 1, "H": 1, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 1, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -9, "position_events": [{"type": "ASSIST", "pos": "3루수"}]}, {"name": "나성범", "team": "KIA", "opponent": "삼성", "date": "07월 28일", "stadium": "대구", "pos": "우", "position": "우익수", "position_override": false, "ab": 3, "stat": {"R": 0, "H": 0, "BB": 1, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -10}, {"name": "서호철", "team": "NC", "opponent": "KT", "date": "07월 28일", "stadium": "창원", "pos": "타", "position": "지명타자", "position_override": false, "ab": 1, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -10}, {"name": "최정원", "team": "NC", "opponent": "KT", "date": "07월 28일", "stadium": "창원", "pos": "중", "position": "중견수", "position_override": false, "ab": 3, "stat": {"R": 0, "H": 2, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 1, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -10}, {"name": "심우준", "team": "한화", "opponent": "롯데", "date": "07월 28일", "stadium": "대전", "pos": "유", "position": "유격수", "position_override": false, "ab": 2, "stat": {"R": 0, "H": 0, "BB": 1, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 2, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -10}, {"name": "조형우", "team": "SSG", "opponent": "두산", "date": "07월 28일", "stadium": "문학", "pos": "포", "position": "포수", "position_override": false, "ab": 4, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 2, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 2, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 1, "SB_ALLOWED_CATCHER": 0}, "lp": -10, "position_events": [{"type": "CS_CATCHER", "pos": "포수"}]}, {"name": "한유섬", "team": "SSG", "opponent": "두산", "date": "07월 28일", "stadium": "문학", "pos": "타", "position": "우익수", "position_override": false, "ab": 1, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -10}, {"name": "조수행", "team": "두산", "opponent": "SSG", "date": "07월 28일", "stadium": "문학", "pos": "주좌", "position": "좌익수", "position_override": false, "ab": 1, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -10}, {"name": "윤준호", "team": "두산", "opponent": "SSG", "date": "07월 28일", "stadium": "문학", "pos": "포", "position": "포수", "position_override": false, "ab": 1, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -10}, {"name": "이형종", "team": "키움", "opponent": "LG", "date": "07월 28일", "stadium": "잠실", "pos": "타", "position": "좌익수", "position_override": false, "ab": 1, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -10}, {"name": "문보경", "team": "LG", "opponent": "키움", "date": "07월 28일", "stadium": "잠실", "pos": "三", "position": "3루수", "position_override": false, "ab": 3, "stat": {"R": 1, "H": 0, "BB": 1, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 2, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 2, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -13, "position_events": [{"type": "ASSIST", "pos": "3루수"}, {"type": "ASSIST", "pos": "3루수"}]}, {"name": "양의지", "team": "두산", "opponent": "SSG", "date": "07월 28일", "stadium": "문학", "pos": "포", "position": "포수", "position_override": false, "ab": 4, "stat": {"R": 0, "H": 1, "BB": 0, "2B": 1, "3B": 0, "HR": 0, "RBI": 0, "FO": 2, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 1, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 1}, "lp": -14, "position_events": [{"type": "ASSIST", "pos": "포수"}, {"type": "SB_ALLOWED_CATCHER", "pos": "포수"}]}, {"name": "김현준", "team": "삼성", "opponent": "KIA", "date": "07월 28일", "stadium": "대구", "pos": "주좌", "position": "좌익수", "position_override": false, "ab": 2, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 1, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -15}, {"name": "김영웅", "team": "삼성", "opponent": "KIA", "date": "07월 28일", "stadium": "대구", "pos": "三", "position": "3루수", "position_override": false, "ab": 5, "stat": {"R": 1, "H": 1, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 1, "SB": 0, "CS": 0, "HBP": 0, "K": 2, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -15}, {"name": "정현창", "team": "KIA", "opponent": "삼성", "date": "07월 28일", "stadium": "대구", "pos": "유", "position": "유격수", "position_override": false, "ab": 1, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -15}, {"name": "오윤석", "team": "KT", "opponent": "NC", "date": "07월 28일", "stadium": "창원", "pos": "一", "position": "1루수", "position_override": false, "ab": 1, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -15}, {"name": "정은원", "team": "한화", "opponent": "롯데", "date": "07월 28일", "stadium": "대전", "pos": "二", "position": "3루수", "position_override": false, "ab": 1, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -15}, {"name": "송찬의", "team": "LG", "opponent": "키움", "date": "07월 28일", "stadium": "잠실", "pos": "타", "position": "좌익수", "position_override": false, "ab": 1, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -15}, {"name": "여동욱", "team": "키움", "opponent": "LG", "date": "07월 28일", "stadium": "잠실", "pos": "타", "position": "3루수", "position_override": false, "ab": 1, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -15}, {"name": "권동진", "team": "KT", "opponent": "NC", "date": "07월 28일", "stadium": "창원", "pos": "유", "position": "유격수", "position_override": false, "ab": 5, "stat": {"R": 1, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 2, "GDP": 0, "SACFLY": 0, "SACBUNT": 1, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 3, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -17, "position_events": [{"type": "ASSIST", "pos": "유격수"}, {"type": "ASSIST", "pos": "유격수"}, {"type": "ASSIST", "pos": "유격수"}]}, {"name": "이도윤", "team": "한화", "opponent": "롯데", "date": "07월 28일", "stadium": "대전", "pos": "二", "position": "2루수", "position_override": false, "ab": 3, "stat": {"R": 0, "H": 0, "BB": 1, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 2, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 1, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -19, "position_events": [{"type": "ASSIST", "pos": "2루수"}]}, {"name": "박상준", "team": "KIA", "opponent": "삼성", "date": "07월 28일", "stadium": "대구", "pos": "一", "position": "1루수", "position_override": false, "ab": 3, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 2, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 1, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -20, "position_events": [{"type": "DP", "pos": "1루수"}]}, {"name": "안중열", "team": "NC", "opponent": "KT", "date": "07월 28일", "stadium": "창원", "pos": "포", "position": "포수", "position_override": false, "ab": 1, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 1}, "lp": -20, "position_events": [{"type": "SB_ALLOWED_CATCHER", "pos": "포수"}]}, {"name": "장성우", "team": "KT", "opponent": "NC", "date": "07월 28일", "stadium": "창원", "pos": "지", "position": "지명타자", "position_override": false, "ab": 2, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 2, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -20}, {"name": "페라자", "team": "한화", "opponent": "롯데", "date": "07월 28일", "stadium": "대전", "pos": "우", "position": "우익수", "position_override": false, "ab": 4, "stat": {"R": 1, "H": 0, "BB": 1, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 3, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -20}, {"name": "정준재", "team": "SSG", "opponent": "두산", "date": "07월 28일", "stadium": "문학", "pos": "二", "position": "2루수", "position_override": false, "ab": 5, "stat": {"R": 0, "H": 1, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 2, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 4, "OF_ASSIST": 0, "DP_FIELD": 1, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -21, "position_events": [{"type": "ASSIST", "pos": "2루수"}, {"type": "DP", "pos": "2루수"}, {"type": "ASSIST", "pos": "2루수"}, {"type": "ASSIST", "pos": "2루수"}, {"type": "DP", "pos": "2루수"}, {"type": "ASSIST", "pos": "2루수"}]}, {"name": "박민우", "team": "NC", "opponent": "KT", "date": "07월 28일", "stadium": "창원", "pos": "二", "position": "2루수", "position_override": false, "ab": 3, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 2, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 2, "OF_ASSIST": 0, "DP_FIELD": 1, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -23, "position_events": [{"type": "ASSIST", "pos": "2루수"}, {"type": "DP", "pos": "2루수"}, {"type": "ASSIST", "pos": "2루수"}]}, {"name": "장승현", "team": "삼성", "opponent": "KIA", "date": "07월 28일", "stadium": "대구", "pos": "포", "position": "포수", "position_override": false, "ab": 2, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -25}, {"name": "김선빈", "team": "KIA", "opponent": "삼성", "date": "07월 28일", "stadium": "대구", "pos": "지", "position": "2루수", "position_override": false, "ab": 3, "stat": {"R": 0, "H": 0, "BB": 1, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 2, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -25}, {"name": "블레인", "team": "NC", "opponent": "KT", "date": "07월 28일", "stadium": "창원", "pos": "一", "position": "1루수", "position_override": false, "ab": 3, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 2, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 1, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -25, "position_events": [{"type": "DP", "pos": "1루수"}]}, {"name": "임근우", "team": "SSG", "opponent": "두산", "date": "07월 28일", "stadium": "문학", "pos": "우", "position": "우익수", "position_override": false, "ab": 3, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 1, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -25}, {"name": "안상현", "team": "SSG", "opponent": "두산", "date": "07월 28일", "stadium": "문학", "pos": "三", "position": "3루수", "position_override": false, "ab": 3, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 2, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 5, "OF_ASSIST": 0, "DP_FIELD": 1, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -25, "position_events": [{"type": "ASSIST", "pos": "3루수"}, {"type": "ASSIST", "pos": "3루수"}, {"type": "ASSIST", "pos": "3루수"}, {"type": "ASSIST", "pos": "3루수"}, {"type": "ASSIST", "pos": "3루수"}, {"type": "DP", "pos": "3루수"}]}, {"name": "오스틴", "team": "LG", "opponent": "키움", "date": "07월 28일", "stadium": "잠실", "pos": "지", "position": "1루수", "position_override": false, "ab": 5, "stat": {"R": 1, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 4, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -25}, {"name": "데이비슨", "team": "키움", "opponent": "LG", "date": "07월 28일", "stadium": "잠실", "pos": "一", "position": "1루수", "position_override": false, "ab": 4, "stat": {"R": 0, "H": 1, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 2, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -25}, {"name": "김주원", "team": "NC", "opponent": "KT", "date": "07월 28일", "stadium": "창원", "pos": "유", "position": "유격수", "position_override": false, "ab": 3, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 2, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 2, "OF_ASSIST": 0, "DP_FIELD": 1, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -28, "position_events": [{"type": "ASSIST", "pos": "유격수"}, {"type": "DP", "pos": "유격수"}, {"type": "ASSIST", "pos": "유격수"}]}, {"name": "한석현", "team": "NC", "opponent": "KT", "date": "07월 28일", "stadium": "창원", "pos": "우", "position": "우익수", "position_override": false, "ab": 2, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 2, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -30}, {"name": "오장한", "team": "NC", "opponent": "KT", "date": "07월 28일", "stadium": "창원", "pos": "타우", "position": "우익수", "position_override": false, "ab": 2, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 2, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -30}, {"name": "이우성", "team": "NC", "opponent": "KT", "date": "07월 28일", "stadium": "창원", "pos": "좌", "position": "좌익수", "position_override": false, "ab": 3, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 3, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -30}, {"name": "김형준", "team": "NC", "opponent": "KT", "date": "07월 28일", "stadium": "창원", "pos": "포", "position": "포수", "position_override": false, "ab": 2, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 2, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -30}, {"name": "전의산", "team": "SSG", "opponent": "두산", "date": "07월 28일", "stadium": "문학", "pos": "一", "position": "1루수", "position_override": false, "ab": 4, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 2, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 1, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -30, "position_events": [{"type": "DP", "pos": "1루수"}, {"type": "DP", "pos": "1루수"}]}, {"name": "박찬호", "team": "두산", "opponent": "SSG", "date": "07월 28일", "stadium": "문학", "pos": "유", "position": "유격수", "position_override": false, "ab": 4, "stat": {"R": 0, "H": 1, "BB": 1, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 2, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 1, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -30}, {"name": "안치홍", "team": "키움", "opponent": "LG", "date": "07월 28일", "stadium": "잠실", "pos": "지", "position": "1루수", "position_override": false, "ab": 3, "stat": {"R": 0, "H": 0, "BB": 1, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 2, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -30}, {"name": "박건우", "team": "NC", "opponent": "KT", "date": "07월 28일", "stadium": "창원", "pos": "지", "position": "우익수", "position_override": false, "ab": 3, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -35}, {"name": "홍창기", "team": "LG", "opponent": "키움", "date": "07월 28일", "stadium": "잠실", "pos": "우", "position": "우익수", "position_override": false, "ab": 4, "stat": {"R": 0, "H": 0, "BB": 1, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 3, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -35}, {"name": "안현민", "team": "KT", "opponent": "NC", "date": "07월 28일", "stadium": "창원", "pos": "우", "position": "우익수", "position_override": false, "ab": 3, "stat": {"R": 0, "H": 0, "BB": 1, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 0, "GO": 1, "GDP": 1, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -40}, {"name": "추재현", "team": "키움", "opponent": "LG", "date": "07월 28일", "stadium": "잠실", "pos": "좌", "position": "중견수", "position_override": false, "ab": 4, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 3, "GO": 1, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -40}, {"name": "마드리스", "team": "SSG", "opponent": "두산", "date": "07월 28일", "stadium": "문학", "pos": "좌", "position": "좌익수", "position_override": false, "ab": 4, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 3, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -45}, {"name": "강승호", "team": "두산", "opponent": "SSG", "date": "07월 28일", "stadium": "문학", "pos": "一", "position": "1루수", "position_override": false, "ab": 4, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 1, "GDP": 1, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -60}, {"name": "한지윤", "team": "한화", "opponent": "롯데", "date": "07월 28일", "stadium": "대전", "pos": "좌一", "position": "좌익수", "position_override": false, "ab": 5, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 4, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0}, "lp": -70}, {"name": "한준수", "team": "KIA", "opponent": "삼성", "date": "07월 28일", "stadium": "대구", "pos": "포", "position": "포수", "position_override": false, "ab": 4, "stat": {"R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0, "FO": 1, "GO": 1, "GDP": 1, "SACFLY": 0, "SACBUNT": 0, "SB": 0, "CS": 0, "HBP": 0, "K": 1, "PICKOFF": 0, "CYCLE": false, "GRANDSLAM": 0, "E": 0, "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0, "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 2}, "lp": -80, "position_events": [{"type": "SB_ALLOWED_CATCHER", "pos": "포수"}, {"type": "SB_ALLOWED_CATCHER", "pos": "포수"}]}], "pitchers": [{"name": "고영표", "team": "KT", "opponent": "NC", "date": "07월 28일", "stadium": "창원", "inn": "7", "role": "선발", "stat": {"H": 2, "HR": 0, "ER": 0, "BB": 1, "HBP": 0, "K": 10, "OUT": 21, "WP": 0, "BK": 0, "QS": false, "QSPLUS": true, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 1, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 370}, {"name": "벤자민", "team": "두산", "opponent": "SSG", "date": "07월 28일", "stadium": "문학", "inn": "6", "role": "선발", "stat": {"H": 4, "HR": 0, "ER": 0, "BB": 1, "HBP": 0, "K": 8, "OUT": 18, "WP": 0, "BK": 0, "QS": true, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 1, "PICKOFF_A": 0}, "lp": 260}, {"name": "톨허스트", "team": "LG", "opponent": "키움", "date": "07월 28일", "stadium": "잠실", "inn": "7", "role": "선발", "stat": {"H": 6, "HR": 1, "ER": 3, "BB": 0, "HBP": 0, "K": 7, "OUT": 21, "WP": 0, "BK": 0, "QS": false, "QSPLUS": true, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 1, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 205}, {"name": "아빌라", "team": "SSG", "opponent": "두산", "date": "07월 28일", "stadium": "문학", "inn": "6", "role": "선발", "stat": {"H": 5, "HR": 0, "ER": 0, "BB": 4, "HBP": 0, "K": 4, "OUT": 18, "WP": 0, "BK": 0, "QS": true, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 1, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 180}, {"name": "현도훈", "team": "롯데", "opponent": "한화", "date": "07월 28일", "stadium": "대전", "inn": "2 ⅓", "role": "구원", "stat": {"H": 0, "HR": 0, "ER": 0, "BB": 1, "HBP": 0, "K": 2, "OUT": 7, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 3, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 105}, {"name": "이영하", "team": "두산", "opponent": "SSG", "date": "07월 28일", "stadium": "문학", "inn": "2", "role": "구원", "stat": {"H": 0, "HR": 0, "ER": 0, "BB": 1, "HBP": 0, "K": 3, "OUT": 6, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 95}, {"name": "이승민", "team": "삼성", "opponent": "KIA", "date": "07월 28일", "stadium": "대구", "inn": "1 ⅓", "role": "구원", "stat": {"H": 1, "HR": 0, "ER": 0, "BB": 0, "HBP": 0, "K": 2, "OUT": 4, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 1, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 65}, {"name": "임기영", "team": "삼성", "opponent": "KIA", "date": "07월 28일", "stadium": "대구", "inn": "1", "role": "구원", "stat": {"H": 0, "HR": 0, "ER": 0, "BB": 0, "HBP": 0, "K": 2, "OUT": 3, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 60}, {"name": "김태훈", "team": "NC", "opponent": "KT", "date": "07월 28일", "stadium": "창원", "inn": "1", "role": "구원", "stat": {"H": 0, "HR": 0, "ER": 0, "BB": 0, "HBP": 0, "K": 2, "OUT": 3, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 60}, {"name": "주권", "team": "KT", "opponent": "NC", "date": "07월 28일", "stadium": "창원", "inn": "1", "role": "구원", "stat": {"H": 0, "HR": 0, "ER": 0, "BB": 0, "HBP": 0, "K": 2, "OUT": 3, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 60}, {"name": "최요한", "team": "NC", "opponent": "KT", "date": "07월 28일", "stadium": "창원", "inn": "0 ⅔", "role": "구원", "stat": {"H": 0, "HR": 0, "ER": 0, "BB": 0, "HBP": 0, "K": 1, "OUT": 2, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 3, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 50}, {"name": "전준표", "team": "키움", "opponent": "LG", "date": "07월 28일", "stadium": "잠실", "inn": "5", "role": "선발", "stat": {"H": 5, "HR": 1, "ER": 2, "BB": 3, "HBP": 0, "K": 2, "OUT": 15, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 1, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 50}, {"name": "정현우", "team": "키움", "opponent": "LG", "date": "07월 28일", "stadium": "잠실", "inn": "1", "role": "구원", "stat": {"H": 0, "HR": 0, "ER": 0, "BB": 1, "HBP": 0, "K": 2, "OUT": 3, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 50}, {"name": "장찬희", "team": "삼성", "opponent": "KIA", "date": "07월 28일", "stadium": "대구", "inn": "1", "role": "구원", "stat": {"H": 0, "HR": 0, "ER": 0, "BB": 0, "HBP": 0, "K": 1, "OUT": 3, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 45}, {"name": "손주영", "team": "LG", "opponent": "키움", "date": "07월 28일", "stadium": "잠실", "inn": "1", "role": "구원", "stat": {"H": 1, "HR": 0, "ER": 0, "BB": 1, "HBP": 0, "K": 1, "OUT": 3, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 1, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 1, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 45}, {"name": "손주환", "team": "NC", "opponent": "KT", "date": "07월 28일", "stadium": "창원", "inn": "1", "role": "구원", "stat": {"H": 0, "HR": 0, "ER": 0, "BB": 1, "HBP": 0, "K": 2, "OUT": 3, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 1, "PICKOFF_A": 0}, "lp": 40}, {"name": "최준용", "team": "롯데", "opponent": "한화", "date": "07월 28일", "stadium": "대전", "inn": "1", "role": "구원", "stat": {"H": 1, "HR": 0, "ER": 0, "BB": 1, "HBP": 0, "K": 2, "OUT": 3, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 40}, {"name": "이승현", "team": "삼성", "opponent": "KIA", "date": "07월 28일", "stadium": "대구", "inn": "1", "role": "구원", "stat": {"H": 0, "HR": 0, "ER": 0, "BB": 1, "HBP": 0, "K": 0, "OUT": 3, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 3, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 35}, {"name": "황준서", "team": "한화", "opponent": "롯데", "date": "07월 28일", "stadium": "대전", "inn": "1 ⅓", "role": "구원", "stat": {"H": 3, "HR": 0, "ER": 0, "BB": 0, "HBP": 0, "K": 1, "OUT": 4, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 2, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 35}, {"name": "박세웅", "team": "롯데", "opponent": "한화", "date": "07월 28일", "stadium": "대전", "inn": "2 ⅔", "role": "선발", "stat": {"H": 3, "HR": 0, "ER": 2, "BB": 3, "HBP": 1, "K": 3, "OUT": 8, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 35}, {"name": "이이무라", "team": "롯데", "opponent": "한화", "date": "07월 28일", "stadium": "대전", "inn": "1", "role": "구원", "stat": {"H": 1, "HR": 0, "ER": 0, "BB": 0, "HBP": 0, "K": 1, "OUT": 3, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 35}, {"name": "김강현", "team": "롯데", "opponent": "한화", "date": "07월 28일", "stadium": "대전", "inn": "1", "role": "구원", "stat": {"H": 1, "HR": 0, "ER": 0, "BB": 0, "HBP": 0, "K": 1, "OUT": 3, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 35}, {"name": "조병현", "team": "SSG", "opponent": "두산", "date": "07월 28일", "stadium": "문학", "inn": "1", "role": "구원", "stat": {"H": 1, "HR": 0, "ER": 0, "BB": 0, "HBP": 0, "K": 1, "OUT": 3, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 35}, {"name": "우규민", "team": "KT", "opponent": "NC", "date": "07월 28일", "stadium": "창원", "inn": "1", "role": "구원", "stat": {"H": 0, "HR": 0, "ER": 0, "BB": 0, "HBP": 0, "K": 0, "OUT": 3, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 30}, {"name": "이민석", "team": "롯데", "opponent": "한화", "date": "07월 28일", "stadium": "대전", "inn": "1", "role": "구원", "stat": {"H": 1, "HR": 0, "ER": 1, "BB": 3, "HBP": 0, "K": 1, "OUT": 3, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 1, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 3, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 30}, {"name": "김민", "team": "SSG", "opponent": "두산", "date": "07월 28일", "stadium": "문학", "inn": "0 ⅔", "role": "구원", "stat": {"H": 0, "HR": 0, "ER": 0, "BB": 0, "HBP": 0, "K": 0, "OUT": 2, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 2, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 30}, {"name": "김정우", "team": "두산", "opponent": "SSG", "date": "07월 28일", "stadium": "문학", "inn": "1", "role": "구원", "stat": {"H": 0, "HR": 0, "ER": 0, "BB": 0, "HBP": 0, "K": 0, "OUT": 3, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 30}, {"name": "김택연", "team": "두산", "opponent": "SSG", "date": "07월 28일", "stadium": "문학", "inn": "1", "role": "구원", "stat": {"H": 0, "HR": 0, "ER": 0, "BB": 0, "HBP": 0, "K": 0, "OUT": 3, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 30}, {"name": "강재민", "team": "한화", "opponent": "롯데", "date": "07월 28일", "stadium": "대전", "inn": "1", "role": "구원", "stat": {"H": 3, "HR": 0, "ER": 1, "BB": 1, "HBP": 0, "K": 3, "OUT": 3, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 25}, {"name": "우강훈", "team": "LG", "opponent": "키움", "date": "07월 28일", "stadium": "잠실", "inn": "0 ⅔", "role": "구원", "stat": {"H": 1, "HR": 0, "ER": 0, "BB": 1, "HBP": 0, "K": 0, "OUT": 2, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 1, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 1, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 25}, {"name": "최원태", "team": "삼성", "opponent": "KIA", "date": "07월 28일", "stadium": "대구", "inn": "4 ⅓", "role": "선발", "stat": {"H": 5, "HR": 1, "ER": 4, "BB": 0, "HBP": 0, "K": 2, "OUT": 13, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 1, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 20}, {"name": "이태양", "team": "KIA", "opponent": "삼성", "date": "07월 28일", "stadium": "대구", "inn": "1 ⅓", "role": "구원", "stat": {"H": 2, "HR": 0, "ER": 0, "BB": 1, "HBP": 0, "K": 1, "OUT": 4, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 1, "CS_A": 0, "SB_ALLOWED": 1, "PICKOFF_A": 0}, "lp": 20}, {"name": "최지민", "team": "KIA", "opponent": "삼성", "date": "07월 28일", "stadium": "대구", "inn": "1", "role": "구원", "stat": {"H": 1, "HR": 0, "ER": 0, "BB": 0, "HBP": 0, "K": 0, "OUT": 3, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 20}, {"name": "김진수", "team": "LG", "opponent": "키움", "date": "07월 28일", "stadium": "잠실", "inn": "0 ⅓", "role": "구원", "stat": {"H": 0, "HR": 0, "ER": 0, "BB": 1, "HBP": 0, "K": 0, "OUT": 1, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 1, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 20}, {"name": "김선기", "team": "키움", "opponent": "LG", "date": "07월 28일", "stadium": "잠실", "inn": "0 ⅓", "role": "구원", "stat": {"H": 0, "HR": 0, "ER": 0, "BB": 0, "HBP": 0, "K": 0, "OUT": 1, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 2, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 20}, {"name": "박윤성", "team": "키움", "opponent": "LG", "date": "07월 28일", "stadium": "잠실", "inn": "1", "role": "구원", "stat": {"H": 0, "HR": 0, "ER": 0, "BB": 1, "HBP": 0, "K": 0, "OUT": 3, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 20}, {"name": "한재승", "team": "KIA", "opponent": "삼성", "date": "07월 28일", "stadium": "대구", "inn": "1", "role": "구원", "stat": {"H": 2, "HR": 0, "ER": 0, "BB": 1, "HBP": 0, "K": 2, "OUT": 3, "WP": 1, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 10}, {"name": "노경은", "team": "SSG", "opponent": "두산", "date": "07월 28일", "stadium": "문학", "inn": "1", "role": "구원", "stat": {"H": 2, "HR": 0, "ER": 1, "BB": 0, "HBP": 0, "K": 1, "OUT": 3, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 1, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": 5}, {"name": "이형범", "team": "한화", "opponent": "롯데", "date": "07월 28일", "stadium": "대전", "inn": "1", "role": "구원", "stat": {"H": 3, "HR": 0, "ER": 2, "BB": 1, "HBP": 0, "K": 1, "OUT": 3, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 1, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": -10}, {"name": "배찬승", "team": "삼성", "opponent": "KIA", "date": "07월 28일", "stadium": "대구", "inn": "0 ⅓", "role": "구원", "stat": {"H": 1, "HR": 0, "ER": 0, "BB": 2, "HBP": 0, "K": 0, "OUT": 1, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 1, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": -15}, {"name": "원종해", "team": "NC", "opponent": "KT", "date": "07월 28일", "stadium": "창원", "inn": "5 ⅓", "role": "선발", "stat": {"H": 7, "HR": 1, "ER": 5, "BB": 4, "HBP": 0, "K": 3, "OUT": 16, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 2, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": -15}, {"name": "화이트", "team": "한화", "opponent": "롯데", "date": "07월 28일", "stadium": "대전", "inn": "4 ⅔", "role": "선발", "stat": {"H": 9, "HR": 0, "ER": 4, "BB": 2, "HBP": 0, "K": 1, "OUT": 14, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 2, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": -15}, {"name": "김태형", "team": "KIA", "opponent": "삼성", "date": "07월 28일", "stadium": "대구", "inn": "3", "role": "구원", "stat": {"H": 3, "HR": 1, "ER": 1, "BB": 2, "HBP": 1, "K": 0, "OUT": 9, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": -20}, {"name": "이민우", "team": "한화", "opponent": "롯데", "date": "07월 28일", "stadium": "대전", "inn": "1", "role": "구원", "stat": {"H": 2, "HR": 0, "ER": 2, "BB": 1, "HBP": 0, "K": 1, "OUT": 3, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 1, "3B_A": 1, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 2, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": -20}, {"name": "이로운", "team": "SSG", "opponent": "두산", "date": "07월 28일", "stadium": "문학", "inn": "0 ⅓", "role": "구원", "stat": {"H": 1, "HR": 0, "ER": 0, "BB": 1, "HBP": 0, "K": 0, "OUT": 1, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 1, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": -20}, {"name": "박지성", "team": "키움", "opponent": "LG", "date": "07월 28일", "stadium": "잠실", "inn": "0 ⅔", "role": "구원", "stat": {"H": 2, "HR": 0, "ER": 0, "BB": 1, "HBP": 0, "K": 0, "OUT": 2, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 1, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": -20}, {"name": "문승원", "team": "SSG", "opponent": "두산", "date": "07월 28일", "stadium": "문학", "inn": "1", "role": "구원", "stat": {"H": 1, "HR": 1, "ER": 1, "BB": 0, "HBP": 0, "K": 0, "OUT": 3, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": -30}, {"name": "김범수", "team": "KIA", "opponent": "삼성", "date": "07월 28일", "stadium": "대구", "inn": "0 ⅔", "role": "구원", "stat": {"H": 3, "HR": 0, "ER": 2, "BB": 0, "HBP": 1, "K": 0, "OUT": 2, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 1, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": -50}, {"name": "김준원", "team": "NC", "opponent": "KT", "date": "07월 28일", "stadium": "창원", "inn": "1", "role": "구원", "stat": {"H": 4, "HR": 0, "ER": 1, "BB": 1, "HBP": 1, "K": 1, "OUT": 3, "WP": 1, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 1, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0}, "lp": -55}, {"name": "올러", "team": "KIA", "opponent": "삼성", "date": "07월 28일", "stadium": "대구", "inn": "1", "role": "선발", "stat": {"H": 7, "HR": 1, "ER": 8, "BB": 3, "HBP": 0, "K": 1, "OUT": 3, "WP": 0, "BK": 0, "QS": false, "QSPLUS": false, "HOLD": 0, "SAVE": 0, "BLOWN": 0, "PERFECT": false, "NOHIT": false, "SHO": false, "CG": false, "2B_A": 2, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0, "CS_A": 0, "SB_ALLOWED": 1, "PICKOFF_A": 0}, "lp": -205}]}</script>
+<script>
+const data = JSON.parse(document.getElementById('lp-data').textContent);
+
+const POSITION_GROUPS = {
+  '전체': null,
+  '포수': ['포수'],
+  '1루수': ['1루수'],
+  '2루수': ['2루수'],
+  '3루수': ['3루수'],
+  '유격수': ['유격수'],
+  '외야수': ['좌익수', '중견수', '우익수'],
+  '지명타자': ['지명타자'],
+};
+
+// 등록 포지션과 실제 수비 위치 비교용 (naver_fantasy_score.py의 FIELD_GROUP과 동일하게 유지)
+const FIELD_GROUP = {
+  '포수': '포수', '1루수': '내야', '2루수': '내야', '3루수': '내야', '유격수': '내야',
+  '좌익수': '외야', '중견수': '외야', '우익수': '외야',
+};
+// 이 6개 항목의 가중치(naver_fantasy_score.py BATTER_POINTS와 동일하게 유지)
+const FIELD_WEIGHTS = { ASSIST: 1, OF_ASSIST: 30, DP_FIELD: 10, TP_FIELD: 50, CS_CATCHER: 40, SB_ALLOWED_CATCHER: -10 };
+
+function positionAllowed(eventPos, registeredPos, mode, dhDefenseOn) {
+  if (registeredPos === '지명타자') return dhDefenseOn;
+  if (!registeredPos) return true;
+  if (mode === '1') return eventPos === registeredPos;
+  if (mode === '2') return FIELD_GROUP[eventPos] === FIELD_GROUP[registeredPos];
+  return true; // mode === '3'
+}
+
+function aggregateFieldEvents(events, registeredPos, mode, dhDefenseOn) {
+  const counts = { ASSIST: 0, OF_ASSIST: 0, CS_CATCHER: 0, SB_ALLOWED_CATCHER: 0 };
+  let dp = false, tp = false;
+  (events || []).forEach(ev => {
+    if (!positionAllowed(ev.pos, registeredPos, mode, dhDefenseOn)) return;
+    if (ev.type === 'DP') dp = true;
+    else if (ev.type === 'TP') tp = true;
+    else counts[ev.type] = (counts[ev.type] || 0) + 1;
+  });
+  counts.DP_FIELD = dp ? 1 : 0;
+  counts.TP_FIELD = tp ? 1 : 0;
+  return counts;
+}
+
+function applyFieldRule(mode, dhDefenseOn) {
+  data.batters.forEach(row => {
+    if (!row.position_events) return;
+    const fresh = aggregateFieldEvents(row.position_events, row.position, mode, dhDefenseOn);
+    let delta = 0;
+    Object.keys(FIELD_WEIGHTS).forEach(key => {
+      delta += (fresh[key] - row.stat[key]) * FIELD_WEIGHTS[key];
+      row.stat[key] = fresh[key];
+    });
+    row.lp += delta;
+  });
+}
+
+function lpClass(v) {
+  if (v >= 150) return 'hot';
+  if (v >= 60) return 'warm';
+  if (v < 0) return 'cool';
+  return '';
+}
+
+const SAVE_TIP = `<b>세이브 요건 (공식 야구규칙 기준)</b><br>
+승리 팀의 마지막 투수로 등판해 경기를 끝냈고, 그 경기의 선발투수가 아니며,
+다음 중 하나를 만족해야 함:<br>
+① 3점 이내 리드로 등판해 최소 1이닝 이상 투구<br>
+② 동점 주자가 누상·타석·다음 타자 중 하나로 존재하는
+"잠재적 동점 상황"에 등판(점수차 무관)<br>
+③ 최소 3이닝을 투구<br>
++ 팀이 승리로 경기를 마쳐야 인정됨`;
+
+const HOLD_TIP = `<b>홀드 요건 (공식 야구규칙 기준)</b><br>
+선발투수도, 세이브 요건을 만족한 마무리투수도 아닌 구원투수가
+리드를 지킨 상태로 등판해 최소 1아웃 이상을 잡고,<br>
+동점이나 역전을 허용하지 않은 채 다음 투수에게
+리드를 그대로 넘기고 물러났을 경우 부여됨`;
+
+const batterCols = [
+  {h:'#', key:null, cls:'rank'},
+  {h:'이름', key:'name', cls:'name left'},
+  {h:'포지션', key:'position', cls:'left'},
+  {h:'소속', key:'team', cls:'left'},
+  {h:'상대', key:'opponent', cls:'left'},
+  {h:'구장', key:'stadium', cls:'left'},
+  {h:'LP', key:'lp', num:true},
+  {h:'타수', key:'ab', num:true},
+  {h:'안타', key:'H', num:true},
+  {h:'2B', key:'2B', num:true},
+  {h:'3B', key:'3B', num:true},
+  {h:'홈런', key:'HR', num:true},
+  {h:'타점', key:'RBI', num:true},
+  {h:'득점', key:'R', num:true},
+  {h:'사사구', merge:['BB','HBP'], labels:['볼넷','사구'], num:true},
+  {h:'삼진', key:'K', num:true},
+  {h:'도루', key:'SB', num:true},
+  {h:'주루사', merge:['CS','PICKOFF'], labels:['도루실패','견제사'], num:true},
+  {h:'병살', key:'GDP', num:true},
+  {h:'희비', key:'SACFLY', num:true},
+  {h:'진루타', key:'SACBUNT', num:true},
+  {h:'실책', key:'E', num:true},
+  {h:'보살', key:'ASSIST', num:true},
+  {h:'외야보살', key:'OF_ASSIST', num:true},
+  {h:'병살가담', key:'DP_FIELD', num:true},
+  {h:'삼중살가담', key:'TP_FIELD', num:true},
+  {h:'도루저지(포)', key:'CS_CATCHER', num:true},
+  {h:'도루허용(포)', key:'SB_ALLOWED_CATCHER', num:true},
+  {h:'사이클', key:'CYCLE', tag:true},
+  {h:'만루HR', key:'GRANDSLAM', num:true},
+];
+
+const pitcherCols = [
+  {h:'#', key:null, cls:'rank'},
+  {h:'이름', key:'name', cls:'name left'},
+  {h:'구분', key:'role', cls:'left'},
+  {h:'소속', key:'team', cls:'left'},
+  {h:'상대', key:'opponent', cls:'left'},
+  {h:'구장', key:'stadium', cls:'left'},
+  {h:'LP', key:'lp', num:true},
+  {h:'IP', key:'inn', cls:'left'},
+  {h:'피안타', key:'H', num:true},
+  {h:'자책', key:'ER', num:true},
+  {h:'사사구', merge:['BB','HBP'], labels:['볼넷','사구'], num:true},
+  {h:'탈삼진', key:'K', num:true},
+  {h:'피2루타', key:'2B_A', num:true},
+  {h:'피3루타', key:'3B_A', num:true},
+  {h:'폭투', key:'WP', num:true},
+  {h:'보크', key:'BK', num:true},
+  {h:'승계실점허용', key:'INHERITED_SCORED', num:true},
+  {h:'승계실점막음', key:'INHERITED_STRANDED', num:true},
+  {h:'도루저지+견제', merge:['CS_A','PICKOFF_A'], labels:['도루 저지(투수)','견제사(투수)'], num:true},
+  {h:'도루허용', key:'SB_ALLOWED', num:true},
+  {h:'홀드', key:'HOLD', num:true, tip: HOLD_TIP},
+  {h:'세이브', key:'SAVE', num:true, tip: SAVE_TIP},
+  {h:'블론', key:'BLOWN', num:true},
+  {h:'QS+', key:'QSPLUS', tag:true},
+  {h:'QS', key:'QS', tag:true},
+  {h:'완투', key:'CG', tag:true},
+  {h:'완봉', key:'SHO', tag:true},
+  {h:'노히트', key:'NOHIT', tag:true},
+  {h:'퍼펙트', key:'PERFECT', tag:true},
+];
+
+function cellValue(row, col) {
+  if (col.merge) {
+    return col.merge.reduce((sum, k) => sum + (row.stat ? (row.stat[k] || 0) : 0), 0);
+  }
+  if (col.key === null) return null;
+  if (col.key === 'name' || col.key === 'team' || col.key === 'opponent' ||
+      col.key === 'stadium' || col.key === 'date' || col.key === 'ab' ||
+      col.key === 'inn' || col.key === 'lp' || col.key === 'position' || col.key === 'role') {
+    return row[col.key];
+  }
+  return row.stat ? row.stat[col.key] : undefined;
+}
+
+function makeRowCells(row, cols, i) {
+  return cols.map(col => {
+    const td = document.createElement('td');
+    if (col.key === null) {
+      td.textContent = i + 1;
+      td.className = 'rank';
+    } else if (col.key === 'lp') {
+      const span = document.createElement('span');
+      span.className = 'lp num ' + lpClass(row.lp);
+      span.textContent = row.lp;
+      td.appendChild(span);
+    } else if (col.key === 'position') {
+      td.className = 'left posbadge';
+      td.textContent = row.position || '-';
+      if (row.position_override) {
+        const s = document.createElement('span');
+        s.className = 'override';
+        s.textContent = '●';
+        s.title = '유저 수동 재지정';
+        td.appendChild(s);
+      }
+    } else if (col.key === 'role') {
+      const span = document.createElement('span');
+      span.className = 'role ' + (row.role === '선발' ? 'starter' : 'reliever');
+      span.textContent = row.role || '';
+      td.appendChild(span);
+      td.className = 'left';
+    } else if (col.tag) {
+      const v = cellValue(row, col);
+      if (v) { const s = document.createElement('span'); s.className = 'tag'; s.textContent = '●'; td.appendChild(s); }
+      td.className = 'num';
+    } else if (col.merge) {
+      const v = cellValue(row, col);
+      td.textContent = v || 0;
+      td.className = 'num';
+      const breakdown = col.merge
+        .map((k, i) => `${col.labels[i]} ${(row.stat && row.stat[k]) || 0}`)
+        .join(' · ');
+      td.title = breakdown;
+    } else {
+      const v = cellValue(row, col);
+      td.textContent = (v === undefined || v === null) ? '' : v;
+      if (col.cls) td.className = col.cls;
+      else if (col.num) td.className = 'num';
+    }
+    return td;
+  });
+}
+
+function render(tableId, cols, rows) {
+  const table = document.getElementById(tableId);
+  const thead = document.createElement('thead');
+  const trh = document.createElement('tr');
+  cols.forEach((c, i) => {
+    const th = document.createElement('th');
+    th.appendChild(document.createTextNode(c.h));
+    if (c.tip) {
+      const tip = document.createElement('span');
+      tip.className = 'info-tip';
+      tip.textContent = 'i';
+      tip.tabIndex = 0;
+      tip.addEventListener('click', e => e.stopPropagation());
+      const bubble = document.createElement('span');
+      bubble.className = 'bubble';
+      bubble.innerHTML = c.tip;
+      tip.appendChild(bubble);
+      th.appendChild(tip);
+    }
+    if (c.cls) th.className = c.cls;
+    th.dataset.idx = i;
+    trh.appendChild(th);
+  });
+  thead.appendChild(trh);
+
+  const tbody = document.createElement('tbody');
+  table.innerHTML = '';
+  table.appendChild(thead);
+  table.appendChild(tbody);
+
+  function renderBody(sorted) {
+    tbody.innerHTML = '';
+    sorted.forEach((row, i) => {
+      const tr = document.createElement('tr');
+      makeRowCells(row, cols, i).forEach(td => tr.appendChild(td));
+      tbody.appendChild(tr);
+    });
+  }
+  renderBody(rows);
+
+  let sortState = { idx: cols.findIndex(c => c.key === 'lp'), dir: -1 };
+  function applySort(rowsToSort) {
+    const col = cols[sortState.idx];
+    const sorted = [...rowsToSort].sort((a, b) => {
+      const av = cellValue(a, col), bv = cellValue(b, col);
+      if (typeof av === 'string' || typeof bv === 'string') {
+        return sortState.dir * String(av).localeCompare(String(bv), 'ko');
+      }
+      return sortState.dir * ((bv||0) - (av||0)) * -1;
+    });
+    renderBody(sorted);
+    [...trh.children].forEach(th => th.classList.toggle('sorted', +th.dataset.idx === sortState.idx));
+    return sorted;
+  }
+
+  let currentRows = rows;
+  trh.querySelectorAll('th').forEach(th => {
+    th.addEventListener('click', () => {
+      const idx = +th.dataset.idx;
+      if (cols[idx].key === null) return;
+      if (sortState.idx === idx) sortState.dir *= -1; else { sortState.idx = idx; sortState.dir = -1; }
+      currentRows = applySort(currentRows);
+    });
+  });
+
+  return {
+    rows,
+    setRows(newRows) { currentRows = newRows; applySort(newRows); },
+  };
+}
+
+const bCtl = render('tbl-b', batterCols, data.batters);
+const pCtl = render('tbl-p', pitcherCols, data.pitchers);
+document.getElementById('count-b').textContent = data.batters.length + '명';
+document.getElementById('count-p').textContent = data.pitchers.length + '명';
+
+// --- 검색 + 포지션 필터 (타자) ---
+let posFilter = '전체';
+const posChipsWrap = document.getElementById('pos-chips');
+Object.keys(POSITION_GROUPS).forEach(label => {
+  const btn = document.createElement('button');
+  btn.className = 'chip' + (label === '전체' ? ' active' : '');
+  btn.textContent = label;
+  btn.addEventListener('click', () => {
+    posFilter = label;
+    [...posChipsWrap.children].forEach(c => c.classList.toggle('active', c === btn));
+    applyBatterFilters();
+  });
+  posChipsWrap.appendChild(btn);
+});
+
+function applyBatterFilters() {
+  const q = document.getElementById('search-b').value.trim().toLowerCase();
+  const groups = POSITION_GROUPS[posFilter];
+  const filtered = data.batters.filter(r => {
+    const matchesText = (r.name + r.team).toLowerCase().includes(q);
+    const matchesPos = !groups || groups.includes(r.position);
+    return matchesText && matchesPos;
+  });
+  bCtl.setRows(filtered);
+  document.getElementById('count-b').textContent = filtered.length + '명';
+}
+document.getElementById('search-b').addEventListener('input', applyBatterFilters);
+
+// --- 타 포지션 수비기록 인정 규칙 (드롭다운 + 지명타자 토글) ---
+const posModeSelect = document.getElementById('pos-mode');
+const dhToggle = document.getElementById('dh-defense-toggle');
+function onFieldRuleChange() {
+  applyFieldRule(posModeSelect.value, dhToggle.checked);
+  applyBatterFilters();
+}
+posModeSelect.addEventListener('change', onFieldRuleChange);
+dhToggle.addEventListener('change', onFieldRuleChange);
+
+// --- 검색 + 역할 필터 (투수) ---
+let roleFilter = '전체';
+const roleChipsWrap = document.getElementById('role-chips');
+['전체', '선발', '구원'].forEach(label => {
+  const btn = document.createElement('button');
+  btn.className = 'chip' + (label === '전체' ? ' active' : '');
+  btn.textContent = label;
+  btn.addEventListener('click', () => {
+    roleFilter = label;
+    [...roleChipsWrap.children].forEach(c => c.classList.toggle('active', c === btn));
+    applyPitcherFilters();
+  });
+  roleChipsWrap.appendChild(btn);
+});
+
+function applyPitcherFilters() {
+  const q = document.getElementById('search-p').value.trim().toLowerCase();
+  const filtered = data.pitchers.filter(r => {
+    const matchesText = (r.name + r.team).toLowerCase().includes(q);
+    const matchesRole = roleFilter === '전체' || r.role === roleFilter;
+    return matchesText && matchesRole;
+  });
+  pCtl.setRows(filtered);
+  document.getElementById('count-p').textContent = filtered.length + '명';
+}
+document.getElementById('search-p').addEventListener('input', applyPitcherFilters);
+
+// --- 챕터(타자/투수) 탭 전환 ---
+document.querySelectorAll('.chip-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.chip-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const target = btn.dataset.chapter;
+    document.getElementById('chapter-batters').classList.toggle('active', target === 'batters');
+    document.getElementById('chapter-pitchers').classList.toggle('active', target === 'pitchers');
+  });
+});
+</script>
