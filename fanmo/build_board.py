@@ -327,8 +327,8 @@ tbody tr.clickable:hover { background: var(--chip-bg); }
 .modal-card {
   position: relative;
   width: 100%;
-  max-width: 620px;
-  max-height: 82vh;
+  max-width: 660px;
+  max-height: 85vh;
   overflow-y: auto;
   background: var(--paper-1);
   border: 1px solid var(--line);
@@ -349,11 +349,33 @@ tbody tr.clickable:hover { background: var(--chip-bg); }
   font-size: 13px;
   cursor: pointer;
 }
-.modal-head { margin-bottom: 16px; padding-right: 30px; }
+.modal-head { margin-bottom: 14px; padding-right: 30px; }
 .modal-name { font-size: 19px; font-weight: 700; }
 .modal-meta { font-size: 12.5px; color: var(--ink-1); margin-top: 3px; }
 .modal-lp { font-size: 26px; font-weight: 700; margin-top: 8px; }
-.modal-body table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+
+.modal-view-toggle {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+.modal-view-toggle button {
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 7px 14px;
+  background: none;
+  border: none;
+  color: var(--ink-1);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+.modal-view-toggle button.active { color: var(--ink-0); border-bottom-color: var(--accent); }
+
+/* 타임라인 보기 */
+.modal-body table { width: 100%; border-collapse: collapse; font-size: 12.5px; table-layout: fixed; }
 .modal-body th {
   text-align: left;
   font-size: 11px;
@@ -363,13 +385,66 @@ tbody tr.clickable:hover { background: var(--chip-bg); }
   padding: 6px 8px;
   border-bottom: 1px solid var(--line);
 }
-.modal-body td { padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.modal-body td { padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: top; word-break: keep-all; overflow-wrap: break-word; }
 .modal-body tr:last-child td { border-bottom: none; }
-.modal-body td.inn { color: var(--ink-1); white-space: nowrap; }
-.modal-body td.pts { text-align: right; font-weight: 700; white-space: nowrap; }
+.modal-body td.inn { color: var(--ink-1); white-space: nowrap; width: 44px; }
+.modal-body td.pts { text-align: right; font-weight: 700; white-space: nowrap; width: 66px; }
 .modal-body td.pts.pos { color: var(--hot); }
 .modal-body td.pts.neg { color: var(--cool); }
 .modal-empty { color: var(--ink-1); font-size: 13px; padding: 10px 0; }
+
+/* 카테고리 보기 (아코디언) */
+.cat-group {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+.cat-group-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  cursor: pointer;
+  background: var(--chip-bg);
+  user-select: none;
+}
+.cat-group-head .cat-name { font-weight: 700; font-size: 13.5px; display: flex; align-items: center; gap: 8px; }
+.cat-group-head .cat-toggle-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px; height: 18px;
+  border-radius: 5px;
+  background: var(--paper-1);
+  border: 1px solid var(--line);
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.cat-group-head .cat-total { font-weight: 700; font-size: 14px; }
+.cat-group-body { display: none; padding: 4px 14px 8px; }
+.cat-group.expanded .cat-group-body { display: block; }
+.cat-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 12.5px;
+  border-bottom: 1px dashed var(--line);
+}
+.cat-item:last-child { border-bottom: none; }
+.cat-item .cat-item-label { color: var(--ink-0); }
+.cat-item .cat-item-count { color: var(--ink-1); font-size: 11.5px; margin-left: 6px; }
+.cat-item .cat-item-pts { font-weight: 700; white-space: nowrap; }
+.cat-item .cat-item-flag {
+  display: inline-block;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--line);
+  margin-right: 7px;
+}
+.cat-item .cat-item-flag.on { background: var(--hot); }
 
 .tablewrap {
   overflow-x: auto;
@@ -535,6 +610,10 @@ footer.notes b { color: var(--ink-0); }
       <div class="modal-name" id="modal-name"></div>
       <div class="modal-meta" id="modal-meta"></div>
       <div class="modal-lp" id="modal-lp"></div>
+    </div>
+    <div class="modal-view-toggle">
+      <button id="modal-view-category" class="active">카테고리 보기</button>
+      <button id="modal-view-timeline">타임라인 보기</button>
     </div>
     <div class="modal-body" id="modal-body"></div>
   </div>
@@ -1002,14 +1081,13 @@ const modalName = document.getElementById('modal-name');
 const modalMeta = document.getElementById('modal-meta');
 const modalLp = document.getElementById('modal-lp');
 const modalBody = document.getElementById('modal-body');
+const modalViewCategoryBtn = document.getElementById('modal-view-category');
+const modalViewTimelineBtn = document.getElementById('modal-view-timeline');
 
-function openPlayerModal(row) {
-  modalName.textContent = row.name;
-  const posOrRole = row.position ? row.position : (row.role || '');
-  modalMeta.textContent = [posOrRole, row.team, row.opponent, row.date].filter(Boolean).join(' · ');
-  modalLp.textContent = row.lp + ' LP';
-  modalLp.style.color = row.lp > 0 ? 'var(--hot)' : (row.lp < 0 ? 'var(--cool)' : 'var(--ink-0)');
+let currentModalRow = null;
+let currentModalView = 'category'; // 'category' | 'timeline'
 
+function renderTimelineView(row) {
   modalBody.innerHTML = '';
   const log = row.play_log;
   if (log === undefined) {
@@ -1017,33 +1095,138 @@ function openPlayerModal(row) {
     p.className = 'modal-empty';
     p.textContent = '이 경기는 텍스트 중계 조회에 실패했거나 지원되지 않는 리그라 상세 내역이 없어요. 표의 합산 점수만 유효합니다.';
     modalBody.appendChild(p);
-  } else if (log.length === 0) {
+    return;
+  }
+  if (log.length === 0) {
     const p = document.createElement('div');
     p.className = 'modal-empty';
     p.textContent = '이 선수는 이번 경기에서 득점으로 이어진 개별 이벤트가 없어요 (LP 0).';
     modalBody.appendChild(p);
-  } else {
-    const table = document.createElement('table');
-    const thead = document.createElement('thead');
-    thead.innerHTML = '<tr><th>이닝</th><th>결과</th><th style="text-align:right">포인트</th></tr>';
-    const tbody = document.createElement('tbody');
-    log.forEach(e => {
-      const tr = document.createElement('tr');
-      const tdInn = document.createElement('td');
-      tdInn.className = 'inn';
-      tdInn.textContent = e.inn ? e.inn + '회' : '-';
-      const tdText = document.createElement('td');
-      tdText.textContent = e.text;
-      const tdPts = document.createElement('td');
-      tdPts.className = 'pts ' + (e.points > 0 ? 'pos' : (e.points < 0 ? 'neg' : ''));
-      tdPts.textContent = (e.points > 0 ? '+' : '') + e.points;
-      tr.append(tdInn, tdText, tdPts);
-      tbody.appendChild(tr);
-    });
-    table.append(thead, tbody);
-    modalBody.appendChild(table);
+    return;
   }
+  const table = document.createElement('table');
+  const thead = document.createElement('thead');
+  thead.innerHTML = '<tr><th>이닝</th><th>결과</th><th style="text-align:right">포인트</th></tr>';
+  const tbody = document.createElement('tbody');
+  log.forEach(e => {
+    const tr = document.createElement('tr');
+    const tdInn = document.createElement('td');
+    tdInn.className = 'inn';
+    tdInn.textContent = e.inn ? e.inn + '회' : '-';
+    const tdText = document.createElement('td');
+    tdText.textContent = e.text;
+    const tdPts = document.createElement('td');
+    tdPts.className = 'pts ' + (e.points > 0 ? 'pos' : (e.points < 0 ? 'neg' : ''));
+    tdPts.textContent = (e.points > 0 ? '+' : '') + e.points;
+    tr.append(tdInn, tdText, tdPts);
+    tbody.appendChild(tr);
+  });
+  table.append(thead, tbody);
+  modalBody.appendChild(table);
+}
 
+function renderCategoryView(row) {
+  modalBody.innerHTML = '';
+  const cats = row.categories;
+  if (!cats) {
+    const p = document.createElement('div');
+    p.className = 'modal-empty';
+    p.textContent = '이 리그는 아직 카테고리별 세부 내역을 지원하지 않아요. 표의 합산 점수만 유효합니다.';
+    modalBody.appendChild(p);
+    return;
+  }
+  cats.forEach((group, gi) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'cat-group';
+
+    const head = document.createElement('div');
+    head.className = 'cat-group-head';
+    const nameSpan = document.createElement('span');
+    nameSpan.className = 'cat-name';
+    const icon = document.createElement('span');
+    icon.className = 'cat-toggle-icon';
+    icon.textContent = '+';
+    nameSpan.append(icon, document.createTextNode(group.name));
+    const totalSpan = document.createElement('span');
+    totalSpan.className = 'cat-total';
+    totalSpan.textContent = (group.total > 0 ? '+' : '') + group.total;
+    totalSpan.style.color = group.total > 0 ? 'var(--hot)' : (group.total < 0 ? 'var(--cool)' : 'var(--ink-1)');
+    head.append(nameSpan, totalSpan);
+
+    const body = document.createElement('div');
+    body.className = 'cat-group-body';
+    const visibleItems = group.items.filter(it => it.flag ? true : it.count);
+    if (visibleItems.length === 0) {
+      const empty = document.createElement('div');
+      empty.className = 'cat-item';
+      empty.innerHTML = '<span class="cat-item-label" style="color:var(--ink-1)">해당 없음</span>';
+      body.appendChild(empty);
+    }
+    visibleItems.forEach(it => {
+      const row2 = document.createElement('div');
+      row2.className = 'cat-item';
+      const left = document.createElement('span');
+      if (it.flag) {
+        const dot = document.createElement('span');
+        dot.className = 'cat-item-flag' + (it.count ? ' on' : '');
+        left.appendChild(dot);
+        left.appendChild(document.createTextNode(it.label));
+      } else {
+        left.className = 'cat-item-label';
+        left.textContent = it.label;
+        const cnt = document.createElement('span');
+        cnt.className = 'cat-item-count';
+        cnt.textContent = it.count + '개';
+        left.appendChild(cnt);
+      }
+      const right = document.createElement('span');
+      right.className = 'cat-item-pts';
+      if (it.info) {
+        right.style.color = 'var(--ink-1)';
+        right.textContent = it.flag ? (it.count ? '조건 만족' : '') : '';
+      } else {
+        right.style.color = it.points > 0 ? 'var(--hot)' : (it.points < 0 ? 'var(--cool)' : 'var(--ink-1)');
+        right.textContent = (it.points > 0 ? '+' : '') + it.points;
+      }
+      row2.append(left, right);
+      body.appendChild(row2);
+    });
+
+    head.addEventListener('click', () => wrap.classList.toggle('expanded'));
+    if (gi === 0) wrap.classList.add('expanded'); // 첫 그룹은 기본으로 펼쳐서 보여줌
+    wrap.append(head, body);
+    modalBody.appendChild(wrap);
+  });
+}
+
+function renderModalBody() {
+  if (!currentModalRow) return;
+  if (currentModalView === 'timeline') renderTimelineView(currentModalRow);
+  else renderCategoryView(currentModalRow);
+}
+
+modalViewCategoryBtn.addEventListener('click', () => {
+  currentModalView = 'category';
+  modalViewCategoryBtn.classList.add('active');
+  modalViewTimelineBtn.classList.remove('active');
+  renderModalBody();
+});
+modalViewTimelineBtn.addEventListener('click', () => {
+  currentModalView = 'timeline';
+  modalViewTimelineBtn.classList.add('active');
+  modalViewCategoryBtn.classList.remove('active');
+  renderModalBody();
+});
+
+function openPlayerModal(row) {
+  currentModalRow = row;
+  modalName.textContent = row.name;
+  const posOrRole = row.position ? row.position : (row.role || '');
+  modalMeta.textContent = [posOrRole, row.team, row.opponent, row.date].filter(Boolean).join(' · ');
+  modalLp.textContent = row.lp + ' LP';
+  modalLp.style.color = row.lp > 0 ? 'var(--hot)' : (row.lp < 0 ? 'var(--cool)' : 'var(--ink-0)');
+
+  renderModalBody();
   modalOverlay.classList.add('open');
 }
 

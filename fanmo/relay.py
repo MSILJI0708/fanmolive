@@ -70,6 +70,8 @@ def fetch_full_relay(game_id: str, max_innings: int = 15) -> list[dict]:
                     "half": g.get("homeOrAway"),  # '0'=원정 공격(홈 수비), '1'=홈 공격(원정 수비)
                     "out": cgs.get("out"),
                     "base": (cgs.get("base1") or "0", cgs.get("base2") or "0", cgs.get("base3") or "0"),
+                    "home_score": int(cgs.get("homeScore") or 0),
+                    "away_score": int(cgs.get("awayScore") or 0),
                     "text": opt.get("text", ""),
                 })
     events.sort(key=lambda e: (e["no"], e["sub"]))
@@ -184,6 +186,10 @@ def compute_relay_stats(
       'fielding_events': {name: [{'type':'ASSIST'|'OF_ASSIST'|'DP'|'TP', 'pos':실제 수비 위치}, ...]},
       'batter_extra': {name: {'ADVANCE':n}},
       'timeline': {name: [{'inn':int, 'text':str, 'points':int, 'tags':{stat:count}}, ...]},
+      'pitcher_entry_margin': {name: int},  # 구원투수가 등판한 순간의 (자팀-상대) 점수차. 세이브
+                                             # 기회 판정용(조건1: 0<margin<=3 and 1이닝 이상 / 조건3:
+                                             # 3이닝 이상 무관. "동점주자가 누상/타석"인 조건2는 미구현)
+      'final_score': {'home': int, 'away': int} | None,  # 승/패 판정용 최종 스코어
     }
     catcher_events/fielding_events는 "그 순간 실제로 뛴 포지션"을 이벤트마다 태그해 원본 그대로
     반환한다 — 판타지 카드 등록 포지션과 다른 포지션에서 난 수비 기록을 어떻게 인정할지는
@@ -205,6 +211,9 @@ def compute_relay_stats(
     catcher_events: dict = defaultdict(list)
     fielding_events: dict = defaultdict(list)
     timeline: dict = defaultdict(list)
+    # 세이브 기회 판정용: 구원투수가 등판한 "순간"의 (자기 팀 점수 - 상대 팀 점수) 마진.
+    # 선발은 여기 안 걸리는 게 맞다(등판 자체가 '교체'로 안 잡히니까).
+    pitcher_entry_margin: dict = {}
 
     defense = {"0": dict(home_starting_defense), "1": dict(away_starting_defense)}
     current_pitcher = {"0": home_starting_pitcher, "1": away_starting_pitcher}
@@ -241,6 +250,10 @@ def compute_relay_stats(
                     if slot != "0" and slot not in pending_inherited[half]:
                         pending_inherited[half][slot] = in_name
                 current_pitcher[half] = in_name
+                if in_name not in pitcher_entry_margin:
+                    # half='0'이면 수비팀=홈, half='1'이면 수비팀=원정
+                    margin = (ev["home_score"] - ev["away_score"]) if half == "0" else (ev["away_score"] - ev["home_score"])
+                    pitcher_entry_margin[in_name] = margin
             elif in_label in FIELDING_POSITIONS:
                 defense[half][in_label] = in_name
             prev_base[half] = base
@@ -409,12 +422,19 @@ def compute_relay_stats(
                 "points": PITCHER_POINTS["INHERITED_STRANDED"], "tags": {"INHERITED_STRANDED": 1},
             })
 
+    final_score = (
+        {"home": events[-1]["home_score"], "away": events[-1]["away_score"]}
+        if events else None
+    )
+
     return {
         "pitcher_extra": {k: dict(v) for k, v in pitcher_extra.items()},
         "catcher_events": dict(catcher_events),
         "fielding_events": dict(fielding_events),
         "batter_extra": batter_extra,
         "timeline": {k: v for k, v in timeline.items()},
+        "pitcher_entry_margin": pitcher_entry_margin,
+        "final_score": final_score,
     }
 
 

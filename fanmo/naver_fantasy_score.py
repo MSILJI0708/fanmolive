@@ -358,7 +358,7 @@ def process_game(
                 "BLOWN": 1 if wls == "블" else 0,
                 "PERFECT": perfect, "NOHIT": nohit, "SHO": sho, "CG": cg,
                 "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0,
-                "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0,
+                "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0, "SAVE_OPP": False,
             }
             pitcher_rows.append({
                 "name": name, "team": team_name[side], "opponent": opp_name[side],
@@ -442,6 +442,10 @@ def _merge_relay_stats(game_id: str, rd: dict, batter_rows: list[dict], pitcher_
     pitcher_extra = stats["pitcher_extra"]
     batter_extra = stats["batter_extra"]
     timeline = stats["timeline"]
+    entry_margin = stats["pitcher_entry_margin"]
+    final_score = stats["final_score"]
+    info = rd.get("gameInfo", {})
+    home_team_name = info.get("hName", "")
 
     for row in batter_rows:
         events_for_player = fielding_events.get(row["name"], []) + catcher_events.get(row["name"], [])
@@ -477,16 +481,176 @@ def _merge_relay_stats(game_id: str, rd: dict, batter_rows: list[dict], pitcher_
             row["stat"]["PICKOFF_A"] += pe.get("PICKOFF_A", 0)
             row["lp"] = score_pitcher(row["stat"])
 
+        margin = entry_margin.get(row["name"])
+        if margin is not None and final_score is not None:
+            side = "home" if row["team"] == home_team_name else "away"
+            opp_side = "away" if side == "home" else "home"
+            team_won = final_score[side] > final_score[opp_side]
+            outs = row["stat"]["OUT"]
+            # 조건1: 3점 이내 리드로 등판해 1이닝 이상 / 조건3: 이닝 무관 3이닝 이상
+            # ("동점주자가 누상/타석/다음타자"인 조건2는 미구현 — 주자 신원까지 필요해 생략)
+            row["stat"]["SAVE_OPP"] = bool(
+                team_won and ((1 <= margin <= 3 and outs >= 3) or outs >= 9)
+            )
+
     for row in batter_rows + pitcher_rows:
         _attach_play_log(row, timeline)
+        row["categories"] = (
+            _pitcher_categories(row) if "OUT" in row["stat"] else _batter_categories(row)
+        )
+
+
+def _cat_item(label: str, key: str, stat: dict, points_table: dict, weight_key: str | None = None,
+              flag: bool = False) -> dict:
+    w = points_table.get(weight_key or key, 0)
+    v = stat.get(key, 0)
+    pts = (w if v else 0) if flag else v * w
+    return {"label": label, "count": v, "points": pts, "flag": flag}
+
+
+def _batter_categories(row: dict) -> list[dict]:
+    """카드게임에서 요청한 5개 그룹(+아웃)으로 타자 스탯을 묶는다. 항목은 항상 전부 계산해서
+    넣고(그래야 총합이 LP와 정확히 맞음), 값이 0/false인 항목을 숨길지는 화면(JS) 쪽에서 정한다."""
+    s = row["stat"]
+
+    def item(label, key, **kw):
+        return _cat_item(label, key, s, BATTER_POINTS, **kw)
+
+    groups = [
+        {"name": "출루", "items": [item("안타", "H"), item("볼넷", "BB"), item("사구", "HBP")]},
+        {"name": "장타", "items": [
+            item("2루타", "2B"), item("3루타", "3B"), item("홈런", "HR"),
+            item("만루홈런", "GRANDSLAM"), item("사이클히트", "CYCLE", flag=True),
+        ]},
+        {"name": "팀배팅", "items": [
+            item("타점", "RBI"), item("진루타(번트 포함)", "SACBUNT"), item("희생플라이", "SACFLY"),
+        ]},
+        {"name": "주루", "items": [
+            item("도루", "SB"), item("도루실패", "CS"), item("견제사", "PICKOFF"), item("득점", "R"),
+        ]},
+        {"name": "수비", "items": [
+            item("보살", "ASSIST"), item("외야수 보살", "OF_ASSIST"),
+            item("병살 가담", "DP_FIELD"), item("삼중살 가담", "TP_FIELD"),
+            item("도루 저지(포수)", "CS_CATCHER"), item("도루 허용(포수)", "SB_ALLOWED_CATCHER"),
+            item("실책", "E"),
+        ]},
+        {"name": "아웃", "items": [
+            item("뜬공 아웃", "FO"), item("땅볼 아웃", "GO"), item("병살타", "GDP"), item("삼진", "K"),
+        ]},
+    ]
+    for g in groups:
+        g["total"] = sum(i["points"] for i in g["items"])
+    return groups
+
+
+def _pitcher_categories(row: dict) -> list[dict]:
+    """선발/구원은 애초에 서로 절대 낼 수 없는 스탯이 있어서(선발은 홀드/세이브 불가, 구원은
+    QS/완투 불가) 역할별로 다른 그룹 구성을 쓴다. 상대쪽 전용 스탯은 구조상 항상 0이라 빼도
+    총합에서 LP가 안 맞는 문제는 안 생긴다."""
+    s = row["stat"]
+    role = row.get("role")
+
+    def item(label, key, **kw):
+        return _cat_item(label, key, s, PITCHER_POINTS, **kw)
+
+    groups = [
+        {"name": "기본", "items": [
+            {"label": "아웃카운트", "count": s["OUT"], "points": s["OUT"] * PITCHER_POINTS["OUT"], "flag": False},
+            item("자책점", "ER"), item("탈삼진", "K"),
+        ]},
+        {"name": "출루허용", "items": [item("피안타", "H"), item("볼넷", "BB"), item("사구", "HBP")]},
+        {"name": "장타허용", "items": [item("피2루타", "2B_A"), item("피3루타", "3B_A"), item("피홈런", "HR")]},
+    ]
+
+    if role == "선발":
+        groups.append({"name": "주자억제", "items": [
+            item("도루 허용", "SB_ALLOWED"), item("도루 저지", "CS_A"), item("견제사", "PICKOFF_A"),
+            item("폭투", "WP"), item("보크", "BK"),
+        ]})
+        groups.append({"name": "선발 특별", "items": [
+            item("퀄리티스타트+", "QSPLUS", flag=True), item("퀄리티스타트", "QS", flag=True),
+            item("완투", "CG", flag=True), item("완봉", "SHO", flag=True),
+            item("노히트", "NOHIT", flag=True), item("퍼펙트게임", "PERFECT", flag=True),
+        ]})
+    else:  # 구원
+        groups.append({"name": "주자억제", "items": [
+            item("도루 허용", "SB_ALLOWED"), item("도루 저지", "CS_A"), item("견제사", "PICKOFF_A"),
+            item("폭투", "WP"), item("보크", "BK"),
+            {"label": "승계주자 수", "count": s["INHERITED_SCORED"] + s["INHERITED_STRANDED"],
+             "points": 0, "flag": False, "info": True},
+            item("승계주자 실점 허용", "INHERITED_SCORED"),
+            item("승계주자 실점 막음", "INHERITED_STRANDED"),
+        ]})
+        groups.append({"name": "구원 특별", "items": [
+            {"label": "세이브 기회", "count": 1 if s["SAVE_OPP"] else 0, "points": 0, "flag": True, "info": True},
+            item("홀드", "HOLD", flag=True), item("세이브", "SAVE", flag=True),
+            item("블론 세이브", "BLOWN", flag=True),
+        ]})
+
+    for g in groups:
+        g["total"] = sum(i["points"] for i in g["items"])
+    return groups
+
+
+def _pitcher_box_summary_lines(stat: dict) -> list[dict]:
+    """투수의 이닝/자책/탈삼진 등은 타석별 릴레이 이벤트가 아니라 경기 전체 박스스코어 합계로만
+    나오니, 타임라인에 없는 이 항목들을 이름 붙은 요약 줄로 명시해서 "기타 보정"이 커지는 걸 막는다."""
+    lines = []
+    if stat["OUT"]:
+        lines.append({"inn": None, "text": f"아웃카운트 {stat['OUT']}개",
+                       "points": stat["OUT"] * PITCHER_POINTS["OUT"], "tags": {"OUT": stat["OUT"]}})
+    if stat["K"]:
+        lines.append({"inn": None, "text": f"탈삼진 {stat['K']}개",
+                       "points": stat["K"] * PITCHER_POINTS["K"], "tags": {"K": stat["K"]}})
+    if stat["ER"]:
+        lines.append({"inn": None, "text": f"자책점 {stat['ER']}점",
+                       "points": stat["ER"] * PITCHER_POINTS["ER"], "tags": {"ER": stat["ER"]}})
+    if stat["H"]:
+        lines.append({"inn": None, "text": f"피안타 {stat['H']}개",
+                       "points": stat["H"] * PITCHER_POINTS["H"], "tags": {"H": stat["H"]}})
+    if stat["BB"] or stat["HBP"]:
+        lines.append({
+            "inn": None, "text": f"사사구 {stat['BB'] + stat['HBP']}개 (볼넷 {stat['BB']} + 사구 {stat['HBP']})",
+            "points": stat["BB"] * PITCHER_POINTS["BB"] + stat["HBP"] * PITCHER_POINTS["HBP"],
+            "tags": {"BB": stat["BB"], "HBP": stat["HBP"]},
+        })
+    if stat["WP"]:
+        lines.append({"inn": None, "text": f"폭투 {stat['WP']}개",
+                       "points": stat["WP"] * PITCHER_POINTS["WP"], "tags": {"WP": stat["WP"]}})
+    if stat["BK"]:
+        lines.append({"inn": None, "text": f"보크 {stat['BK']}개",
+                       "points": stat["BK"] * PITCHER_POINTS["BK"], "tags": {"BK": stat["BK"]}})
+    if stat["QSPLUS"]:
+        lines.append({"inn": None, "text": "퀄리티스타트+", "points": PITCHER_POINTS["QSPLUS"], "tags": {"QSPLUS": 1}})
+    elif stat["QS"]:
+        lines.append({"inn": None, "text": "퀄리티스타트", "points": PITCHER_POINTS["QS"], "tags": {"QS": 1}})
+    if stat["HOLD"]:
+        lines.append({"inn": None, "text": "홀드", "points": PITCHER_POINTS["HOLD"], "tags": {"HOLD": 1}})
+    if stat["SAVE"]:
+        lines.append({"inn": None, "text": "세이브", "points": PITCHER_POINTS["SAVE"], "tags": {"SAVE": 1}})
+    if stat["BLOWN"]:
+        lines.append({"inn": None, "text": "블론 세이브", "points": PITCHER_POINTS["BLOWN"], "tags": {"BLOWN": 1}})
+    if stat["PERFECT"]:
+        lines.append({"inn": None, "text": "퍼펙트게임", "points": PITCHER_POINTS["PERFECT"], "tags": {"PERFECT": 1}})
+    elif stat["NOHIT"]:
+        lines.append({"inn": None, "text": "노히트", "points": PITCHER_POINTS["NOHIT"], "tags": {"NOHIT": 1}})
+    if stat["SHO"]:
+        lines.append({"inn": None, "text": "완봉", "points": PITCHER_POINTS["SHO"], "tags": {"SHO": 1}})
+    elif stat["CG"]:
+        lines.append({"inn": None, "text": "완투", "points": PITCHER_POINTS["CG"], "tags": {"CG": 1}})
+    return lines
 
 
 def _attach_play_log(row: dict, timeline: dict) -> None:
     """선수 클릭 팝업용 "타석/수비별 결과 - 포인트" 내역. 릴레이 텍스트를 직접 분류해서 만든
     거라, 박스스코어 기반 최종 LP(row['lp'])와 합계가 다를 수 있다(예: 병살 가담이 이미 그
     경기에서 2번 이상 잡혔지만 실제 점수는 1회로 상한). 그 차이는 마지막 줄에 "기타 보정"으로
-    투명하게 남겨서, 팝업에 나온 항목을 전부 더하면 항상 실제 LP와 정확히 맞도록 한다."""
+    투명하게 남겨서, 팝업에 나온 항목을 전부 더하면 항상 실제 LP와 정확히 맞도록 한다.
+    투수는 이닝/자책/탈삼진 등 박스스코어 전용 항목을 이름 붙은 요약 줄로 먼저 채워서
+    "기타 보정"이 원칙적으로 0에 가깝게 만든다."""
     log = list(timeline.get(row["name"], []))
+    if "OUT" in row["stat"]:  # 투수 행
+        log = _pitcher_box_summary_lines(row["stat"]) + log
     log_sum = sum(e["points"] for e in log)
     diff = row["lp"] - log_sum
     if diff:
