@@ -60,8 +60,8 @@ def innings_to_outs(inn: str) -> int:
 
 def process_game(game_id: str, schedule_entry: dict) -> tuple[list[dict], list[dict]]:
     rd = fetch_record(game_id)
-    if not rd.get("homeBatter") and not rd.get("homePitcher"):
-        return [], []
+    if not rd or (not rd.get("homeBatter") and not rd.get("homePitcher")):
+        return [], []  # 경기 시작 전이라 아직 박스스코어가 없음
 
     is_final = schedule_entry.get("statusCode") == "RESULT"
     date_disp = schedule_entry["gameDate"]
@@ -129,8 +129,8 @@ def process_game(game_id: str, schedule_entry: dict) -> tuple[list[dict], list[d
 def collect_date(date_str: str) -> tuple[list[dict], list[dict]]:
     all_batters, all_pitchers = [], []
     for g in fetch_schedule(date_str):
-        if g.get("statusCode") == "READY":
-            continue  # 경기 시작 전
+        if g.get("statusCode") in ("READY", "BEFORE"):
+            continue  # 경기 시작 전 (READY=곧 시작, BEFORE=아직 한참 남음)
         gid = g["gameId"]
         try:
             b, p = process_game(gid, g)
