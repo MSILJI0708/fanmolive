@@ -310,6 +310,67 @@ section.board.active { display: block; }
 .rule-bar input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--accent); cursor: pointer; }
 .rule-bar .rule-note { color: var(--ink-1); font-size: 11px; margin-left: auto; }
 
+tbody tr.clickable { cursor: pointer; }
+tbody tr.clickable:hover { background: var(--chip-bg); }
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+.modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 620px;
+  max-height: 82vh;
+  overflow-y: auto;
+  background: var(--paper-1);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 22px 24px;
+}
+.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--paper-0);
+  color: var(--ink-1);
+  font-size: 13px;
+  cursor: pointer;
+}
+.modal-head { margin-bottom: 16px; padding-right: 30px; }
+.modal-name { font-size: 19px; font-weight: 700; }
+.modal-meta { font-size: 12.5px; color: var(--ink-1); margin-top: 3px; }
+.modal-lp { font-size: 26px; font-weight: 700; margin-top: 8px; }
+.modal-body table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.modal-body th {
+  text-align: left;
+  font-size: 11px;
+  color: var(--ink-1);
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--line);
+}
+.modal-body td { padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.modal-body tr:last-child td { border-bottom: none; }
+.modal-body td.inn { color: var(--ink-1); white-space: nowrap; }
+.modal-body td.pts { text-align: right; font-weight: 700; white-space: nowrap; }
+.modal-body td.pts.pos { color: var(--hot); }
+.modal-body td.pts.neg { color: var(--cool); }
+.modal-empty { color: var(--ink-1); font-size: 13px; padding: 10px 0; }
+
 .tablewrap {
   overflow-x: auto;
   border: 1px solid var(--line);
@@ -466,6 +527,18 @@ footer.notes b { color: var(--ink-0); }
     <div class="tablewrap"><table id="tbl-p"></table></div>
   </section>
 </main>
+
+<div class="modal-overlay" id="player-modal-overlay">
+  <div class="modal-card" role="dialog" aria-modal="true">
+    <button class="modal-close" id="player-modal-close" aria-label="닫기">✕</button>
+    <div class="modal-head">
+      <div class="modal-name" id="modal-name"></div>
+      <div class="modal-meta" id="modal-meta"></div>
+      <div class="modal-lp" id="modal-lp"></div>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
 
 <footer class="notes">
   <b>포지션 판정.</b> 기준일 이전 최근 14일간 수비 출전 기록(포지션별 수비 이닝 추정)에서
@@ -743,6 +816,9 @@ function render(tableId, cols, rows) {
     tbody.innerHTML = '';
     sorted.forEach((row, i) => {
       const tr = document.createElement('tr');
+      tr.className = 'clickable';
+      tr.title = '클릭하면 타석/수비별 포인트 내역을 볼 수 있어요';
+      tr.addEventListener('click', () => openPlayerModal(row));
       makeRowCells(row, cols, i).forEach(td => tr.appendChild(td));
       tbody.appendChild(tr);
     });
@@ -919,6 +995,69 @@ function switchDate(dateStr) {
 dateSelect.addEventListener('change', () => switchDate(dateSelect.value));
 
 renderTiles(activeDate);
+
+// --- 선수 클릭 → 타석/수비별 포인트 내역 팝업 ---
+const modalOverlay = document.getElementById('player-modal-overlay');
+const modalName = document.getElementById('modal-name');
+const modalMeta = document.getElementById('modal-meta');
+const modalLp = document.getElementById('modal-lp');
+const modalBody = document.getElementById('modal-body');
+
+function openPlayerModal(row) {
+  modalName.textContent = row.name;
+  const posOrRole = row.position ? row.position : (row.role || '');
+  modalMeta.textContent = [posOrRole, row.team, row.opponent, row.date].filter(Boolean).join(' · ');
+  modalLp.textContent = row.lp + ' LP';
+  modalLp.style.color = row.lp > 0 ? 'var(--hot)' : (row.lp < 0 ? 'var(--cool)' : 'var(--ink-0)');
+
+  modalBody.innerHTML = '';
+  const log = row.play_log;
+  if (log === undefined) {
+    const p = document.createElement('div');
+    p.className = 'modal-empty';
+    p.textContent = '이 경기는 텍스트 중계 조회에 실패했거나 지원되지 않는 리그라 상세 내역이 없어요. 표의 합산 점수만 유효합니다.';
+    modalBody.appendChild(p);
+  } else if (log.length === 0) {
+    const p = document.createElement('div');
+    p.className = 'modal-empty';
+    p.textContent = '이 선수는 이번 경기에서 득점으로 이어진 개별 이벤트가 없어요 (LP 0).';
+    modalBody.appendChild(p);
+  } else {
+    const table = document.createElement('table');
+    const thead = document.createElement('thead');
+    thead.innerHTML = '<tr><th>이닝</th><th>결과</th><th style="text-align:right">포인트</th></tr>';
+    const tbody = document.createElement('tbody');
+    log.forEach(e => {
+      const tr = document.createElement('tr');
+      const tdInn = document.createElement('td');
+      tdInn.className = 'inn';
+      tdInn.textContent = e.inn ? e.inn + '회' : '-';
+      const tdText = document.createElement('td');
+      tdText.textContent = e.text;
+      const tdPts = document.createElement('td');
+      tdPts.className = 'pts ' + (e.points > 0 ? 'pos' : (e.points < 0 ? 'neg' : ''));
+      tdPts.textContent = (e.points > 0 ? '+' : '') + e.points;
+      tr.append(tdInn, tdText, tdPts);
+      tbody.appendChild(tr);
+    });
+    table.append(thead, tbody);
+    modalBody.appendChild(table);
+  }
+
+  modalOverlay.classList.add('open');
+}
+
+function closePlayerModal() {
+  modalOverlay.classList.remove('open');
+}
+
+document.getElementById('player-modal-close').addEventListener('click', closePlayerModal);
+modalOverlay.addEventListener('click', e => {
+  if (e.target === modalOverlay) closePlayerModal();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closePlayerModal();
+});
 </script>
 """
 

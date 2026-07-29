@@ -29,7 +29,7 @@ from __future__ import annotations
 import re
 from collections import defaultdict
 
-from naver_fantasy_score import fetch_json
+from naver_fantasy_score import BATTER_POINTS, PITCHER_POINTS, fetch_json
 from position import FIELDING_CHARS
 
 RELAY_URL = "https://api-gw.sports.naver.com/schedule/games/{game_id}/relay?inning={inning}"
@@ -43,7 +43,8 @@ _CHAIN_RE = re.compile(r"\(([^)]+)\)$")
 _RUN_RE = re.compile(r"^(?P<base>[123])루주자 (?P<name>\S+) : 홈인$")
 _SB_RE = re.compile(r"^[123]루주자 (?P<name>\S+) : 도루로 (?:[123]루까지 진루|홈인)$")
 _CS_RE = re.compile(r"^[123]루주자 (?P<name>\S+) : 도루실패아웃 \((?P<chain>[^)]+)\)$")
-_PICKOFF_RE = re.compile(r"^[123]루주자 \S+ : 견제사아웃 \((?P<who>투수|포수) 견제")
+_PICKOFF_RE = re.compile(r"^[123]루주자 (?P<name>\S+) : 견제사아웃 \((?P<who>투수|포수) 견제")
+_HOME_RE = re.compile(r"^[123]루주자 \S+ : 홈인$")
 _PLAIN_ADVANCE_RE = re.compile(r"^[123]루주자 \S+ : (?:[123]루까지 진루|홈인)$")
 _ADVANCE_MARKERS = ("폭투", "도루", "실책", "보크", "낫")
 _INNING_MARK_RE = re.compile(r"^(\d+)회(초|말) (.+) 공격$")
@@ -83,6 +84,43 @@ def _split_chain(chain_text: str) -> list[str]:
     parts = [p.strip() for p in text.split("->")]
     parts = [p for p in parts if p in FIELDING_POSITIONS]
     return parts if len(parts) >= 2 else []
+
+
+def classify_relay_desc(desc: str) -> dict[str, int]:
+    """타석 결과 문장 하나에서 타자 스탯 태그를 뽑는다(naver_fantasy_score.classify_pa의 relay
+    텍스트 버전). 병살은 GO와 안 겹치게(원본과 동일하게) 배타적으로 잡고, 희생플라이/희생번트는
+    원본처럼 FO/GO에도 같이 더해진다."""
+    tags = {"H": 0, "2B": 0, "3B": 0, "HR": 0, "BB": 0, "HBP": 0, "K": 0,
+            "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0}
+    if "홈런" in desc:
+        tags["H"] = 1
+        tags["HR"] = 1
+    elif "3루타" in desc:
+        tags["H"] = 1
+        tags["3B"] = 1
+    elif "2루타" in desc:
+        tags["H"] = 1
+        tags["2B"] = 1
+    elif "1루타" in desc or "안타" in desc:
+        tags["H"] = 1
+    elif "몸에 맞는" in desc:
+        tags["HBP"] = 1
+    elif "볼넷" in desc:
+        tags["BB"] = 1
+    elif "삼진" in desc or "스트라이크 낫 아웃" in desc:
+        tags["K"] = 1
+    elif "병살" in desc:
+        tags["GDP"] = 1
+    elif "희생플라이" in desc:
+        tags["SACFLY"] = 1
+        tags["FO"] = 1
+    elif "땅볼" in desc or "희생번트" in desc:
+        tags["GO"] = 1
+    elif "플라이" in desc or "직선타" in desc:
+        tags["FO"] = 1
+    elif "아웃" in desc:
+        tags["GO"] = 1  # 분류 못한 아웃은 보수적으로 땅볼 취급
+    return tags
 
 
 def _is_productive_out_desc(desc: str) -> bool:
@@ -145,18 +183,28 @@ def compute_relay_stats(
       'catcher_events': {name: [{'type':'CS_CATCHER'|'SB_ALLOWED_CATCHER', 'pos':'포수'}, ...]},
       'fielding_events': {name: [{'type':'ASSIST'|'OF_ASSIST'|'DP'|'TP', 'pos':실제 수비 위치}, ...]},
       'batter_extra': {name: {'ADVANCE':n}},
+      'timeline': {name: [{'inn':int, 'text':str, 'points':int, 'tags':{stat:count}}, ...]},
     }
     catcher_events/fielding_events는 "그 순간 실제로 뛴 포지션"을 이벤트마다 태그해 원본 그대로
     반환한다 — 판타지 카드 등록 포지션과 다른 포지션에서 난 수비 기록을 어떻게 인정할지는
     naver_fantasy_score.py의 필터링 단계(및 프론트엔드의 사용자 선택)에서 결정한다. 그래서 더블
     플레이/트리플 플레이도 "게임당 1회"로 미리 접지 않고 매 발생 건을 그대로 내보낸다(필터링 후
     남는 이벤트 중 하나라도 있으면 1회 인정하는 계산은 호출자 몫).
+
+    timeline은 "선수를 클릭하면 타석/수비별로 무슨 일이 있었고 몇 점을 얻었는지" 팝업용 원장이다.
+    시간순 그대로 담아서 게임당 1회 상한(DP/TP 등) 같은 후처리는 하지 않으므로, 화면에서 보여줄 때
+    실제 LP와 차이가 나면 그 차액을 "기타 보정" 한 줄로 reconcile해야 한다(naver_fantasy_score.py
+    쪽에서 처리).
     """
     batter_extra = _detect_productive_outs(events)
+    group_texts: dict = defaultdict(list)
+    for ev in events:
+        group_texts[ev["no"]].append(ev["text"])
 
     pitcher_extra: dict = defaultdict(lambda: defaultdict(int))
     catcher_events: dict = defaultdict(list)
     fielding_events: dict = defaultdict(list)
+    timeline: dict = defaultdict(list)
 
     defense = {"0": dict(home_starting_defense), "1": dict(away_starting_defense)}
     current_pitcher = {"0": home_starting_pitcher, "1": away_starting_pitcher}
@@ -175,6 +223,10 @@ def compute_relay_stats(
             for half_key in ("0", "1"):
                 for pitcher in pending_inherited[half_key].values():
                     pitcher_extra[pitcher]["INHERITED_STRANDED"] += 1
+                    timeline[pitcher].append({
+                        "inn": ev["inn"], "text": "승계주자 실점 막음",
+                        "points": PITCHER_POINTS["INHERITED_STRANDED"], "tags": {"INHERITED_STRANDED": 1},
+                    })
                 pending_inherited[half_key] = {}
             prev_base = {"0": ("0", "0", "0"), "1": ("0", "0", "0")}
             continue
@@ -196,41 +248,81 @@ def compute_relay_stats(
 
         m_run = _RUN_RE.match(text)
         if m_run:
+            runner = m_run.group("name")
             slot = prev_base[half][int(m_run.group("base")) - 1]
             pitcher = pending_inherited[half].pop(slot, None)
             if pitcher:
                 pitcher_extra[pitcher]["INHERITED_SCORED"] += 1
+                timeline[pitcher].append({
+                    "inn": ev["inn"], "text": f"승계주자 {runner} 실점 허용",
+                    "points": PITCHER_POINTS["INHERITED_SCORED"], "tags": {"INHERITED_SCORED": 1},
+                })
+            timeline[runner].append({
+                "inn": ev["inn"], "text": "득점", "points": BATTER_POINTS["R"], "tags": {"R": 1},
+            })
             prev_base[half] = base
             continue
 
         m_sb = _SB_RE.match(text)
         if m_sb:
+            runner = m_sb.group("name")
+            timeline[runner].append({
+                "inn": ev["inn"], "text": "도루 성공", "points": BATTER_POINTS["SB"], "tags": {"SB": 1},
+            })
             catcher = defense[half].get("포수")
             if catcher:
                 catcher_events[catcher].append({"type": "SB_ALLOWED_CATCHER", "pos": "포수"})
+                timeline[catcher].append({
+                    "inn": ev["inn"], "text": f"도루 허용 ({runner})",
+                    "points": BATTER_POINTS["SB_ALLOWED_CATCHER"], "tags": {"SB_ALLOWED_CATCHER": 1},
+                })
             pitcher = current_pitcher[half]
             if pitcher:
                 pitcher_extra[pitcher]["SB_A"] += 1
+                timeline[pitcher].append({
+                    "inn": ev["inn"], "text": f"도루 허용 ({runner})",
+                    "points": PITCHER_POINTS["SB_ALLOWED"], "tags": {"SB_ALLOWED": 1},
+                })
             prev_base[half] = base
             continue
 
         m_cs = _CS_RE.match(text)
         if m_cs:
+            runner = m_cs.group("name")
+            timeline[runner].append({
+                "inn": ev["inn"], "text": "도루 실패(아웃)", "points": BATTER_POINTS["CS"], "tags": {"CS": 1},
+            })
             catcher = defense[half].get("포수")
             if catcher:
                 catcher_events[catcher].append({"type": "CS_CATCHER", "pos": "포수"})
+                timeline[catcher].append({
+                    "inn": ev["inn"], "text": f"도루 저지 ({runner})",
+                    "points": BATTER_POINTS["CS_CATCHER"], "tags": {"CS_CATCHER": 1},
+                })
             pitcher = current_pitcher[half]
             if pitcher:
                 pitcher_extra[pitcher]["CS_A"] += 1
+                timeline[pitcher].append({
+                    "inn": ev["inn"], "text": f"도루 저지 ({runner})",
+                    "points": PITCHER_POINTS["CS_A"], "tags": {"CS_A": 1},
+                })
             prev_base[half] = base
             continue
 
         m_pickoff = _PICKOFF_RE.match(text)
         if m_pickoff:
+            runner = m_pickoff.group("name")
+            timeline[runner].append({
+                "inn": ev["inn"], "text": "견제사(아웃)", "points": BATTER_POINTS["PICKOFF"], "tags": {"PICKOFF": 1},
+            })
             # "포수 견제"(포수가 던진 견제)는 투수의 견제사로 치지 않고, "투수 견제"만 인정
             if m_pickoff.group("who") == "투수":
                 pitcher = current_pitcher[half]
                 if pitcher:
+                    timeline[pitcher].append({
+                        "inn": ev["inn"], "text": f"견제사 ({runner})",
+                        "points": PITCHER_POINTS["PICKOFF_A"], "tags": {"PICKOFF_A": 1},
+                    })
                     pitcher_extra[pitcher]["PICKOFF_A"] += 1
             prev_base[half] = base
             continue
@@ -238,14 +330,42 @@ def compute_relay_stats(
         m_play = _PLAY_RE.match(text)
         if m_play:
             desc = m_play.group("desc")
+            batter = m_play.group("batter")
             if "2루타" in desc:
                 p = current_pitcher[half]
                 if p:
                     pitcher_extra[p]["2B_A"] += 1
+                    timeline[p].append({
+                        "inn": ev["inn"], "text": f"피2루타 ({batter})",
+                        "points": PITCHER_POINTS["2B_A"], "tags": {"2B_A": 1},
+                    })
             elif "3루타" in desc:
                 p = current_pitcher[half]
                 if p:
                     pitcher_extra[p]["3B_A"] += 1
+                    timeline[p].append({
+                        "inn": ev["inn"], "text": f"피3루타 ({batter})",
+                        "points": PITCHER_POINTS["3B_A"], "tags": {"3B_A": 1},
+                    })
+
+            bat_tags = classify_relay_desc(desc)
+            if any(bat_tags.values()):
+                pts = sum(bat_tags[k] * BATTER_POINTS.get(k, 0) for k in bat_tags)
+                timeline[batter].append({
+                    "inn": ev["inn"], "text": desc, "points": pts,
+                    "tags": {k: v for k, v in bat_tags.items() if v},
+                })
+                rbi = sum(1 for t in group_texts[ev["no"]] if _HOME_RE.match(t))
+                if bat_tags["HR"]:
+                    timeline[batter].append({
+                        "inn": ev["inn"], "text": "득점 (홈런)", "points": BATTER_POINTS["R"], "tags": {"R": 1},
+                    })
+                    rbi += 1  # 홈런은 다른 주자뿐 아니라 타자 자신의 득점도 타점으로 잡힌다
+                if rbi:
+                    timeline[batter].append({
+                        "inn": ev["inn"], "text": f"타점 {rbi}개", "points": rbi * BATTER_POINTS.get("RBI", 0),
+                        "tags": {"RBI": rbi},
+                    })
 
             m_chain = _CHAIN_RE.search(desc)
             if m_chain:
@@ -259,18 +379,42 @@ def compute_relay_stats(
                     if i < len(chain) - 1:  # 마지막(포구/터치 처리)을 뺀 나머지가 보살
                         etype = "OF_ASSIST" if pos in OUTFIELD_POSITIONS else "ASSIST"
                         fielding_events[fielder].append({"type": etype, "pos": pos})
+                        timeline[fielder].append({
+                            "inn": ev["inn"], "text": f"보살 ({pos}, {batter} 타석)",
+                            "points": BATTER_POINTS[etype], "tags": {etype: 1},
+                        })
                     if is_dp:
                         fielding_events[fielder].append({"type": "DP", "pos": pos})
+                        timeline[fielder].append({
+                            "inn": ev["inn"], "text": f"병살 가담 ({pos}, {batter} 타석)",
+                            "points": BATTER_POINTS["DP_FIELD"], "tags": {"DP_FIELD": 1},
+                        })
                     if is_tp:
                         fielding_events[fielder].append({"type": "TP", "pos": pos})
+                        timeline[fielder].append({
+                            "inn": ev["inn"], "text": f"삼중살 가담 ({pos}, {batter} 타석)",
+                            "points": BATTER_POINTS["TP_FIELD"], "tags": {"TP_FIELD": 1},
+                        })
 
         prev_base[half] = base
+
+    # 경기 마지막 하프이닝은 다음 "N회 공격" 표시줄이 없어서 루프 안에서 못 걸러진다 —
+    # 남아있는 승계주자는 경기가 그렇게 끝난 것 자체가 실점 없이 막았다는 뜻이라 여기서 마저 정산한다.
+    last_inn = events[-1]["inn"] if events else None
+    for half_key in ("0", "1"):
+        for pitcher in pending_inherited[half_key].values():
+            pitcher_extra[pitcher]["INHERITED_STRANDED"] += 1
+            timeline[pitcher].append({
+                "inn": last_inn, "text": "승계주자 실점 막음(경기 종료)",
+                "points": PITCHER_POINTS["INHERITED_STRANDED"], "tags": {"INHERITED_STRANDED": 1},
+            })
 
     return {
         "pitcher_extra": {k: dict(v) for k, v in pitcher_extra.items()},
         "catcher_events": dict(catcher_events),
         "fielding_events": dict(fielding_events),
         "batter_extra": batter_extra,
+        "timeline": {k: v for k, v in timeline.items()},
     }
 
 

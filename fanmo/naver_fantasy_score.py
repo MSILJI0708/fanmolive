@@ -441,6 +441,7 @@ def _merge_relay_stats(game_id: str, rd: dict, batter_rows: list[dict], pitcher_
     catcher_events = stats["catcher_events"]
     pitcher_extra = stats["pitcher_extra"]
     batter_extra = stats["batter_extra"]
+    timeline = stats["timeline"]
 
     for row in batter_rows:
         events_for_player = fielding_events.get(row["name"], []) + catcher_events.get(row["name"], [])
@@ -475,6 +476,25 @@ def _merge_relay_stats(game_id: str, rd: dict, batter_rows: list[dict], pitcher_
             row["stat"]["SB_ALLOWED"] += pe.get("SB_A", 0)
             row["stat"]["PICKOFF_A"] += pe.get("PICKOFF_A", 0)
             row["lp"] = score_pitcher(row["stat"])
+
+    for row in batter_rows + pitcher_rows:
+        _attach_play_log(row, timeline)
+
+
+def _attach_play_log(row: dict, timeline: dict) -> None:
+    """선수 클릭 팝업용 "타석/수비별 결과 - 포인트" 내역. 릴레이 텍스트를 직접 분류해서 만든
+    거라, 박스스코어 기반 최종 LP(row['lp'])와 합계가 다를 수 있다(예: 병살 가담이 이미 그
+    경기에서 2번 이상 잡혔지만 실제 점수는 1회로 상한). 그 차이는 마지막 줄에 "기타 보정"으로
+    투명하게 남겨서, 팝업에 나온 항목을 전부 더하면 항상 실제 LP와 정확히 맞도록 한다."""
+    log = list(timeline.get(row["name"], []))
+    log_sum = sum(e["points"] for e in log)
+    diff = row["lp"] - log_sum
+    if diff:
+        log.append({
+            "inn": None, "text": "기타 보정 (박스스코어 기준 상한 등)",
+            "points": diff, "tags": {},
+        })
+    row["play_log"] = log
 
 
 def collect_date(date_str: str, position_map: dict | None = None) -> tuple[list[dict], list[dict]]:
