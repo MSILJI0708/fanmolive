@@ -50,8 +50,15 @@ jobs:
         working-directory: fanmo
         continue-on-error: true
         run: |
+          # MLB는 미국 저녁 경기가 KST로는 다음날 새벽~오전에 걸쳐 끝나서, 네이버가 매기는
+          # gameDate가 "KST 오늘"이 아니라 "KST 내일"인 경우가 대부분이다(예: 미국 현지 저녁
+          # 7시 경기는 KST로 다음날 오전 8시경 끝남). TODAY_KST만 수집하면 이미 다 끝난
+          # 어제자 경기만 계속 재조회하게 돼서, 정작 지금 진행 중/예정인 오늘 밤 경기는 전혀
+          # 못 잡는다 — TODAY_KST와 TODAY_KST+1일 두 날짜를 모두 수집해서 이 시차를 커버한다.
           TODAY_KST=$(TZ=Asia/Seoul date +%F)
+          TOMORROW_KST=$(TZ=Asia/Seoul date -d "+1 day" +%F)
           python mlb_fantasy_score.py --date "$TODAY_KST"
+          python mlb_fantasy_score.py --date "$TOMORROW_KST"
 
       - name: 보드 HTML 빌드
         working-directory: fanmo
