@@ -365,9 +365,14 @@ def compute_relay_stats(
 
         m_runner_out = _RUNNER_OUT_RE.match(text)
         if m_runner_out:
-            chain = _split_chain(m_runner_out.group("chain"))
-            if len(chain) >= 2:
-                assist_pos = chain[-2]  # 마지막으로 송구를 보낸 야수(그 다음이 받아서 아웃 처리)
+            # 여기는 _split_chain을 그대로 쓰지 않는다 — 타자 자신의 뜬공/땅볼과 달리, 주자를
+            # 베이스에서 잡아내는 플레이는 "유격수 2루 터치아웃"처럼 야수 혼자(포스아웃) 처리해도
+            # 보살로 인정해야 해서, _split_chain의 "체인 길이 2 이상만" 제약을 적용하면 안 된다.
+            raw = _CHAIN_SUFFIX_RE.sub("", m_runner_out.group("chain"))
+            parts = [p.strip() for p in raw.split("->")]
+            parts = [p for p in parts if p in FIELDING_POSITIONS]
+            if parts:
+                assist_pos = parts[-2] if len(parts) >= 2 else parts[0]
                 fielder = defense[half].get(assist_pos)
                 if fielder:
                     etype = "OF_ASSIST" if assist_pos in OUTFIELD_POSITIONS else "ASSIST"
