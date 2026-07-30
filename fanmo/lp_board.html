@@ -402,7 +402,8 @@ tbody tr.clickable:hover { background: var(--chip-bg); }
 .cat-item .cat-item-flag.on { background: var(--hot); }
 
 .tablewrap {
-  overflow-x: auto;
+  overflow: auto;
+  max-height: 74vh;
   border: 1px solid var(--line);
   border-radius: 10px;
   box-shadow: var(--shadow);
@@ -417,6 +418,7 @@ tbody tr.clickable:hover { background: var(--chip-bg); }
 .tablewrap thead th {
   position: sticky;
   top: 0;
+  z-index: 2;
   background: var(--paper-1);
   border-bottom: 1px solid var(--line);
   color: var(--ink-1);
@@ -442,6 +444,17 @@ tbody tr.clickable:hover { background: var(--chip-bg); }
 tbody tr:nth-child(even) { background: var(--row-alt); }
 tbody tr:hover { background: var(--chip-bg); }
 td.name { text-align: left; font-weight: 600; }
+/* 첫 열(이름) 고정 — 헤더 행 고정과 함께 표가 길어져도 지금 보는 게 누구 행인지 알 수 있게.
+   sticky는 배경이 불투명해야 아래로 지나가는 다른 열이 안 비쳐서, 얼룩무늬/호버도 따로 맞춰준다. */
+.tablewrap th.name, .tablewrap td.name {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--paper-1);
+}
+.tablewrap thead th.name { z-index: 3; }
+.tablewrap tbody tr:nth-child(even) td.name { background: var(--row-alt); }
+.tablewrap tbody tr:hover td.name { background: var(--chip-bg); }
 td.rank { text-align: left; color: var(--ink-1); width: 28px; }
 .lp {
   display: inline-block;
