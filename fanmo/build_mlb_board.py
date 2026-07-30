@@ -526,19 +526,18 @@ footer.notes b { color: var(--ink-0); }
 </div>
 
 <footer class="notes">
-  <b>이 보드는 실험용입니다.</b> KBO판 <code>naver_fantasy_score.py</code>가 쓰는 네이버 스포츠
-  API를 MLB(<code>categoryId=mlb</code>)에도 그대로 호출해봤는데, 응답 스키마 자체가 KBO와
-  다르다 — 박스스코어에 타석별 코드(inn1~inn25)가 없고, 텍스트 중계도 이닝별 주자 상태 없이
-  문장이 <code>&lt;br/&gt;</code>로 이어붙은 블롭 형태라 KBO용 relay.py 파서를 그대로 못 쓴다.
-  그래서 이 보드는 <b>박스스코어에서 확실히 뽑히는 항목만</b> 채운다: 타자는 득점·안타·홈런·타점·
-  볼넷·사구·삼진·도루, 투수는 피안타·자책·볼넷·탈삼진·아웃카운트(이닝)·완투·완봉·노히트·퍼펙트·
-  QS·QS+·홀드·세이브·블론(<code>wls</code> 표기 '홀'/'세'/'블'/'승'/'패'가 KBO와 동일해 그대로
-  재사용). 포지션은 그 경기 하루치 표기만 있고(9UP식 2주 수비기록 집계는 KBO 전용이라 적용 안 함).<br>
-  <b>0으로 비어 있는 항목.</b> 2루타·3루타·병살·희생플라이·희생번트·사이클히트·만루홈런·도루실패·
-  견제사·실책(타자), 피2루타·피3루타·폭투·보크·승계주자 실점·도루 저지/허용·견제사(투수), 보살·
-  외야수 보살·병살/삼중살 가담은 전부 데이터가 없어 0으로 표시된다 — 실제로 0번 일어났다는 뜻이
-  아니라 "아직 못 채웠다"는 뜻이다. 이 실험이 쓸만하면 다음 단계로 MLB 텍스트 중계 포맷을 따로
-  분석해 KBO relay.py에 준하는 파서를 만들 수 있다.
+  <b>이 보드는 실험용입니다.</b> MLB 텍스트 중계는 KBO와 응답 형식이 달라서(한 타석의 공/결과가
+  개별 이벤트가 아니라 문자열 하나에 <code>&lt;br/&gt;</code>로 이어붙어 있고, 매 이벤트마다
+  있던 KBO의 주자상태·스코어 스냅샷이 아예 없음) <code>mlb_relay.py</code>를 새로 만들어 파싱했다.
+  덕분에 박스스코어엔 없는 2루타·3루타·병살타·희생플라이·진루타(번트 포함)·도루실패·견제사(타자),
+  피2루타·피3루타·도루허용·도루저지·견제사(투수)까지 채웠고, 실책은 "그 포지션의 선발 라인업"으로
+  근사해서 귀속시켰다(경기 중 그 자리 선수가 교체되면 그 이후 실책 귀속은 부정확할 수 있음).<br>
+  <b>구조적으로 못 채우는 항목.</b> 승계주자 실점 허용/막음, 세이브 기회 판정은 등판 시점의
+  점수차·주자 상황을 알아야 하는데 MLB 중계엔 그 스냅샷 자체가 없어 계산이 불가능하다. 보살·
+  외야수 보살·병살/삼중살 가담은 아웃 처리에 KBO식 "(위치→위치 송구아웃)" 체인이 없어서, 포수
+  도루 저지/허용은 포지션 교체 문구 자체가 안 보여 포수를 동적으로 추적할 수 없어서 못 채운다.
+  선수 클릭 시 나오는 카테고리/타임라인 팝업도 아직 MLB엔 없다(KBO만 지원) — 표의 합산 점수는
+  유효하지만 세부 내역은 못 본다.
 </footer>
 
 <script id="lp-data" type="application/json">__DATA_JSON__</script>
@@ -590,12 +589,21 @@ const batterCols = [
   {h:'LP', key:'lp', num:true},
   {h:'타수', key:'ab', num:true},
   {h:'안타', key:'H', num:true},
+  {h:'2B', key:'2B', num:true},
+  {h:'3B', key:'3B', num:true},
   {h:'홈런', key:'HR', num:true},
   {h:'타점', key:'RBI', num:true},
   {h:'득점', key:'R', num:true},
   {h:'사사구', merge:['BB','HBP'], labels:['볼넷','사구'], num:true},
   {h:'삼진', key:'K', num:true},
   {h:'도루', key:'SB', num:true},
+  {h:'주루사', merge:['CS','PICKOFF'], labels:['도루실패','견제사'], num:true},
+  {h:'병살', key:'GDP', num:true},
+  {h:'희비', key:'SACFLY', num:true},
+  {h:'진루타', key:'SACBUNT', num:true},
+  {h:'실책', key:'E', num:true},
+  {h:'사이클', key:'CYCLE', tag:true},
+  {h:'만루HR', key:'GRANDSLAM', num:true},
 ];
 
 const pitcherCols = [
@@ -610,6 +618,10 @@ const pitcherCols = [
   {h:'자책', key:'ER', num:true},
   {h:'볼넷', key:'BB', num:true},
   {h:'탈삼진', key:'K', num:true},
+  {h:'피2루타', key:'2B_A', num:true},
+  {h:'피3루타', key:'3B_A', num:true},
+  {h:'도루저지+견제', merge:['CS_A','PICKOFF_A'], labels:['도루 저지','견제사'], num:true},
+  {h:'도루허용', key:'SB_ALLOWED', num:true},
   {h:'홀드', key:'HOLD', num:true, tip: HOLD_TIP},
   {h:'세이브', key:'SAVE', num:true, tip: SAVE_TIP},
   {h:'블론', key:'BLOWN', num:true},
