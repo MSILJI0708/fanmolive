@@ -1,19 +1,20 @@
 name: KBO/MLB 판타지 LP 보드 자동 갱신
 
 # 사람이 매번 실행하지 않아도, 정해진 주기로:
-#   1) 오늘 KBO 경기(collect_date가 알아서 시작 전 경기는 건너뜀)를 수집하고
+#   0) 지금이 "활성 구간"(오늘 KBO 첫 경기 시작 2시간 전 ~ 그날 경기 전부 종료)인지
+#      check_active_window.py로 확인하고, 아니면 여기서 바로 끝낸다(몇 초짜리 빈 실행).
+#   1) 활성 구간이면 오늘 KBO 경기(collect_date가 알아서 시작 전 경기는 건너뜀)를 수집하고
 #   2) 테스트로 오늘 MLB 경기도 같이 수집해보고
 #   3) 두 보드를 다시 빌드해서
 #   4) 수집 데이터는 저장소에 커밋, 완성된 HTML은 GitHub Pages로 배포한다.
 #
-# 실행 빈도(KST 기준, cron은 UTC라 KST-9시간으로 환산했다):
-#   - KST 01:00~09:00 (KBO 새벽/심야 연장 드묾, MLB 한창 진행 중) → UTC 16-23시, 5분 간격
-#   - KST 18:00~24:00 (KBO 저녁 경기 시간대) → UTC 09-14시, 5분 간격
-#   - 그 외 시간 → UTC 0-8,15시, 30분 간격
-# 참고: 이 저장소는 public이라 Actions 무료 사용량 제한(private 저장소 기준 월 2,000분)에
-# 안 걸린다. 이 스케줄대로면 하루 약 188회(5분 구간 168회 + 30분 구간 20회) 실행되는데,
-# public 저장소는 무제한이라 문제없다. 나중에 private으로 되돌릴 경우 간격을 넓히는 걸
-# 고려할 것 — 한 번에 1~2분씩만 걸려도 한 달에 5,000~11,000분이 필요해 무료 한도를 넘긴다.
+# 트리거 자체는 외부 cron-job.org가 고정 간격으로 이 워크플로우의 workflow_dispatch를
+# 호출하는 방식이다(GitHub 자체 schedule: 트리거가 못 미더워서 이렇게 바꿈). 그래서
+# "낮에는 뜸하게, 경기 임박하면 자주" 같은 가변 주기는 cron-job.org 쪽에서 직접 구현하기
+# 어렵다 — 대신 cron-job.org는 원하는 가장 빠른 주기(예: 1~2분)로 항상 호출하게 해두고,
+# 위 0번 단계가 "지금 진짜 활성 구간인지"를 매번 판단해서 활성 구간이 아니면 나머지
+# 단계를 전부 건너뛰는 방식으로 구현했다. public 저장소라 Actions 무료 사용량 제한이
+# 없어서, 자주 호출해도 문제없다(활성 구간 아닐 때는 몇 초 안에 끝나서 비용도 거의 없음).
 on:
   workflow_dispatch: {} # Actions 탭에서 수동으로도 실행 가능
 
@@ -29,6 +30,8 @@ concurrency:
 jobs:
   collect-and-build:
     runs-on: ubuntu-latest
+    outputs:
+      active: ${{ steps.check_active.outputs.active }}
     steps:
       - name: 저장소 체크아웃
         uses: actions/checkout@v4
@@ -39,7 +42,16 @@ jobs:
           python-version: "3.12"
       # 전부 표준 라이브러리만 쓰므로(urllib, json, ssl, http.server 등) pip install 단계가 필요 없다.
 
+      - name: "지금이 활성 구간인지 확인 (아니면 뒤 단계 전부 건너뜀)"
+        id: check_active
+        working-directory: fanmo
+        run: |
+          RESULT=$(python check_active_window.py)
+          echo "active=$RESULT" >> "$GITHUB_OUTPUT"
+          echo "판정 결과: $RESULT"
+
       - name: "KBO 오늘 경기 수집 (기준일: KST 오늘)"
+        if: steps.check_active.outputs.active == 'true'
         working-directory: fanmo
         run: |
           TODAY_KST=$(TZ=Asia/Seoul date +%F)
@@ -47,6 +59,7 @@ jobs:
           python daily_pipeline.py --date "$TODAY_KST"
 
       - name: MLB 오늘 경기 수집 (테스트, 실패해도 KBO 파이프라인은 계속)
+        if: steps.check_active.outputs.active == 'true'
         working-directory: fanmo
         continue-on-error: true
         run: |
@@ -61,12 +74,14 @@ jobs:
           python mlb_fantasy_score.py --date "$TOMORROW_KST"
 
       - name: 보드 HTML 빌드
+        if: steps.check_active.outputs.active == 'true'
         working-directory: fanmo
         run: |
           python build_board.py --date "$TODAY_KST"
           python build_mlb_board.py --date "$TODAY_KST" || true
 
       - name: 수집 결과 커밋 & 푸시
+        if: steps.check_active.outputs.active == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -79,6 +94,7 @@ jobs:
           fi
 
       - name: Pages 배포용 폴더 구성
+        if: steps.check_active.outputs.active == 'true'
         run: |
           mkdir -p _site
           cp fanmo/lp_board.html _site/index.html
@@ -87,12 +103,14 @@ jobs:
           fi
 
       - name: Pages 아티팩트 업로드
+        if: steps.check_active.outputs.active == 'true'
         uses: actions/upload-pages-artifact@v3
         with:
           path: _site
 
   deploy:
     needs: collect-and-build
+    if: needs.collect-and-build.outputs.active == 'true'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
