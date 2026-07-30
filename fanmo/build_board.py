@@ -236,6 +236,13 @@ section.board.active { display: block; }
   color: var(--paper-1);
   border-color: var(--ink-0);
 }
+.chip.group-chip { display: inline-flex; align-items: center; gap: 5px; }
+.chip.group-chip .sign {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 13px; height: 13px; border-radius: 4px;
+  background: var(--paper-0); color: var(--ink-1); font-size: 10px; font-weight: 700;
+}
+.chip.group-chip.expanded .sign { background: var(--accent); color: #fff; }
 
 .info-tip {
   position: relative;
@@ -590,6 +597,8 @@ footer.notes b { color: var(--ink-0); }
       </label>
       <span class="rule-note">보살·외야보살·병살가담·삼중살가담·도루저지(포)·도루허용(포)에만 적용됨</span>
     </div>
+    <div class="chips" id="batter-mode-chips"></div>
+    <div class="chips" id="batter-group-chips"></div>
     <div class="tablewrap"><table id="tbl-b"></table></div>
   </section>
 
@@ -599,6 +608,8 @@ footer.notes b { color: var(--ink-0); }
       <span class="count" id="count-p"></span>
     </div>
     <div class="chips" id="role-chips"></div>
+    <div class="chips" id="pitcher-mode-chips"></div>
+    <div class="chips" id="pitcher-group-chips"></div>
     <div class="tablewrap"><table id="tbl-p"></table></div>
   </section>
 </main>
@@ -719,6 +730,65 @@ function lpClass(v) {
   return '';
 }
 
+// 표 상단 "카테고리 방식" 보기용 가중치(naver_fantasy_score.py BATTER_POINTS/PITCHER_POINTS와 동일)
+const BATTER_POINTS_JS = {
+  R: 15, H: 10, BB: 10, '2B': 15, '3B': 30, HR: 80, RBI: 25,
+  FO: -10, GO: -10, GDP: -25, SACFLY: 10, SACBUNT: 10, SB: 30, CS: -15,
+  HBP: 5, K: -15, PICKOFF: -10, CYCLE: 50, GRANDSLAM: 10, E: -10,
+  ASSIST: 1, DP_FIELD: 10, TP_FIELD: 50, OF_ASSIST: 30,
+  CS_CATCHER: 40, SB_ALLOWED_CATCHER: -10,
+};
+const PITCHER_POINTS_JS = {
+  H: -10, '2B_A': -10, '3B_A': -15, HR: -40, ER: -10, BB: -10, HBP: -10, WP: -20,
+  OUT: 10, K: 15, BK: -50, QS: 20, QSPLUS: 30,
+  INHERITED_SCORED: -5, INHERITED_STRANDED: 5,
+  CS_A: 10, SB_ALLOWED: -10, PICKOFF_A: 10,
+  HOLD: 20, SAVE: 30, BLOWN: -10, PERFECT: 100, NOHIT: 70, SHO: 30, CG: 15,
+};
+
+// 표에서 "카테고리 방식"으로 볼 때 쓰는 그룹 정의(팝업의 categories와 라벨은 맞추되,
+// 투수는 선발/구원 구분 없이 통합 - 표는 두 역할이 섞여 있어 항목을 안 나눌 수 없음).
+const BATTER_GROUP_DEFS = {
+  '출루': [{ label: '안타', key: 'H' }, { label: '볼넷', key: 'BB' }, { label: '사구', key: 'HBP' }],
+  '장타': [
+    { label: '2루타', key: '2B' }, { label: '3루타', key: '3B' }, { label: '홈런', key: 'HR' },
+    { label: '만루홈런', key: 'GRANDSLAM' }, { label: '사이클히트', key: 'CYCLE', flag: true },
+  ],
+  '팀배팅': [{ label: '타점', key: 'RBI' }, { label: '진루타', key: 'SACBUNT' }, { label: '희생플라이', key: 'SACFLY' }],
+  '주루': [{ label: '도루', key: 'SB' }, { label: '도루실패', key: 'CS' }, { label: '견제사', key: 'PICKOFF' }, { label: '득점', key: 'R' }],
+  '수비': [
+    { label: '보살', key: 'ASSIST' }, { label: '외야수 보살', key: 'OF_ASSIST' },
+    { label: '병살 가담', key: 'DP_FIELD' }, { label: '삼중살 가담', key: 'TP_FIELD' },
+    { label: '도루 저지(포)', key: 'CS_CATCHER' }, { label: '도루 허용(포)', key: 'SB_ALLOWED_CATCHER' },
+    { label: '실책', key: 'E' },
+  ],
+  '아웃': [{ label: '뜬공 아웃', key: 'FO' }, { label: '땅볼 아웃', key: 'GO' }, { label: '병살타', key: 'GDP' }, { label: '삼진', key: 'K' }],
+};
+const PITCHER_GROUP_DEFS = {
+  '기본': [{ label: '아웃카운트', key: 'OUT' }, { label: '자책점', key: 'ER' }, { label: '탈삼진', key: 'K' }],
+  '출루허용': [{ label: '피안타', key: 'H' }, { label: '볼넷', key: 'BB' }, { label: '사구', key: 'HBP' }],
+  '장타허용': [{ label: '피2루타', key: '2B_A' }, { label: '피3루타', key: '3B_A' }, { label: '피홈런', key: 'HR' }],
+  '주자억제': [
+    { label: '도루 허용', key: 'SB_ALLOWED' }, { label: '도루 저지', key: 'CS_A' }, { label: '견제사', key: 'PICKOFF_A' },
+    { label: '폭투', key: 'WP' }, { label: '보크', key: 'BK' },
+    { label: '승계주자 실점 허용', key: 'INHERITED_SCORED' }, { label: '승계주자 실점 막음', key: 'INHERITED_STRANDED' },
+  ],
+  '특별': [
+    { label: 'QS+', key: 'QSPLUS', flag: true }, { label: 'QS', key: 'QS', flag: true },
+    { label: '완투', key: 'CG', flag: true }, { label: '완봉', key: 'SHO', flag: true },
+    { label: '노히트', key: 'NOHIT', flag: true }, { label: '퍼펙트', key: 'PERFECT', flag: true },
+    { label: '홀드', key: 'HOLD', flag: true }, { label: '세이브', key: 'SAVE', flag: true }, { label: '블론세이브', key: 'BLOWN', flag: true },
+  ],
+};
+
+function groupTotal(row, items, weights) {
+  return items.reduce((sum, it) => {
+    const v = row.stat ? (row.stat[it.key] || 0) : 0;
+    const w = weights[it.key] || 0;
+    return sum + (it.flag ? (v ? w : 0) : v * w);
+  }, 0);
+}
+
 const SAVE_TIP = `<b>세이브 요건 (공식 야구규칙 기준)</b><br>
 승리 팀의 마지막 투수로 등판해 경기를 끝냈고, 그 경기의 선발투수가 아니며,
 다음 중 하나를 만족해야 함:<br>
@@ -734,7 +804,7 @@ const HOLD_TIP = `<b>홀드 요건 (공식 야구규칙 기준)</b><br>
 동점이나 역전을 허용하지 않은 채 다음 투수에게
 리드를 그대로 넘기고 물러났을 경우 부여됨`;
 
-const batterCols = [
+const batterColsFlat = [
   {h:'#', key:null, cls:'rank'},
   {h:'이름', key:'name', cls:'name left'},
   {h:'포지션', key:'position', cls:'left'},
@@ -767,7 +837,7 @@ const batterCols = [
   {h:'만루HR', key:'GRANDSLAM', num:true},
 ];
 
-const pitcherCols = [
+const pitcherColsFlat = [
   {h:'#', key:null, cls:'rank'},
   {h:'이름', key:'name', cls:'name left'},
   {h:'구분', key:'role', cls:'left'},
@@ -800,6 +870,9 @@ const pitcherCols = [
 ];
 
 function cellValue(row, col) {
+  if (col.compute) {
+    return col.compute(row);
+  }
   if (col.merge) {
     return col.merge.reduce((sum, k) => sum + (row.stat ? (row.stat[k] || 0) : 0), 0);
   }
@@ -842,6 +915,13 @@ function makeRowCells(row, cols, i) {
     } else if (col.tag) {
       const v = cellValue(row, col);
       if (v) { const s = document.createElement('span'); s.className = 'tag'; s.textContent = '●'; td.appendChild(s); }
+      td.className = 'num';
+    } else if (col.groupTotal) {
+      const v = cellValue(row, col);
+      const span = document.createElement('span');
+      span.className = 'lp num ' + lpClass(v);
+      span.textContent = (v > 0 ? '+' : '') + v;
+      td.appendChild(span);
       td.className = 'num';
     } else if (col.merge) {
       const v = cellValue(row, col);
@@ -935,10 +1015,129 @@ function render(tableId, cols, rows) {
   };
 }
 
-const bCtl = render('tbl-b', batterCols, data.batters);
-const pCtl = render('tbl-p', pitcherCols, data.pitchers);
+const BATTER_LEADING_COLS = [
+  {h:'#', key:null, cls:'rank'},
+  {h:'이름', key:'name', cls:'name left'},
+  {h:'포지션', key:'position', cls:'left'},
+  {h:'소속', key:'team', cls:'left'},
+  {h:'상대', key:'opponent', cls:'left'},
+  {h:'구장', key:'stadium', cls:'left'},
+  {h:'LP', key:'lp', num:true},
+  {h:'타수', key:'ab', num:true},
+];
+const PITCHER_LEADING_COLS = [
+  {h:'#', key:null, cls:'rank'},
+  {h:'이름', key:'name', cls:'name left'},
+  {h:'구분', key:'role', cls:'left'},
+  {h:'소속', key:'team', cls:'left'},
+  {h:'상대', key:'opponent', cls:'left'},
+  {h:'구장', key:'stadium', cls:'left'},
+  {h:'LP', key:'lp', num:true},
+  {h:'IP', key:'inn', cls:'left'},
+];
+
+function buildGroupedCols(leadingCols, groupDefs, expandState, weights) {
+  const cols = [...leadingCols];
+  Object.keys(groupDefs).forEach(gname => {
+    const items = groupDefs[gname];
+    if (expandState[gname]) {
+      items.forEach(it => {
+        cols.push({
+          h: it.label, tag: !!it.flag, num: !it.flag,
+          compute: row => {
+            const v = row.stat ? (row.stat[it.key] || 0) : 0;
+            return it.flag ? (v ? 1 : 0) : v;
+          },
+        });
+      });
+    } else {
+      cols.push({ h: gname, groupTotal: true, compute: row => groupTotal(row, items, weights) });
+    }
+  });
+  return cols;
+}
+
+let batterTableMode = 'flat'; // 'flat' | 'grouped'
+const batterGroupExpand = { '출루': false, '장타': false, '팀배팅': false, '주루': false, '수비': false, '아웃': false };
+let pitcherTableMode = 'flat';
+const pitcherGroupExpand = { '기본': false, '출루허용': false, '장타허용': false, '주자억제': false, '특별': false };
+
+function getBatterCols() {
+  return batterTableMode === 'grouped'
+    ? buildGroupedCols(BATTER_LEADING_COLS, BATTER_GROUP_DEFS, batterGroupExpand, BATTER_POINTS_JS)
+    : batterColsFlat;
+}
+function getPitcherCols() {
+  return pitcherTableMode === 'grouped'
+    ? buildGroupedCols(PITCHER_LEADING_COLS, PITCHER_GROUP_DEFS, pitcherGroupExpand, PITCHER_POINTS_JS)
+    : pitcherColsFlat;
+}
+
+let bCtl = render('tbl-b', getBatterCols(), data.batters);
+let pCtl = render('tbl-p', getPitcherCols(), data.pitchers);
 document.getElementById('count-b').textContent = data.batters.length + '명';
 document.getElementById('count-p').textContent = data.pitchers.length + '명';
+
+function rebuildBatterTable() {
+  bCtl = render('tbl-b', getBatterCols(), data.batters);
+  applyBatterFilters();
+}
+function rebuildPitcherTable() {
+  pCtl = render('tbl-p', getPitcherCols(), data.pitchers);
+  applyPitcherFilters();
+}
+
+function renderModeChips(wrapId, onFlat, onGrouped) {
+  const wrap = document.getElementById(wrapId);
+  const flatBtn = document.createElement('button');
+  flatBtn.className = 'chip active';
+  flatBtn.textContent = '기존 방식 (전체 컬럼)';
+  const groupBtn = document.createElement('button');
+  groupBtn.className = 'chip';
+  groupBtn.textContent = '카테고리 방식 (그룹 접기/펼치기)';
+  flatBtn.addEventListener('click', () => {
+    flatBtn.classList.add('active');
+    groupBtn.classList.remove('active');
+    onFlat();
+  });
+  groupBtn.addEventListener('click', () => {
+    groupBtn.classList.add('active');
+    flatBtn.classList.remove('active');
+    onGrouped();
+  });
+  wrap.append(flatBtn, groupBtn);
+}
+
+function renderGroupChips(wrapId, groupDefs, expandState, rebuildFn) {
+  const wrap = document.getElementById(wrapId);
+  wrap.innerHTML = '';
+  Object.keys(groupDefs).forEach(gname => {
+    const btn = document.createElement('button');
+    btn.className = 'chip group-chip' + (expandState[gname] ? ' expanded' : '');
+    const sign = document.createElement('span');
+    sign.className = 'sign';
+    sign.textContent = expandState[gname] ? '−' : '+';
+    btn.append(sign, document.createTextNode(gname));
+    btn.addEventListener('click', () => {
+      expandState[gname] = !expandState[gname];
+      renderGroupChips(wrapId, groupDefs, expandState, rebuildFn);
+      rebuildFn();
+    });
+    wrap.appendChild(btn);
+  });
+}
+
+renderModeChips('batter-mode-chips',
+  () => { batterTableMode = 'flat'; document.getElementById('batter-group-chips').style.display = 'none'; rebuildBatterTable(); },
+  () => { batterTableMode = 'grouped'; document.getElementById('batter-group-chips').style.display = ''; renderGroupChips('batter-group-chips', BATTER_GROUP_DEFS, batterGroupExpand, rebuildBatterTable); rebuildBatterTable(); },
+);
+document.getElementById('batter-group-chips').style.display = 'none';
+
+renderModeChips('pitcher-mode-chips',
+  () => { pitcherTableMode = 'flat'; document.getElementById('pitcher-group-chips').style.display = 'none'; rebuildPitcherTable(); },
+  () => { pitcherTableMode = 'grouped'; document.getElementById('pitcher-group-chips').style.display = ''; renderGroupChips('pitcher-group-chips', PITCHER_GROUP_DEFS, pitcherGroupExpand, rebuildPitcherTable); rebuildPitcherTable(); },
+);
+document.getElementById('pitcher-group-chips').style.display = 'none';
 
 // --- 검색 + 포지션 필터 (타자) ---
 let posFilter = '전체';
