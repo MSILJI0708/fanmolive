@@ -1,5 +1,5 @@
 <!doctype html>
-<title>MLB 판타지 LP 보드(실험) · 2026-07-31</title>
+<title>MLB 판타지 LP 보드(실험) · 2026-07-30</title>
 <style>
 :root {
   --paper-0: #f3f1ea;
@@ -434,30 +434,30 @@ footer.notes b { color: var(--ink-0); }
 <div class="tiles" id="tiles-main">
   <div class="tile">
     <div class="label">경기 수</div>
-    <div class="value num" id="tile-games">0</div>
-    <div class="meta" id="tile-games-meta">2026-07-31 KBO 전 경기</div>
+    <div class="value num" id="tile-games">9</div>
+    <div class="meta" id="tile-games-meta">2026-07-30 KBO 전 경기</div>
   </div>
   <div class="tile">
     <div class="label">타자 최고 LP</div>
-    <div class="value hot num" id="tile-topb-lp">0</div>
-    <div class="meta" id="tile-topb-meta">- · -</div>
+    <div class="value hot num" id="tile-topb-lp">340</div>
+    <div class="meta" id="tile-topb-meta">수삭 · 샌프란시스코</div>
   </div>
   <div class="tile">
     <div class="label">투수 최고 LP</div>
-    <div class="value hot num" id="tile-topp-lp">0</div>
-    <div class="meta" id="tile-topp-meta">- · -</div>
+    <div class="value hot num" id="tile-topp-lp">315</div>
+    <div class="meta" id="tile-topp-meta">세일 · 애틀랜타</div>
   </div>
   <div class="tile">
     <div class="label">집계 선수</div>
-    <div class="value num" id="tile-total">0</div>
-    <div class="meta" id="tile-total-meta">타자 0 · 투수 0</div>
+    <div class="value num" id="tile-total">302</div>
+    <div class="meta" id="tile-total-meta">타자 213 · 투수 89</div>
   </div>
 </div>
 
 <main>
   <nav class="chapters">
-    <button class="chip-tab active" data-chapter="batters">타자 <span class="n" id="tab-nb">0명</span></button>
-    <button class="chip-tab" data-chapter="pitchers">투수 <span class="n" id="tab-np">0명</span></button>
+    <button class="chip-tab active" data-chapter="batters">타자 <span class="n" id="tab-nb">213명</span></button>
+    <button class="chip-tab" data-chapter="pitchers">투수 <span class="n" id="tab-np">89명</span></button>
   </nav>
 
   <section class="board active" id="chapter-batters">
@@ -510,7 +510,7 @@ footer.notes b { color: var(--ink-0); }
 <script>
 const ALL_DATA = JSON.parse(document.getElementById('lp-data').textContent);
 const AVAILABLE_DATES = Object.keys(ALL_DATA).sort().reverse();
-let activeDate = '2026-07-31';
+let activeDate = '2026-07-30';
 let data = ALL_DATA[activeDate] || { batters: [], pitchers: [] };
 
 const POSITION_GROUPS = {
