@@ -34,7 +34,7 @@ from mlb_relay import (
 SCHEDULE_URL = (
     "https://api-gw.sports.naver.com/schedule/games"
     "?fields=basic&upperCategoryId=wbaseball&categoryId=mlb"
-    "&fromDate={date}&toDate={date}"
+    "&fromDate={date}&toDate={date}&size=40"
 )
 RECORD_URL = "https://api-gw.sports.naver.com/schedule/games/{game_id}/record"
 

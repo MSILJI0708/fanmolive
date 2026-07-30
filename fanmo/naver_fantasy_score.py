@@ -48,7 +48,7 @@ HEADERS = {
 SCHEDULE_URL = (
     "https://api-gw.sports.naver.com/schedule/games"
     "?fields=basic&upperCategoryId=kbaseball&categoryId=kbo"
-    "&fromDate={date}&toDate={date}"
+    "&fromDate={date}&toDate={date}&size=20"
 )
 GAME_URL = "https://api-gw.sports.naver.com/schedule/games/{game_id}"
 RECORD_URL = "https://api-gw.sports.naver.com/schedule/games/{game_id}/record"
