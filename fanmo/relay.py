@@ -436,21 +436,33 @@ def compute_relay_stats(
                         })
 
             m_chain = _CHAIN_RE.search(desc)
-            if m_chain:
-                chain = _split_chain(m_chain.group(1))
-                is_dp = "병살" in desc
-                is_tp = "삼중살" in desc
-                for i, pos in enumerate(chain):
+            chain = _split_chain(m_chain.group(1)) if m_chain else []
+            is_dp = "병살" in desc
+            is_tp = "삼중살" in desc
+
+            # 보살: 병살/삼중살은 별도 스탯(DP_FIELD/TP_FIELD)으로 채점하므로 여기서는 제외하고,
+            # 타구를 처리해 아웃을 만든 플레이에서 "마지막으로 송구를 보낸 야수" 한 명에게만 준다
+            # (체인이 없는 단독 처리 - 예: 뜬공을 직접 잡은 외야수 - 는 그 야수 본인이 대상).
+            if (bat_tags["FO"] or bat_tags["GO"]) and not is_dp and not is_tp:
+                first_tok = desc.split(" ", 1)[0]
+                primary_pos = first_tok if first_tok in FIELDING_POSITIONS else None
+                seq = chain if len(chain) >= 2 else ([primary_pos] if primary_pos else [])
+                if seq:
+                    assist_pos = seq[max(0, len(seq) - 2)]
+                    fielder = defense[half].get(assist_pos)
+                    if fielder:
+                        etype = "OF_ASSIST" if assist_pos in OUTFIELD_POSITIONS else "ASSIST"
+                        fielding_events[fielder].append({"type": etype, "pos": assist_pos})
+                        timeline[fielder].append({
+                            "inn": ev["inn"], "text": f"보살 ({assist_pos}, {batter} 타석)",
+                            "points": BATTER_POINTS[etype], "tags": {etype: 1},
+                        })
+
+            if chain and (is_dp or is_tp):
+                for pos in chain:
                     fielder = defense[half].get(pos)
                     if not fielder:
                         continue
-                    if i < len(chain) - 1:  # 마지막(포구/터치 처리)을 뺀 나머지가 보살
-                        etype = "OF_ASSIST" if pos in OUTFIELD_POSITIONS else "ASSIST"
-                        fielding_events[fielder].append({"type": etype, "pos": pos})
-                        timeline[fielder].append({
-                            "inn": ev["inn"], "text": f"보살 ({pos}, {batter} 타석)",
-                            "points": BATTER_POINTS[etype], "tags": {etype: 1},
-                        })
                     if is_dp:
                         fielding_events[fielder].append({"type": "DP", "pos": pos})
                         timeline[fielder].append({
