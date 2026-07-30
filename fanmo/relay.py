@@ -219,6 +219,12 @@ def compute_relay_stats(
     # 세이브 기회 판정용: 구원투수가 등판한 "순간"의 (자기 팀 점수 - 상대 팀 점수) 마진.
     # 선발은 여기 안 걸리는 게 맞다(등판 자체가 '교체'로 안 잡히니까).
     pitcher_entry_margin: dict = {}
+    # 자책점을 "이닝별"로 보여주기 위한 추적: 주자 이름 -> 그 주자를 출루시킨 투수.
+    # 이후 그 주자가 득점하면 이 투수에게 "자책점 후보"를 그 득점이 일어난 이닝에 매긴다.
+    # (진짜 자책/비자책 판정은 박스스코어에만 있어서, 상한은 naver_fantasy_score.py에서
+    # 박스스코어의 er 합계로 다시 자른다 — 여기서는 후보만 시간순으로 모아둔다)
+    run_origin: dict[str, str] = {}
+    earned_run_events: dict = defaultdict(list)
 
     defense = {"0": dict(home_starting_defense), "1": dict(away_starting_defense)}
     current_pitcher = {"0": home_starting_pitcher, "1": away_starting_pitcher}
@@ -278,6 +284,9 @@ def compute_relay_stats(
             timeline[runner].append({
                 "inn": ev["inn"], "text": "득점", "points": BATTER_POINTS["R"], "tags": {"R": 1},
             })
+            origin = run_origin.pop(runner, None)
+            if origin:
+                earned_run_events[origin].append({"inn": ev["inn"], "runner": runner})
             prev_base[half] = base
             continue
 
@@ -389,6 +398,11 @@ def compute_relay_stats(
                 # (아웃카운트는 병살이면 2개, 그 외 아웃성 결과는 1개, 안타/볼넷/사구는 0개)
                 p = current_pitcher[half]
                 if p:
+                    if bat_tags["HR"]:
+                        # 홈런은 타자 본인이 그 자리에서 득점까지 확정되므로 별도 조회 없이 바로 기록
+                        earned_run_events[p].append({"inn": ev["inn"], "runner": batter})
+                    elif bat_tags["H"] or bat_tags["BB"] or bat_tags["HBP"]:
+                        run_origin[batter] = p
                     if bat_tags["H"]:
                         timeline[p].append({
                             "inn": ev["inn"], "text": f"피안타 ({batter})",
@@ -476,6 +490,7 @@ def compute_relay_stats(
         "timeline": {k: v for k, v in timeline.items()},
         "pitcher_entry_margin": pitcher_entry_margin,
         "final_score": final_score,
+        "earned_run_events": {k: v for k, v in earned_run_events.items()},
     }
 
 
