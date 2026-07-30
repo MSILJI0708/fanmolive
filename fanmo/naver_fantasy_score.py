@@ -667,12 +667,111 @@ def _attach_play_log(row: dict, timeline: dict, er_events: list[dict] | None = N
     row["play_log"] = log
 
 
+def _zero_batter_stat() -> dict:
+    return {
+        "R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0,
+        "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0,
+        "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0,
+        "CYCLE": 0, "GRANDSLAM": 0, "E": 0,
+        "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0,
+        "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0,
+    }
+
+
+def _zero_pitcher_stat() -> dict:
+    return {
+        "H": 0, "HR": 0, "ER": 0, "BB": 0, "HBP": 0, "K": 0, "OUT": 0,
+        "WP": 0, "BK": 0, "QS": False, "QSPLUS": False,
+        "HOLD": 0, "SAVE": 0, "BLOWN": 0,
+        "PERFECT": False, "NOHIT": False, "SHO": False, "CG": False,
+        "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0,
+        "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0, "SAVE_OPP": False,
+    }
+
+
+def build_pregame_rows(g: dict) -> tuple[list[dict], list[dict]]:
+    """경기 시작 2시간 전부터, 아직 시작 안 한(BEFORE) 경기라도 1군 엔트리 전원을 LP 0짜리
+    "출전 예정" 행으로 미리 보여준다. 코리아베이스볼(koreabaseball.com) 등록 현황에서 그날
+    기준 1군 엔트리를, 네이버 스포츠 /preview에서 선발 라인업 발표 여부를 가져와 합친다.
+    라인업이 아직 발표 전이면 선발투수만(fullLineUp에 그 한 명만 들어있음) 표시되고,
+    나머지는 발표되는 대로 자동으로 초록 마커가 붙는다."""
+    import pregame
+
+    if g.get("statusCode") != "BEFORE" or not pregame.is_within_pregame_window(g.get("gameDateTime", "")):
+        return [], []
+
+    home_code, away_code = g.get("homeTeamCode"), g.get("awayTeamCode")
+    home_name, away_name = g.get("homeTeamName", ""), g.get("awayTeamName", "")
+    date_str = g.get("gameDate", "")
+    date_disp = f"{date_str[5:7]}월 {date_str[8:10]}일" if len(date_str) == 10 else ""
+
+    try:
+        home_roster = pregame.fetch_active_roster(home_code, date_str)
+        away_roster = pregame.fetch_active_roster(away_code, date_str)
+    except Exception as exc:  # noqa: BLE001
+        print(f"  {g.get('gameId')} 1군 엔트리 조회 실패: {exc}")
+        return [], []
+
+    preview = pregame.fetch_preview(g["gameId"]) or {}
+    stadium = preview.get("stadium", "")
+
+    from position import load_db  # naver_fantasy_score <-> position 순환 임포트 방지(지연 임포트)
+    name_pos_by_team: dict[tuple, str] = {}
+    for rec in load_db().get("players", {}).values():
+        name_pos_by_team[(rec["name"], rec.get("team", ""))] = rec["effective_position"]
+
+    batter_rows, pitcher_rows = [], []
+    for side, code, team, opp, roster in (
+        ("home", home_code, home_name, away_name, home_roster),
+        ("away", away_code, away_name, home_name, away_roster),
+    ):
+        side_preview = preview.get(side, {})
+        starters = side_preview.get("starters", {})
+        starting_pitcher = side_preview.get("starting_pitcher")
+
+        pitcher_names = [n for n, c in roster.items() if c == "투수"]
+        pitcher_names.sort(key=lambda n: 0 if n == starting_pitcher else 1)
+        for name in pitcher_names:
+            pitcher_rows.append({
+                "name": name, "team": team, "opponent": opp,
+                "date": date_disp, "stadium": stadium, "inn": "",
+                "role": "선발" if name == starting_pitcher else "구원",
+                "stat": _zero_pitcher_stat(), "lp": 0,
+                "is_starter": name == starting_pitcher,
+                "status": "pregame",
+            })
+
+        batter_names = [n for n, c in roster.items() if c != "투수"]
+        batter_names.sort(key=lambda n: starters.get(n, 99))
+        for name in batter_names:
+            category = roster[name]
+            position = name_pos_by_team.get((name, team), category)
+            batter_rows.append({
+                "name": name, "team": team, "opponent": opp,
+                "date": date_disp, "stadium": stadium, "pos": "",
+                "position": position, "position_override": False,
+                "ab": 0, "stat": _zero_batter_stat(), "lp": 0,
+                "is_starter": name in starters,
+                "bat_order": starters.get(name),
+                "status": "pregame",
+            })
+
+    return batter_rows, pitcher_rows
+
+
 def collect_date(date_str: str, position_map: dict | None = None) -> tuple[list[dict], list[dict]]:
     all_batters, all_pitchers = [], []
     for g in fetch_schedule(date_str):
         gid = g["gameId"]
         if g.get("statusCode") == "BEFORE":
-            continue  # 아직 시작 전 → 박스스코어 없음
+            try:
+                b, p = build_pregame_rows(g)
+            except Exception as exc:  # noqa: BLE001
+                print(f"  {gid} 출전 예정 명단 처리 실패: {exc}")
+                b, p = [], []
+            all_batters.extend(b)
+            all_pitchers.extend(p)
+            continue  # 아직 시작 전 → 박스스코어는 없음
         try:
             b, p = process_game(gid, position_map=position_map, game_status=g.get("statusCode"))
         except Exception as exc:  # noqa: BLE001

@@ -495,6 +495,17 @@ td.rank { text-align: left; color: var(--ink-1); width: 28px; }
 .role { font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 5px; }
 .role.starter { background: var(--chip-bg); color: var(--accent-ink); }
 .role.reliever { color: var(--ink-1); }
+.starter-badge {
+  display: inline-block;
+  margin-left: 5px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: #1e8e3e;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  vertical-align: middle;
+}
 
 footer.notes {
   max-width: 1180px;
@@ -898,6 +909,16 @@ function makeRowCells(row, cols, i) {
       span.textContent = row.role || '';
       td.appendChild(span);
       td.className = 'left';
+    } else if (col.key === 'name') {
+      td.appendChild(document.createTextNode(row.name));
+      td.className = col.cls || 'name left';
+      if (row.is_starter) {
+        const s = document.createElement('span');
+        s.className = 'starter-badge';
+        s.textContent = '선';
+        s.title = '선발 라인업 확정';
+        td.appendChild(s);
+      }
     } else if (col.tag) {
       const v = cellValue(row, col);
       if (v) { const s = document.createElement('span'); s.className = 'tag'; s.textContent = '●'; td.appendChild(s); }
@@ -1274,6 +1295,15 @@ let currentModalView = 'category'; // 'category' | 'timeline'
 
 function renderTimelineView(row) {
   modalBody.innerHTML = '';
+  if (row.status === 'pregame') {
+    const p = document.createElement('div');
+    p.className = 'modal-empty';
+    p.textContent = row.is_starter
+      ? '아직 경기 전이에요. 오늘 선발 라인업에 이름을 올렸어요 — 경기가 시작되면 이닝별 기록이 여기에 채워집니다.'
+      : '아직 경기 전이에요. 1군 엔트리에는 있지만 아직 선발 라인업 발표 전(또는 벤치)이라 출전 여부가 확정되지 않았어요.';
+    modalBody.appendChild(p);
+    return;
+  }
   const log = row.play_log;
   if (log === undefined) {
     const p = document.createElement('div');
@@ -1350,6 +1380,15 @@ function renderTimelineView(row) {
 
 function renderCategoryView(row) {
   modalBody.innerHTML = '';
+  if (row.status === 'pregame') {
+    const p = document.createElement('div');
+    p.className = 'modal-empty';
+    p.textContent = row.is_starter
+      ? '아직 경기 전이에요. 오늘 선발 라인업에 이름을 올렸어요 — 경기가 시작되면 카테고리별 기록이 여기에 채워집니다.'
+      : '아직 경기 전이에요. 1군 엔트리에는 있지만 아직 선발 라인업 발표 전(또는 벤치)이라 출전 여부가 확정되지 않았어요.';
+    modalBody.appendChild(p);
+    return;
+  }
   const cats = row.categories;
   if (!cats) {
     const p = document.createElement('div');
