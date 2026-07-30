@@ -593,27 +593,15 @@ def _pitcher_categories(row: dict) -> list[dict]:
 
 
 def _pitcher_box_summary_lines(stat: dict) -> list[dict]:
-    """투수의 이닝/자책/탈삼진 등은 타석별 릴레이 이벤트가 아니라 경기 전체 박스스코어 합계로만
-    나오니, 타임라인에 없는 이 항목들을 이름 붙은 요약 줄로 명시해서 "기타 보정"이 커지는 걸 막는다."""
+    """아웃카운트/탈삼진/피안타/피홈런/볼넷/사구는 이제 relay.py가 타자와 똑같이 이닝별
+    타임라인으로 채워주므로 여기서는 안 넣는다(중복 방지). 자책점은 "이 투수가 던지는 동안
+    난 점수"와 "그중 자책으로 기록된 점수"가 다를 수 있어(비자책 실점 등) 이닝별로 안전하게
+    나눌 수 없어 그대로 경기 합계 한 줄로 남긴다. QS 이하 보너스류도 경기 전체 단위 판정이라
+    특정 이닝에 귀속시킬 수 없다."""
     lines = []
-    if stat["OUT"]:
-        lines.append({"inn": None, "text": f"아웃카운트 {stat['OUT']}개",
-                       "points": stat["OUT"] * PITCHER_POINTS["OUT"], "tags": {"OUT": stat["OUT"]}})
-    if stat["K"]:
-        lines.append({"inn": None, "text": f"탈삼진 {stat['K']}개",
-                       "points": stat["K"] * PITCHER_POINTS["K"], "tags": {"K": stat["K"]}})
     if stat["ER"]:
         lines.append({"inn": None, "text": f"자책점 {stat['ER']}점",
                        "points": stat["ER"] * PITCHER_POINTS["ER"], "tags": {"ER": stat["ER"]}})
-    if stat["H"]:
-        lines.append({"inn": None, "text": f"피안타 {stat['H']}개",
-                       "points": stat["H"] * PITCHER_POINTS["H"], "tags": {"H": stat["H"]}})
-    if stat["BB"] or stat["HBP"]:
-        lines.append({
-            "inn": None, "text": f"사사구 {stat['BB'] + stat['HBP']}개 (볼넷 {stat['BB']} + 사구 {stat['HBP']})",
-            "points": stat["BB"] * PITCHER_POINTS["BB"] + stat["HBP"] * PITCHER_POINTS["HBP"],
-            "tags": {"BB": stat["BB"], "HBP": stat["HBP"]},
-        })
     if stat["WP"]:
         lines.append({"inn": None, "text": f"폭투 {stat['WP']}개",
                        "points": stat["WP"] * PITCHER_POINTS["WP"], "tags": {"WP": stat["WP"]}})

@@ -394,11 +394,11 @@ tbody tr.clickable:hover { background: var(--chip-bg); }
 }
 .modal-body td { padding: 5px 6px; border-bottom: 1px solid var(--line); vertical-align: top; overflow-wrap: anywhere; text-align: left; }
 .modal-body tr:last-child td { border-bottom: none; }
-.modal-body td.inn { color: var(--ink-1); white-space: nowrap; width: 34px; }
-/* result 컬럼은 width:0으로 줘야 fixed 레이아웃에서 내용 길이로 컬럼이 안 늘어나고
-   남은 공간 안에서만 줄바꿈된다(고정폭 테이블의 "가변 컬럼" 트릭) */
-.modal-body td.result { width: 0; }
-.modal-body td.pts { text-align: right; font-weight: 700; white-space: nowrap; width: 52px; }
+/* 셋을 합쳐 정확히 100%가 되는 퍼센트 폭으로 줘야 fixed 레이아웃에서 셋 다 화면 안에
+   들어온다(콘텐츠 길이에 따라 컬럼이 늘어나 스크롤이 생기는 걸 막는 확실한 방법) */
+.modal-body td.inn { color: var(--ink-1); width: 14%; }
+.modal-body td.result { width: 66%; }
+.modal-body td.pts { text-align: right; font-weight: 700; white-space: nowrap; width: 20%; }
 .modal-body td.pts.pos { color: var(--hot); }
 .modal-body td.pts.neg { color: var(--cool); }
 .modal-empty { color: var(--ink-1); font-size: 13px; padding: 10px 0; }
@@ -1308,7 +1308,7 @@ function renderTimelineView(row) {
   }
   const table = document.createElement('table');
   const thead = document.createElement('thead');
-  thead.innerHTML = '<tr><th>이닝</th><th>결과</th><th style="text-align:right">포인트</th></tr>';
+  thead.innerHTML = '<tr><th style="width:14%">이닝</th><th style="width:66%">결과</th><th style="width:20%;text-align:right">포인트</th></tr>';
   const tbody = document.createElement('tbody');
   log.forEach(e => {
     const tr = document.createElement('tr');

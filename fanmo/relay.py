@@ -385,6 +385,42 @@ def compute_relay_stats(
                         "tags": {"RBI": rbi},
                     })
 
+                # 투수 쪽도 타자와 같은 타석을 "상대 성적"으로 이닝별 타임라인에 남긴다
+                # (아웃카운트는 병살이면 2개, 그 외 아웃성 결과는 1개, 안타/볼넷/사구는 0개)
+                p = current_pitcher[half]
+                if p:
+                    if bat_tags["H"]:
+                        timeline[p].append({
+                            "inn": ev["inn"], "text": f"피안타 ({batter})",
+                            "points": PITCHER_POINTS["H"], "tags": {"H": 1},
+                        })
+                    if bat_tags["HR"]:
+                        timeline[p].append({
+                            "inn": ev["inn"], "text": f"피홈런 ({batter})",
+                            "points": PITCHER_POINTS["HR"], "tags": {"HR": 1},
+                        })
+                    if bat_tags["BB"]:
+                        timeline[p].append({
+                            "inn": ev["inn"], "text": f"볼넷 허용 ({batter})",
+                            "points": PITCHER_POINTS["BB"], "tags": {"BB": 1},
+                        })
+                    if bat_tags["HBP"]:
+                        timeline[p].append({
+                            "inn": ev["inn"], "text": f"사구 허용 ({batter})",
+                            "points": PITCHER_POINTS["HBP"], "tags": {"HBP": 1},
+                        })
+                    if bat_tags["K"]:
+                        timeline[p].append({
+                            "inn": ev["inn"], "text": f"탈삼진 ({batter})",
+                            "points": PITCHER_POINTS["K"], "tags": {"K": 1},
+                        })
+                    outs_this_play = 2 if bat_tags["GDP"] else (1 if (bat_tags["K"] or bat_tags["FO"] or bat_tags["GO"]) else 0)
+                    if outs_this_play:
+                        timeline[p].append({
+                            "inn": ev["inn"], "text": f"아웃카운트 {outs_this_play}개 ({batter})",
+                            "points": outs_this_play * PITCHER_POINTS["OUT"], "tags": {"OUT": outs_this_play},
+                        })
+
             m_chain = _CHAIN_RE.search(desc)
             if m_chain:
                 chain = _split_chain(m_chain.group(1))
