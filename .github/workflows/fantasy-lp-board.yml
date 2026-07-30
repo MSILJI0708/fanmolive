@@ -2,19 +2,21 @@ name: KBO/MLB 판타지 LP 보드 자동 갱신
 
 # 사람이 매번 실행하지 않아도, 정해진 주기로:
 #   0) 지금이 "활성 구간"(오늘 KBO 첫 경기 시작 2시간 전 ~ 그날 경기 전부 종료)인지
-#      check_active_window.py로 확인하고, 아니면 여기서 바로 끝낸다(몇 초짜리 빈 실행).
-#   1) 활성 구간이면 오늘 KBO 경기(collect_date가 알아서 시작 전 경기는 건너뜀)를 수집하고
-#   2) 테스트로 오늘 MLB 경기도 같이 수집해보고
-#   3) 두 보드를 다시 빌드해서
+#      check_active_window.py로 확인한다. KBO 활성 구간이면 수집/빌드/커밋/배포를 전부 한다.
+#   0-1) MLB은 KBO 활성 구간과 무관하게 별도로, 마지막 실행 이후 15분이 지났으면 그때만
+#      돌린다(mlb_last_run.txt에 마지막 실행 시각을 저장해 두고 매번 경과 시간을 잰다) —
+#      미국 경기는 한국 시간 기준 거의 하루 내내 걸쳐 있어서 KBO 기준 활성 구간에 얹어가면
+#      경기 시간대를 많이 놓친다.
+#   1) KBO가 활성 구간이면 오늘 KBO 경기(collect_date가 알아서 시작 전 경기는 건너뜀)를 수집하고
+#   2) MLB이 실행 시점이면(15분 경과) 테스트로 오늘/내일(KST) MLB 경기도 같이 수집하고
+#   3) (KBO 활성 또는 MLB 실행 시점이면) 두 보드를 다시 빌드해서
 #   4) 수집 데이터는 저장소에 커밋, 완성된 HTML은 GitHub Pages로 배포한다.
 #
 # 트리거 자체는 외부 cron-job.org가 고정 간격으로 이 워크플로우의 workflow_dispatch를
-# 호출하는 방식이다(GitHub 자체 schedule: 트리거가 못 미더워서 이렇게 바꿈). 그래서
-# "낮에는 뜸하게, 경기 임박하면 자주" 같은 가변 주기는 cron-job.org 쪽에서 직접 구현하기
-# 어렵다 — 대신 cron-job.org는 원하는 가장 빠른 주기(예: 1~2분)로 항상 호출하게 해두고,
-# 위 0번 단계가 "지금 진짜 활성 구간인지"를 매번 판단해서 활성 구간이 아니면 나머지
-# 단계를 전부 건너뛰는 방식으로 구현했다. public 저장소라 Actions 무료 사용량 제한이
-# 없어서, 자주 호출해도 문제없다(활성 구간 아닐 때는 몇 초 안에 끝나서 비용도 거의 없음).
+# 호출하는 방식이다(GitHub 자체 schedule: 트리거가 못 미더워서 이렇게 바꿈). cron-job.org는
+# 원하는 가장 빠른 주기(예: 1~2분)로 항상 호출하게 해두고, 실제로 뭘 할지는 위 0/0-1번
+# 판정으로 매번 정한다. public 저장소라 Actions 무료 사용량 제한이 없어서, 자주 호출해도
+# 문제없다(둘 다 아닐 때는 몇 초 안에 끝나서 비용도 거의 없음).
 on:
   workflow_dispatch: {} # Actions 탭에서 수동으로도 실행 가능
 
@@ -31,7 +33,7 @@ jobs:
   collect-and-build:
     runs-on: ubuntu-latest
     outputs:
-      active: ${{ steps.check_active.outputs.active }}
+      do_work: ${{ steps.combine.outputs.do_work }}
     steps:
       - name: 저장소 체크아웃
         uses: actions/checkout@v4
@@ -42,24 +44,50 @@ jobs:
           python-version: "3.12"
       # 전부 표준 라이브러리만 쓰므로(urllib, json, ssl, http.server 등) pip install 단계가 필요 없다.
 
-      - name: "지금이 활성 구간인지 확인 (아니면 뒤 단계 전부 건너뜀)"
+      - name: 기준 날짜(KST) 계산
+        run: |
+          echo "TODAY_KST=$(TZ=Asia/Seoul date +%F)" >> "$GITHUB_ENV"
+          echo "TOMORROW_KST=$(TZ=Asia/Seoul date -d '+1 day' +%F)" >> "$GITHUB_ENV"
+
+      - name: "KBO 활성 구간인지 확인"
         id: check_active
         working-directory: fanmo
         run: |
           RESULT=$(python check_active_window.py)
           echo "active=$RESULT" >> "$GITHUB_OUTPUT"
-          echo "판정 결과: $RESULT"
+          echo "KBO 활성 구간 판정: $RESULT"
+
+      - name: "MLB 실행 시점인지 확인 (마지막 실행 후 15분 경과)"
+        id: check_mlb_due
+        working-directory: fanmo
+        run: |
+          FILE="mlb_last_run.txt"
+          NOW=$(date -u +%s)
+          LAST=$(cat "$FILE" 2>/dev/null || echo 0)
+          ELAPSED_MIN=$(( (NOW - LAST) / 60 ))
+          if [ "$ELAPSED_MIN" -ge 15 ]; then
+            echo "due=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "due=false" >> "$GITHUB_OUTPUT"
+          fi
+          echo "MLB 마지막 실행으로부터 ${ELAPSED_MIN}분 경과 -> due=$([ "$ELAPSED_MIN" -ge 15 ] && echo true || echo false)"
+
+      - name: "이번에 뭐라도 할 게 있는지 종합 판정"
+        id: combine
+        run: |
+          if [ "${{ steps.check_active.outputs.active }}" = "true" ] || [ "${{ steps.check_mlb_due.outputs.due }}" = "true" ]; then
+            echo "do_work=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "do_work=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: "KBO 오늘 경기 수집 (기준일: KST 오늘)"
         if: steps.check_active.outputs.active == 'true'
         working-directory: fanmo
-        run: |
-          TODAY_KST=$(TZ=Asia/Seoul date +%F)
-          echo "TODAY_KST=$TODAY_KST" >> "$GITHUB_ENV"
-          python daily_pipeline.py --date "$TODAY_KST"
+        run: python daily_pipeline.py --date "$TODAY_KST"
 
-      - name: MLB 오늘 경기 수집 (테스트, 실패해도 KBO 파이프라인은 계속)
-        if: steps.check_active.outputs.active == 'true'
+      - name: MLB 오늘 경기 수집 (테스트, 15분 주기, 실패해도 KBO 파이프라인은 계속)
+        if: steps.check_mlb_due.outputs.due == 'true'
         working-directory: fanmo
         continue-on-error: true
         run: |
@@ -68,24 +96,23 @@ jobs:
           # 7시 경기는 KST로 다음날 오전 8시경 끝남). TODAY_KST만 수집하면 이미 다 끝난
           # 어제자 경기만 계속 재조회하게 돼서, 정작 지금 진행 중/예정인 오늘 밤 경기는 전혀
           # 못 잡는다 — TODAY_KST와 TODAY_KST+1일 두 날짜를 모두 수집해서 이 시차를 커버한다.
-          TODAY_KST=$(TZ=Asia/Seoul date +%F)
-          TOMORROW_KST=$(TZ=Asia/Seoul date -d "+1 day" +%F)
           python mlb_fantasy_score.py --date "$TODAY_KST"
           python mlb_fantasy_score.py --date "$TOMORROW_KST"
+          date -u +%s > mlb_last_run.txt
 
       - name: 보드 HTML 빌드
-        if: steps.check_active.outputs.active == 'true'
+        if: steps.combine.outputs.do_work == 'true'
         working-directory: fanmo
         run: |
           python build_board.py --date "$TODAY_KST"
           python build_mlb_board.py --date "$TODAY_KST" || true
 
       - name: 수집 결과 커밋 & 푸시
-        if: steps.check_active.outputs.active == 'true'
+        if: steps.combine.outputs.do_work == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add fanmo/data_*.json fanmo/position_db.json fanmo/lp_board.html fanmo/lp_board_mlb.html
+          git add fanmo/data_*.json fanmo/position_db.json fanmo/lp_board.html fanmo/lp_board_mlb.html fanmo/mlb_last_run.txt
           if git diff --cached --quiet; then
             echo "변경 사항 없음, 커밋 생략"
           else
@@ -94,7 +121,7 @@ jobs:
           fi
 
       - name: Pages 배포용 폴더 구성
-        if: steps.check_active.outputs.active == 'true'
+        if: steps.combine.outputs.do_work == 'true'
         run: |
           mkdir -p _site
           cp fanmo/lp_board.html _site/index.html
@@ -103,14 +130,14 @@ jobs:
           fi
 
       - name: Pages 아티팩트 업로드
-        if: steps.check_active.outputs.active == 'true'
+        if: steps.combine.outputs.do_work == 'true'
         uses: actions/upload-pages-artifact@v3
         with:
           path: _site
 
   deploy:
     needs: collect-and-build
-    if: needs.collect-and-build.outputs.active == 'true'
+    if: needs.collect-and-build.outputs.do_work == 'true'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
