@@ -135,10 +135,12 @@ def classify_relay_desc(desc: str) -> dict[str, int]:
         tags["FO"] = 1
     elif "땅볼" in desc or "희생번트" in desc:
         tags["GO"] = 1
-    elif "직선타" in desc:
+    elif "라인드라이브" in desc:
         # 직선타(라인드라이브)로 잡힌 아웃은 뜬공 아웃(FO) 페널티에 포함되지 않는다 —
-        # 9up 판타지 점수와 대조해서 확인됨. 아웃 자체는 발생했으니 LD로 남겨서 투수 쪽
-        # 이닝별 아웃카운트 표시에는 반영하되, 타자 점수에는 영향이 없다(BATTER_POINTS에 없음).
+        # 9up 판타지 점수와 대조해서 확인됨. 중계 텍스트는 "직선타"가 아니라 항상
+        # "라인드라이브"로 표기한다(박스스코어 코드 쪽 약자 "직"과 다른 표현이라 따로 확인 필요).
+        # 아웃 자체는 발생했으니 LD로 남겨서 투수 쪽 이닝별 아웃카운트 표시에는 반영하되,
+        # 타자 점수에는 영향이 없다(BATTER_POINTS에 없음).
         tags["LD"] = 1
     elif "플라이" in desc:
         tags["FO"] = 1

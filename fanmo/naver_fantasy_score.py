@@ -299,6 +299,7 @@ def process_game(
                 "RBI": int(p.get("rbi") or 0),
                 "FO": tags["FO"] + tags["SACFLY"],
                 "GO": tags["GO"] + tags["SACBUNT"],
+                "LD": tags["LD"],
                 "GDP": tags["GDP"],
                 "SACFLY": tags["SACFLY"],
                 "SACBUNT": tags["SACBUNT"],
@@ -312,6 +313,7 @@ def process_game(
                 "E": etc["errors"].get(name, 0),
                 "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0,
                 "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0,
+                "ADVANCE_OUT": 0,
             }
             pos_info = (position_map or {}).get(p.get("playerCode"), {})
             batter_rows.append({
@@ -468,10 +470,13 @@ def _merge_relay_stats(game_id: str, rd: dict, batter_rows: list[dict], pitcher_
             row["stat"]["SB_ALLOWED_CATCHER"] += agg["SB_ALLOWED_CATCHER"]
         advance = batter_extra.get(row["name"])
         if advance:
-            # 릴레이 기반 진루타(구 희생번트) 판정이 박스코드 기반보다 더 넓은 정의라
-            # 그 값으로 대체한다(같은 사건을 중복 집계하지 않도록 덮어쓰기)
-            row["stat"]["SACBUNT"] = advance
-        if events_for_player or advance:
+            # "진루타"(번트가 아닌 일반 타구로 주자를 진루시킨 아웃)는 더 이상 채점하지 않는다
+            # (희생번트 칸은 박스스코어 자체의 공식 기록만 쓴다 — "희"+"땅" 플래그는 KBO
+            # 공식 스코어러가 번트 시도와 주자 진루 성공을 이미 전제로 매기는 값이라 그대로 둬도
+            # 정확하다). 그래도 나중에 다시 볼 수 있게 참고용으로 ADVANCE_OUT에 남겨둔다
+            # (BATTER_POINTS에 없는 키라 LP에는 전혀 영향을 주지 않는다).
+            row["stat"]["ADVANCE_OUT"] = advance
+        if events_for_player:
             row["lp"] = score_batter(row["stat"])
 
     for row in pitcher_rows:
@@ -515,7 +520,10 @@ def _cat_item(label: str, key: str, stat: dict, points_table: dict, weight_key: 
 
 def _batter_categories(row: dict) -> list[dict]:
     """카드게임에서 요청한 5개 그룹(+아웃)으로 타자 스탯을 묶는다. 항목은 항상 전부 계산해서
-    넣고(그래야 총합이 LP와 정확히 맞음), 값이 0/false인 항목을 숨길지는 화면(JS) 쪽에서 정한다."""
+    넣고, 값이 0/false인 항목을 숨길지는 화면(JS) 쪽에서 정한다.
+    "아웃" 그룹은 견제사/도루실패를 "주루" 그룹과 중복으로 보여준다("아웃당한 방식"을 한눈에
+    모아보기 위함)라서, 그룹 총합을 전부 더하면 LP보다 그만큼 더 나올 수 있다(그룹별 합계는
+    각각 정확하고, 전체 LP는 팝업 상단에 별도로 표시되니 문제는 없다)."""
     s = row["stat"]
 
     def item(label, key, **kw):
@@ -528,7 +536,7 @@ def _batter_categories(row: dict) -> list[dict]:
             item("만루홈런", "GRANDSLAM"), item("사이클히트", "CYCLE", flag=True),
         ]},
         {"name": "팀배팅", "items": [
-            item("타점", "RBI"), item("진루타(번트 포함)", "SACBUNT"), item("희생플라이", "SACFLY"),
+            item("타점", "RBI"), item("희생번트", "SACBUNT"), item("희생플라이", "SACFLY"),
         ]},
         {"name": "주루", "items": [
             item("도루", "SB"), item("도루실패", "CS"), item("견제사", "PICKOFF"), item("득점", "R"),
@@ -540,12 +548,21 @@ def _batter_categories(row: dict) -> list[dict]:
             item("실책", "E"),
         ]},
         {"name": "아웃", "items": [
-            item("뜬공 아웃", "FO"), item("땅볼 아웃", "GO"), item("병살타", "GDP"), item("삼진", "K"),
+            item("삼진", "K"), item("땅볼 아웃", "GO"), item("뜬공 아웃(파울플라이 포함)", "FO"),
+            item("직선타", "LD"), _pickoff_cs_item(s), item("병살타", "GDP"),
         ]},
     ]
     for g in groups:
         g["total"] = sum(i["points"] for i in g["items"])
     return groups
+
+
+def _pickoff_cs_item(stat: dict) -> dict:
+    """견제사+도루실패를 "아웃" 카테고리에서 한 줄로 합쳐 보여준다(각자 주루 카테고리에도
+    따로 나오지만, 여기서는 "타자가 아웃당한 방식"을 한눈에 모아 보는 게 목적이라 중복 표시)."""
+    count = stat.get("PICKOFF", 0) + stat.get("CS", 0)
+    pts = stat.get("PICKOFF", 0) * BATTER_POINTS["PICKOFF"] + stat.get("CS", 0) * BATTER_POINTS["CS"]
+    return {"label": "견제사+도루실패", "count": count, "points": pts, "flag": False}
 
 
 def _pitcher_categories(row: dict) -> list[dict]:
@@ -674,11 +691,11 @@ def _attach_play_log(row: dict, timeline: dict, er_events: list[dict] | None = N
 def _zero_batter_stat() -> dict:
     return {
         "R": 0, "H": 0, "BB": 0, "2B": 0, "3B": 0, "HR": 0, "RBI": 0,
-        "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0,
+        "FO": 0, "GO": 0, "LD": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0,
         "SB": 0, "CS": 0, "HBP": 0, "K": 0, "PICKOFF": 0,
         "CYCLE": 0, "GRANDSLAM": 0, "E": 0,
         "ASSIST": 0, "OF_ASSIST": 0, "DP_FIELD": 0, "TP_FIELD": 0,
-        "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0,
+        "CS_CATCHER": 0, "SB_ALLOWED_CATCHER": 0, "ADVANCE_OUT": 0,
     }
 
 
