@@ -392,7 +392,7 @@ tbody tr.clickable:hover { background: var(--chip-bg); }
   padding: 6px 8px;
   border-bottom: 1px solid var(--line);
 }
-.modal-body td { padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: top; word-break: keep-all; overflow-wrap: break-word; }
+.modal-body td { padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: top; word-break: keep-all; overflow-wrap: break-word; text-align: left; }
 .modal-body tr:last-child td { border-bottom: none; }
 .modal-body td.inn { color: var(--ink-1); white-space: nowrap; width: 44px; }
 .modal-body td.pts { text-align: right; font-weight: 700; white-space: nowrap; width: 66px; }

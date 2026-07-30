@@ -94,6 +94,11 @@ def classify_relay_desc(desc: str) -> dict[str, int]:
     원본처럼 FO/GO에도 같이 더해진다."""
     tags = {"H": 0, "2B": 0, "3B": 0, "HR": 0, "BB": 0, "HBP": 0, "K": 0,
             "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0}
+    if "실책" in desc and "아웃" not in desc:
+        # "유격수 플라이 실책으로 출루"처럼 수비 실책으로 살아나간 경우 — 아웃이 아니므로
+        # "플라이"/"땅볼" 같은 하위 키워드가 우연히 걸려 뜬공·땅볼 아웃으로 오분류되면 안 된다.
+        # 타자 본인에게는 어차피 점수가 없는 이벤트라 전부 0으로 둔다(실책 자체는 별도 경로로 집계).
+        return tags
     if "홈런" in desc:
         tags["H"] = 1
         tags["HR"] = 1
