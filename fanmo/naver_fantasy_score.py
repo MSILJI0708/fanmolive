@@ -120,8 +120,12 @@ def classify_pa(code: str) -> str:
         return "GDP"
     if code.endswith("땅"):
         return "SACBUNT" if "희" in code else "GO"
-    if code.endswith(("비", "파", "직")):
+    if code.endswith(("비", "파")):
         return "SACFLY" if "희" in code else "FO"
+    if code.endswith("직"):
+        # 직선타(라인드라이브)로 잡힌 아웃은 뜬공 아웃(FO) 페널티에 포함되지 않는다 —
+        # 9up 판타지 점수와 대조해서 확인됨(뜬공 아웃 개수가 실제로는 1개 적게 잡혀야 했음).
+        return "LD"
     if "실" in code:
         return "REACH_ERROR"
     if code.endswith("홈"):
@@ -697,7 +701,11 @@ def build_pregame_rows(g: dict) -> tuple[list[dict], list[dict]]:
     나머지는 발표되는 대로 자동으로 초록 마커가 붙는다."""
     import pregame
 
-    if g.get("statusCode") != "BEFORE" or not pregame.is_within_pregame_window(g.get("gameDateTime", "")):
+    # "BEFORE"(경기 한참 전)뿐 아니라 "READY"(곧 시작, 이 시점에 라인업이 뜨는 경우가 많음)도
+    # 경기 시작 전 상태라 여기서 같이 처리해야 한다 — READY로 바뀌는 순간 이 체크에서 빠지면
+    # process_game 쪽은 아직 박스스코어가 없어 빈 값을 돌려주고, 결과적으로 막 발표된 선발
+    # 라인업이 통째로 안 보이는 공백 구간이 생긴다.
+    if g.get("statusCode") not in ("BEFORE", "READY") or not pregame.is_within_pregame_window(g.get("gameDateTime", "")):
         return [], []
 
     home_code, away_code = g.get("homeTeamCode"), g.get("awayTeamCode")
@@ -763,7 +771,7 @@ def collect_date(date_str: str, position_map: dict | None = None) -> tuple[list[
     all_batters, all_pitchers = [], []
     for g in fetch_schedule(date_str):
         gid = g["gameId"]
-        if g.get("statusCode") == "BEFORE":
+        if g.get("statusCode") in ("BEFORE", "READY"):
             try:
                 b, p = build_pregame_rows(g)
             except Exception as exc:  # noqa: BLE001

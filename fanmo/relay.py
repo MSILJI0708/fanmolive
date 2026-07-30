@@ -90,10 +90,13 @@ _CHAIN_SUFFIX_RE = re.compile(r"\s*(?:[123]루\s*)?(?:송구아웃|터치아웃|
 def _split_chain(chain_text: str) -> list[str]:
     """'(유격수->2루수->1루수 송구아웃)' → ['유격수','2루수','1루수']. 체인이 없으면 (단일 수비수) [].
     '유격수->2루수 2루 터치아웃'처럼 마지막 키워드 앞에 베이스 번호가 붙는 경우도 있어 그 부분까지
-    통째로 떼어낸다(안 떼면 '2루수 2루'가 위치명과 안 맞아 체인이 통째로 날아가 버린다)."""
+    통째로 떼어낸다(안 떼면 '2루수 2루'가 위치명과 안 맞아 체인이 통째로 날아가 버린다).
+    투수도 순서 유지를 위해 남겨둔다 — "1루수->2루수->투수" 체인에서 투수를 걸러내 버리면
+    "마지막으로 송구를 보낸 야수"가 2루수가 아니라 1루수로 잘못 계산된다(투수 본인은 보살
+    스탯이 없어 defense 딕셔너리에 없으므로, 크레딧 조회 시 자연히 걸러진다)."""
     text = _CHAIN_SUFFIX_RE.sub("", chain_text)
     parts = [p.strip() for p in text.split("->")]
-    parts = [p for p in parts if p in FIELDING_POSITIONS]
+    parts = [p for p in parts if p in FIELDING_POSITIONS or p == "투수"]
     return parts if len(parts) >= 2 else []
 
 
@@ -102,7 +105,7 @@ def classify_relay_desc(desc: str) -> dict[str, int]:
     텍스트 버전). 병살은 GO와 안 겹치게(원본과 동일하게) 배타적으로 잡고, 희생플라이/희생번트는
     원본처럼 FO/GO에도 같이 더해진다."""
     tags = {"H": 0, "2B": 0, "3B": 0, "HR": 0, "BB": 0, "HBP": 0, "K": 0,
-            "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0}
+            "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "LD": 0}
     if "실책" in desc and "아웃" not in desc:
         # "유격수 플라이 실책으로 출루"처럼 수비 실책으로 살아나간 경우 — 아웃이 아니므로
         # "플라이"/"땅볼" 같은 하위 키워드가 우연히 걸려 뜬공·땅볼 아웃으로 오분류되면 안 된다.
@@ -132,7 +135,12 @@ def classify_relay_desc(desc: str) -> dict[str, int]:
         tags["FO"] = 1
     elif "땅볼" in desc or "희생번트" in desc:
         tags["GO"] = 1
-    elif "플라이" in desc or "직선타" in desc:
+    elif "직선타" in desc:
+        # 직선타(라인드라이브)로 잡힌 아웃은 뜬공 아웃(FO) 페널티에 포함되지 않는다 —
+        # 9up 판타지 점수와 대조해서 확인됨. 아웃 자체는 발생했으니 LD로 남겨서 투수 쪽
+        # 이닝별 아웃카운트 표시에는 반영하되, 타자 점수에는 영향이 없다(BATTER_POINTS에 없음).
+        tags["LD"] = 1
+    elif "플라이" in desc:
         tags["FO"] = 1
     elif "아웃" in desc:
         tags["GO"] = 1  # 분류 못한 아웃은 보수적으로 땅볼 취급
@@ -370,7 +378,7 @@ def compute_relay_stats(
             # 보살로 인정해야 해서, _split_chain의 "체인 길이 2 이상만" 제약을 적용하면 안 된다.
             raw = _CHAIN_SUFFIX_RE.sub("", m_runner_out.group("chain"))
             parts = [p.strip() for p in raw.split("->")]
-            parts = [p for p in parts if p in FIELDING_POSITIONS]
+            parts = [p for p in parts if p in FIELDING_POSITIONS or p == "투수"]
             if parts:
                 assist_pos = parts[-2] if len(parts) >= 2 else parts[0]
                 fielder = defense[half].get(assist_pos)
@@ -458,7 +466,7 @@ def compute_relay_stats(
                             "inn": ev["inn"], "text": f"탈삼진 ({batter})",
                             "points": PITCHER_POINTS["K"], "tags": {"K": 1},
                         })
-                    outs_this_play = 2 if bat_tags["GDP"] else (1 if (bat_tags["K"] or bat_tags["FO"] or bat_tags["GO"]) else 0)
+                    outs_this_play = 2 if bat_tags["GDP"] else (1 if (bat_tags["K"] or bat_tags["FO"] or bat_tags["GO"] or bat_tags["LD"]) else 0)
                     if outs_this_play:
                         timeline[p].append({
                             "inn": ev["inn"], "text": f"아웃카운트 {outs_this_play}개 ({batter})",
@@ -472,19 +480,12 @@ def compute_relay_stats(
 
             # 보살: 병살/삼중살은 별도 스탯(DP_FIELD/TP_FIELD)으로 채점하므로 여기서는 제외하고,
             # 타구를 처리해 아웃을 만든 플레이에서 "마지막으로 송구를 보낸 야수" 한 명에게만 준다.
-            # 체인이 없는 단독 처리(예: 1루수가 직접 베이스를 밟는 무보살 땅볼 아웃)는 그 내야수
-            # 본인이 대상이지만, 외야수는 다르다 — 뜬공을 그냥 잡기만 한 건 송구 자체가 없는
-            # "무보살" 플레이라 외야수 보살은 실제로 송구를 보내 주자(타자 포함)를 잡아낸
-            # 체인(길이 2 이상)에서만 인정한다.
+            # 체인이 없는 단독 처리(뜬공을 그냥 잡거나, 1루수가 직접 베이스를 밟는 무보살 땅볼
+            # 아웃 등)는 내야/외야 구분 없이 보살로 안 친다 — "무보살"이라는 말 그대로 송구 자체가
+            # 없으면 보살이 아니다(9up 판타지 점수와 대조해서 실제로 확인됨: 무보살 처리를
+            # 보살로 잘못 쳐주고 있던 게 여러 선수에게서 1~2점씩 차이를 만들고 있었음).
             if (bat_tags["FO"] or bat_tags["GO"]) and not is_dp and not is_tp:
-                first_tok = desc.split(" ", 1)[0]
-                primary_pos = first_tok if first_tok in FIELDING_POSITIONS else None
-                if len(chain) >= 2:
-                    seq = chain
-                elif primary_pos and primary_pos not in OUTFIELD_POSITIONS:
-                    seq = [primary_pos]
-                else:
-                    seq = []
+                seq = chain if len(chain) >= 2 else []
                 if seq:
                     assist_pos = seq[max(0, len(seq) - 2)]
                     fielder = defense[half].get(assist_pos)
