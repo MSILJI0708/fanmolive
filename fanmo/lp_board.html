@@ -428,13 +428,13 @@ tbody tr.clickable:hover { background: var(--chip-bg); }
   box-shadow: var(--shadow);
   background: var(--paper-1);
 }
-table {
+.tablewrap table {
   border-collapse: collapse;
   width: 100%;
   font-size: 12.5px;
   min-width: 920px;
 }
-thead th {
+.tablewrap thead th {
   position: sticky;
   top: 0;
   background: var(--paper-1);
@@ -450,10 +450,10 @@ thead th {
   cursor: pointer;
   user-select: none;
 }
-thead th.left, td.left { text-align: left; }
-thead th:hover { color: var(--ink-0); }
-thead th.sorted { color: var(--accent-ink); }
-tbody td {
+.tablewrap thead th.left, .tablewrap td.left { text-align: left; }
+.tablewrap thead th:hover { color: var(--ink-0); }
+.tablewrap thead th.sorted { color: var(--accent-ink); }
+.tablewrap tbody td {
   padding: 7px 10px;
   text-align: right;
   white-space: nowrap;
