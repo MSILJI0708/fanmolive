@@ -45,6 +45,12 @@ _SB_RE = re.compile(r"^[123]루주자 (?P<name>\S+) : 도루로 (?:[123]루까�
 _CS_RE = re.compile(r"^[123]루주자 (?P<name>\S+) : 도루실패아웃 \((?P<chain>[^)]+)\)$")
 _PICKOFF_RE = re.compile(r"^[123]루주자 (?P<name>\S+) : 견제사아웃 \((?P<who>투수|포수) 견제")
 _HOME_RE = re.compile(r"^[123]루주자 \S+ : 홈인$")
+# "1루주자 김현수 : 포스아웃 (유격수->2루수 2루 터치아웃)", "3루주자 X : 태그아웃 (좌익수->포수 태그아웃)"
+# 처럼 이름에 공백이 없는 주자가 타구 처리 체인으로 베이스에서 아웃되는 경우. _PLAY_RE는
+# "이름 : 결과"에서 이름을 공백 없는 한 토큰으로 잡기 때문에 "N루주자 이름"(토큰 2개)인 이 줄은
+# 원래 어떤 정규식에도 안 걸려서 그냥 통째로 무시되고 있었다(외야수가 송구로 주자를 잡아내는
+# 보살 상황이 여기서 제일 많이 나오는데 그게 전부 누락되고 있었던 것).
+_RUNNER_OUT_RE = re.compile(r"^[123]루주자 \S+ : (?:포스아웃|태그아웃) \((?P<chain>[^)]+)\)$")
 _PLAIN_ADVANCE_RE = re.compile(r"^[123]루주자 \S+ : (?:[123]루까지 진루|홈인)$")
 _ADVANCE_MARKERS = ("폭투", "도루", "실책", "보크", "낫")
 _INNING_MARK_RE = re.compile(r"^(\d+)회(초|말) (.+) 공격$")
@@ -78,11 +84,14 @@ def fetch_full_relay(game_id: str, max_innings: int = 15) -> list[dict]:
     return events
 
 
+_CHAIN_SUFFIX_RE = re.compile(r"\s*(?:[123]루\s*)?(?:송구아웃|터치아웃|포구아웃|태그아웃)$")
+
+
 def _split_chain(chain_text: str) -> list[str]:
-    """'(유격수->2루수->1루수 송구아웃)' → ['유격수','2루수','1루수']. 체인이 없으면 (단일 수비수) []."""
-    text = chain_text
-    for suffix in (" 송구아웃", " 터치아웃", " 포구아웃", " 태그아웃"):
-        text = text.replace(suffix, "")
+    """'(유격수->2루수->1루수 송구아웃)' → ['유격수','2루수','1루수']. 체인이 없으면 (단일 수비수) [].
+    '유격수->2루수 2루 터치아웃'처럼 마지막 키워드 앞에 베이스 번호가 붙는 경우도 있어 그 부분까지
+    통째로 떼어낸다(안 떼면 '2루수 2루'가 위치명과 안 맞아 체인이 통째로 날아가 버린다)."""
+    text = _CHAIN_SUFFIX_RE.sub("", chain_text)
     parts = [p.strip() for p in text.split("->")]
     parts = [p for p in parts if p in FIELDING_POSITIONS]
     return parts if len(parts) >= 2 else []
@@ -354,6 +363,22 @@ def compute_relay_stats(
             prev_base[half] = base
             continue
 
+        m_runner_out = _RUNNER_OUT_RE.match(text)
+        if m_runner_out:
+            chain = _split_chain(m_runner_out.group("chain"))
+            if len(chain) >= 2:
+                assist_pos = chain[-2]  # 마지막으로 송구를 보낸 야수(그 다음이 받아서 아웃 처리)
+                fielder = defense[half].get(assist_pos)
+                if fielder:
+                    etype = "OF_ASSIST" if assist_pos in OUTFIELD_POSITIONS else "ASSIST"
+                    fielding_events[fielder].append({"type": etype, "pos": assist_pos})
+                    timeline[fielder].append({
+                        "inn": ev["inn"], "text": f"보살 ({assist_pos}, 주자 아웃)",
+                        "points": BATTER_POINTS[etype], "tags": {etype: 1},
+                    })
+            prev_base[half] = base
+            continue
+
         m_play = _PLAY_RE.match(text)
         if m_play:
             desc = m_play.group("desc")
@@ -441,12 +466,20 @@ def compute_relay_stats(
             is_tp = "삼중살" in desc
 
             # 보살: 병살/삼중살은 별도 스탯(DP_FIELD/TP_FIELD)으로 채점하므로 여기서는 제외하고,
-            # 타구를 처리해 아웃을 만든 플레이에서 "마지막으로 송구를 보낸 야수" 한 명에게만 준다
-            # (체인이 없는 단독 처리 - 예: 뜬공을 직접 잡은 외야수 - 는 그 야수 본인이 대상).
+            # 타구를 처리해 아웃을 만든 플레이에서 "마지막으로 송구를 보낸 야수" 한 명에게만 준다.
+            # 체인이 없는 단독 처리(예: 1루수가 직접 베이스를 밟는 무보살 땅볼 아웃)는 그 내야수
+            # 본인이 대상이지만, 외야수는 다르다 — 뜬공을 그냥 잡기만 한 건 송구 자체가 없는
+            # "무보살" 플레이라 외야수 보살은 실제로 송구를 보내 주자(타자 포함)를 잡아낸
+            # 체인(길이 2 이상)에서만 인정한다.
             if (bat_tags["FO"] or bat_tags["GO"]) and not is_dp and not is_tp:
                 first_tok = desc.split(" ", 1)[0]
                 primary_pos = first_tok if first_tok in FIELDING_POSITIONS else None
-                seq = chain if len(chain) >= 2 else ([primary_pos] if primary_pos else [])
+                if len(chain) >= 2:
+                    seq = chain
+                elif primary_pos and primary_pos not in OUTFIELD_POSITIONS:
+                    seq = [primary_pos]
+                else:
+                    seq = []
                 if seq:
                     assist_pos = seq[max(0, len(seq) - 2)]
                     fielder = defense[half].get(assist_pos)
