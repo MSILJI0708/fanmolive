@@ -144,6 +144,11 @@ def classify_relay_desc(desc: str) -> dict[str, int]:
         tags["LD"] = 1
     elif "플라이" in desc:
         tags["FO"] = 1
+    elif "번트" in desc:
+        # 희생번트(위에서 이미 처리)도 번트안타(1루타/안타 체크에서 이미 처리)도 아닌
+        # 순수 "번트 아웃"(비희생 번트 시도가 실패해 아웃된 경우) — 일반 스윙 땅볼 아웃과
+        # 달리 페널티를 주지 않는다. 아무 태그도 안 세워 이 타석을 0점으로 남긴다.
+        pass
     elif "아웃" in desc:
         tags["GO"] = 1  # 분류 못한 아웃은 보수적으로 땅볼 취급
     return tags
@@ -235,6 +240,10 @@ def compute_relay_stats(
     catcher_events: dict = defaultdict(list)
     fielding_events: dict = defaultdict(list)
     timeline: dict = defaultdict(list)
+    # 희생번트도 번트안타도 아닌 "번트 아웃"(비희생 번트 시도가 실패해 아웃된 경우) 횟수.
+    # 박스스코어 코드만으로는 이걸 일반 스윙 땅볼 아웃과 구분할 수 없어서(둘 다 그냥
+    # "N땅"으로만 나옴) 중계 텍스트로 잡아낸 만큼을 나중에 GO 집계에서 빼준다.
+    bunt_out: dict = defaultdict(int)
     # 세이브 기회 판정용: 구원투수가 등판한 "순간"의 (자기 팀 점수 - 상대 팀 점수) 마진.
     # 선발은 여기 안 걸리는 게 맞다(등판 자체가 '교체'로 안 잡히니까).
     pitcher_entry_margin: dict = {}
@@ -381,7 +390,31 @@ def compute_relay_stats(
             raw = _CHAIN_SUFFIX_RE.sub("", m_runner_out.group("chain"))
             parts = [p.strip() for p in raw.split("->")]
             parts = [p for p in parts if p in FIELDING_POSITIONS or p == "투수"]
-            if parts:
+            # 이 포스아웃 자체의 문구엔 "병살"/"삼중살"이 안 붙지만(타자 쪽 줄에만 붙음),
+            # 같은 타석(no) 안에 병살/삼중살 문구가 있으면 이 주자 포스아웃도 그 병살/삼중살의
+            # 일부다 — 그럴 땐 보살 대신, 관여한 야수 전원에게 병살/삼중살 가담을 준다
+            # (다른 야수들과 동일하게 배타적 처리; 1경기 1회 상한은 score_batter에서 적용).
+            group = group_texts[ev["no"]]
+            is_dp_group = any("병살" in t for t in group)
+            is_tp_group = any("삼중살" in t for t in group)
+            if parts and (is_dp_group or is_tp_group):
+                for pos in parts:
+                    fielder = defense[half].get(pos)
+                    if not fielder:
+                        continue
+                    if is_dp_group:
+                        fielding_events[fielder].append({"type": "DP", "pos": pos})
+                        timeline[fielder].append({
+                            "inn": ev["inn"], "text": f"병살 가담 ({pos}, 주자 아웃)",
+                            "points": BATTER_POINTS["DP_FIELD"], "tags": {"DP_FIELD": 1},
+                        })
+                    if is_tp_group:
+                        fielding_events[fielder].append({"type": "TP", "pos": pos})
+                        timeline[fielder].append({
+                            "inn": ev["inn"], "text": f"삼중살 가담 ({pos}, 주자 아웃)",
+                            "points": BATTER_POINTS["TP_FIELD"], "tags": {"TP_FIELD": 1},
+                        })
+            elif parts:
                 assist_pos = parts[-2] if len(parts) >= 2 else parts[0]
                 fielder = defense[half].get(assist_pos)
                 if fielder:
@@ -416,7 +449,22 @@ def compute_relay_stats(
                     })
 
             bat_tags = classify_relay_desc(desc)
-            if any(bat_tags.values()):
+            # 희생번트도 번트안타도 아닌 "번트 아웃"(비희생 번트 시도 실패) — 박스스코어 코드로는
+            # 일반 스윙 땅볼 아웃과 구분이 안 돼서, 여기서 잡은 만큼 나중에 GO 집계에서 빼준다.
+            is_bunt_out = "번트" in desc and "희생번트" not in desc and "안타" not in desc and "아웃" in desc
+            if is_bunt_out:
+                bunt_out[batter] += 1
+                timeline[batter].append({
+                    "inn": ev["inn"], "text": desc, "points": 0, "tags": {},
+                })
+                # 스퀴즈 번트처럼 타자는 아웃당해도 그 사이 주자가 홈에 들어오는 드문 경우 대비
+                rbi = sum(1 for t in group_texts[ev["no"]] if _HOME_RE.match(t))
+                if rbi:
+                    timeline[batter].append({
+                        "inn": ev["inn"], "text": f"타점 {rbi}개", "points": rbi * BATTER_POINTS.get("RBI", 0),
+                        "tags": {"RBI": rbi},
+                    })
+            elif any(bat_tags.values()):
                 pts = sum(bat_tags[k] * BATTER_POINTS.get(k, 0) for k in bat_tags)
                 timeline[batter].append({
                     "inn": ev["inn"], "text": desc, "points": pts,
@@ -544,6 +592,7 @@ def compute_relay_stats(
         "pitcher_entry_margin": pitcher_entry_margin,
         "final_score": final_score,
         "earned_run_events": {k: v for k, v in earned_run_events.items()},
+        "bunt_out": dict(bunt_out),
     }
 
 

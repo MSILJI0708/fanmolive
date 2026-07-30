@@ -213,12 +213,19 @@ PITCHER_POINTS = {
 def score_batter(stat: dict) -> int:
     pts = 0
     for key, weight in BATTER_POINTS.items():
-        if key in ("CYCLE", "GRANDSLAM"):
+        if key in ("CYCLE", "GRANDSLAM", "DP_FIELD", "TP_FIELD"):
             continue
         pts += stat.get(key, 0) * weight
     if stat.get("CYCLE"):
         pts += BATTER_POINTS["CYCLE"]
     pts += stat.get("GRANDSLAM", 0) * BATTER_POINTS["GRANDSLAM"]
+    # 더블/트리플 플레이 가담은 원래 규정상 "1경기에 1번만 인정" — 병살 하나에 여러 야수가
+    # 가담해도 각 야수 본인 기준으로는 그 경기에서 몇 번을 가담했든 1회분만 받는다(9up 판타지
+    # 점수의 이재현 사례로 확인함: 가담 횟수는 2로 표시돼도 포인트는 10점 그대로였음).
+    if stat.get("DP_FIELD"):
+        pts += BATTER_POINTS["DP_FIELD"]
+    if stat.get("TP_FIELD"):
+        pts += BATTER_POINTS["TP_FIELD"]
     return pts
 
 
@@ -304,7 +311,7 @@ def process_game(
                 "HR": hr,
                 "RBI": int(p.get("rbi") or 0),
                 "FO": tags["FO"] + tags["SACFLY"],
-                "GO": tags["GO"] + tags["SACBUNT"],
+                "GO": tags["GO"] + tags["SACBUNT"] + tags["GDP"],
                 "LD": tags["LD"],
                 "GDP": tags["GDP"],
                 "SACFLY": tags["SACFLY"],
@@ -457,6 +464,7 @@ def _merge_relay_stats(game_id: str, rd: dict, batter_rows: list[dict], pitcher_
     entry_margin = stats["pitcher_entry_margin"]
     final_score = stats["final_score"]
     earned_run_events = stats.get("earned_run_events", {})
+    bunt_out = stats.get("bunt_out", {})
     info = rd.get("gameInfo", {})
     home_team_name = info.get("hName", "")
 
@@ -482,7 +490,13 @@ def _merge_relay_stats(game_id: str, rd: dict, batter_rows: list[dict], pitcher_
             # 정확하다). 그래도 나중에 다시 볼 수 있게 참고용으로 ADVANCE_OUT에 남겨둔다
             # (BATTER_POINTS에 없는 키라 LP에는 전혀 영향을 주지 않는다).
             row["stat"]["ADVANCE_OUT"] = advance
-        if events_for_player:
+        bunts = bunt_out.get(row["name"])
+        if bunts:
+            # 희생번트도 번트안타도 아닌 "번트 아웃"(비희생 번트 실패)은 페널티가 없다.
+            # 박스스코어 코드로는 일반 스윙 땅볼 아웃과 구분이 안 돼 GO에 이미 포함돼있으니
+            # 중계에서 확인된 만큼 빼준다.
+            row["stat"]["GO"] = max(0, row["stat"]["GO"] - bunts)
+        if events_for_player or bunts:
             row["lp"] = score_batter(row["stat"])
 
     for row in pitcher_rows:
@@ -682,6 +696,18 @@ def _attach_play_log(row: dict, timeline: dict, er_events: list[dict] | None = N
     투수는 이닝/자책/QS 등 박스스코어 전용 항목을 실제로 그 일이 일어난 이닝 뒤에 이어붙여서
     "기타 보정"이 원칙적으로 0에 가깝게 만든다."""
     log = list(timeline.get(row["name"], []))
+    # 병살/삼중살 가담은 규정상 "1경기에 1번만 인정"이라, 같은 경기에서 여러 번 잡혀도 실제
+    # 점수는 처음 1번만 반영된다. 화면에 전부 +10/+50으로 찍히면 헷갈리니, 두 번째부터는
+    # 점수를 0으로 표시하고 문구에 상한 적용 사실을 남긴다(합계는 그대로 LP와 정확히 맞음).
+    seen_dp_tp = set()
+    for e in log:
+        for key in ("DP_FIELD", "TP_FIELD"):
+            if e.get("tags", {}).get(key):
+                if key in seen_dp_tp:
+                    e["text"] += " (1경기 1회 상한, 추가 반영 없음)"
+                    e["points"] = 0
+                else:
+                    seen_dp_tp.add(key)
     if "OUT" in row["stat"]:  # 투수 행
         log = log + _pitcher_box_summary_lines(row["stat"], log, er_events or [])
     log_sum = sum(e["points"] for e in log)

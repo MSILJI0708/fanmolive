@@ -3,6 +3,7 @@ import glob
 import json
 import os
 import re
+from datetime import datetime, timedelta, timezone
 
 ap = argparse.ArgumentParser(description="수집된 data_<date>.json 전부를 모아 날짜 선택이 가능한 LP 보드 HTML을 만든다")
 ap.add_argument("--date", default=None, help="처음 열었을 때 보여줄 기준일 YYYY-MM-DD (생략 시 가장 최근 수집일)")
@@ -30,6 +31,8 @@ has_data = bool(batters or pitchers)
 top_batter = batters[0] if batters else {"lp": 0, "name": "-", "team": "-"}
 top_pitcher = pitchers[0] if pitchers else {"lp": 0, "name": "-", "team": "-"}
 games_count = len({(r["team"], r["opponent"], r["date"]) for r in batters}) // 2 if batters else 0
+# 이 HTML을 만든 시점(빌드 시각) = 자동화가 매번 새로 빌드하니 사실상 "마지막 업데이트 시각".
+last_update = datetime.now(timezone(timedelta(hours=9))).strftime("%m월 %d일 %H:%M")
 
 payload = json.dumps(all_data, ensure_ascii=False)
 
@@ -363,11 +366,14 @@ tbody tr.clickable:hover { background: var(--chip-bg); }
 
 .modal-view-toggle {
   display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
   gap: 4px;
   margin-bottom: 14px;
   border-bottom: 1px solid var(--line);
 }
-.modal-view-toggle button {
+.modal-view-toggle .tabs { display: flex; gap: 4px; }
+.modal-view-toggle .tabs button {
   font: inherit;
   font-size: 12.5px;
   font-weight: 700;
@@ -379,7 +385,19 @@ tbody tr.clickable:hover { background: var(--chip-bg); }
   border-bottom: 2px solid transparent;
   margin-bottom: -1px;
 }
-.modal-view-toggle button.active { color: var(--ink-0); border-bottom-color: var(--accent); }
+.modal-view-toggle .tabs button.active { color: var(--ink-0); border-bottom-color: var(--accent); }
+.modal-view-toggle .expand-controls { display: flex; gap: 6px; padding-bottom: 7px; }
+.modal-view-toggle .expand-controls button {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--chip-bg);
+  color: var(--ink-1);
+  cursor: pointer;
+}
+.modal-view-toggle .expand-controls button:hover { color: var(--ink-0); }
 
 .modal-empty { color: var(--ink-1); font-size: 13px; padding: 10px 0; }
 
@@ -544,6 +562,7 @@ footer.notes b { color: var(--ink-0); }
     <select id="date-select" class="date-select"></select>
     · 데이터 출처 <code>api-gw.sports.naver.com</code> (Selenium 불필요, 공개 JSON 응답 직접 호출)
     · <a href="mlb.html">MLB 실험판 보기 →</a>
+    · 마지막 업데이트 __LAST_UPDATE__ (KST)
   </p>
 </header>
 
@@ -630,8 +649,14 @@ footer.notes b { color: var(--ink-0); }
       <div class="modal-lp" id="modal-lp"></div>
     </div>
     <div class="modal-view-toggle">
-      <button id="modal-view-category" class="active">카테고리 보기</button>
-      <button id="modal-view-timeline">타임라인 보기</button>
+      <div class="tabs">
+        <button id="modal-view-category" class="active">카테고리 보기</button>
+        <button id="modal-view-timeline">타임라인 보기</button>
+      </div>
+      <div class="expand-controls">
+        <button id="modal-expand-all">전체 펼치기 [+]</button>
+        <button id="modal-collapse-all">전체 접기 [-]</button>
+      </div>
     </div>
     <div class="modal-body" id="modal-body"></div>
   </div>
@@ -1304,6 +1329,16 @@ const modalLp = document.getElementById('modal-lp');
 const modalBody = document.getElementById('modal-body');
 const modalViewCategoryBtn = document.getElementById('modal-view-category');
 const modalViewTimelineBtn = document.getElementById('modal-view-timeline');
+const modalExpandAllBtn = document.getElementById('modal-expand-all');
+const modalCollapseAllBtn = document.getElementById('modal-collapse-all');
+// 카테고리 보기/타임라인 보기 둘 다 같은 .cat-group 아코디언 구조를 쓰기 때문에,
+// 이 버튼 둘로 지금 보이는 뷰의 그룹을 한 번에 펼치거나 접을 수 있다.
+modalExpandAllBtn.addEventListener('click', () => {
+  modalBody.querySelectorAll('.cat-group').forEach(el => el.classList.add('expanded'));
+});
+modalCollapseAllBtn.addEventListener('click', () => {
+  modalBody.querySelectorAll('.cat-group').forEach(el => el.classList.remove('expanded'));
+});
 
 let currentModalRow = null;
 let currentModalView = 'category'; // 'category' | 'timeline'
@@ -1535,6 +1570,7 @@ html_doc = (html_doc
     .replace("__NB__", str(len(batters)))
     .replace("__NP__", str(len(pitchers)))
     .replace("__DATA_JSON__", payload)
+    .replace("__LAST_UPDATE__", last_update)
 )
 
 out_path = os.path.join(here, "lp_board.html")

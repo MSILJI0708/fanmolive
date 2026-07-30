@@ -3,6 +3,7 @@ import glob
 import json
 import os
 import re
+from datetime import datetime, timedelta, timezone
 
 ap = argparse.ArgumentParser(description="수집된 data_mlb_<date>.json 전부를 모아 날짜 선택이 가능한 MLB LP 보드 HTML을 만든다")
 ap.add_argument("--date", default=None, help="처음 열었을 때 보여줄 기준일 YYYY-MM-DD (생략 시 가장 최근 수집일)")
@@ -29,6 +30,7 @@ has_data = bool(batters or pitchers)
 top_batter = batters[0] if batters else {"lp": 0, "name": "-", "team": "-"}
 top_pitcher = pitchers[0] if pitchers else {"lp": 0, "name": "-", "team": "-"}
 games_count = len({(r["team"], r["opponent"], r["date"]) for r in batters}) // 2 if batters else 0
+last_update = datetime.now(timezone(timedelta(hours=9))).strftime("%m월 %d일 %H:%M")
 
 payload = json.dumps(all_data, ensure_ascii=False)
 
@@ -454,6 +456,7 @@ footer.notes b { color: var(--ink-0); }
     <select id="date-select" class="date-select"></select>
     · 데이터 출처 <code>api-gw.sports.naver.com</code> (Selenium 불필요, 공개 JSON 응답 직접 호출)
     · <a href="index.html">← KBO 보드로</a>
+    · 마지막 업데이트 __LAST_UPDATE__ (KST)
   </p>
 </header>
 
@@ -975,6 +978,7 @@ html_doc = (html_doc
     .replace("__NB__", str(len(batters)))
     .replace("__NP__", str(len(pitchers)))
     .replace("__DATA_JSON__", payload)
+    .replace("__LAST_UPDATE__", last_update)
 )
 
 out_path = os.path.join(here, "lp_board_mlb.html")
