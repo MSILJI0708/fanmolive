@@ -347,20 +347,23 @@ tbody tr.clickable:hover { background: var(--chip-bg); }
 .modal-view-toggle button.active { color: var(--ink-0); border-bottom-color: var(--accent); }
 
 /* 타임라인 보기 */
-.modal-body table { width: 100%; border-collapse: collapse; font-size: 12.5px; table-layout: fixed; }
+.modal-body table { width: 100%; border-collapse: collapse; font-size: 12px; table-layout: fixed; }
 .modal-body th {
   text-align: left;
-  font-size: 11px;
+  font-size: 10.5px;
   color: var(--ink-1);
   text-transform: uppercase;
   letter-spacing: .03em;
-  padding: 6px 8px;
+  padding: 5px 6px;
   border-bottom: 1px solid var(--line);
 }
-.modal-body td { padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: top; word-break: keep-all; overflow-wrap: break-word; text-align: left; }
+.modal-body td { padding: 5px 6px; border-bottom: 1px solid var(--line); vertical-align: top; overflow-wrap: anywhere; text-align: left; }
 .modal-body tr:last-child td { border-bottom: none; }
-.modal-body td.inn { color: var(--ink-1); white-space: nowrap; width: 44px; }
-.modal-body td.pts { text-align: right; font-weight: 700; white-space: nowrap; width: 66px; }
+.modal-body td.inn { color: var(--ink-1); white-space: nowrap; width: 34px; }
+/* result 컬럼은 width:0으로 줘야 fixed 레이아웃에서 내용 길이로 컬럼이 안 늘어나고
+   남은 공간 안에서만 줄바꿈된다(고정폭 테이블의 "가변 컬럼" 트릭) */
+.modal-body td.result { width: 0; }
+.modal-body td.pts { text-align: right; font-weight: 700; white-space: nowrap; width: 52px; }
 .modal-body td.pts.pos { color: var(--hot); }
 .modal-body td.pts.neg { color: var(--cool); }
 .modal-empty { color: var(--ink-1); font-size: 13px; padding: 10px 0; }
@@ -1278,6 +1281,7 @@ function renderTimelineView(row) {
     tdInn.className = 'inn';
     tdInn.textContent = e.inn ? e.inn + '회' : '-';
     const tdText = document.createElement('td');
+    tdText.className = 'result';
     tdText.textContent = e.text;
     const tdPts = document.createElement('td');
     tdPts.className = 'pts ' + (e.points > 0 ? 'pos' : (e.points < 0 ? 'neg' : ''));
@@ -1386,7 +1390,8 @@ function openPlayerModal(row) {
   currentModalRow = row;
   modalName.textContent = row.name;
   const posOrRole = row.position ? row.position : (row.role || '');
-  modalMeta.textContent = [posOrRole, row.team, row.opponent, row.date].filter(Boolean).join(' · ');
+  const vsOpponent = row.opponent ? ('vs ' + row.opponent) : '';
+  modalMeta.textContent = [posOrRole, row.team, vsOpponent, row.date].filter(Boolean).join(' · ');
   modalLp.textContent = row.lp + ' LP';
   modalLp.style.color = row.lp > 0 ? 'var(--hot)' : (row.lp < 0 ? 'var(--cool)' : 'var(--ink-0)');
 
