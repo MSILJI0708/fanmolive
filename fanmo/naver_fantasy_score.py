@@ -150,7 +150,18 @@ def parse_batter_pa(row: dict) -> dict:
 
 # ───────────────────────── etcRecords(특이기록) 파서 ─────────────────────────
 _NAME_INN_RE = re.compile(r"([^\s()]+)\((\d+)회\)")
-_HR_RE = re.compile(r"^(.+?)(\d+)호\((\d+)회(\d+)점\s*(.*?)\)$")
+# 한 경기에 홈런이 여럿이면 "김도영33호(1회1점 토다) 권희동4호(2회4점 양현종) ..."처럼
+# 모든 선수의 기록이 공백으로 이어붙은 문자열 하나로 온다. 예전엔 이 문자열 전체를 ^...$로
+# 통째로 매칭하는 정규식을 썼는데, 그러면 첫 번째 선수만 제대로 잡히고 그 뒤 선수들의
+# "(N회N점 상대)" 부분이 첫 번째 매치의 마지막 그룹에 통째로 빨려들어가 버려서, 두 번째
+# 이후 선수(권희동 등)의 만루홈런이 조용히 누락됐다. finditer로 각 선수 기록을 따로 뽑아야 한다.
+# 한 선수가 그 경기에서 홈런을 2개 이상 쳤으면 "위즈덤25호26호(6회4점 8회1점 원태인 육선엽)"
+# 처럼 "N호"가 여러 번 붙고 괄호 안에도 "회N점"이 여러 쌍 들어온다 — 이름 그룹을 숫자가
+# 아닌 문자로만 한정해서, 뒤에 붙는 "N호"들이 이름에 섞여 들어가지 않게 한다(이름에 숫자가
+# 섞이면 grand_slam_batters에 엉뚱한 문자열이 들어가 정작 그 선수 이름과 안 맞아 조회가
+# 실패한다). 괄호 안은 "회N점"이 몇 쌍이든 통째로 캡처해서, 그 안에 "4점"이 있는지만 본다
+# (몇 번째 홈런이 만루였는지는 안 가려도 되고, 그 경기에 만루홈런이 있었는지만 알면 된다).
+_HR_ITEM_RE = re.compile(r"([^\d\s()]+)((?:\d+호)+)\(([^()]*)\)")
 
 
 def parse_etc_records(etc_records: list[dict]) -> dict:
@@ -180,9 +191,9 @@ def parse_etc_records(etc_records: list[dict]) -> dict:
             for name, _ in _NAME_INN_RE.findall(result):
                 picked_off[name] += 1
         elif how == "홈런":
-            m = _HR_RE.match(result)
-            if m and m.group(4) == "4":
-                grand_slam_batters.add(m.group(1).strip())
+            for name, _hr_nos, points_blob in _HR_ITEM_RE.findall(result):
+                if "4점" in points_blob:
+                    grand_slam_batters.add(name)
 
     return {
         "errors": errors,
