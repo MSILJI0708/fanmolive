@@ -157,14 +157,16 @@ def parse_etc_records(etc_records: list[dict]) -> dict:
     errors, wild_pitches = defaultdict(int), defaultdict(int)
     caught_stealing, balks = defaultdict(int), defaultdict(int)
     picked_off = defaultdict(int)
+    error_innings: dict = defaultdict(list)
     grand_slam_batters: set[str] = set()
 
     for e in etc_records or []:
         how = e.get("how", "")
         result = (e.get("result") or "").strip()
         if how == "실책":
-            for name, _ in _NAME_INN_RE.findall(result):
+            for name, inn in _NAME_INN_RE.findall(result):
                 errors[name] += 1
+                error_innings[name].append(int(inn))
         elif how == "폭투":
             for name, _ in _NAME_INN_RE.findall(result):
                 wild_pitches[name] += 1
@@ -184,6 +186,7 @@ def parse_etc_records(etc_records: list[dict]) -> dict:
 
     return {
         "errors": errors,
+        "error_innings": error_innings,
         "wild_pitches": wild_pitches,
         "caught_stealing": caught_stealing,
         "balks": balks,
@@ -336,6 +339,7 @@ def process_game(
                 "position_override": pos_info.get("is_override", False),
                 "ab": int(p.get("ab") or 0), "stat": stat,
                 "lp": score_batter(stat),
+                "_error_innings": list(etc["error_innings"].get(name, [])),
             })
 
     pitcher_rows: list[dict] = []
@@ -688,14 +692,50 @@ def _pitcher_box_summary_lines(stat: dict, log: list[dict], er_events: list[dict
     return lines
 
 
+def _batter_box_summary_lines(row: dict, log: list[dict]) -> list[dict]:
+    """타자 쪽 박스스코어 전용 항목(투수의 _pitcher_box_summary_lines에 대응) — 중계 텍스트
+    만으로는 절대 못 만드는 항목들이라 여기서 박스스코어(etcRecords) 값으로 직접 합성한다.
+    - 실책: 실책은 "그 순간 수비 중이던 야수"가 아니라 etcRecords의 "실책" 특이기록에 이름이
+      그대로 박혀 나와서, 중계 텍스트 패턴 매칭 없이도 이닝까지 정확히 알 수 있다.
+    - 만루홈런/사이클히트 보너스: 홈런/안타 자체는 이미 중계 타임라인에 있지만, 그 위에 얹는
+      보너스 점수(+10/+50)는 "이 경기에서 만루/사이클을 달성했다"는 게임 전체 단위 판정이라
+      개별 타석 문장에는 나타나지 않는다."""
+    lines = []
+    for inn in row.pop("_error_innings", []):
+        lines.append({"inn": inn, "text": "실책", "points": BATTER_POINTS["E"], "tags": {"E": 1}})
+    stat = row["stat"]
+    if stat.get("GRANDSLAM"):
+        hr_inn = next((e["inn"] for e in log if e.get("tags", {}).get("HR")), None)
+        lines.append({
+            "inn": hr_inn, "text": "만루홈런 보너스",
+            "points": stat["GRANDSLAM"] * BATTER_POINTS["GRANDSLAM"], "tags": {"GRANDSLAM": stat["GRANDSLAM"]},
+        })
+    if stat.get("CYCLE"):
+        last_inn = None
+        for e in log:
+            if e.get("inn") is not None:
+                last_inn = e["inn"]
+        lines.append({
+            "inn": last_inn, "text": "사이클히트 보너스",
+            "points": BATTER_POINTS["CYCLE"], "tags": {"CYCLE": 1},
+        })
+    return lines
+
+
 def _attach_play_log(row: dict, timeline: dict, er_events: list[dict] | None = None) -> None:
     """선수 클릭 팝업용 "타석/수비별 결과 - 포인트" 내역. 릴레이 텍스트를 직접 분류해서 만든
     거라, 박스스코어 기반 최종 LP(row['lp'])와 합계가 다를 수 있다(예: 병살 가담이 이미 그
     경기에서 2번 이상 잡혔지만 실제 점수는 1회로 상한). 그 차이는 마지막 줄에 "기타 보정"으로
     투명하게 남겨서, 팝업에 나온 항목을 전부 더하면 항상 실제 LP와 정확히 맞도록 한다.
     투수는 이닝/자책/QS 등 박스스코어 전용 항목을 실제로 그 일이 일어난 이닝 뒤에 이어붙여서
-    "기타 보정"이 원칙적으로 0에 가깝게 만든다."""
-    log = list(timeline.get(row["name"], []))
+    "기타 보정"이 원칙적으로 0에 가깝게 만든다.
+
+    timeline은 (이름, 역할) 튜플로 키가 잡혀 있다 — 두 팀에 동명이인 투수/타자가 있을 때
+    이름만으로는 서로 다른 두 선수의 기록이 섞여버리기 때문(relay.py 쪽 compute_relay_stats
+    참고). 여기서는 이 행이 투수 행인지 타자 행인지(row['stat']에 'OUT' 키가 있는지)로
+    역할을 판정해서 그 역할의 기록만 가져온다."""
+    role = "pitch" if "OUT" in row["stat"] else "bat"
+    log = list(timeline.get((row["name"], role), []))
     # 병살/삼중살 가담은 규정상 "1경기에 1번만 인정"이라, 같은 경기에서 여러 번 잡혀도 실제
     # 점수는 처음 1번만 반영된다. 화면에 전부 +10/+50으로 찍히면 헷갈리니, 두 번째부터는
     # 점수를 0으로 표시하고 문구에 상한 적용 사실을 남긴다(합계는 그대로 LP와 정확히 맞음).
@@ -710,6 +750,8 @@ def _attach_play_log(row: dict, timeline: dict, er_events: list[dict] | None = N
                     seen_dp_tp.add(key)
     if "OUT" in row["stat"]:  # 투수 행
         log = log + _pitcher_box_summary_lines(row["stat"], log, er_events or [])
+    else:  # 타자 행
+        log = log + _batter_box_summary_lines(row, log)
     log_sum = sum(e["points"] for e in log)
     diff = row["lp"] - log_sum
     if diff:

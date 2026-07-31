@@ -11,21 +11,39 @@ args = ap.parse_args()
 
 here = os.path.dirname(os.path.abspath(__file__))
 
-all_data: dict[str, dict] = {}
 # data_????????.json 만 (KBO). data_mlb_*.json은 별도 리그라 build_mlb_board.py가 처리한다.
-for path in sorted(glob.glob(os.path.join(here, "data_????????.json"))):
-    with open(path, encoding="utf-8") as f:
-        d = json.load(f)
+# 2025 시즌 개막부터 데이터를 전부 모으면 날짜 수가 수백 개로 늘어나서, 예전처럼 전체
+# 날짜의 전체 선수 데이터를 HTML 하나에 통째로 심으면 파일이 너무 커진다(과거 22일치만으로도
+# 10MB를 넘겨 아티팩트 게시가 타임아웃난 적이 있음). 그래서 지금 보여줄 "기준일" 하나의 전체
+# 데이터만 HTML에 심고, 나머지 날짜는 "그날 경기 수" 정도의 가벼운 색인만 심어서 달력에
+# 점으로 표시하고, 실제로 그 날짜를 클릭하면 JS가 해당 data_YYYYMMDD.json을 그때 가서
+# fetch로 받아온다(day_index.py의 "지연 로딩"과 동일한 발상).
+paths = sorted(glob.glob(os.path.join(here, "data_????????.json")))
+file_dates = []
+for path in paths:
     m = re.search(r"data_(\d{8})\.json$", path)
-    ds = d.get("date") or f"{m.group(1)[:4]}-{m.group(1)[4:6]}-{m.group(1)[6:8]}"
-    all_data[ds] = {"batters": d["batters"], "pitchers": d["pitchers"]}
+    dc = m.group(1)
+    file_dates.append(f"{dc[0:4]}-{dc[4:6]}-{dc[6:8]}")
 
-if not all_data:
+if not file_dates:
     raise SystemExit("data_*.json 파일이 없습니다. 먼저 daily_pipeline.py로 데이터를 수집하세요.")
 
-date_str = args.date if args.date in all_data else max(all_data.keys())
-batters = all_data[date_str]["batters"]
-pitchers = all_data[date_str]["pitchers"]
+date_str = args.date if args.date in file_dates else max(file_dates)
+
+date_index: dict[str, dict] = {}  # date -> {"games": n, "file": "data_YYYYMMDD.json"} (달력 표시용 경량 색인)
+active_payload = {"batters": [], "pitchers": []}
+for path, ds in zip(paths, file_dates):
+    with open(path, encoding="utf-8") as f:
+        d = json.load(f)
+    batters_ = d.get("batters", [])
+    pitchers_ = d.get("pitchers", [])
+    games = len({(r["team"], r["opponent"], r["date"]) for r in batters_}) // 2 if batters_ else 0
+    date_index[ds] = {"games": games, "file": os.path.basename(path)}
+    if ds == date_str:
+        active_payload = {"batters": batters_, "pitchers": pitchers_}
+
+batters = active_payload["batters"]
+pitchers = active_payload["pitchers"]
 
 has_data = bool(batters or pitchers)
 top_batter = batters[0] if batters else {"lp": 0, "name": "-", "team": "-"}
@@ -34,7 +52,8 @@ games_count = len({(r["team"], r["opponent"], r["date"]) for r in batters}) // 2
 # 이 HTML을 만든 시점(빌드 시각) = 자동화가 매번 새로 빌드하니 사실상 "마지막 업데이트 시각".
 last_update = datetime.now(timezone(timedelta(hours=9))).strftime("%m월 %d일 %H:%M")
 
-payload = json.dumps(all_data, ensure_ascii=False)
+payload = json.dumps(active_payload, ensure_ascii=False)
+date_index_payload = json.dumps(date_index, ensure_ascii=False)
 
 html_doc = """<!doctype html>
 <title>KBO 판타지 LP 보드 · __DATE__</title>
@@ -138,6 +157,77 @@ h1 {
   color: var(--ink-0);
   cursor: pointer;
 }
+
+.date-picker { position: relative; display: inline-block; }
+.date-picker-btn {
+  font: inherit;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 3px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--paper-1);
+  color: var(--ink-0);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.date-picker-btn:hover { border-color: var(--accent); }
+.date-picker-pop {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 40;
+  background: var(--paper-1);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  padding: 12px;
+  width: 296px;
+}
+.date-picker-pop.open { display: block; }
+.dp-selects { display: flex; gap: 6px; margin-bottom: 10px; }
+.dp-selects select {
+  flex: 1;
+  font: inherit;
+  font-size: 12.5px;
+  padding: 4px 2px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--paper-0);
+  color: var(--ink-0);
+}
+.dp-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.dp-nav button {
+  border: none;
+  background: none;
+  color: var(--ink-1);
+  cursor: pointer;
+  font-size: 15px;
+  padding: 2px 10px;
+  border-radius: 6px;
+}
+.dp-nav button:hover { background: var(--chip-bg); color: var(--ink-0); }
+.dp-nav .dp-title { font-weight: 700; font-size: 13px; }
+.dp-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
+.dp-dow { font-size: 10.5px; color: var(--ink-1); padding: 3px 0; }
+.dp-cell {
+  position: relative;
+  font-size: 12px;
+  padding: 5px 0 4px;
+  border-radius: 6px;
+  cursor: default;
+  color: var(--ink-1);
+}
+.dp-cell.empty { visibility: hidden; }
+.dp-cell.has-data { cursor: pointer; color: var(--ink-0); font-weight: 600; }
+.dp-cell.has-data:hover { background: var(--chip-bg); }
+.dp-cell .dp-n { display: block; font-size: 9px; color: var(--accent-ink); font-weight: 700; margin-top: 1px; }
+.dp-cell.today { box-shadow: inset 0 0 0 1.5px var(--accent); }
+.dp-cell.selected { background: var(--accent); color: #fff; }
+.dp-cell.selected .dp-n { color: #fff; }
 
 .tiles {
   max-width: 1180px;
@@ -559,7 +649,24 @@ footer.notes b { color: var(--ink-0); }
   <h1>선수 카드 LP 보드</h1>
   <p class="sub">
     기준일
-    <select id="date-select" class="date-select"></select>
+    <span class="date-picker" id="date-picker">
+      <button type="button" class="date-picker-btn" id="date-picker-btn">
+        <span id="dp-btn-label">__DATE__</span> <span aria-hidden="true">▾</span>
+      </button>
+      <div class="date-picker-pop" id="date-picker-pop">
+        <div class="dp-selects">
+          <select id="dp-year"></select>
+          <select id="dp-month"></select>
+          <select id="dp-day"></select>
+        </div>
+        <div class="dp-nav">
+          <button type="button" id="dp-prev" aria-label="이전 달">&lt;</button>
+          <span class="dp-title" id="dp-title"></span>
+          <button type="button" id="dp-next" aria-label="다음 달">&gt;</button>
+        </div>
+        <div class="dp-grid" id="dp-grid"></div>
+      </div>
+    </span>
     · 데이터 출처 <code>api-gw.sports.naver.com</code> (Selenium 불필요, 공개 JSON 응답 직접 호출)
     · <a href="mlb.html">MLB 실험판 보기 →</a>
     · 마지막 업데이트 __LAST_UPDATE__ (KST)
@@ -695,11 +802,21 @@ footer.notes b { color: var(--ink-0); }
 </footer>
 
 <script id="lp-data" type="application/json">__DATA_JSON__</script>
+<script id="lp-date-index" type="application/json">__DATE_INDEX_JSON__</script>
 <script>
-const ALL_DATA = JSON.parse(document.getElementById('lp-data').textContent);
-const AVAILABLE_DATES = Object.keys(ALL_DATA).sort().reverse();
+// DATE_INDEX: 모든 수집일의 "그날 경기 수"만 담은 가벼운 색인(달력 점 표시용).
+// ALL_DATA는 캐시 겸 저장소 — 처음엔 기준일 하나만 채워져 있고, 다른 날짜를 고르면
+// switchDate()가 그때 가서 data_YYYYMMDD.json을 fetch해 채워 넣는다(지연 로딩).
+const DATE_INDEX = JSON.parse(document.getElementById('lp-date-index').textContent);
+const AVAILABLE_DATES = Object.keys(DATE_INDEX).sort();
 let activeDate = '__DATE__';
+const ALL_DATA = { [activeDate]: JSON.parse(document.getElementById('lp-data').textContent) };
 let data = ALL_DATA[activeDate] || { batters: [], pitchers: [] };
+
+function dateToFile(dateStr) {
+  const info = DATE_INDEX[dateStr];
+  return info ? info.file : ('data_' + dateStr.replaceAll('-', '') + '.json');
+}
 
 const POSITION_GROUPS = {
   '전체': null,
@@ -1262,15 +1379,127 @@ document.querySelectorAll('.chip-tab').forEach(btn => {
   });
 });
 
-// --- 기준일 선택 ---
-const dateSelect = document.getElementById('date-select');
-AVAILABLE_DATES.forEach(d => {
+// --- 기준일 선택(달력 클릭 + 년/월/일 드롭다운) ---
+const dpBtn = document.getElementById('date-picker-btn');
+const dpBtnLabel = document.getElementById('dp-btn-label');
+const dpPop = document.getElementById('date-picker-pop');
+const dpYear = document.getElementById('dp-year');
+const dpMonth = document.getElementById('dp-month');
+const dpDay = document.getElementById('dp-day');
+const dpPrev = document.getElementById('dp-prev');
+const dpNext = document.getElementById('dp-next');
+const dpTitle = document.getElementById('dp-title');
+const dpGrid = document.getElementById('dp-grid');
+
+const YEARS = [...new Set(AVAILABLE_DATES.map(d => d.slice(0, 4)))].sort();
+YEARS.forEach(y => {
   const opt = document.createElement('option');
-  opt.value = d;
-  opt.textContent = d;
-  dateSelect.appendChild(opt);
+  opt.value = y;
+  opt.textContent = y + '년';
+  dpYear.appendChild(opt);
 });
-dateSelect.value = activeDate;
+for (let m = 1; m <= 12; m++) {
+  const opt = document.createElement('option');
+  opt.value = String(m).padStart(2, '0');
+  opt.textContent = m + '월';
+  dpMonth.appendChild(opt);
+}
+function fillDayOptions(year, month) {
+  const daysInMonth = new Date(Number(year), Number(month), 0).getDate();
+  const prevValue = dpDay.value;
+  dpDay.innerHTML = '';
+  for (let dnum = 1; dnum <= daysInMonth; dnum++) {
+    const opt = document.createElement('option');
+    opt.value = String(dnum).padStart(2, '0');
+    opt.textContent = dnum + '일';
+    dpDay.appendChild(opt);
+  }
+  if ([...dpDay.options].some(o => o.value === prevValue)) dpDay.value = prevValue;
+}
+
+let calYear = Number(activeDate.slice(0, 4));
+let calMonth = Number(activeDate.slice(5, 7)); // 1~12
+
+const todayKST = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
+const todayStr = todayKST.getFullYear() + '-' + String(todayKST.getMonth() + 1).padStart(2, '0')
+  + '-' + String(todayKST.getDate()).padStart(2, '0');
+
+function renderDatePicker() {
+  dpYear.value = String(calYear);
+  dpMonth.value = String(calMonth).padStart(2, '0');
+  fillDayOptions(calYear, calMonth);
+  if (calYear === Number(activeDate.slice(0, 4)) && calMonth === Number(activeDate.slice(5, 7))) {
+    dpDay.value = activeDate.slice(8, 10);
+  }
+
+  dpTitle.textContent = calYear + '년 ' + calMonth + '월';
+  dpGrid.innerHTML = '';
+  ['일', '월', '화', '수', '목', '금', '토'].forEach(dw => {
+    const el = document.createElement('div');
+    el.className = 'dp-dow';
+    el.textContent = dw;
+    dpGrid.appendChild(el);
+  });
+  const startWeekday = new Date(calYear, calMonth - 1, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth, 0).getDate();
+  for (let i = 0; i < startWeekday; i++) {
+    const el = document.createElement('div');
+    el.className = 'dp-cell empty';
+    dpGrid.appendChild(el);
+  }
+  for (let dnum = 1; dnum <= daysInMonth; dnum++) {
+    const ds = calYear + '-' + String(calMonth).padStart(2, '0') + '-' + String(dnum).padStart(2, '0');
+    const el = document.createElement('div');
+    el.className = 'dp-cell';
+    const info = DATE_INDEX[ds];
+    if (info) {
+      el.classList.add('has-data');
+      el.innerHTML = dnum + '<span class="dp-n">' + info.games + '경기</span>';
+      el.addEventListener('click', () => { closeDatePicker(); switchDate(ds); });
+    } else {
+      el.textContent = dnum;
+    }
+    if (ds === todayStr) el.classList.add('today');
+    if (ds === activeDate) el.classList.add('selected');
+    dpGrid.appendChild(el);
+  }
+}
+
+function openDatePicker() {
+  calYear = Number(activeDate.slice(0, 4));
+  calMonth = Number(activeDate.slice(5, 7));
+  renderDatePicker();
+  dpPop.classList.add('open');
+}
+function closeDatePicker() {
+  dpPop.classList.remove('open');
+}
+dpBtn.addEventListener('click', e => {
+  e.stopPropagation();
+  dpPop.classList.contains('open') ? closeDatePicker() : openDatePicker();
+});
+document.addEventListener('click', e => {
+  if (!document.getElementById('date-picker').contains(e.target)) closeDatePicker();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeDatePicker();
+});
+dpPrev.addEventListener('click', () => {
+  calMonth -= 1;
+  if (calMonth < 1) { calMonth = 12; calYear -= 1; }
+  renderDatePicker();
+});
+dpNext.addEventListener('click', () => {
+  calMonth += 1;
+  if (calMonth > 12) { calMonth = 1; calYear += 1; }
+  renderDatePicker();
+});
+dpYear.addEventListener('change', () => { calYear = Number(dpYear.value); renderDatePicker(); });
+dpMonth.addEventListener('change', () => { calMonth = Number(dpMonth.value); renderDatePicker(); });
+dpDay.addEventListener('change', () => {
+  const ds = calYear + '-' + String(calMonth).padStart(2, '0') + '-' + dpDay.value;
+  if (DATE_INDEX[ds]) { closeDatePicker(); switchDate(ds); }
+});
 
 function computeTiles(d) {
   const hasData = (d.batters.length > 0) || (d.pitchers.length > 0);
@@ -1298,9 +1527,24 @@ function renderTiles(dateStr) {
   document.getElementById('tab-np').textContent = data.pitchers.length + '명';
 }
 
-function switchDate(dateStr) {
+async function switchDate(dateStr) {
+  if (dateStr === activeDate && ALL_DATA[dateStr]) return;
   activeDate = dateStr;
-  data = ALL_DATA[dateStr] || { batters: [], pitchers: [] };
+  dpBtnLabel.textContent = dateStr;
+
+  if (!ALL_DATA[dateStr]) {
+    dpBtnLabel.textContent = dateStr + ' (불러오는 중…)';
+    try {
+      const resp = await fetch(dateToFile(dateStr));
+      const json = await resp.json();
+      ALL_DATA[dateStr] = { batters: json.batters || [], pitchers: json.pitchers || [] };
+    } catch (e) {
+      ALL_DATA[dateStr] = { batters: [], pitchers: [] };
+    }
+    if (activeDate !== dateStr) return; // 응답 도착 전에 다른 날짜로 또 바뀌었으면 이 결과는 버린다
+    dpBtnLabel.textContent = dateStr;
+  }
+  data = ALL_DATA[dateStr];
 
   // 필터 상태 초기화(다른 날짜의 필터가 새 데이터에 그대로 적용돼 혼란스러운 것 방지)
   document.getElementById('search-b').value = '';
@@ -1316,8 +1560,6 @@ function switchDate(dateStr) {
   applyBatterFilters();
   applyPitcherFilters();
 }
-
-dateSelect.addEventListener('change', () => switchDate(dateSelect.value));
 
 renderTiles(activeDate);
 
@@ -1570,6 +1812,7 @@ html_doc = (html_doc
     .replace("__NB__", str(len(batters)))
     .replace("__NP__", str(len(pitchers)))
     .replace("__DATA_JSON__", payload)
+    .replace("__DATE_INDEX_JSON__", date_index_payload)
     .replace("__LAST_UPDATE__", last_update)
 )
 

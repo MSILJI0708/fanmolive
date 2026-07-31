@@ -106,10 +106,13 @@ def classify_relay_desc(desc: str) -> dict[str, int]:
     원본처럼 FO/GO에도 같이 더해진다."""
     tags = {"H": 0, "2B": 0, "3B": 0, "HR": 0, "BB": 0, "HBP": 0, "K": 0,
             "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "LD": 0}
-    if "실책" in desc and "아웃" not in desc:
+    if "실책" in desc and "출루" in desc:
         # "유격수 플라이 실책으로 출루"처럼 수비 실책으로 살아나간 경우 — 아웃이 아니므로
         # "플라이"/"땅볼" 같은 하위 키워드가 우연히 걸려 뜬공·땅볼 아웃으로 오분류되면 안 된다.
         # 타자 본인에게는 어차피 점수가 없는 이벤트라 전부 0으로 둔다(실책 자체는 별도 경로로 집계).
+        # "출루" 여부로 판단해야 한다 — "중견수 희생플라이 (중견수 실책)"처럼 "아웃" 단어 없이도
+        # 실제로는 타자가 아웃된(희생플라이가 성립한) 경우가 있어서(실책은 그 다음 송구 등에서
+        # 발생), "아웃" 단어 유무로 판단하면 이런 진짜 희생플라이까지 통째로 0점 처리돼버린다.
         return tags
     if "홈런" in desc:
         tags["H"] = 1
@@ -124,12 +127,19 @@ def classify_relay_desc(desc: str) -> dict[str, int]:
         tags["H"] = 1
     elif "몸에 맞는" in desc:
         tags["HBP"] = 1
-    elif "볼넷" in desc:
+    elif "볼넷" in desc or "고의4구" in desc:
+        # "자동 고의4구"(고의사구)도 볼넷과 동일하게 채점된다 — box score의 bb 필드에도
+        # 고의사구가 포함되는데, 여기서 "볼넷"이라는 단어가 안 들어가 있어 그동안 통째로
+        # 미분류(전부 0점)로 빠지면서 팝업에서 "기타 보정"으로만 나타났었다.
         tags["BB"] = 1
     elif "삼진" in desc or "스트라이크 낫 아웃" in desc:
         tags["K"] = 1
     elif "병살" in desc:
         tags["GDP"] = 1
+        # 병살타는 기본적으로 땅볼 타구이므로 GO 페널티도 함께 적용된다(box score 쪽
+        # process_game에서 GO 스탯에 GDP 개수를 합산하는 것과 동일한 규칙). 여기서도 GO를
+        # 같이 세워야 팝업 합계가 실제 LP(-25+-10=-35)와 정확히 맞는다.
+        tags["GO"] = 1
     elif "희생플라이" in desc:
         tags["SACFLY"] = 1
         tags["FO"] = 1
@@ -239,7 +249,16 @@ def compute_relay_stats(
     pitcher_extra: dict = defaultdict(lambda: defaultdict(int))
     catcher_events: dict = defaultdict(list)
     fielding_events: dict = defaultdict(list)
+    # timeline은 (이름, 역할) 튜플로 키를 잡는다 — 이름만으로 키를 잡으면 두 팀에 동명이인
+    # 투수/타자가 있을 때(예: 한쪽 팀 투수와 다른 쪽 팀 타자가 우연히 이름이 같은 경우) 서로
+    # 무관한 두 선수의 기록이 한 timeline 리스트에 섞여 들어가 버린다(실제로 SSG-KIA전에서
+    # 양 팀에 동명이인 "김민준" 투수/타자가 있어 이 문제가 발생한 걸 확인함). "bat"은 타자
+    # 본인의 타석/주루/수비(보살 등) 기록, "pitch"는 투수 본인의 피안타/사사구/아웃카운트 등
+    # 기록이라 역할이 겹칠 일이 없다.
     timeline: dict = defaultdict(list)
+
+    def tl(name: str, role: str) -> list:
+        return timeline[(name, role)]
     # 희생번트도 번트안타도 아닌 "번트 아웃"(비희생 번트 시도가 실패해 아웃된 경우) 횟수.
     # 박스스코어 코드만으로는 이걸 일반 스윙 땅볼 아웃과 구분할 수 없어서(둘 다 그냥
     # "N땅"으로만 나옴) 중계 텍스트로 잡아낸 만큼을 나중에 GO 집계에서 빼준다.
@@ -271,7 +290,7 @@ def compute_relay_stats(
             for half_key in ("0", "1"):
                 for pitcher in pending_inherited[half_key].values():
                     pitcher_extra[pitcher]["INHERITED_STRANDED"] += 1
-                    timeline[pitcher].append({
+                    tl(pitcher, "pitch").append({
                         "inn": ev["inn"], "text": "승계주자 실점 막음",
                         "points": PITCHER_POINTS["INHERITED_STRANDED"], "tags": {"INHERITED_STRANDED": 1},
                     })
@@ -305,11 +324,11 @@ def compute_relay_stats(
             pitcher = pending_inherited[half].pop(slot, None)
             if pitcher:
                 pitcher_extra[pitcher]["INHERITED_SCORED"] += 1
-                timeline[pitcher].append({
+                tl(pitcher, "pitch").append({
                     "inn": ev["inn"], "text": f"승계주자 {runner} 실점 허용",
                     "points": PITCHER_POINTS["INHERITED_SCORED"], "tags": {"INHERITED_SCORED": 1},
                 })
-            timeline[runner].append({
+            tl(runner, "bat").append({
                 "inn": ev["inn"], "text": "득점", "points": BATTER_POINTS["R"], "tags": {"R": 1},
             })
             origin = run_origin.pop(runner, None)
@@ -321,20 +340,20 @@ def compute_relay_stats(
         m_sb = _SB_RE.match(text)
         if m_sb:
             runner = m_sb.group("name")
-            timeline[runner].append({
+            tl(runner, "bat").append({
                 "inn": ev["inn"], "text": "도루 성공", "points": BATTER_POINTS["SB"], "tags": {"SB": 1},
             })
             catcher = defense[half].get("포수")
             if catcher:
                 catcher_events[catcher].append({"type": "SB_ALLOWED_CATCHER", "pos": "포수"})
-                timeline[catcher].append({
+                tl(catcher, "bat").append({
                     "inn": ev["inn"], "text": f"도루 허용 ({runner})",
                     "points": BATTER_POINTS["SB_ALLOWED_CATCHER"], "tags": {"SB_ALLOWED_CATCHER": 1},
                 })
             pitcher = current_pitcher[half]
             if pitcher:
                 pitcher_extra[pitcher]["SB_A"] += 1
-                timeline[pitcher].append({
+                tl(pitcher, "pitch").append({
                     "inn": ev["inn"], "text": f"도루 허용 ({runner})",
                     "points": PITCHER_POINTS["SB_ALLOWED"], "tags": {"SB_ALLOWED": 1},
                 })
@@ -344,20 +363,20 @@ def compute_relay_stats(
         m_cs = _CS_RE.match(text)
         if m_cs:
             runner = m_cs.group("name")
-            timeline[runner].append({
+            tl(runner, "bat").append({
                 "inn": ev["inn"], "text": "도루 실패(아웃)", "points": BATTER_POINTS["CS"], "tags": {"CS": 1},
             })
             catcher = defense[half].get("포수")
             if catcher:
                 catcher_events[catcher].append({"type": "CS_CATCHER", "pos": "포수"})
-                timeline[catcher].append({
+                tl(catcher, "bat").append({
                     "inn": ev["inn"], "text": f"도루 저지 ({runner})",
                     "points": BATTER_POINTS["CS_CATCHER"], "tags": {"CS_CATCHER": 1},
                 })
             pitcher = current_pitcher[half]
             if pitcher:
                 pitcher_extra[pitcher]["CS_A"] += 1
-                timeline[pitcher].append({
+                tl(pitcher, "pitch").append({
                     "inn": ev["inn"], "text": f"도루 저지 ({runner})",
                     "points": PITCHER_POINTS["CS_A"], "tags": {"CS_A": 1},
                 })
@@ -367,14 +386,14 @@ def compute_relay_stats(
         m_pickoff = _PICKOFF_RE.match(text)
         if m_pickoff:
             runner = m_pickoff.group("name")
-            timeline[runner].append({
+            tl(runner, "bat").append({
                 "inn": ev["inn"], "text": "견제사(아웃)", "points": BATTER_POINTS["PICKOFF"], "tags": {"PICKOFF": 1},
             })
             # "포수 견제"(포수가 던진 견제)는 투수의 견제사로 치지 않고, "투수 견제"만 인정
             if m_pickoff.group("who") == "투수":
                 pitcher = current_pitcher[half]
                 if pitcher:
-                    timeline[pitcher].append({
+                    tl(pitcher, "pitch").append({
                         "inn": ev["inn"], "text": f"견제사 ({runner})",
                         "points": PITCHER_POINTS["PICKOFF_A"], "tags": {"PICKOFF_A": 1},
                     })
@@ -404,13 +423,13 @@ def compute_relay_stats(
                         continue
                     if is_dp_group:
                         fielding_events[fielder].append({"type": "DP", "pos": pos})
-                        timeline[fielder].append({
+                        tl(fielder, "bat").append({
                             "inn": ev["inn"], "text": f"병살 가담 ({pos}, 주자 아웃)",
                             "points": BATTER_POINTS["DP_FIELD"], "tags": {"DP_FIELD": 1},
                         })
                     if is_tp_group:
                         fielding_events[fielder].append({"type": "TP", "pos": pos})
-                        timeline[fielder].append({
+                        tl(fielder, "bat").append({
                             "inn": ev["inn"], "text": f"삼중살 가담 ({pos}, 주자 아웃)",
                             "points": BATTER_POINTS["TP_FIELD"], "tags": {"TP_FIELD": 1},
                         })
@@ -420,7 +439,7 @@ def compute_relay_stats(
                 if fielder:
                     etype = "OF_ASSIST" if assist_pos in OUTFIELD_POSITIONS else "ASSIST"
                     fielding_events[fielder].append({"type": etype, "pos": assist_pos})
-                    timeline[fielder].append({
+                    tl(fielder, "bat").append({
                         "inn": ev["inn"], "text": f"보살 ({assist_pos}, 주자 아웃)",
                         "points": BATTER_POINTS[etype], "tags": {etype: 1},
                     })
@@ -435,7 +454,7 @@ def compute_relay_stats(
                 p = current_pitcher[half]
                 if p:
                     pitcher_extra[p]["2B_A"] += 1
-                    timeline[p].append({
+                    tl(p, "pitch").append({
                         "inn": ev["inn"], "text": f"피2루타 ({batter})",
                         "points": PITCHER_POINTS["2B_A"], "tags": {"2B_A": 1},
                     })
@@ -443,7 +462,7 @@ def compute_relay_stats(
                 p = current_pitcher[half]
                 if p:
                     pitcher_extra[p]["3B_A"] += 1
-                    timeline[p].append({
+                    tl(p, "pitch").append({
                         "inn": ev["inn"], "text": f"피3루타 ({batter})",
                         "points": PITCHER_POINTS["3B_A"], "tags": {"3B_A": 1},
                     })
@@ -454,30 +473,30 @@ def compute_relay_stats(
             is_bunt_out = "번트" in desc and "희생번트" not in desc and "안타" not in desc and "아웃" in desc
             if is_bunt_out:
                 bunt_out[batter] += 1
-                timeline[batter].append({
+                tl(batter, "bat").append({
                     "inn": ev["inn"], "text": desc, "points": 0, "tags": {},
                 })
                 # 스퀴즈 번트처럼 타자는 아웃당해도 그 사이 주자가 홈에 들어오는 드문 경우 대비
                 rbi = sum(1 for t in group_texts[ev["no"]] if _HOME_RE.match(t))
                 if rbi:
-                    timeline[batter].append({
+                    tl(batter, "bat").append({
                         "inn": ev["inn"], "text": f"타점 {rbi}개", "points": rbi * BATTER_POINTS.get("RBI", 0),
                         "tags": {"RBI": rbi},
                     })
             elif any(bat_tags.values()):
                 pts = sum(bat_tags[k] * BATTER_POINTS.get(k, 0) for k in bat_tags)
-                timeline[batter].append({
+                tl(batter, "bat").append({
                     "inn": ev["inn"], "text": desc, "points": pts,
                     "tags": {k: v for k, v in bat_tags.items() if v},
                 })
                 rbi = sum(1 for t in group_texts[ev["no"]] if _HOME_RE.match(t))
                 if bat_tags["HR"]:
-                    timeline[batter].append({
+                    tl(batter, "bat").append({
                         "inn": ev["inn"], "text": "득점 (홈런)", "points": BATTER_POINTS["R"], "tags": {"R": 1},
                     })
                     rbi += 1  # 홈런은 다른 주자뿐 아니라 타자 자신의 득점도 타점으로 잡힌다
                 if rbi:
-                    timeline[batter].append({
+                    tl(batter, "bat").append({
                         "inn": ev["inn"], "text": f"타점 {rbi}개", "points": rbi * BATTER_POINTS.get("RBI", 0),
                         "tags": {"RBI": rbi},
                     })
@@ -492,33 +511,33 @@ def compute_relay_stats(
                     elif bat_tags["H"] or bat_tags["BB"] or bat_tags["HBP"]:
                         run_origin[batter] = p
                     if bat_tags["H"]:
-                        timeline[p].append({
+                        tl(p, "pitch").append({
                             "inn": ev["inn"], "text": f"피안타 ({batter})",
                             "points": PITCHER_POINTS["H"], "tags": {"H": 1},
                         })
                     if bat_tags["HR"]:
-                        timeline[p].append({
+                        tl(p, "pitch").append({
                             "inn": ev["inn"], "text": f"피홈런 ({batter})",
                             "points": PITCHER_POINTS["HR"], "tags": {"HR": 1},
                         })
                     if bat_tags["BB"]:
-                        timeline[p].append({
+                        tl(p, "pitch").append({
                             "inn": ev["inn"], "text": f"볼넷 허용 ({batter})",
                             "points": PITCHER_POINTS["BB"], "tags": {"BB": 1},
                         })
                     if bat_tags["HBP"]:
-                        timeline[p].append({
+                        tl(p, "pitch").append({
                             "inn": ev["inn"], "text": f"사구 허용 ({batter})",
                             "points": PITCHER_POINTS["HBP"], "tags": {"HBP": 1},
                         })
                     if bat_tags["K"]:
-                        timeline[p].append({
+                        tl(p, "pitch").append({
                             "inn": ev["inn"], "text": f"탈삼진 ({batter})",
                             "points": PITCHER_POINTS["K"], "tags": {"K": 1},
                         })
                     outs_this_play = 2 if bat_tags["GDP"] else (1 if (bat_tags["K"] or bat_tags["FO"] or bat_tags["GO"] or bat_tags["LD"]) else 0)
                     if outs_this_play:
-                        timeline[p].append({
+                        tl(p, "pitch").append({
                             "inn": ev["inn"], "text": f"아웃카운트 {outs_this_play}개 ({batter})",
                             "points": outs_this_play * PITCHER_POINTS["OUT"], "tags": {"OUT": outs_this_play},
                         })
@@ -542,7 +561,7 @@ def compute_relay_stats(
                     if fielder:
                         etype = "OF_ASSIST" if assist_pos in OUTFIELD_POSITIONS else "ASSIST"
                         fielding_events[fielder].append({"type": etype, "pos": assist_pos})
-                        timeline[fielder].append({
+                        tl(fielder, "bat").append({
                             "inn": ev["inn"], "text": f"보살 ({assist_pos}, {batter} 타석)",
                             "points": BATTER_POINTS[etype], "tags": {etype: 1},
                         })
@@ -554,13 +573,13 @@ def compute_relay_stats(
                         continue
                     if is_dp:
                         fielding_events[fielder].append({"type": "DP", "pos": pos})
-                        timeline[fielder].append({
+                        tl(fielder, "bat").append({
                             "inn": ev["inn"], "text": f"병살 가담 ({pos}, {batter} 타석)",
                             "points": BATTER_POINTS["DP_FIELD"], "tags": {"DP_FIELD": 1},
                         })
                     if is_tp:
                         fielding_events[fielder].append({"type": "TP", "pos": pos})
-                        timeline[fielder].append({
+                        tl(fielder, "bat").append({
                             "inn": ev["inn"], "text": f"삼중살 가담 ({pos}, {batter} 타석)",
                             "points": BATTER_POINTS["TP_FIELD"], "tags": {"TP_FIELD": 1},
                         })
@@ -573,7 +592,7 @@ def compute_relay_stats(
     for half_key in ("0", "1"):
         for pitcher in pending_inherited[half_key].values():
             pitcher_extra[pitcher]["INHERITED_STRANDED"] += 1
-            timeline[pitcher].append({
+            tl(pitcher, "pitch").append({
                 "inn": last_inn, "text": "승계주자 실점 막음(경기 종료)",
                 "points": PITCHER_POINTS["INHERITED_STRANDED"], "tags": {"INHERITED_STRANDED": 1},
             })
