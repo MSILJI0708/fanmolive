@@ -56,6 +56,8 @@ payload = json.dumps(active_payload, ensure_ascii=False)
 date_index_payload = json.dumps(date_index, ensure_ascii=False)
 
 html_doc = """<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>KBO 판타지 LP 보드 · __DATE__</title>
 <style>
 :root {
@@ -176,9 +178,7 @@ h1 {
 .date-picker-btn:hover { border-color: var(--accent); }
 .date-picker-pop {
   display: none;
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 0;
+  position: fixed;
   z-index: 40;
   background: var(--paper-1);
   border: 1px solid var(--line);
@@ -186,8 +186,17 @@ h1 {
   box-shadow: var(--shadow);
   padding: 12px;
   width: 296px;
+  max-width: calc(100vw - 24px);
 }
 .date-picker-pop.open { display: block; }
+.date-picker-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 39;
+  background: rgba(0, 0, 0, .25);
+}
+.date-picker-backdrop.open { display: block; }
 .dp-selects { display: flex; gap: 6px; margin-bottom: 10px; }
 .dp-selects select {
   flex: 1;
@@ -642,7 +651,74 @@ footer.notes b { color: var(--ink-0); }
 @media (prefers-reduced-motion: no-preference) {
   tbody tr { transition: background .1s ease; }
 }
+
+.theme-toggle {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 50;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--paper-1);
+  color: var(--ink-0);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.theme-toggle:hover { border-color: var(--accent); }
+
+/* 모바일에서는 한 화면에 보이는 데이터 양이 줄어도 되니, 촘촘한 표/칩 글씨 크기를
+   전반적으로 키운다. 표는 이미 가로 스크롤(.tablewrap, min-width)로 넘치는 걸 처리하고
+   있어서 폰트를 키워도 레이아웃이 깨지지 않고 그냥 스크롤 폭만 늘어난다. */
+@media (max-width: 640px) {
+  header.top { padding: 24px 16px 16px; }
+  h1 { font-size: 20px; }
+  .sub { font-size: 13.5px; line-height: 1.6; }
+  .tiles { grid-template-columns: repeat(2, 1fr); padding: 0 16px; }
+  .tile .value { font-size: 24px; }
+  .tile .label { font-size: 11.5px; }
+  .tile .meta { font-size: 12.5px; }
+  main { padding: 0 16px; }
+  nav.chapters button { font-size: 16px; padding: 10px 14px 12px; }
+  .search { font-size: 16px; padding: 9px 12px; min-width: 140px; }
+  .chip { font-size: 13.5px; padding: 7px 13px; }
+  .rule-bar select, .rule-bar label { font-size: 13.5px; }
+  .tablewrap table { font-size: 15px; min-width: 760px; }
+  .tablewrap thead th { font-size: 13px; padding: 11px 12px; }
+  .tablewrap tbody td { padding: 11px 12px; }
+  .lp { font-size: 14px; min-width: 50px; }
+  .modal-name { font-size: 21px; }
+  .modal-meta { font-size: 14px; }
+  .modal-lp { font-size: 28px; }
+  .cat-group-head .cat-name { font-size: 15px; }
+  .cat-group-head .cat-total { font-size: 15px; }
+  .cat-item { font-size: 14.5px; padding: 9px 4px; }
+  .cat-item .cat-item-count { font-size: 12.5px; }
+  .date-picker-btn { font-size: 14.5px; padding: 6px 12px; }
+  .theme-toggle { width: 44px; height: 44px; font-size: 20px; }
+}
 </style>
+<script>
+// 화면이 그려지기 전에 최대한 빨리 저장된 테마를 적용해서(FOUC 방지), 라이트/다크를
+// 명시적으로 골라둔 경우 시스템 설정보다 그 선택이 먼저 반영되게 한다. 저장된 값이
+// 없으면(자동) data-theme을 아예 안 붙여서 @media (prefers-color-scheme)이 그대로 먹는다.
+(function () {
+  try {
+    var p = JSON.parse(localStorage.getItem('kboBoardPrefs_v1') || '{}');
+    if (p.theme === 'light' || p.theme === 'dark') {
+      document.documentElement.dataset.theme = p.theme;
+    }
+  } catch (e) { /* 저장된 값이 없거나 깨졌으면 그냥 시스템 설정을 따른다 */ }
+})();
+</script>
+
+<button type="button" class="theme-toggle" id="theme-toggle" title="테마 전환(자동/라이트/다크)" aria-label="테마 전환">🌓</button>
 
 <header class="top">
   <p class="eyebrow">KBO 판타지 모드 · 라이브 포인트</p>
@@ -653,6 +729,7 @@ footer.notes b { color: var(--ink-0); }
       <button type="button" class="date-picker-btn" id="date-picker-btn">
         <span id="dp-btn-label">__DATE__</span> <span aria-hidden="true">▾</span>
       </button>
+      <div class="date-picker-backdrop" id="date-picker-backdrop"></div>
       <div class="date-picker-pop" id="date-picker-pop">
         <div class="dp-selects">
           <select id="dp-year"></select>
@@ -817,6 +894,40 @@ function dateToFile(dateStr) {
   const info = DATE_INDEX[dateStr];
   return info ? info.file : ('data_' + dateStr.replaceAll('-', '') + '.json');
 }
+
+// --- 탭/필터 설정을 새로고침해도 유지(localStorage) ---
+const PREF_KEY = 'kboBoardPrefs_v1';
+function loadPrefs() {
+  try { return JSON.parse(localStorage.getItem(PREF_KEY)) || {}; } catch (e) { return {}; }
+}
+function savePrefs(patch) {
+  const p = loadPrefs();
+  Object.assign(p, patch);
+  try { localStorage.setItem(PREF_KEY, JSON.stringify(p)); } catch (e) { /* 저장 실패해도 무시 */ }
+}
+const savedPrefs = loadPrefs();
+
+// --- 라이트/다크/자동 테마 전환 (버튼 클릭할 때마다 자동→라이트→다크→자동 순환) ---
+const themeToggleBtn = document.getElementById('theme-toggle');
+const THEME_ICONS = { auto: '🌓', light: '☀️', dark: '🌙' };
+function currentThemeMode() {
+  const t = document.documentElement.dataset.theme;
+  return (t === 'light' || t === 'dark') ? t : 'auto';
+}
+function applyThemeIcon() {
+  themeToggleBtn.textContent = THEME_ICONS[currentThemeMode()];
+}
+applyThemeIcon();
+themeToggleBtn.addEventListener('click', () => {
+  const next = { auto: 'light', light: 'dark', dark: 'auto' }[currentThemeMode()];
+  if (next === 'auto') {
+    delete document.documentElement.dataset.theme;
+  } else {
+    document.documentElement.dataset.theme = next;
+  }
+  savePrefs({ theme: next });
+  applyThemeIcon();
+});
 
 const POSITION_GROUPS = {
   '전체': null,
@@ -1304,19 +1415,22 @@ renderModeChips('pitcher-mode-chips',
 document.getElementById('pitcher-group-chips').style.display = 'none';
 
 // --- 검색 + 포지션 필터 (타자) ---
-let posFilter = '전체';
+let posFilter = (savedPrefs.posFilter && Object.prototype.hasOwnProperty.call(POSITION_GROUPS, savedPrefs.posFilter))
+  ? savedPrefs.posFilter : '전체';
 const posChipsWrap = document.getElementById('pos-chips');
 Object.keys(POSITION_GROUPS).forEach(label => {
   const btn = document.createElement('button');
-  btn.className = 'chip' + (label === '전체' ? ' active' : '');
+  btn.className = 'chip' + (label === posFilter ? ' active' : '');
   btn.textContent = label;
   btn.addEventListener('click', () => {
     posFilter = label;
     [...posChipsWrap.children].forEach(c => c.classList.toggle('active', c === btn));
+    savePrefs({ posFilter: label });
     applyBatterFilters();
   });
   posChipsWrap.appendChild(btn);
 });
+if (savedPrefs.searchB) document.getElementById('search-b').value = savedPrefs.searchB;
 
 function applyBatterFilters() {
   const q = document.getElementById('search-b').value.trim().toLowerCase();
@@ -1329,32 +1443,41 @@ function applyBatterFilters() {
   bCtl.setRows(filtered);
   document.getElementById('count-b').textContent = filtered.length + '명';
 }
-document.getElementById('search-b').addEventListener('input', applyBatterFilters);
+document.getElementById('search-b').addEventListener('input', () => {
+  savePrefs({ searchB: document.getElementById('search-b').value });
+  applyBatterFilters();
+});
 
 // --- 타 포지션 수비기록 인정 규칙 (드롭다운 + 지명타자 토글) ---
 const posModeSelect = document.getElementById('pos-mode');
 const dhToggle = document.getElementById('dh-defense-toggle');
+if (savedPrefs.posMode) posModeSelect.value = savedPrefs.posMode;
+if (savedPrefs.dhOn) dhToggle.checked = true;
+applyFieldRule(posModeSelect.value, dhToggle.checked);
 function onFieldRuleChange() {
   applyFieldRule(posModeSelect.value, dhToggle.checked);
+  savePrefs({ posMode: posModeSelect.value, dhOn: dhToggle.checked });
   applyBatterFilters();
 }
 posModeSelect.addEventListener('change', onFieldRuleChange);
 dhToggle.addEventListener('change', onFieldRuleChange);
 
 // --- 검색 + 역할 필터 (투수) ---
-let roleFilter = '전체';
+let roleFilter = ['전체', '선발', '구원'].includes(savedPrefs.roleFilter) ? savedPrefs.roleFilter : '전체';
 const roleChipsWrap = document.getElementById('role-chips');
 ['전체', '선발', '구원'].forEach(label => {
   const btn = document.createElement('button');
-  btn.className = 'chip' + (label === '전체' ? ' active' : '');
+  btn.className = 'chip' + (label === roleFilter ? ' active' : '');
   btn.textContent = label;
   btn.addEventListener('click', () => {
     roleFilter = label;
     [...roleChipsWrap.children].forEach(c => c.classList.toggle('active', c === btn));
+    savePrefs({ roleFilter: label });
     applyPitcherFilters();
   });
   roleChipsWrap.appendChild(btn);
 });
+if (savedPrefs.searchP) document.getElementById('search-p').value = savedPrefs.searchP;
 
 function applyPitcherFilters() {
   const q = document.getElementById('search-p').value.trim().toLowerCase();
@@ -1366,23 +1489,55 @@ function applyPitcherFilters() {
   pCtl.setRows(filtered);
   document.getElementById('count-p').textContent = filtered.length + '명';
 }
-document.getElementById('search-p').addEventListener('input', applyPitcherFilters);
+document.getElementById('search-p').addEventListener('input', () => {
+  savePrefs({ searchP: document.getElementById('search-p').value });
+  applyPitcherFilters();
+});
+
+// 새로고침해도 지금까지 고른 검색/필터가 그대로 보이도록, 초기 렌더 위에 즉시 한 번 적용한다.
+applyBatterFilters();
+applyPitcherFilters();
 
 // --- 챕터(타자/투수) 탭 전환 ---
+function activateChapter(target) {
+  document.querySelectorAll('.chip-tab').forEach(b => b.classList.toggle('active', b.dataset.chapter === target));
+  document.getElementById('chapter-batters').classList.toggle('active', target === 'batters');
+  document.getElementById('chapter-pitchers').classList.toggle('active', target === 'pitchers');
+}
 document.querySelectorAll('.chip-tab').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.chip-tab').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
     const target = btn.dataset.chapter;
-    document.getElementById('chapter-batters').classList.toggle('active', target === 'batters');
-    document.getElementById('chapter-pitchers').classList.toggle('active', target === 'pitchers');
+    activateChapter(target);
+    savePrefs({ chapter: target });
   });
 });
+if (savedPrefs.chapter === 'pitchers') activateChapter('pitchers');
 
 // --- 기준일 선택(달력 클릭 + 년/월/일 드롭다운) ---
 const dpBtn = document.getElementById('date-picker-btn');
 const dpBtnLabel = document.getElementById('dp-btn-label');
 const dpPop = document.getElementById('date-picker-pop');
+const dpBackdrop = document.getElementById('date-picker-backdrop');
+
+// 팝업이 "기준일" 버튼과 멀리 떨어진 곳에 뜨는 문제 — position:absolute가 조상 요소의
+// 위치/오버플로 상태에 영향을 받기 쉬워서(특히 모바일에서), 버튼의 실제 화면 좌표를 직접
+// 계산해 position:fixed로 딱 붙여준다. 화면 밖으로 나가지 않게 가장자리에서는 안쪽으로
+// 당겨서 보정한다.
+function positionDatePickerPop() {
+  const btnRect = dpBtn.getBoundingClientRect();
+  const popW = dpPop.offsetWidth || 296;
+  const margin = 12;
+  let left = btnRect.left;
+  left = Math.min(left, window.innerWidth - popW - margin);
+  left = Math.max(left, margin);
+  let top = btnRect.bottom + 6;
+  const popH = dpPop.offsetHeight || 360;
+  if (top + popH > window.innerHeight - margin) {
+    top = Math.max(margin, btnRect.top - popH - 6);
+  }
+  dpPop.style.left = left + 'px';
+  dpPop.style.top = top + 'px';
+}
 const dpYear = document.getElementById('dp-year');
 const dpMonth = document.getElementById('dp-month');
 const dpDay = document.getElementById('dp-day');
@@ -1470,13 +1625,20 @@ function openDatePicker() {
   calMonth = Number(activeDate.slice(5, 7));
   renderDatePicker();
   dpPop.classList.add('open');
+  dpBackdrop.classList.add('open');
+  positionDatePickerPop();
 }
 function closeDatePicker() {
   dpPop.classList.remove('open');
+  dpBackdrop.classList.remove('open');
 }
 dpBtn.addEventListener('click', e => {
   e.stopPropagation();
   dpPop.classList.contains('open') ? closeDatePicker() : openDatePicker();
+});
+dpBackdrop.addEventListener('click', closeDatePicker);
+window.addEventListener('resize', () => {
+  if (dpPop.classList.contains('open')) positionDatePickerPop();
 });
 document.addEventListener('click', e => {
   if (!document.getElementById('date-picker').contains(e.target)) closeDatePicker();

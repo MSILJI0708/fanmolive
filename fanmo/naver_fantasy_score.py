@@ -34,7 +34,7 @@ import json
 import re
 import ssl
 import urllib.request
-from collections import defaultdict
+from collections import Counter, defaultdict
 
 HEADERS = {
     "User-Agent": (
@@ -126,6 +126,12 @@ def classify_pa(code: str) -> str:
         return "GDP"
     if code.endswith("땅"):
         return "SACBUNT" if "희" in code else "GO"
+    if code.endswith("번"):
+        # '투희번'/'포희번'/'1희번'처럼 "희"가 붙으면 희생번트(땅볼과 동일하게 처리),
+        # '투번'/'1번'/'2번'처럼 "희" 없이 그냥 "번"으로만 끝나면 희생도 안타도 아닌
+        # "번트 아웃"(비희생 번트 시도 실패)이라 페널티가 없다 — BATTER_POINTS에 없는
+        # 값을 반환해서 GO/SACBUNT 어느 쪽도 건드리지 않게 한다(REACH_ERROR와 동일한 패턴).
+        return "SACBUNT" if "희" in code else "BUNT_OUT"
     if code.endswith(("비", "파")):
         return "SACFLY" if "희" in code else "FO"
     if code.endswith("직"):
@@ -143,8 +149,16 @@ def parse_batter_pa(row: dict) -> dict:
     tags = defaultdict(int)
     for i in range(1, 26):
         code = row.get(f"inn{i}")
-        if code:
-            tags[classify_pa(code)] += 1
+        if not code:
+            continue
+        # 아주 가끔 한 타석 슬롯에 "4구/4구", "좌파/유땅"처럼 슬래시로 결과 두 개가 묶여서
+        # 온다(왜 그런 슬롯이 생기는지는 불명이나, 실제로 그 타자의 ab가 그만큼 더 많은 걸로
+        # 봐서 정말 타석을 두 번 가졌는데 어떤 이유로 한 슬롯에 합쳐 기록된 것으로 보인다).
+        # 그동안은 이 합쳐진 문자열 전체를 그대로 classify_pa에 넘겨서, 접미사만 보고
+        # 뒷부분 결과 하나로만 분류하고 앞부분 결과가 통째로 사라지고 있었다.
+        for part in code.split("/"):
+            if part:
+                tags[classify_pa(part)] += 1
     return tags
 
 
@@ -483,7 +497,17 @@ def _merge_relay_stats(game_id: str, rd: dict, batter_rows: list[dict], pitcher_
     info = rd.get("gameInfo", {})
     home_team_name = info.get("hName", "")
 
+    # 릴레이 텍스트는 선수를 이름으로만 가리켜서, 같은 팀에 이름이 완전히 같은 선수가
+    # 둘 있으면(흔치 않지만 실제로 있음 — 예: 삼성 계투진에 "이승현"이 둘) 어느 쪽이 그
+    # 플레이를 했는지 텍스트만으로는 원천적으로 구분할 수 없다. 그런 경우 두 선수 모두
+    # 릴레이 기반 심화 기록(보살/병살가담/피2루타/자책점 세부 등) 합산을 건너뛰고 박스스코어
+    # 집계값만 쓴다 — 잘못된 값을 억지로 나누는 것보다 "세부 내역 없음"이 낫다.
+    ambiguous_batters = {name for name, c in Counter(r["name"] for r in batter_rows).items() if c > 1}
+    ambiguous_pitchers = {name for name, c in Counter(r["name"] for r in pitcher_rows).items() if c > 1}
+
     for row in batter_rows:
+        if row["name"] in ambiguous_batters:
+            continue
         events_for_player = fielding_events.get(row["name"], []) + catcher_events.get(row["name"], [])
         if events_for_player:
             row["position_events"] = events_for_player
@@ -515,6 +539,8 @@ def _merge_relay_stats(game_id: str, rd: dict, batter_rows: list[dict], pitcher_
             row["lp"] = score_batter(row["stat"])
 
     for row in pitcher_rows:
+        if row["name"] in ambiguous_pitchers:
+            continue
         pe = pitcher_extra.get(row["name"])
         if pe:
             row["stat"]["2B_A"] += pe.get("2B_A", 0)
@@ -539,9 +565,11 @@ def _merge_relay_stats(game_id: str, rd: dict, batter_rows: list[dict], pitcher_
             )
 
     for row in batter_rows + pitcher_rows:
-        _attach_play_log(row, timeline, earned_run_events.get(row["name"], []))
+        is_pitcher_row = "OUT" in row["stat"]
+        ambiguous = row["name"] in (ambiguous_pitchers if is_pitcher_row else ambiguous_batters)
+        _attach_play_log(row, timeline, earned_run_events.get(row["name"], []), ambiguous_name=ambiguous)
         row["categories"] = (
-            _pitcher_categories(row) if "OUT" in row["stat"] else _batter_categories(row)
+            _pitcher_categories(row) if is_pitcher_row else _batter_categories(row)
         )
 
 
@@ -733,7 +761,9 @@ def _batter_box_summary_lines(row: dict, log: list[dict]) -> list[dict]:
     return lines
 
 
-def _attach_play_log(row: dict, timeline: dict, er_events: list[dict] | None = None) -> None:
+def _attach_play_log(
+    row: dict, timeline: dict, er_events: list[dict] | None = None, ambiguous_name: bool = False,
+) -> None:
     """선수 클릭 팝업용 "타석/수비별 결과 - 포인트" 내역. 릴레이 텍스트를 직접 분류해서 만든
     거라, 박스스코어 기반 최종 LP(row['lp'])와 합계가 다를 수 있다(예: 병살 가담이 이미 그
     경기에서 2번 이상 잡혔지만 실제 점수는 1회로 상한). 그 차이는 마지막 줄에 "기타 보정"으로
@@ -744,7 +774,19 @@ def _attach_play_log(row: dict, timeline: dict, er_events: list[dict] | None = N
     timeline은 (이름, 역할) 튜플로 키가 잡혀 있다 — 두 팀에 동명이인 투수/타자가 있을 때
     이름만으로는 서로 다른 두 선수의 기록이 섞여버리기 때문(relay.py 쪽 compute_relay_stats
     참고). 여기서는 이 행이 투수 행인지 타자 행인지(row['stat']에 'OUT' 키가 있는지)로
-    역할을 판정해서 그 역할의 기록만 가져온다."""
+    역할을 판정해서 그 역할의 기록만 가져온다.
+
+    ambiguous_name=True면 같은 팀·같은 역할(타자/투수)에 이름이 완전히 같은 선수가 더 있다는
+    뜻이다(예: 같은 팀 계투진에 동명이인 "이승현"이 둘) — 이럴 땐 릴레이 텍스트만으로 둘 중
+    누구의 플레이인지 원천적으로 구분이 안 되니, 잘못된 세부 내역을 보여주는 대신 그 사실을
+    그대로 알린다."""
+    if ambiguous_name:
+        row["play_log"] = [{
+            "inn": None,
+            "text": "동명이인 선수가 있어 세부 내역을 표시할 수 없습니다 (박스스코어 합계 기준 LP)",
+            "points": row["lp"], "tags": {},
+        }]
+        return
     role = "pitch" if "OUT" in row["stat"] else "bat"
     log = list(timeline.get((row["name"], role), []))
     # 병살/삼중살 가담은 규정상 "1경기에 1번만 인정"이라, 같은 경기에서 여러 번 잡혀도 실제

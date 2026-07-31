@@ -40,8 +40,13 @@ OUTFIELD_POSITIONS = {"좌익수", "중견수", "우익수"}
 _SUB_RE = re.compile(r"^(?P<out>.+?) : (?P<in_label>\S+) (?P<in_name>\S+) \(으\)로 교체$")
 _PLAY_RE = re.compile(r"^(?P<batter>\S+?) : (?P<desc>.+)$")
 _CHAIN_RE = re.compile(r"\(([^)]+)\)$")
-_RUN_RE = re.compile(r"^(?P<base>[123])루주자 (?P<name>\S+) : 홈인$")
-_SB_RE = re.compile(r"^[123]루주자 (?P<name>\S+) : 도루로 (?:[123]루까지 진루|홈인)$")
+# "3루주자 오지환 : 폭투로 홈인"처럼 득점 이유가 "홈인" 앞에 붙는 경우가 많다(폭투/보크/실책 등).
+# 타점(RBI)과 달리 득점(R) 포인트는 "어떻게" 홈에 들어왔는지와 무관하게 그 주자 본인에게
+# 항상 인정되는 스탯이라, 여기서는 이유 텍스트를 제한하지 않고 "...홈인"으로 끝나기만 하면
+# 다 잡는다. 다만 "도루로 홈인"(홈 스틸)은 _SB_RE가 먼저 잡아서 도루 성공 포인트를 주므로
+# (이 두 정규식의 검사 순서가 중요 — _SB_RE를 먼저 검사해야 한다), 여기서 다시 안 겹친다.
+_RUN_RE = re.compile(r"^(?P<base>[123])루주자 (?P<name>\S+) : .*홈인$")
+_SB_RE = re.compile(r"^[123]루주자 (?P<name>\S+) : 도루로 (?:(?P<adv_base>[123])루까지 진루|(?P<is_home>홈인))$")
 _CS_RE = re.compile(r"^[123]루주자 (?P<name>\S+) : 도루실패아웃 \((?P<chain>[^)]+)\)$")
 _PICKOFF_RE = re.compile(r"^[123]루주자 (?P<name>\S+) : 견제사아웃 \((?P<who>투수|포수) 견제")
 _HOME_RE = re.compile(r"^[123]루주자 \S+ : 홈인$")
@@ -105,7 +110,7 @@ def classify_relay_desc(desc: str) -> dict[str, int]:
     텍스트 버전). 병살은 GO와 안 겹치게(원본과 동일하게) 배타적으로 잡고, 희생플라이/희생번트는
     원본처럼 FO/GO에도 같이 더해진다."""
     tags = {"H": 0, "2B": 0, "3B": 0, "HR": 0, "BB": 0, "HBP": 0, "K": 0,
-            "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "LD": 0}
+            "FO": 0, "GO": 0, "GDP": 0, "SACFLY": 0, "SACBUNT": 0, "LD": 0}
     if "실책" in desc and "출루" in desc:
         # "유격수 플라이 실책으로 출루"처럼 수비 실책으로 살아나간 경우 — 아웃이 아니므로
         # "플라이"/"땅볼" 같은 하위 키워드가 우연히 걸려 뜬공·땅볼 아웃으로 오분류되면 안 된다.
@@ -132,7 +137,12 @@ def classify_relay_desc(desc: str) -> dict[str, int]:
         # 고의사구가 포함되는데, 여기서 "볼넷"이라는 단어가 안 들어가 있어 그동안 통째로
         # 미분류(전부 0점)로 빠지면서 팝업에서 "기타 보정"으로만 나타났었다.
         tags["BB"] = 1
-    elif "삼진" in desc or "스트라이크 낫 아웃" in desc:
+    elif "삼진" in desc or "낫아웃" in desc or "낫 아웃" in desc:
+        # 스트라이크 낫아웃(포수가 세 번째 스트라이크를 놓친 삼진, "스트라이크 낫아웃 폭투"
+        # 등으로 표기)도 삼진이다 — "낫아웃"은 띄어쓰기 없이 붙여 나오는데 예전 체크는
+        # "낫 아웃"(공백 있음)만 찾아서 매칭이 안 되고, 그 뒤 "아웃"이라는 단어만 걸려
+        # 땅볼 아웃으로 잘못 분류되고 있었다(박스스코어 kk 필드 기준 삼진 수와는 이미
+        # 일치해서 최종 LP엔 영향이 없었지만, 팝업 내역이 실제와 안 맞았다).
         tags["K"] = 1
     elif "병살" in desc:
         tags["GDP"] = 1
@@ -143,7 +153,14 @@ def classify_relay_desc(desc: str) -> dict[str, int]:
     elif "희생플라이" in desc:
         tags["SACFLY"] = 1
         tags["FO"] = 1
-    elif "땅볼" in desc or "희생번트" in desc:
+    elif "희생번트" in desc:
+        # 희생번트는 GO 페널티와 SACBUNT 보너스가 같이 붙어서 순 0점이 된다(box score의
+        # process_game과 동일한 규칙 — '희'가 붙은 번트 코드는 GO와 SACBUNT 양쪽에 다
+        # 반영됨). 예전엔 여기서 GO만 세워서 팝업에 -10만 찍히고 실제 LP(0점)와 안 맞는
+        # 차이가 "기타 보정"으로만 흡수되고 있었다.
+        tags["GO"] = 1
+        tags["SACBUNT"] = 1
+    elif "땅볼" in desc:
         tags["GO"] = 1
     elif "라인드라이브" in desc:
         # 직선타(라인드라이브)로 잡힌 아웃은 뜬공 아웃(FO) 페널티에 포함되지 않는다 —
@@ -243,8 +260,20 @@ def compute_relay_stats(
     """
     batter_extra = _detect_productive_outs(events)
     group_texts: dict = defaultdict(list)
+    # 같은 타석(no) 안에서 아웃카운트가 실제로 늘었는지 추적 — "OO 땅볼로 출루"라는 문구가
+    # "김재현 : 유격수 앞 땅볼로 출루"(다른 주자가 포스아웃당한 진짜 병살성 타구, 아웃 있음)와
+    # "김현수 : 2루수 앞 땅볼로 출루"(사실은 실책으로 살아나간 것, 아웃 없음) 두 경우에 똑같이
+    # 쓰여서 문구만으로는 구분이 안 된다. 실제로 그 타석 안에서 아웃카운트가 늘었는지를 봐야
+    # 확실히 구분되므로, 그룹별 최소/최대 아웃카운트를 미리 모아둔다.
+    group_out_range: dict = {}
     for ev in events:
         group_texts[ev["no"]].append(ev["text"])
+        try:
+            o = int(ev["out"])
+        except (TypeError, ValueError):
+            continue
+        lo, hi = group_out_range.get(ev["no"], (o, o))
+        group_out_range[ev["no"]] = (min(lo, o), max(hi, o))
 
     pitcher_extra: dict = defaultdict(lambda: defaultdict(int))
     catcher_events: dict = defaultdict(list)
@@ -317,11 +346,10 @@ def compute_relay_stats(
             prev_base[half] = base
             continue
 
-        m_run = _RUN_RE.match(text)
-        if m_run:
-            runner = m_run.group("name")
-            slot = prev_base[half][int(m_run.group("base")) - 1]
-            pitcher = pending_inherited[half].pop(slot, None)
+        def _credit_run(runner: str, base_slot: str) -> None:
+            """득점(R) 포인트 + 승계주자 실점 허용/자책점 후보 추적 — 어떤 이유로 홈에
+            들어왔든(타구/폭투/실책/보크/도루) 득점 자체는 항상 그 주자에게 인정된다."""
+            pitcher = pending_inherited[half].pop(base_slot, None)
             if pitcher:
                 pitcher_extra[pitcher]["INHERITED_SCORED"] += 1
                 tl(pitcher, "pitch").append({
@@ -334,9 +362,12 @@ def compute_relay_stats(
             origin = run_origin.pop(runner, None)
             if origin:
                 earned_run_events[origin].append({"inn": ev["inn"], "runner": runner})
-            prev_base[half] = base
-            continue
 
+        # _SB_RE를 _RUN_RE보다 먼저 검사해야 한다 — "도루로 홈인"(홈 스틸)은 도루 성공
+        # 포인트와 득점 포인트를 둘 다 받아야 하는데, _RUN_RE는 "...홈인"으로 끝나는 문구를
+        # 전부 잡도록 느슨해져 있어서(폭투/보크/실책으로 득점하는 경우까지 잡으려고) 먼저
+        # 검사하면 "도루로"라는 이유를 무시하고 그냥 득점으로만 처리해버려 도루 성공이
+        # 통째로 누락된다.
         m_sb = _SB_RE.match(text)
         if m_sb:
             runner = m_sb.group("name")
@@ -357,6 +388,19 @@ def compute_relay_stats(
                     "inn": ev["inn"], "text": f"도루 허용 ({runner})",
                     "points": PITCHER_POINTS["SB_ALLOWED"], "tags": {"SB_ALLOWED": 1},
                 })
+            if m_sb.group("is_home"):
+                # 홈 스틸도 명백히 득점이라 SB와 별개로 R도 인정해야 한다(그동안 도루
+                # 성공만 잡히고 득점은 누락됐었다).
+                slot = prev_base[half][2]  # 홈 스틸은 항상 3루주자만 가능
+                _credit_run(runner, slot)
+            prev_base[half] = base
+            continue
+
+        m_run = _RUN_RE.match(text)
+        if m_run:
+            runner = m_run.group("name")
+            slot = prev_base[half][int(m_run.group("base")) - 1]
+            _credit_run(runner, slot)
             prev_base[half] = base
             continue
 
@@ -380,6 +424,12 @@ def compute_relay_stats(
                     "inn": ev["inn"], "text": f"도루 저지 ({runner})",
                     "points": PITCHER_POINTS["CS_A"], "tags": {"CS_A": 1},
                 })
+                # 도루 저지도 명백히 실제 아웃 하나다 — 타자의 타석과 무관하게 별도로
+                # 발생하는 아웃이라 그동안 투수의 아웃카운트에 전혀 반영되지 않고 있었다.
+                tl(pitcher, "pitch").append({
+                    "inn": ev["inn"], "text": f"아웃카운트 1개 ({runner} 도루 저지)",
+                    "points": PITCHER_POINTS["OUT"], "tags": {"OUT": 1},
+                })
             prev_base[half] = base
             continue
 
@@ -389,9 +439,15 @@ def compute_relay_stats(
             tl(runner, "bat").append({
                 "inn": ev["inn"], "text": "견제사(아웃)", "points": BATTER_POINTS["PICKOFF"], "tags": {"PICKOFF": 1},
             })
-            # "포수 견제"(포수가 던진 견제)는 투수의 견제사로 치지 않고, "투수 견제"만 인정
+            pitcher = current_pitcher[half]
+            # "포수 견제"(포수가 던진 견제)는 투수의 견제사(PICKOFF_A) 스탯으로는 안 치지만,
+            # 누가 던졌든 아웃 자체는 실제로 일어났으니 투수의 아웃카운트에는 반영해야 한다.
+            if pitcher:
+                tl(pitcher, "pitch").append({
+                    "inn": ev["inn"], "text": f"아웃카운트 1개 ({runner} 견제사)",
+                    "points": PITCHER_POINTS["OUT"], "tags": {"OUT": 1},
+                })
             if m_pickoff.group("who") == "투수":
-                pitcher = current_pitcher[half]
                 if pitcher:
                     tl(pitcher, "pitch").append({
                         "inn": ev["inn"], "text": f"견제사 ({runner})",
@@ -443,6 +499,31 @@ def compute_relay_stats(
                         "inn": ev["inn"], "text": f"보살 ({assist_pos}, 주자 아웃)",
                         "points": BATTER_POINTS[etype], "tags": {etype: 1},
                     })
+                # 이 포스아웃/태그아웃이 투수 아웃카운트에 이미 반영됐는지 확인해야 한다 —
+                # 페어더스초이스처럼 타자 본인도 같은 타석에서 아웃 처리되는 경우엔 그 타석
+                # 처리 쪽에서 이미 아웃 1개를 세므로 여기서 또 세면 중복이 된다. 반대로
+                # "정수빈 안타 도중 다른 주자가 무리하게 진루하다 태그아웃"처럼 타자 본인은
+                # 안타/볼넷 등으로 살아난 경우엔 이 주자 아웃이 그 타석의 유일한 아웃이라
+                # 투수 아웃카운트에 안 잡히고 있었다.
+                batter_already_out = False
+                for t in group_texts[ev["no"]]:
+                    m_bat = _PLAY_RE.match(t)
+                    if not m_bat:
+                        continue
+                    bd = m_bat.group("desc")
+                    is_bunt_out_here = (
+                        "번트" in bd and "희생번트" not in bd and "안타" not in bd and "아웃" in bd
+                    )
+                    bt = classify_relay_desc(bd)
+                    batter_already_out = is_bunt_out_here or bool(bt["GO"] or bt["FO"] or bt["K"] or bt["GDP"])
+                    break
+                if not batter_already_out:
+                    pitcher = current_pitcher[half]
+                    if pitcher:
+                        tl(pitcher, "pitch").append({
+                            "inn": ev["inn"], "text": "아웃카운트 1개 (주자 아웃)",
+                            "points": PITCHER_POINTS["OUT"], "tags": {"OUT": 1},
+                        })
             prev_base[half] = base
             continue
 
@@ -468,6 +549,16 @@ def compute_relay_stats(
                     })
 
             bat_tags = classify_relay_desc(desc)
+            if bat_tags["GO"] and "출루" in desc:
+                # "OO 땅볼로 출루"는 다른 주자가 포스아웃된 진짜 (병살성) 그라운드아웃일 수도
+                # 있고, 사실은 실책으로 살아나간 것일 수도 있다 — 문구가 완전히 똑같아서 텍스트
+                # 만으로는 구분이 안 된다(김현수 사례로 확인: 박스스코어 코드가 '2실'인데도
+                # 중계에는 "실책" 단어 없이 "2루수 앞 땅볼로 출루"로만 나옴). 이 타석 안에서
+                # 아웃카운트가 실제로 늘었는지로 구분해야 한다 — 안 늘었으면 아무도 아웃되지
+                # 않은 것이니 배터 본인도 그냥 실책 등으로 살아난 것으로 보고 0점 처리한다.
+                lo, hi = group_out_range.get(ev["no"], (0, 0))
+                if hi <= lo:
+                    bat_tags = {k: 0 for k in bat_tags}
             # 희생번트도 번트안타도 아닌 "번트 아웃"(비희생 번트 시도 실패) — 박스스코어 코드로는
             # 일반 스윙 땅볼 아웃과 구분이 안 돼서, 여기서 잡은 만큼 나중에 GO 집계에서 빼준다.
             is_bunt_out = "번트" in desc and "희생번트" not in desc and "안타" not in desc and "아웃" in desc
@@ -483,13 +574,28 @@ def compute_relay_stats(
                         "inn": ev["inn"], "text": f"타점 {rbi}개", "points": rbi * BATTER_POINTS.get("RBI", 0),
                         "tags": {"RBI": rbi},
                     })
+                # 타자에게는 번트 아웃이 무페널티(0점)지만, 투수 입장에서는 엄연히 실제 아웃
+                # 하나다 — 이 분기가 elif any(bat_tags.values()) 쪽을 아예 안 타서 그동안
+                # 투수의 아웃카운트 자체가 통째로 누락되고 있었다.
+                p = current_pitcher[half]
+                if p:
+                    tl(p, "pitch").append({
+                        "inn": ev["inn"], "text": f"아웃카운트 1개 ({batter})",
+                        "points": PITCHER_POINTS["OUT"], "tags": {"OUT": 1},
+                    })
             elif any(bat_tags.values()):
                 pts = sum(bat_tags[k] * BATTER_POINTS.get(k, 0) for k in bat_tags)
                 tl(batter, "bat").append({
                     "inn": ev["inn"], "text": desc, "points": pts,
                     "tags": {k: v for k, v in bat_tags.items() if v},
                 })
-                rbi = sum(1 for t in group_texts[ev["no"]] if _HOME_RE.match(t))
+                # 공식 야구 규정상 타자가 병살타/삼중살로 아웃되면서 주자가 홈에 들어와도
+                # 그 타자에게는 타점을 인정하지 않는다(9.04 규정) — box score의 rbi 필드도
+                # 이 규칙을 따르는데, 여기서는 그냥 "같은 타석(no) 안에 홈인이 있으면 전부
+                # 타점"으로 잡고 있어서 병살타 때는 실제보다 타점이 하나 더 잡히고 있었다.
+                rbi = 0 if (bat_tags["GDP"] or "삼중살" in desc) else sum(
+                    1 for t in group_texts[ev["no"]] if _HOME_RE.match(t)
+                )
                 if bat_tags["HR"]:
                     tl(batter, "bat").append({
                         "inn": ev["inn"], "text": "득점 (홈런)", "points": BATTER_POINTS["R"], "tags": {"R": 1},
