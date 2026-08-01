@@ -8,6 +8,13 @@ HTML 보드를 만든다.
     python daily_pipeline.py                  # 오늘 날짜
     python daily_pipeline.py --date 2026-07-30
     python daily_pipeline.py --skip-position  # 포지션 재집계 생략(이미 오늘자로 갱신했을 때)
+
+포지션 재집계(build_position_db)는 최근 14일치 일정+박스스코어를 전부 다시 조회해서
+(최대 14 + 14*5 ≈ 84번의 API 호출) 자동화가 매번(활성 구간 중 몇 분 간격) 호출하기엔
+너무 무겁다 — 포지션은 어차피 하루이틀 안에 잘 안 바뀌는 값이라, POSITION_REFRESH_INTERVAL
+이상 지났을 때만 실제로 재집계하고 그 사이엔 건너뛴다(마지막 재집계 시각은
+position_last_refresh.txt에 저장). 라이브 경기 중 네이버 API가 느려질 때 이 재집계까지
+겹쳐서 파이프라인 전체가 오래 걸리는(심하면 몇 분씩 멈추는) 문제의 주된 원인이었다.
 """
 
 from __future__ import annotations
@@ -15,12 +22,29 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import time
 from datetime import date
 
 from naver_fantasy_score import collect_date, load_position_map
 from position import build_position_db
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+POSITION_REFRESH_INTERVAL = 60 * 60  # 1시간
+POSITION_LAST_REFRESH_PATH = os.path.join(HERE, "position_last_refresh.txt")
+
+
+def _position_refresh_due() -> bool:
+    try:
+        with open(POSITION_LAST_REFRESH_PATH, encoding="utf-8") as f:
+            last = float(f.read().strip())
+    except (FileNotFoundError, ValueError):
+        return True
+    return (time.time() - last) >= POSITION_REFRESH_INTERVAL
+
+
+def _mark_position_refreshed() -> None:
+    with open(POSITION_LAST_REFRESH_PATH, "w", encoding="utf-8") as f:
+        f.write(str(time.time()))
 
 
 def run(date_str: str, days: int = 14, refresh_position: bool = True) -> tuple[list[dict], list[dict]]:
@@ -53,7 +77,10 @@ def main():
     args = ap.parse_args()
 
     date_str = args.date or date.today().isoformat()
-    batters, pitchers = run(date_str, days=args.days, refresh_position=not args.skip_position)
+    refresh_position = not args.skip_position and _position_refresh_due()
+    batters, pitchers = run(date_str, days=args.days, refresh_position=refresh_position)
+    if refresh_position:
+        _mark_position_refreshed()
 
     out_path = os.path.join(HERE, f"data_{date_str.replace('-', '')}.json")
     with open(out_path, "w", encoding="utf-8") as f:
