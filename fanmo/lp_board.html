@@ -539,6 +539,14 @@ tbody tr.clickable:hover { background: var(--chip-bg); }
 tbody tr:nth-child(even) { background: var(--row-alt); }
 tbody tr:hover { background: var(--chip-bg); }
 td.name { text-align: left; font-weight: 600; }
+.team-logo {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  margin-right: 5px;
+  object-fit: contain;
+  border-radius: 2px;
+}
 /* 첫 열(이름) 고정 — 헤더 행 고정과 함께 표가 길어져도 지금 보는 게 누구 행인지 알 수 있게.
    sticky는 배경이 불투명해야 아래로 지나가는 다른 열이 안 비쳐서, 얼룩무늬/호버도 따로 맞춰준다. */
 .tablewrap th.name, .tablewrap td.name {
@@ -689,7 +697,7 @@ footer.notes b { color: var(--ink-0); }
     </span>
     · 데이터 출처 <code>api-gw.sports.naver.com</code> (Selenium 불필요, 공개 JSON 응답 직접 호출)
     · <a href="mlb.html">MLB 실험판 보기 →</a>
-    · 마지막 업데이트 08월 01일 21:55 (KST)
+    · 마지막 업데이트 08월 01일 21:56 (KST)
   </p>
 </header>
 
@@ -872,6 +880,22 @@ themeToggleBtn.addEventListener('click', () => {
   applyThemeIcon();
 });
 
+// 소속 컬럼을 텍스트 대신 이름 옆 작은 엠블럼으로 대체해서 표 폭을 줄인다.
+// 네이버 CDN이 리퍼러 기반 핫링크 방지를 걸어둬서(다른 도메인 리퍼러로 요청하면 403),
+// <img>에 referrerpolicy="no-referrer"를 꼭 줘야 브라우저에서 정상적으로 뜬다.
+const TEAM_LOGO_URL = {
+  '삼성': 'https://sports-phinf.pstatic.net/team/kbo/default/SS.png',
+  'KIA': 'https://sports-phinf.pstatic.net/team/kbo/default/HT.png',
+  'NC': 'https://sports-phinf.pstatic.net/team/kbo/default/NC.png',
+  'KT': 'https://sports-phinf.pstatic.net/team/kbo/default/KT.png',
+  '한화': 'https://sports-phinf.pstatic.net/team/kbo/default/HH.png',
+  '롯데': 'https://sports-phinf.pstatic.net/team/kbo/default/LT.png',
+  'SSG': 'https://sports-phinf.pstatic.net/team/kbo/default/SK.png',
+  '두산': 'https://sports-phinf.pstatic.net/team/kbo/default/OB.png',
+  'LG': 'https://sports-phinf.pstatic.net/team/kbo/default/LG.png',
+  '키움': 'https://sports-phinf.pstatic.net/team/kbo/default/WO.png',
+};
+
 const POSITION_GROUPS = {
   '전체': null,
   '포수': ['포수'],
@@ -1014,7 +1038,6 @@ const batterColsFlat = [
   {h:'#', key:null, cls:'rank'},
   {h:'이름', key:'name', cls:'name left'},
   {h:'포지션', key:'position', cls:'left'},
-  {h:'소속', key:'team', cls:'left'},
   {h:'상대', key:'opponent', cls:'left'},
   {h:'구장', key:'stadium', cls:'left'},
   {h:'LP', key:'lp', num:true},
@@ -1047,7 +1070,6 @@ const pitcherColsFlat = [
   {h:'#', key:null, cls:'rank'},
   {h:'이름', key:'name', cls:'name left'},
   {h:'구분', key:'role', cls:'left'},
-  {h:'소속', key:'team', cls:'left'},
   {h:'상대', key:'opponent', cls:'left'},
   {h:'구장', key:'stadium', cls:'left'},
   {h:'LP', key:'lp', num:true},
@@ -1121,6 +1143,17 @@ function makeRowCells(row, cols, i) {
       td.appendChild(span);
       td.className = 'left';
     } else if (col.key === 'name') {
+      const logoUrl = TEAM_LOGO_URL[row.team];
+      if (logoUrl) {
+        const img = document.createElement('img');
+        img.src = logoUrl;
+        img.alt = row.team;
+        img.title = row.team;
+        img.className = 'team-logo';
+        img.loading = 'lazy';
+        img.referrerPolicy = 'no-referrer'; // 네이버 CDN이 리퍼러 기반 핫링크 방지를 걸어둬서 필요
+        td.appendChild(img);
+      }
       td.appendChild(document.createTextNode(row.name));
       td.className = col.cls || 'name left';
       if (row.is_starter) {
@@ -1237,7 +1270,6 @@ const BATTER_LEADING_COLS = [
   {h:'#', key:null, cls:'rank'},
   {h:'이름', key:'name', cls:'name left'},
   {h:'포지션', key:'position', cls:'left'},
-  {h:'소속', key:'team', cls:'left'},
   {h:'상대', key:'opponent', cls:'left'},
   {h:'구장', key:'stadium', cls:'left'},
   {h:'LP', key:'lp', num:true},
@@ -1247,7 +1279,6 @@ const PITCHER_LEADING_COLS = [
   {h:'#', key:null, cls:'rank'},
   {h:'이름', key:'name', cls:'name left'},
   {h:'구분', key:'role', cls:'left'},
-  {h:'소속', key:'team', cls:'left'},
   {h:'상대', key:'opponent', cls:'left'},
   {h:'구장', key:'stadium', cls:'left'},
   {h:'LP', key:'lp', num:true},
@@ -1256,7 +1287,7 @@ const PITCHER_LEADING_COLS = [
 
 function buildGroupedCols(leadingCols, groupDefs, expandState, weights, hideKeys) {
   hideKeys = hideKeys || new Set();
-  const cols = [...leadingCols];
+  const cols = leadingCols.filter(c => !(c.key && hideKeys.has(c.key)));
   Object.keys(groupDefs).forEach(gname => {
     const items = groupDefs[gname].filter(it => !hideKeys.has(it.key));
     if (!items.length) return; // 이 그룹의 항목이 지금 필터에서 전부 안 보이면 그룹 자체를 뺀다
@@ -1283,16 +1314,26 @@ function buildGroupedCols(leadingCols, groupDefs, expandState, weights, hideKeys
 const OUTFIELD_POS_SET = new Set(['좌익수', '중견수', '우익수']);
 const INFIELD_POS_SET = new Set(['1루수', '2루수', '3루수', '유격수']);
 function batterHideKeysForPosition(pos) {
-  if (pos === '포수') return new Set(['OF_ASSIST']);
-  if (INFIELD_POS_SET.has(pos)) return new Set(['OF_ASSIST', 'CS_CATCHER', 'SB_ALLOWED_CATCHER']);
-  if (OUTFIELD_POS_SET.has(pos)) return new Set(['ASSIST', 'CS_CATCHER', 'SB_ALLOWED_CATCHER']);
-  if (pos === '지명타자') return new Set(['ASSIST', 'OF_ASSIST', 'DP_FIELD', 'TP_FIELD', 'CS_CATCHER', 'SB_ALLOWED_CATCHER']);
-  return new Set(); // '전체'
+  const hide = (() => {
+    if (pos === '포수') return new Set(['OF_ASSIST']);
+    if (INFIELD_POS_SET.has(pos)) return new Set(['OF_ASSIST', 'CS_CATCHER', 'SB_ALLOWED_CATCHER']);
+    if (OUTFIELD_POS_SET.has(pos)) return new Set(['ASSIST', 'CS_CATCHER', 'SB_ALLOWED_CATCHER']);
+    if (pos === '지명타자') return new Set(['ASSIST', 'OF_ASSIST', 'DP_FIELD', 'TP_FIELD', 'CS_CATCHER', 'SB_ALLOWED_CATCHER']);
+    return new Set(); // '전체'
+  })();
+  // 포지션 하나만 보고 있으면 "포지션" 컬럼 값이 모든 행에서 똑같아서 굳이 보여줄 필요가 없다.
+  if (pos !== '전체') hide.add('position');
+  return hide;
 }
 function pitcherHideKeysForRole(role) {
-  if (role === '선발') return new Set(['HOLD', 'SAVE', 'SAVE_OPP', 'BLOWN', 'INHERITED_SCORED', 'INHERITED_STRANDED']);
-  if (role === '구원') return new Set(['QSPLUS', 'QS', 'CG', 'SHO', 'NOHIT', 'PERFECT']);
-  return new Set(); // '전체'
+  const hide = (() => {
+    if (role === '선발') return new Set(['HOLD', 'SAVE', 'SAVE_OPP', 'BLOWN', 'INHERITED_SCORED', 'INHERITED_STRANDED']);
+    if (role === '구원') return new Set(['QSPLUS', 'QS', 'CG', 'SHO', 'NOHIT', 'PERFECT']);
+    return new Set(); // '전체'
+  })();
+  // 선발/구원 한쪽만 보고 있으면 "구분" 컬럼도 전부 똑같은 값이라 뺀다.
+  if (role !== '전체') hide.add('role');
+  return hide;
 }
 function filterColsByKeys(cols, hideKeys) {
   if (!hideKeys.size) return cols;
