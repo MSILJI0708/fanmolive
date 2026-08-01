@@ -174,6 +174,8 @@ h1 {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  position: relative;
+  z-index: 41;
 }
 .date-picker-btn:hover { border-color: var(--accent); }
 .date-picker-pop {
@@ -810,7 +812,7 @@ footer.notes b { color: var(--ink-0); }
         </select>
       </label>
       <label class="toggle">
-        <input type="checkbox" id="dh-defense-toggle" />
+        <input type="checkbox" id="dh-defense-toggle" checked />
         지명타자 등록 선수의 수비기록도 인정
       </label>
       <span class="rule-note">보살·외야보살·병살가담·삼중살가담·도루저지(포)·도루허용(포)에만 적용됨</span>
@@ -876,8 +878,8 @@ footer.notes b { color: var(--ink-0); }
   <b>타 포지션 수비기록 규칙.</b> 등록 포지션과 다른 자리에서 난 보살·외야보살·병살/삼중살 가담·
   도루 저지·허용(포수)은 타자 탭 상단 드롭다운으로 즉시 바꿔볼 수 있다 — ① 그 포지션에서만 인정
   ② 내야는 내야끼리·외야는 외야끼리만 인정 ③ 제약 없음(기본값). 지명타자로 등록된 선수의 수비
-  기록은 이 드롭다운과 별개로 옆 토글로 켜고 끌 수 있으며, 기본값은 카드 각주("지명타자 슬롯에
-  들어간 선수의 수비 기록은 인정하지 않는다")를 따라 꺼져 있다.<br>
+  기록은 이 드롭다운과 별개로 옆 토글로 켜고 끌 수 있으며, 기본값은 인정(체크됨)이고 토글을 끄면
+  지명타자 슬롯에 들어간 선수의 수비 기록을 불인정으로 바꿔볼 수 있다.<br>
   <b>여전히 못 채우는 항목.</b> 삼중살 가담은 로직은 있지만 실제 경기에서 발생 예시를 못 봐 검증되지
   않았고(사실상 발생 극히 드묾), 일반 아웃에서 포구만 하고 어시스트 없이 끝나는 단독 수비(보살 없음)는
   정확히 구분해 0으로 처리한다. 중계 텍스트 자체가 없거나 형식이 다른 경기(우천 콜드, 예년 이전 경기 등)는
@@ -1526,7 +1528,7 @@ document.getElementById('search-b').addEventListener('input', () => {
 const posModeSelect = document.getElementById('pos-mode');
 const dhToggle = document.getElementById('dh-defense-toggle');
 if (savedPrefs.posMode) posModeSelect.value = savedPrefs.posMode;
-if (savedPrefs.dhOn) dhToggle.checked = true;
+if (savedPrefs.dhOn === false) dhToggle.checked = false;
 applyFieldRule(posModeSelect.value, dhToggle.checked);
 function onFieldRuleChange() {
   applyFieldRule(posModeSelect.value, dhToggle.checked);
@@ -1711,6 +1713,7 @@ dpBtn.addEventListener('click', e => {
   e.stopPropagation();
   dpPop.classList.contains('open') ? closeDatePicker() : openDatePicker();
 });
+dpPop.addEventListener('click', e => e.stopPropagation());
 dpBackdrop.addEventListener('click', closeDatePicker);
 window.addEventListener('resize', () => {
   if (dpPop.classList.contains('open')) positionDatePickerPop();
@@ -1791,7 +1794,7 @@ async function switchDate(dateStr) {
   roleFilter = '전체';
   [...roleChipsWrap.children].forEach(c => c.classList.toggle('active', c.textContent === '전체'));
   posModeSelect.value = '3';
-  dhToggle.checked = false;
+  dhToggle.checked = true;
 
   renderTiles(dateStr);
   rebuildBatterTable();

@@ -458,7 +458,7 @@ FIELD_GROUP = {
     "좌익수": "외야", "중견수": "외야", "우익수": "외야",
 }
 DEFAULT_POSITION_MODE = 3  # 1=그 포지션에서만, 2=내야/외야끼리만, 3=제약 없음
-DEFAULT_DH_DEFENSE_ON = False  # 지명타자 등록 선수의 수비 기록 인정 여부(카드 각주 기본값=미인정)
+DEFAULT_DH_DEFENSE_ON = True  # 지명타자 등록 선수의 수비 기록 인정 여부(카드 각주 기본값=인정, 토글로 불인정 전환 가능)
 
 
 def _position_allowed(event_pos: str, registered_pos: str, mode: int, dh_defense_on: bool) -> bool:
