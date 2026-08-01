@@ -299,6 +299,34 @@ def load_position_map() -> dict:
     }
 
 
+def _batter_appeared(p: dict) -> bool:
+    """battersBoxscore에 이름은 올라와 있지만 실제로는 전혀 출전하지 않은 선수를 걸러낸다.
+    네이버 박스스코어는 보통 실제로 나온 선수만 주고(교체 주자·수비 교체로 들어온 선수도
+    substituteIn=True로 표시되며, 타석에 못 서고 그친 경우에도 pos는 채워져 있음), 리스트만
+    되고 실제 출전 기록이 전무한 행은 관측된 적이 없지만, 혹시 모를 경우를 대비해 방어적으로
+    제외한다(경기 종료 후 실제로 뛰지 않은 선수가 명단에 남지 않도록)."""
+    if int(p.get("ab") or 0) or int(p.get("hit") or 0) or int(p.get("bb") or 0):
+        return True
+    if int(p.get("run") or 0) or int(p.get("rbi") or 0) or int(p.get("hr") or 0) or int(p.get("sb") or 0):
+        return True
+    if int(p.get("kk") or 0):
+        return True
+    if p.get("substituteIn"):
+        return True
+    return bool((p.get("pos") or "").strip())
+
+
+def _pitcher_appeared(p: dict) -> bool:
+    """pitchersBoxscore 쪽의 동일한 방어적 필터 — 실제 등판 기록(아웃카운트나 피안타/사사구/
+    자책/탈삼진 중 하나라도)이 전혀 없는 행은 제외한다."""
+    if innings_to_outs(p.get("inn")):
+        return True
+    for key in ("hit", "er", "hr", "bb", "bbhp", "kk"):
+        if int(p.get(key) or 0):
+            return True
+    return bool((p.get("wls") or "").strip())
+
+
 # ───────────────────────── 경기 1건 처리 ─────────────────────────
 def process_game(
     game_id: str, position_map: dict | None = None, game_status: str | None = None,
@@ -326,6 +354,8 @@ def process_game(
     bb_box = rd.get("battersBoxscore", {})
     for side in ("home", "away"):
         for p in bb_box.get(side, []):
+            if not _batter_appeared(p):
+                continue
             tags = parse_batter_pa(p)
             hr = int(p.get("hr") or 0)
             cycle = bool(tags["1B"] and tags["2B"] and tags["3B"] and hr)
@@ -374,6 +404,8 @@ def process_game(
         plist = pb_box.get(side, [])
         team_outs = innings_to_outs((team_pb.get(side) or {}).get("inn"))
         for idx, p in enumerate(plist):
+            if not _pitcher_appeared(p):
+                continue
             name = p.get("name", "")
             outs = innings_to_outs(p.get("inn"))
             bb = int(p.get("bb") or 0)
@@ -844,6 +876,13 @@ def build_pregame_rows(g: dict) -> tuple[list[dict], list[dict]]:
     라인업이 아직 발표 전이면 선발투수만(fullLineUp에 그 한 명만 들어있음) 표시되고,
     나머지는 발표되는 대로 자동으로 초록 마커가 붙는다."""
     import pregame
+
+    # 경기가 취소되면(우천취소 등) statusCode는 "RESULT"로 안 넘어가고 "BEFORE"에 계속
+    # 머무른 채 cancel=true만 붙는다. is_within_pregame_window는 "경기 시작 몇 시간 전부터"라는
+    # 하한선만 있고 상한선이 없어서, 이 체크가 없으면 취소된 경기의 예정 명단이 영영 안
+    # 사라지고 계속 표시된다.
+    if g.get("cancel"):
+        return [], []
 
     # "BEFORE"(경기 한참 전)뿐 아니라 "READY"(곧 시작, 이 시점에 라인업이 뜨는 경우가 많음)도
     # 경기 시작 전 상태라 여기서 같이 처리해야 한다 — READY로 바뀌는 순간 이 체크에서 빠지면
