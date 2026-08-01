@@ -1311,10 +1311,12 @@ const PITCHER_LEADING_COLS = [
   {h:'IP', key:'inn', cls:'left'},
 ];
 
-function buildGroupedCols(leadingCols, groupDefs, expandState, weights) {
+function buildGroupedCols(leadingCols, groupDefs, expandState, weights, hideKeys) {
+  hideKeys = hideKeys || new Set();
   const cols = [...leadingCols];
   Object.keys(groupDefs).forEach(gname => {
-    const items = groupDefs[gname];
+    const items = groupDefs[gname].filter(it => !hideKeys.has(it.key));
+    if (!items.length) return; // 이 그룹의 항목이 지금 필터에서 전부 안 보이면 그룹 자체를 뺀다
     if (expandState[gname]) {
       items.forEach(it => {
         cols.push({
@@ -1332,24 +1334,55 @@ function buildGroupedCols(leadingCols, groupDefs, expandState, weights) {
   return cols;
 }
 
+// --- 지금 선택된 포지션/역할과 원천적으로 무관한 기록은 표에서 숨긴다 ---
+// (ex. 선발투수만 볼 때는 구원투수만 받을 수 있는 세이브/홀드/블론/승계주자 컬럼이 계속
+// 0으로만 채워진 채 표를 어지럽히니, 그 필터에서 나올 수 없는 컬럼은 아예 뺀다)
+const OUTFIELD_POS_SET = new Set(['좌익수', '중견수', '우익수']);
+const INFIELD_POS_SET = new Set(['1루수', '2루수', '3루수', '유격수']);
+function batterHideKeysForPosition(pos) {
+  if (pos === '포수') return new Set(['OF_ASSIST']);
+  if (INFIELD_POS_SET.has(pos)) return new Set(['OF_ASSIST', 'CS_CATCHER', 'SB_ALLOWED_CATCHER']);
+  if (OUTFIELD_POS_SET.has(pos)) return new Set(['ASSIST', 'CS_CATCHER', 'SB_ALLOWED_CATCHER']);
+  if (pos === '지명타자') return new Set(['ASSIST', 'OF_ASSIST', 'DP_FIELD', 'TP_FIELD', 'CS_CATCHER', 'SB_ALLOWED_CATCHER']);
+  return new Set(); // '전체'
+}
+function pitcherHideKeysForRole(role) {
+  if (role === '선발') return new Set(['HOLD', 'SAVE', 'SAVE_OPP', 'BLOWN', 'INHERITED_SCORED', 'INHERITED_STRANDED']);
+  if (role === '구원') return new Set(['QSPLUS', 'QS', 'CG', 'SHO', 'NOHIT', 'PERFECT']);
+  return new Set(); // '전체'
+}
+function filterColsByKeys(cols, hideKeys) {
+  if (!hideKeys.size) return cols;
+  return cols.filter(c => {
+    if (c.key && hideKeys.has(c.key)) return false;
+    if (c.merge && c.merge.some(k => hideKeys.has(k))) return false;
+    return true;
+  });
+}
+
 let batterTableMode = 'flat'; // 'flat' | 'grouped'
 const batterGroupExpand = { '출루': false, '장타': false, '팀배팅': false, '주루': false, '수비': false, '아웃': false };
 let pitcherTableMode = 'flat';
 const pitcherGroupExpand = { '기본': false, '출루허용': false, '장타허용': false, '주자억제': false, '특별': false };
 
 function getBatterCols() {
+  const hide = batterHideKeysForPosition(typeof posFilter !== 'undefined' ? posFilter : '전체');
   return batterTableMode === 'grouped'
-    ? buildGroupedCols(BATTER_LEADING_COLS, BATTER_GROUP_DEFS, batterGroupExpand, BATTER_POINTS_JS)
-    : batterColsFlat;
+    ? buildGroupedCols(BATTER_LEADING_COLS, BATTER_GROUP_DEFS, batterGroupExpand, BATTER_POINTS_JS, hide)
+    : filterColsByKeys(batterColsFlat, hide);
 }
 function getPitcherCols() {
+  const hide = pitcherHideKeysForRole(typeof roleFilter !== 'undefined' ? roleFilter : '전체');
   return pitcherTableMode === 'grouped'
-    ? buildGroupedCols(PITCHER_LEADING_COLS, PITCHER_GROUP_DEFS, pitcherGroupExpand, PITCHER_POINTS_JS)
-    : pitcherColsFlat;
+    ? buildGroupedCols(PITCHER_LEADING_COLS, PITCHER_GROUP_DEFS, pitcherGroupExpand, PITCHER_POINTS_JS, hide)
+    : filterColsByKeys(pitcherColsFlat, hide);
 }
 
-let bCtl = render('tbl-b', getBatterCols(), data.batters);
-let pCtl = render('tbl-p', getPitcherCols(), data.pitchers);
+// posFilter/roleFilter가 선언되기 전에는 getBatterCols/getPitcherCols가 그 값을 못 읽으니
+// (let의 TDZ), 실제 첫 렌더는 두 필터가 선언되고 저장된 설정까지 복원된 뒤에
+// rebuildBatterTable/rebuildPitcherTable로 한다 — 그래야 새로고침 직후에도 저장된
+// 포지션/역할 필터에 맞는 컬럼 구성으로 바로 뜬다.
+let bCtl, pCtl;
 document.getElementById('count-b').textContent = data.batters.length + '명';
 document.getElementById('count-p').textContent = data.pitchers.length + '명';
 
@@ -1426,7 +1459,7 @@ Object.keys(POSITION_GROUPS).forEach(label => {
     posFilter = label;
     [...posChipsWrap.children].forEach(c => c.classList.toggle('active', c === btn));
     savePrefs({ posFilter: label });
-    applyBatterFilters();
+    rebuildBatterTable(); // 포지션이 바뀌면 그 포지션에 없는 수비기록 컬럼도 다시 걸러야 한다
   });
   posChipsWrap.appendChild(btn);
 });
@@ -1473,7 +1506,7 @@ const roleChipsWrap = document.getElementById('role-chips');
     roleFilter = label;
     [...roleChipsWrap.children].forEach(c => c.classList.toggle('active', c === btn));
     savePrefs({ roleFilter: label });
-    applyPitcherFilters();
+    rebuildPitcherTable(); // 선발/구원이 바뀌면 그 역할에 없는 컬럼(세이브/QS 등)도 다시 걸러야 한다
   });
   roleChipsWrap.appendChild(btn);
 });
@@ -1494,9 +1527,10 @@ document.getElementById('search-p').addEventListener('input', () => {
   applyPitcherFilters();
 });
 
-// 새로고침해도 지금까지 고른 검색/필터가 그대로 보이도록, 초기 렌더 위에 즉시 한 번 적용한다.
-applyBatterFilters();
-applyPitcherFilters();
+// 표를 이제서야 처음 그린다(posFilter/roleFilter가 저장된 값으로 복원된 뒤라, 새로고침
+// 직후에도 컬럼 구성부터 필터까지 전부 곧장 맞는 상태로 뜬다).
+rebuildBatterTable();
+rebuildPitcherTable();
 
 // --- 챕터(타자/투수) 탭 전환 ---
 function activateChapter(target) {
@@ -1719,8 +1753,8 @@ async function switchDate(dateStr) {
   dhToggle.checked = false;
 
   renderTiles(dateStr);
-  applyBatterFilters();
-  applyPitcherFilters();
+  rebuildBatterTable();
+  rebuildPitcherTable();
 }
 
 renderTiles(activeDate);
