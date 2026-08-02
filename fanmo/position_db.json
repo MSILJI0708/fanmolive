@@ -884,6 +884,316 @@
       "manual_position": null,
       "effective_position": "3루수"
     },
+    "50500": {
+      "name": "황성빈",
+      "team": "롯데",
+      "innings_by_position": {
+        "중견수": 61.7,
+        "좌익수": 17.7
+      },
+      "games": 10,
+      "auto_position": "중견수",
+      "manual_position": null,
+      "effective_position": "중견수"
+    },
+    "51551": {
+      "name": "나승엽",
+      "team": "롯데",
+      "innings_by_position": {
+        "1루수": 97.3
+      },
+      "games": 11,
+      "auto_position": "1루수",
+      "manual_position": null,
+      "effective_position": "1루수"
+    },
+    "52514": {
+      "name": "김세민",
+      "team": "롯데",
+      "innings_by_position": {
+        "3루수": 27.0,
+        "유격수": 27.0
+      },
+      "games": 7,
+      "auto_position": "3루수",
+      "manual_position": null,
+      "effective_position": "3루수"
+    },
+    "54529": {
+      "name": "레이예스",
+      "team": "롯데",
+      "innings_by_position": {
+        "좌익수": 83.8,
+        "우익수": 13.5
+      },
+      "games": 11,
+      "auto_position": "좌익수",
+      "manual_position": null,
+      "effective_position": "좌익수"
+    },
+    "52504": {
+      "name": "김동혁",
+      "team": "롯데",
+      "innings_by_position": {
+        "중견수": 53.3,
+        "우익수": 9.0
+      },
+      "games": 7,
+      "auto_position": "중견수",
+      "manual_position": null,
+      "effective_position": "중견수"
+    },
+    "68525": {
+      "name": "한동희",
+      "team": "롯데",
+      "innings_by_position": {
+        "3루수": 8.0
+      },
+      "games": 11,
+      "auto_position": "3루수",
+      "manual_position": null,
+      "effective_position": "3루수"
+    },
+    "52591": {
+      "name": "윤동희",
+      "team": "롯데",
+      "innings_by_position": {
+        "우익수": 83.8,
+        "중견수": 13.5
+      },
+      "games": 11,
+      "auto_position": "우익수",
+      "manual_position": null,
+      "effective_position": "우익수"
+    },
+    "62931": {
+      "name": "노진혁",
+      "team": "롯데",
+      "innings_by_position": {
+        "3루수": 53.3
+      },
+      "games": 9,
+      "auto_position": "3루수",
+      "manual_position": null,
+      "effective_position": "3루수"
+    },
+    "62802": {
+      "name": "박승욱",
+      "team": "롯데",
+      "innings_by_position": {
+        "3루수": 40.5,
+        "1루수": 8.7,
+        "유격수": 9.0,
+        "2루수": 13.2
+      },
+      "games": 9,
+      "auto_position": "3루수",
+      "manual_position": null,
+      "effective_position": "3루수"
+    },
+    "52568": {
+      "name": "한태양",
+      "team": "롯데",
+      "innings_by_position": {
+        "2루수": 39.8,
+        "3루수": 31.5
+      },
+      "games": 9,
+      "auto_position": "2루수",
+      "manual_position": null,
+      "effective_position": "2루수"
+    },
+    "68205": {
+      "name": "전민재",
+      "team": "롯데",
+      "innings_by_position": {
+        "유격수": 97.3
+      },
+      "games": 11,
+      "auto_position": "유격수",
+      "manual_position": null,
+      "effective_position": "유격수"
+    },
+    "51528": {
+      "name": "손성빈",
+      "team": "롯데",
+      "innings_by_position": {
+        "포수": 97.3
+      },
+      "games": 11,
+      "auto_position": "포수",
+      "manual_position": null,
+      "effective_position": "포수"
+    },
+    "50458": {
+      "name": "김지찬",
+      "team": "삼성",
+      "innings_by_position": {
+        "중견수": 89.0
+      },
+      "games": 10,
+      "auto_position": "중견수",
+      "manual_position": null,
+      "effective_position": "중견수"
+    },
+    "67449": {
+      "name": "김성윤",
+      "team": "삼성",
+      "innings_by_position": {
+        "우익수": 93.5,
+        "중견수": 4.5
+      },
+      "games": 11,
+      "auto_position": "우익수",
+      "manual_position": null,
+      "effective_position": "우익수"
+    },
+    "62404": {
+      "name": "구자욱",
+      "team": "삼성",
+      "innings_by_position": {
+        "좌익수": 89.0
+      },
+      "games": 11,
+      "auto_position": "좌익수",
+      "manual_position": null,
+      "effective_position": "좌익수"
+    },
+    "72443": {
+      "name": "최형우",
+      "team": "삼성",
+      "innings_by_position": {},
+      "games": 10,
+      "auto_position": "지명타자",
+      "manual_position": null,
+      "effective_position": "지명타자"
+    },
+    "54400": {
+      "name": "디아즈",
+      "team": "삼성",
+      "innings_by_position": {
+        "1루수": 98.0
+      },
+      "games": 11,
+      "auto_position": "1루수",
+      "manual_position": null,
+      "effective_position": "1루수"
+    },
+    "65586": {
+      "name": "전병우",
+      "team": "삼성",
+      "innings_by_position": {
+        "3루수": 22.0,
+        "2루수": 4.0,
+        "1루수": 18.0
+      },
+      "games": 7,
+      "auto_position": "3루수",
+      "manual_position": null,
+      "effective_position": "3루수"
+    },
+    "62234": {
+      "name": "류지혁",
+      "team": "삼성",
+      "innings_by_position": {
+        "2루수": 98.0
+      },
+      "games": 11,
+      "auto_position": "2루수",
+      "manual_position": null,
+      "effective_position": "2루수"
+    },
+    "52430": {
+      "name": "김영웅",
+      "team": "삼성",
+      "innings_by_position": {
+        "3루수": 80.0
+      },
+      "games": 10,
+      "auto_position": "3루수",
+      "manual_position": null,
+      "effective_position": "3루수"
+    },
+    "55438": {
+      "name": "심재훈",
+      "team": "삼성",
+      "innings_by_position": {
+        "2루수": 39.5,
+        "유격수": 21.5
+      },
+      "games": 11,
+      "auto_position": "2루수",
+      "manual_position": null,
+      "effective_position": "2루수"
+    },
+    "61404": {
+      "name": "김헌곤",
+      "team": "삼성",
+      "innings_by_position": {
+        "우익수": 9.0,
+        "좌익수": 46.0
+      },
+      "games": 8,
+      "auto_position": "좌익수",
+      "manual_position": null,
+      "effective_position": "좌익수"
+    },
+    "64468": {
+      "name": "박계범",
+      "team": "삼성",
+      "innings_by_position": {
+        "2루수": 17.0
+      },
+      "games": 2,
+      "auto_position": "2루수",
+      "manual_position": null,
+      "effective_position": "2루수"
+    },
+    "74540": {
+      "name": "강민호",
+      "team": "삼성",
+      "innings_by_position": {
+        "포수": 72.0
+      },
+      "games": 9,
+      "auto_position": "포수",
+      "manual_position": null,
+      "effective_position": "포수"
+    },
+    "69442": {
+      "name": "김도환",
+      "team": "삼성",
+      "innings_by_position": {
+        "포수": 71.0
+      },
+      "games": 10,
+      "auto_position": "포수",
+      "manual_position": null,
+      "effective_position": "포수"
+    },
+    "51417": {
+      "name": "김현준",
+      "team": "삼성",
+      "innings_by_position": {
+        "중견수": 9.0,
+        "좌익수": 18.0
+      },
+      "games": 8,
+      "auto_position": "좌익수",
+      "manual_position": null,
+      "effective_position": "좌익수"
+    },
+    "52415": {
+      "name": "이재현",
+      "team": "삼성",
+      "innings_by_position": {
+        "유격수": 98.0
+      },
+      "games": 11,
+      "auto_position": "유격수",
+      "manual_position": null,
+      "effective_position": "유격수"
+    },
     "55767": {
       "name": "한지윤",
       "team": "한화",
@@ -1359,30 +1669,6 @@
       "manual_position": null,
       "effective_position": "포수"
     },
-    "50500": {
-      "name": "황성빈",
-      "team": "롯데",
-      "innings_by_position": {
-        "중견수": 57.2,
-        "좌익수": 13.2
-      },
-      "games": 9,
-      "auto_position": "중견수",
-      "manual_position": null,
-      "effective_position": "중견수"
-    },
-    "52504": {
-      "name": "김동혁",
-      "team": "롯데",
-      "innings_by_position": {
-        "중견수": 44.3,
-        "우익수": 9.0
-      },
-      "games": 6,
-      "auto_position": "중견수",
-      "manual_position": null,
-      "effective_position": "중견수"
-    },
     "69517": {
       "name": "고승민",
       "team": "롯데",
@@ -1395,86 +1681,6 @@
       "manual_position": null,
       "effective_position": "2루수"
     },
-    "52568": {
-      "name": "한태양",
-      "team": "롯데",
-      "innings_by_position": {
-        "2루수": 30.8,
-        "3루수": 31.5
-      },
-      "games": 8,
-      "auto_position": "3루수",
-      "manual_position": null,
-      "effective_position": "3루수"
-    },
-    "54529": {
-      "name": "레이예스",
-      "team": "롯데",
-      "innings_by_position": {
-        "좌익수": 74.8,
-        "우익수": 13.5
-      },
-      "games": 10,
-      "auto_position": "좌익수",
-      "manual_position": null,
-      "effective_position": "좌익수"
-    },
-    "68525": {
-      "name": "한동희",
-      "team": "롯데",
-      "innings_by_position": {
-        "3루수": 8.0
-      },
-      "games": 10,
-      "auto_position": "3루수",
-      "manual_position": null,
-      "effective_position": "3루수"
-    },
-    "51551": {
-      "name": "나승엽",
-      "team": "롯데",
-      "innings_by_position": {
-        "1루수": 88.3
-      },
-      "games": 10,
-      "auto_position": "1루수",
-      "manual_position": null,
-      "effective_position": "1루수"
-    },
-    "52591": {
-      "name": "윤동희",
-      "team": "롯데",
-      "innings_by_position": {
-        "우익수": 74.8,
-        "중견수": 13.5
-      },
-      "games": 10,
-      "auto_position": "우익수",
-      "manual_position": null,
-      "effective_position": "우익수"
-    },
-    "62931": {
-      "name": "노진혁",
-      "team": "롯데",
-      "innings_by_position": {
-        "3루수": 44.3
-      },
-      "games": 8,
-      "auto_position": "3루수",
-      "manual_position": null,
-      "effective_position": "3루수"
-    },
-    "51528": {
-      "name": "손성빈",
-      "team": "롯데",
-      "innings_by_position": {
-        "포수": 88.3
-      },
-      "games": 10,
-      "auto_position": "포수",
-      "manual_position": null,
-      "effective_position": "포수"
-    },
     "61102": {
       "name": "유강남",
       "team": "롯데",
@@ -1482,142 +1688,6 @@
         "포수": 18.0
       },
       "games": 3,
-      "auto_position": "포수",
-      "manual_position": null,
-      "effective_position": "포수"
-    },
-    "62802": {
-      "name": "박승욱",
-      "team": "롯데",
-      "innings_by_position": {
-        "유격수": 9.0,
-        "2루수": 13.2,
-        "1루수": 4.2,
-        "3루수": 36.0
-      },
-      "games": 8,
-      "auto_position": "3루수",
-      "manual_position": null,
-      "effective_position": "3루수"
-    },
-    "68205": {
-      "name": "전민재",
-      "team": "롯데",
-      "innings_by_position": {
-        "유격수": 88.3
-      },
-      "games": 10,
-      "auto_position": "유격수",
-      "manual_position": null,
-      "effective_position": "유격수"
-    },
-    "51417": {
-      "name": "김현준",
-      "team": "삼성",
-      "innings_by_position": {
-        "중견수": 9.0,
-        "좌익수": 18.0
-      },
-      "games": 7,
-      "auto_position": "좌익수",
-      "manual_position": null,
-      "effective_position": "좌익수"
-    },
-    "67449": {
-      "name": "김성윤",
-      "team": "삼성",
-      "innings_by_position": {
-        "우익수": 85.5,
-        "중견수": 4.5
-      },
-      "games": 10,
-      "auto_position": "우익수",
-      "manual_position": null,
-      "effective_position": "우익수"
-    },
-    "62404": {
-      "name": "구자욱",
-      "team": "삼성",
-      "innings_by_position": {
-        "좌익수": 81.0
-      },
-      "games": 10,
-      "auto_position": "좌익수",
-      "manual_position": null,
-      "effective_position": "좌익수"
-    },
-    "72443": {
-      "name": "최형우",
-      "team": "삼성",
-      "innings_by_position": {},
-      "games": 9,
-      "auto_position": "지명타자",
-      "manual_position": null,
-      "effective_position": "지명타자"
-    },
-    "52430": {
-      "name": "김영웅",
-      "team": "삼성",
-      "innings_by_position": {
-        "3루수": 72.0
-      },
-      "games": 9,
-      "auto_position": "3루수",
-      "manual_position": null,
-      "effective_position": "3루수"
-    },
-    "52415": {
-      "name": "이재현",
-      "team": "삼성",
-      "innings_by_position": {
-        "유격수": 90.0
-      },
-      "games": 10,
-      "auto_position": "유격수",
-      "manual_position": null,
-      "effective_position": "유격수"
-    },
-    "54400": {
-      "name": "디아즈",
-      "team": "삼성",
-      "innings_by_position": {
-        "1루수": 90.0
-      },
-      "games": 10,
-      "auto_position": "1루수",
-      "manual_position": null,
-      "effective_position": "1루수"
-    },
-    "65586": {
-      "name": "전병우",
-      "team": "삼성",
-      "innings_by_position": {
-        "3루수": 18.0,
-        "1루수": 18.0
-      },
-      "games": 6,
-      "auto_position": "3루수",
-      "manual_position": null,
-      "effective_position": "3루수"
-    },
-    "69442": {
-      "name": "김도환",
-      "team": "삼성",
-      "innings_by_position": {
-        "포수": 63.0
-      },
-      "games": 9,
-      "auto_position": "포수",
-      "manual_position": null,
-      "effective_position": "포수"
-    },
-    "74540": {
-      "name": "강민호",
-      "team": "삼성",
-      "innings_by_position": {
-        "포수": 64.0
-      },
-      "games": 8,
       "auto_position": "포수",
       "manual_position": null,
       "effective_position": "포수"
@@ -1632,63 +1702,6 @@
       "auto_position": "포수",
       "manual_position": null,
       "effective_position": "포수"
-    },
-    "55438": {
-      "name": "심재훈",
-      "team": "삼성",
-      "innings_by_position": {
-        "2루수": 31.5,
-        "유격수": 21.5
-      },
-      "games": 10,
-      "auto_position": "2루수",
-      "manual_position": null,
-      "effective_position": "2루수"
-    },
-    "62234": {
-      "name": "류지혁",
-      "team": "삼성",
-      "innings_by_position": {
-        "2루수": 90.0
-      },
-      "games": 10,
-      "auto_position": "2루수",
-      "manual_position": null,
-      "effective_position": "2루수"
-    },
-    "64468": {
-      "name": "박계범",
-      "team": "삼성",
-      "innings_by_position": {
-        "2루수": 9.0
-      },
-      "games": 1,
-      "auto_position": "2루수",
-      "manual_position": null,
-      "effective_position": "2루수"
-    },
-    "50458": {
-      "name": "김지찬",
-      "team": "삼성",
-      "innings_by_position": {
-        "중견수": 81.0
-      },
-      "games": 9,
-      "auto_position": "중견수",
-      "manual_position": null,
-      "effective_position": "중견수"
-    },
-    "61404": {
-      "name": "김헌곤",
-      "team": "삼성",
-      "innings_by_position": {
-        "우익수": 9.0,
-        "좌익수": 46.0
-      },
-      "games": 7,
-      "auto_position": "좌익수",
-      "manual_position": null,
-      "effective_position": "좌익수"
     },
     "69403": {
       "name": "양우현",
@@ -1752,18 +1765,6 @@
       "auto_position": "지명타자",
       "manual_position": null,
       "effective_position": "지명타자"
-    },
-    "52514": {
-      "name": "김세민",
-      "team": "롯데",
-      "innings_by_position": {
-        "3루수": 18.0,
-        "유격수": 27.0
-      },
-      "games": 6,
-      "auto_position": "유격수",
-      "manual_position": null,
-      "effective_position": "유격수"
     },
     "66291": {
       "name": "이영하",
