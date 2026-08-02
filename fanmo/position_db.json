@@ -1,15 +1,15 @@
 {
-  "as_of": "2026-08-01",
+  "as_of": "2026-08-02",
   "window_days": 14,
   "players": {
     "66606": {
       "name": "최원준",
       "team": "KT",
       "innings_by_position": {
-        "중견수": 28.0,
-        "우익수": 63.0
+        "중견수": 23.5,
+        "우익수": 58.5
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "우익수",
       "manual_position": null,
       "effective_position": "우익수"
@@ -18,9 +18,9 @@
       "name": "김현수",
       "team": "KT",
       "innings_by_position": {
-        "1루수": 73.0
+        "1루수": 64.0
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "1루수",
       "manual_position": null,
       "effective_position": "1루수"
@@ -29,9 +29,9 @@
       "name": "안현민",
       "team": "KT",
       "innings_by_position": {
-        "우익수": 65.0
+        "우익수": 56.0
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "우익수",
       "manual_position": null,
       "effective_position": "우익수"
@@ -40,9 +40,9 @@
       "name": "배정대",
       "team": "KT",
       "innings_by_position": {
-        "중견수": 82.0
+        "중견수": 73.0
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "중견수",
       "manual_position": null,
       "effective_position": "중견수"
@@ -51,11 +51,11 @@
       "name": "힐리어드",
       "team": "KT",
       "innings_by_position": {
-        "좌익수": 51.5,
+        "좌익수": 42.5,
         "중견수": 35.0,
         "1루수": 4.5
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "좌익수",
       "manual_position": null,
       "effective_position": "좌익수"
@@ -75,9 +75,9 @@
       "name": "허경민",
       "team": "KT",
       "innings_by_position": {
-        "3루수": 91.0
+        "3루수": 82.0
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "3루수",
       "manual_position": null,
       "effective_position": "3루수"
@@ -86,10 +86,9 @@
       "name": "오윤석",
       "team": "KT",
       "innings_by_position": {
-        "1루수": 73.0,
-        "2루수": 9.0
+        "1루수": 73.0
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "1루수",
       "manual_position": null,
       "effective_position": "1루수"
@@ -125,7 +124,7 @@
         "중견수": 52.0,
         "우익수": 27.0
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "중견수",
       "manual_position": null,
       "effective_position": "중견수"
@@ -138,7 +137,7 @@
         "유격수": 22.0,
         "3루수": 40.0
       },
-      "games": 12,
+      "games": 11,
       "auto_position": "3루수",
       "manual_position": null,
       "effective_position": "3루수"
@@ -147,9 +146,9 @@
       "name": "페라자",
       "team": "한화",
       "innings_by_position": {
-        "우익수": 99.0
+        "우익수": 88.0
       },
-      "games": 12,
+      "games": 11,
       "auto_position": "우익수",
       "manual_position": null,
       "effective_position": "우익수"
@@ -170,9 +169,9 @@
       "team": "한화",
       "innings_by_position": {
         "좌익수": 34.0,
-        "중견수": 73.0
+        "중견수": 62.0
       },
-      "games": 12,
+      "games": 11,
       "auto_position": "중견수",
       "manual_position": null,
       "effective_position": "중견수"
@@ -184,7 +183,7 @@
         "좌익수": 30.5,
         "1루수": 4.5
       },
-      "games": 6,
+      "games": 5,
       "auto_position": "좌익수",
       "manual_position": null,
       "effective_position": "좌익수"
@@ -193,7 +192,7 @@
       "name": "강백호",
       "team": "한화",
       "innings_by_position": {},
-      "games": 3,
+      "games": 2,
       "auto_position": "지명타자",
       "manual_position": null,
       "effective_position": "지명타자"
@@ -202,9 +201,9 @@
       "name": "노시환",
       "team": "한화",
       "innings_by_position": {
-        "3루수": 62.0
+        "3루수": 51.0
       },
-      "games": 12,
+      "games": 11,
       "auto_position": "3루수",
       "manual_position": null,
       "effective_position": "3루수"
@@ -224,9 +223,9 @@
       "name": "허인서",
       "team": "한화",
       "innings_by_position": {
-        "포수": 98.0
+        "포수": 87.0
       },
-      "games": 11,
+      "games": 10,
       "auto_position": "포수",
       "manual_position": null,
       "effective_position": "포수"
@@ -235,9 +234,9 @@
       "name": "이도윤",
       "team": "한화",
       "innings_by_position": {
-        "2루수": 107.0
+        "2루수": 96.0
       },
-      "games": 12,
+      "games": 11,
       "auto_position": "2루수",
       "manual_position": null,
       "effective_position": "2루수"
@@ -249,7 +248,7 @@
         "2루수": 9.0,
         "3루수": 26.0
       },
-      "games": 7,
+      "games": 6,
       "auto_position": "3루수",
       "manual_position": null,
       "effective_position": "3루수"
@@ -258,9 +257,9 @@
       "name": "심우준",
       "team": "한화",
       "innings_by_position": {
-        "유격수": 107.0
+        "유격수": 96.0
       },
-      "games": 12,
+      "games": 11,
       "auto_position": "유격수",
       "manual_position": null,
       "effective_position": "유격수"
@@ -270,9 +269,9 @@
       "team": "한화",
       "innings_by_position": {
         "좌익수": 18.0,
-        "우익수": 46.0
+        "우익수": 35.0
       },
-      "games": 8,
+      "games": 7,
       "auto_position": "우익수",
       "manual_position": null,
       "effective_position": "우익수"
@@ -281,9 +280,9 @@
       "name": "박찬호",
       "team": "두산",
       "innings_by_position": {
-        "유격수": 85.0
+        "유격수": 76.0
       },
-      "games": 9,
+      "games": 8,
       "auto_position": "유격수",
       "manual_position": null,
       "effective_position": "유격수"
@@ -292,9 +291,9 @@
       "name": "세베리노",
       "team": "두산",
       "innings_by_position": {
-        "1루수": 57.0
+        "1루수": 48.0
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "1루수",
       "manual_position": null,
       "effective_position": "1루수"
@@ -303,11 +302,10 @@
       "name": "강승호",
       "team": "두산",
       "innings_by_position": {
-        "1루수": 61.5,
-        "2루수": 11.0,
-        "우익수": 4.5
+        "1루수": 57.0,
+        "2루수": 11.0
       },
-      "games": 9,
+      "games": 8,
       "auto_position": "1루수",
       "manual_position": null,
       "effective_position": "1루수"
@@ -316,9 +314,9 @@
       "name": "박준순",
       "team": "두산",
       "innings_by_position": {
-        "2루수": 83.0
+        "2루수": 74.0
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "2루수",
       "manual_position": null,
       "effective_position": "2루수"
@@ -329,7 +327,7 @@
       "innings_by_position": {
         "포수": 48.0
       },
-      "games": 9,
+      "games": 8,
       "auto_position": "포수",
       "manual_position": null,
       "effective_position": "포수"
@@ -338,9 +336,9 @@
       "name": "김민석",
       "team": "두산",
       "innings_by_position": {
-        "좌익수": 94.0
+        "좌익수": 85.0
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "좌익수",
       "manual_position": null,
       "effective_position": "좌익수"
@@ -350,10 +348,10 @@
       "team": "두산",
       "innings_by_position": {
         "좌익수": 11.0,
-        "2루수": 61.5,
-        "유격수": 13.5
+        "2루수": 57.0,
+        "유격수": 9.0
       },
-      "games": 9,
+      "games": 8,
       "auto_position": "2루수",
       "manual_position": null,
       "effective_position": "2루수"
@@ -362,9 +360,9 @@
       "name": "안재석",
       "team": "두산",
       "innings_by_position": {
-        "3루수": 94.0
+        "3루수": 85.0
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "3루수",
       "manual_position": null,
       "effective_position": "3루수"
@@ -373,10 +371,10 @@
       "name": "김대한",
       "team": "두산",
       "innings_by_position": {
-        "우익수": 76.0,
+        "우익수": 67.0,
         "중견수": 9.0
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "우익수",
       "manual_position": null,
       "effective_position": "우익수"
@@ -385,11 +383,11 @@
       "name": "조수행",
       "team": "두산",
       "innings_by_position": {
-        "중견수": 15.5,
+        "중견수": 11.0,
         "좌익수": 32.5,
-        "우익수": 29.0
+        "우익수": 24.5
       },
-      "games": 8,
+      "games": 7,
       "auto_position": "좌익수",
       "manual_position": null,
       "effective_position": "좌익수"
@@ -399,10 +397,9 @@
       "team": "두산",
       "innings_by_position": {
         "1루수": 29.0,
-        "유격수": 9.0,
-        "3루수": 9.0
+        "유격수": 9.0
       },
-      "games": 8,
+      "games": 7,
       "auto_position": "1루수",
       "manual_position": null,
       "effective_position": "1루수"
@@ -411,9 +408,9 @@
       "name": "정수빈",
       "team": "두산",
       "innings_by_position": {
-        "중견수": 94.0
+        "중견수": 85.0
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "중견수",
       "manual_position": null,
       "effective_position": "중견수"
@@ -422,9 +419,9 @@
       "name": "윤준호",
       "team": "두산",
       "innings_by_position": {
-        "포수": 85.0
+        "포수": 76.0
       },
-      "games": 9,
+      "games": 8,
       "auto_position": "포수",
       "manual_position": null,
       "effective_position": "포수"
@@ -445,9 +442,9 @@
       "name": "박해민",
       "team": "LG",
       "innings_by_position": {
-        "중견수": 98.0
+        "중견수": 89.0
       },
-      "games": 11,
+      "games": 10,
       "auto_position": "중견수",
       "manual_position": null,
       "effective_position": "중견수"
@@ -458,7 +455,7 @@
       "innings_by_position": {
         "1루수": 47.0
       },
-      "games": 11,
+      "games": 10,
       "auto_position": "1루수",
       "manual_position": null,
       "effective_position": "1루수"
@@ -467,9 +464,9 @@
       "name": "문정빈",
       "team": "LG",
       "innings_by_position": {
-        "1루수": 51.0
+        "1루수": 42.0
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "1루수",
       "manual_position": null,
       "effective_position": "1루수"
@@ -478,10 +475,10 @@
       "name": "송찬의",
       "team": "LG",
       "innings_by_position": {
-        "좌익수": 27.5,
-        "우익수": 34.5
+        "좌익수": 23.0,
+        "우익수": 30.0
       },
-      "games": 9,
+      "games": 8,
       "auto_position": "우익수",
       "manual_position": null,
       "effective_position": "우익수"
@@ -490,10 +487,10 @@
       "name": "문성주",
       "team": "LG",
       "innings_by_position": {
-        "좌익수": 81.0,
-        "중견수": 9.0
+        "좌익수": 76.5,
+        "중견수": 4.5
       },
-      "games": 11,
+      "games": 10,
       "auto_position": "좌익수",
       "manual_position": null,
       "effective_position": "좌익수"
@@ -502,9 +499,9 @@
       "name": "오지환",
       "team": "LG",
       "innings_by_position": {
-        "유격수": 98.0
+        "유격수": 89.0
       },
-      "games": 11,
+      "games": 10,
       "auto_position": "유격수",
       "manual_position": null,
       "effective_position": "유격수"
@@ -514,10 +511,10 @@
       "team": "LG",
       "innings_by_position": {
         "3루수": 15.5,
-        "2루수": 60.0,
+        "2루수": 51.0,
         "유격수": 13.5
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "2루수",
       "manual_position": null,
       "effective_position": "2루수"
@@ -526,9 +523,9 @@
       "name": "문보경",
       "team": "LG",
       "innings_by_position": {
-        "3루수": 89.0
+        "3루수": 80.0
       },
-      "games": 11,
+      "games": 10,
       "auto_position": "3루수",
       "manual_position": null,
       "effective_position": "3루수"
@@ -548,9 +545,9 @@
       "name": "신민재",
       "team": "LG",
       "innings_by_position": {
-        "2루수": 65.0
+        "2루수": 56.0
       },
-      "games": 8,
+      "games": 7,
       "auto_position": "2루수",
       "manual_position": null,
       "effective_position": "2루수"
@@ -559,9 +556,9 @@
       "name": "서건창",
       "team": "키움",
       "innings_by_position": {
-        "2루수": 92.0
+        "2루수": 81.0
       },
-      "games": 11,
+      "games": 10,
       "auto_position": "2루수",
       "manual_position": null,
       "effective_position": "2루수"
@@ -570,9 +567,9 @@
       "name": "여동욱",
       "team": "키움",
       "innings_by_position": {
-        "3루수": 55.0
+        "3루수": 44.0
       },
-      "games": 9,
+      "games": 8,
       "auto_position": "3루수",
       "manual_position": null,
       "effective_position": "3루수"
@@ -581,10 +578,10 @@
       "name": "안치홍",
       "team": "키움",
       "innings_by_position": {
-        "1루수": 36.0,
-        "2루수": 27.0
+        "1루수": 30.5,
+        "2루수": 21.5
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "1루수",
       "manual_position": null,
       "effective_position": "1루수"
@@ -593,9 +590,9 @@
       "name": "데이비슨",
       "team": "키움",
       "innings_by_position": {
-        "1루수": 74.0
+        "1루수": 63.0
       },
-      "games": 12,
+      "games": 11,
       "auto_position": "1루수",
       "manual_position": null,
       "effective_position": "1루수"
@@ -604,9 +601,9 @@
       "name": "박찬혁",
       "team": "키움",
       "innings_by_position": {
-        "우익수": 109.0
+        "우익수": 98.0
       },
-      "games": 12,
+      "games": 11,
       "auto_position": "우익수",
       "manual_position": null,
       "effective_position": "우익수"
@@ -626,11 +623,11 @@
       "name": "추재현",
       "team": "키움",
       "innings_by_position": {
-        "좌익수": 76.5,
+        "좌익수": 65.5,
         "중견수": 21.5,
         "우익수": 11.0
       },
-      "games": 12,
+      "games": 11,
       "auto_position": "좌익수",
       "manual_position": null,
       "effective_position": "좌익수"
@@ -639,9 +636,9 @@
       "name": "김건희",
       "team": "키움",
       "innings_by_position": {
-        "포수": 81.0
+        "포수": 70.0
       },
-      "games": 11,
+      "games": 10,
       "auto_position": "포수",
       "manual_position": null,
       "effective_position": "포수"
@@ -650,10 +647,10 @@
       "name": "임병욱",
       "team": "키움",
       "innings_by_position": {
-        "중견수": 77.5,
+        "중견수": 66.5,
         "우익수": 14.5
       },
-      "games": 11,
+      "games": 10,
       "auto_position": "중견수",
       "manual_position": null,
       "effective_position": "중견수"
@@ -673,10 +670,10 @@
       "name": "김웅빈",
       "team": "키움",
       "innings_by_position": {
-        "3루수": 73.0,
-        "1루수": 10.0
+        "3루수": 67.5,
+        "1루수": 4.5
       },
-      "games": 11,
+      "games": 10,
       "auto_position": "3루수",
       "manual_position": null,
       "effective_position": "3루수"
@@ -685,9 +682,9 @@
       "name": "정준재",
       "team": "SSG",
       "innings_by_position": {
-        "2루수": 109.0
+        "2루수": 100.0
       },
-      "games": 12,
+      "games": 11,
       "auto_position": "2루수",
       "manual_position": null,
       "effective_position": "2루수"
@@ -696,9 +693,9 @@
       "name": "박성한",
       "team": "SSG",
       "innings_by_position": {
-        "유격수": 109.0
+        "유격수": 100.0
       },
-      "games": 12,
+      "games": 11,
       "auto_position": "유격수",
       "manual_position": null,
       "effective_position": "유격수"
@@ -732,9 +729,9 @@
       "team": "SSG",
       "innings_by_position": {
         "좌익수": 13.5,
-        "우익수": 78.5
+        "우익수": 69.5
       },
-      "games": 11,
+      "games": 10,
       "auto_position": "우익수",
       "manual_position": null,
       "effective_position": "우익수"
@@ -743,9 +740,9 @@
       "name": "전의산",
       "team": "SSG",
       "innings_by_position": {
-        "1루수": 100.0
+        "1루수": 91.0
       },
-      "games": 11,
+      "games": 10,
       "auto_position": "1루수",
       "manual_position": null,
       "effective_position": "1루수"
@@ -754,9 +751,9 @@
       "name": "김재환",
       "team": "SSG",
       "innings_by_position": {
-        "좌익수": 17.0
+        "좌익수": 8.0
       },
-      "games": 12,
+      "games": 11,
       "auto_position": "좌익수",
       "manual_position": null,
       "effective_position": "좌익수"
@@ -765,9 +762,9 @@
       "name": "이지영",
       "team": "SSG",
       "innings_by_position": {
-        "포수": 47.0
+        "포수": 38.0
       },
-      "games": 5,
+      "games": 4,
       "auto_position": "포수",
       "manual_position": null,
       "effective_position": "포수"
@@ -787,11 +784,11 @@
       "name": "채현우",
       "team": "SSG",
       "innings_by_position": {
-        "좌익수": 60.5,
+        "좌익수": 51.5,
         "중견수": 4.5,
         "우익수": 9.0
       },
-      "games": 8,
+      "games": 7,
       "auto_position": "좌익수",
       "manual_position": null,
       "effective_position": "좌익수"
@@ -812,10 +809,10 @@
       "name": "홍대인",
       "team": "SSG",
       "innings_by_position": {
-        "3루수": 70.0,
+        "3루수": 61.0,
         "유격수": 20.0
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "3루수",
       "manual_position": null,
       "effective_position": "3루수"
@@ -824,9 +821,9 @@
       "name": "최지훈",
       "team": "SSG",
       "innings_by_position": {
-        "중견수": 109.0
+        "중견수": 100.0
       },
-      "games": 12,
+      "games": 11,
       "auto_position": "중견수",
       "manual_position": null,
       "effective_position": "중견수"
@@ -871,9 +868,9 @@
       "name": "조대현",
       "team": "KT",
       "innings_by_position": {
-        "포수": 71.0
+        "포수": 62.0
       },
-      "games": 8,
+      "games": 7,
       "auto_position": "포수",
       "manual_position": null,
       "effective_position": "포수"
@@ -882,9 +879,9 @@
       "name": "권동진",
       "team": "KT",
       "innings_by_position": {
-        "유격수": 82.0
+        "유격수": 73.0
       },
-      "games": 9,
+      "games": 8,
       "auto_position": "유격수",
       "manual_position": null,
       "effective_position": "유격수"
@@ -893,9 +890,9 @@
       "name": "김주원",
       "team": "NC",
       "innings_by_position": {
-        "유격수": 90.0
+        "유격수": 81.0
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "유격수",
       "manual_position": null,
       "effective_position": "유격수"
@@ -905,10 +902,9 @@
       "team": "NC",
       "innings_by_position": {
         "유격수": 18.0,
-        "2루수": 63.0,
-        "3루수": 9.0
+        "2루수": 63.0
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "2루수",
       "manual_position": null,
       "effective_position": "2루수"
@@ -917,10 +913,10 @@
       "name": "권희동",
       "team": "NC",
       "innings_by_position": {
-        "우익수": 53.0,
+        "우익수": 44.0,
         "좌익수": 19.0
       },
-      "games": 9,
+      "games": 8,
       "auto_position": "우익수",
       "manual_position": null,
       "effective_position": "우익수"
@@ -929,9 +925,9 @@
       "name": "안중열",
       "team": "NC",
       "innings_by_position": {
-        "포수": 73.0
+        "포수": 64.0
       },
-      "games": 8,
+      "games": 7,
       "auto_position": "포수",
       "manual_position": null,
       "effective_position": "포수"
@@ -940,9 +936,9 @@
       "name": "박민우",
       "team": "NC",
       "innings_by_position": {
-        "2루수": 81.0
+        "2루수": 72.0
       },
-      "games": 9,
+      "games": 8,
       "auto_position": "2루수",
       "manual_position": null,
       "effective_position": "2루수"
@@ -952,10 +948,10 @@
       "team": "NC",
       "innings_by_position": {
         "2루수": 9.0,
-        "1루수": 29.0,
+        "1루수": 20.0,
         "3루수": 8.0
       },
-      "games": 7,
+      "games": 6,
       "auto_position": "1루수",
       "manual_position": null,
       "effective_position": "1루수"
@@ -964,9 +960,9 @@
       "name": "블레인",
       "team": "NC",
       "innings_by_position": {
-        "1루수": 73.0
+        "1루수": 64.0
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "1루수",
       "manual_position": null,
       "effective_position": "1루수"
@@ -989,7 +985,7 @@
       "innings_by_position": {
         "우익수": 26.0
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "우익수",
       "manual_position": null,
       "effective_position": "우익수"
@@ -998,9 +994,9 @@
       "name": "이우성",
       "team": "NC",
       "innings_by_position": {
-        "좌익수": 62.0
+        "좌익수": 53.0
       },
-      "games": 8,
+      "games": 7,
       "auto_position": "좌익수",
       "manual_position": null,
       "effective_position": "좌익수"
@@ -1010,9 +1006,9 @@
       "team": "NC",
       "innings_by_position": {
         "중견수": 47.0,
-        "2루수": 18.0
+        "2루수": 9.0
       },
-      "games": 9,
+      "games": 8,
       "auto_position": "중견수",
       "manual_position": null,
       "effective_position": "중견수"
@@ -1021,10 +1017,10 @@
       "name": "김휘집",
       "team": "NC",
       "innings_by_position": {
-        "3루수": 81.5,
-        "유격수": 8.5
+        "3루수": 77.0,
+        "유격수": 4.0
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "3루수",
       "manual_position": null,
       "effective_position": "3루수"
@@ -1045,9 +1041,9 @@
       "name": "김형준",
       "team": "NC",
       "innings_by_position": {
-        "포수": 90.0
+        "포수": 81.0
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "포수",
       "manual_position": null,
       "effective_position": "포수"
@@ -1068,11 +1064,11 @@
       "name": "천재환",
       "team": "NC",
       "innings_by_position": {
-        "중견수": 53.5,
+        "중견수": 44.5,
         "우익수": 17.5,
         "좌익수": 10.0
       },
-      "games": 9,
+      "games": 8,
       "auto_position": "중견수",
       "manual_position": null,
       "effective_position": "중견수"
@@ -1085,7 +1081,7 @@
         "좌익수": 49.5,
         "중견수": 8.0
       },
-      "games": 11,
+      "games": 10,
       "auto_position": "좌익수",
       "manual_position": null,
       "effective_position": "좌익수"
@@ -1103,9 +1099,9 @@
       "name": "박상준",
       "team": "KIA",
       "innings_by_position": {
-        "1루수": 88.0
+        "1루수": 79.0
       },
-      "games": 11,
+      "games": 10,
       "auto_position": "1루수",
       "manual_position": null,
       "effective_position": "1루수"
@@ -1114,9 +1110,9 @@
       "name": "김도영",
       "team": "KIA",
       "innings_by_position": {
-        "3루수": 79.0
+        "3루수": 70.0
       },
-      "games": 11,
+      "games": 10,
       "auto_position": "3루수",
       "manual_position": null,
       "effective_position": "3루수"
@@ -1141,7 +1137,7 @@
         "좌익수": 43.0,
         "1루수": 9.0
       },
-      "games": 11,
+      "games": 10,
       "auto_position": "좌익수",
       "manual_position": null,
       "effective_position": "좌익수"
@@ -1150,10 +1146,10 @@
       "name": "박정우",
       "team": "KIA",
       "innings_by_position": {
-        "좌익수": 26.0,
+        "좌익수": 17.0,
         "우익수": 27.0
       },
-      "games": 7,
+      "games": 6,
       "auto_position": "우익수",
       "manual_position": null,
       "effective_position": "우익수"
@@ -1162,9 +1158,9 @@
       "name": "나성범",
       "team": "KIA",
       "innings_by_position": {
-        "우익수": 71.0
+        "우익수": 62.0
       },
-      "games": 11,
+      "games": 10,
       "auto_position": "우익수",
       "manual_position": null,
       "effective_position": "우익수"
@@ -1184,9 +1180,9 @@
       "name": "김선빈",
       "team": "KIA",
       "innings_by_position": {
-        "2루수": 53.0
+        "2루수": 44.0
       },
-      "games": 8,
+      "games": 7,
       "auto_position": "2루수",
       "manual_position": null,
       "effective_position": "2루수"
@@ -1207,9 +1203,9 @@
       "name": "정현창",
       "team": "KIA",
       "innings_by_position": {
-        "유격수": 79.0
+        "유격수": 70.0
       },
-      "games": 9,
+      "games": 8,
       "auto_position": "유격수",
       "manual_position": null,
       "effective_position": "유격수"
@@ -1218,9 +1214,9 @@
       "name": "한준수",
       "team": "KIA",
       "innings_by_position": {
-        "포수": 88.0
+        "포수": 79.0
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "포수",
       "manual_position": null,
       "effective_position": "포수"
@@ -1229,9 +1225,9 @@
       "name": "김호령",
       "team": "KIA",
       "innings_by_position": {
-        "중견수": 89.0
+        "중견수": 80.0
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "중견수",
       "manual_position": null,
       "effective_position": "중견수"
@@ -1241,9 +1237,9 @@
       "team": "KIA",
       "innings_by_position": {
         "중견수": 26.0,
-        "좌익수": 36.0
+        "좌익수": 27.0
       },
-      "games": 8,
+      "games": 7,
       "auto_position": "좌익수",
       "manual_position": null,
       "effective_position": "좌익수"
@@ -1261,9 +1257,9 @@
       "name": "김동헌",
       "team": "키움",
       "innings_by_position": {
-        "포수": 48.0
+        "포수": 37.0
       },
-      "games": 5,
+      "games": 4,
       "auto_position": "포수",
       "manual_position": null,
       "effective_position": "포수"
@@ -1272,10 +1268,10 @@
       "name": "권혁빈",
       "team": "키움",
       "innings_by_position": {
-        "유격수": 94.5,
+        "유격수": 83.5,
         "좌익수": 5.5
       },
-      "games": 11,
+      "games": 10,
       "auto_position": "유격수",
       "manual_position": null,
       "effective_position": "유격수"
@@ -1295,10 +1291,10 @@
       "name": "황성빈",
       "team": "롯데",
       "innings_by_position": {
-        "중견수": 66.2,
+        "중견수": 57.2,
         "좌익수": 13.2
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "중견수",
       "manual_position": null,
       "effective_position": "중견수"
@@ -1307,10 +1303,10 @@
       "name": "김동혁",
       "team": "롯데",
       "innings_by_position": {
-        "중견수": 48.8,
-        "우익수": 13.5
+        "중견수": 44.3,
+        "우익수": 9.0
       },
-      "games": 7,
+      "games": 6,
       "auto_position": "중견수",
       "manual_position": null,
       "effective_position": "중견수"
@@ -1319,10 +1315,10 @@
       "name": "고승민",
       "team": "롯데",
       "innings_by_position": {
-        "2루수": 79.7,
-        "1루수": 17.7
+        "2루수": 75.2,
+        "1루수": 13.2
       },
-      "games": 11,
+      "games": 10,
       "auto_position": "2루수",
       "manual_position": null,
       "effective_position": "2루수"
@@ -1331,10 +1327,10 @@
       "name": "한태양",
       "team": "롯데",
       "innings_by_position": {
-        "2루수": 35.3,
-        "3루수": 36.0
+        "2루수": 30.8,
+        "3루수": 31.5
       },
-      "games": 9,
+      "games": 8,
       "auto_position": "3루수",
       "manual_position": null,
       "effective_position": "3루수"
@@ -1343,10 +1339,10 @@
       "name": "레이예스",
       "team": "롯데",
       "innings_by_position": {
-        "좌익수": 83.8,
+        "좌익수": 74.8,
         "우익수": 13.5
       },
-      "games": 11,
+      "games": 10,
       "auto_position": "좌익수",
       "manual_position": null,
       "effective_position": "좌익수"
@@ -1357,7 +1353,7 @@
       "innings_by_position": {
         "3루수": 8.0
       },
-      "games": 11,
+      "games": 10,
       "auto_position": "3루수",
       "manual_position": null,
       "effective_position": "3루수"
@@ -1366,9 +1362,9 @@
       "name": "나승엽",
       "team": "롯데",
       "innings_by_position": {
-        "1루수": 97.3
+        "1루수": 88.3
       },
-      "games": 11,
+      "games": 10,
       "auto_position": "1루수",
       "manual_position": null,
       "effective_position": "1루수"
@@ -1377,10 +1373,10 @@
       "name": "윤동희",
       "team": "롯데",
       "innings_by_position": {
-        "우익수": 83.8,
+        "우익수": 74.8,
         "중견수": 13.5
       },
-      "games": 11,
+      "games": 10,
       "auto_position": "우익수",
       "manual_position": null,
       "effective_position": "우익수"
@@ -1391,7 +1387,7 @@
       "innings_by_position": {
         "3루수": 44.3
       },
-      "games": 9,
+      "games": 8,
       "auto_position": "3루수",
       "manual_position": null,
       "effective_position": "3루수"
@@ -1400,9 +1396,9 @@
       "name": "손성빈",
       "team": "롯데",
       "innings_by_position": {
-        "포수": 97.3
+        "포수": 88.3
       },
-      "games": 11,
+      "games": 10,
       "auto_position": "포수",
       "manual_position": null,
       "effective_position": "포수"
@@ -1425,9 +1421,9 @@
         "유격수": 9.0,
         "2루수": 13.2,
         "1루수": 4.2,
-        "3루수": 45.0
+        "3루수": 36.0
       },
-      "games": 9,
+      "games": 8,
       "auto_position": "3루수",
       "manual_position": null,
       "effective_position": "3루수"
@@ -1436,9 +1432,9 @@
       "name": "전민재",
       "team": "롯데",
       "innings_by_position": {
-        "유격수": 97.3
+        "유격수": 88.3
       },
-      "games": 11,
+      "games": 10,
       "auto_position": "유격수",
       "manual_position": null,
       "effective_position": "유격수"
@@ -1447,22 +1443,22 @@
       "name": "김현준",
       "team": "삼성",
       "innings_by_position": {
-        "중견수": 18.0,
+        "중견수": 9.0,
         "좌익수": 18.0
       },
-      "games": 8,
-      "auto_position": "중견수",
+      "games": 7,
+      "auto_position": "좌익수",
       "manual_position": null,
-      "effective_position": "중견수"
+      "effective_position": "좌익수"
     },
     "67449": {
       "name": "김성윤",
       "team": "삼성",
       "innings_by_position": {
-        "우익수": 94.5,
+        "우익수": 85.5,
         "중견수": 4.5
       },
-      "games": 11,
+      "games": 10,
       "auto_position": "우익수",
       "manual_position": null,
       "effective_position": "우익수"
@@ -1471,9 +1467,9 @@
       "name": "구자욱",
       "team": "삼성",
       "innings_by_position": {
-        "좌익수": 90.0
+        "좌익수": 81.0
       },
-      "games": 11,
+      "games": 10,
       "auto_position": "좌익수",
       "manual_position": null,
       "effective_position": "좌익수"
@@ -1482,7 +1478,7 @@
       "name": "최형우",
       "team": "삼성",
       "innings_by_position": {},
-      "games": 10,
+      "games": 9,
       "auto_position": "지명타자",
       "manual_position": null,
       "effective_position": "지명타자"
@@ -1491,10 +1487,9 @@
       "name": "김영웅",
       "team": "삼성",
       "innings_by_position": {
-        "3루수": 72.0,
-        "유격수": 9.0
+        "3루수": 72.0
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "3루수",
       "manual_position": null,
       "effective_position": "3루수"
@@ -1514,9 +1509,9 @@
       "name": "디아즈",
       "team": "삼성",
       "innings_by_position": {
-        "1루수": 99.0
+        "1루수": 90.0
       },
-      "games": 11,
+      "games": 10,
       "auto_position": "1루수",
       "manual_position": null,
       "effective_position": "1루수"
@@ -1525,10 +1520,10 @@
       "name": "전병우",
       "team": "삼성",
       "innings_by_position": {
-        "3루수": 27.0,
+        "3루수": 18.0,
         "1루수": 18.0
       },
-      "games": 7,
+      "games": 6,
       "auto_position": "3루수",
       "manual_position": null,
       "effective_position": "3루수"
@@ -1537,9 +1532,9 @@
       "name": "김도환",
       "team": "삼성",
       "innings_by_position": {
-        "포수": 72.0
+        "포수": 63.0
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "포수",
       "manual_position": null,
       "effective_position": "포수"
@@ -1548,9 +1543,9 @@
       "name": "강민호",
       "team": "삼성",
       "innings_by_position": {
-        "포수": 73.0
+        "포수": 64.0
       },
-      "games": 9,
+      "games": 8,
       "auto_position": "포수",
       "manual_position": null,
       "effective_position": "포수"
@@ -1559,9 +1554,9 @@
       "name": "장승현",
       "team": "삼성",
       "innings_by_position": {
-        "포수": 91.0
+        "포수": 82.0
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "포수",
       "manual_position": null,
       "effective_position": "포수"
@@ -1571,9 +1566,9 @@
       "team": "삼성",
       "innings_by_position": {
         "2루수": 31.5,
-        "유격수": 30.5
+        "유격수": 21.5
       },
-      "games": 11,
+      "games": 10,
       "auto_position": "2루수",
       "manual_position": null,
       "effective_position": "2루수"
@@ -1582,9 +1577,9 @@
       "name": "류지혁",
       "team": "삼성",
       "innings_by_position": {
-        "2루수": 99.0
+        "2루수": 90.0
       },
-      "games": 11,
+      "games": 10,
       "auto_position": "2루수",
       "manual_position": null,
       "effective_position": "2루수"
@@ -1606,7 +1601,7 @@
       "innings_by_position": {
         "중견수": 81.0
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "중견수",
       "manual_position": null,
       "effective_position": "중견수"
@@ -1618,7 +1613,7 @@
         "우익수": 9.0,
         "좌익수": 46.0
       },
-      "games": 8,
+      "games": 7,
       "auto_position": "좌익수",
       "manual_position": null,
       "effective_position": "좌익수"
@@ -1628,9 +1623,9 @@
       "team": "삼성",
       "innings_by_position": {
         "2루수": 22.5,
-        "유격수": 22.5
+        "유격수": 13.5
       },
-      "games": 6,
+      "games": 5,
       "auto_position": "2루수",
       "manual_position": null,
       "effective_position": "2루수"
@@ -1650,7 +1645,7 @@
       "innings_by_position": {
         "좌익수": 9.0
       },
-      "games": 6,
+      "games": 5,
       "auto_position": "좌익수",
       "manual_position": null,
       "effective_position": "좌익수"
@@ -1672,9 +1667,9 @@
       "innings_by_position": {
         "3루수": 13.5,
         "1루수": 4.5,
-        "2루수": 26.0
+        "2루수": 17.0
       },
-      "games": 6,
+      "games": 5,
       "auto_position": "2루수",
       "manual_position": null,
       "effective_position": "2루수"
@@ -1683,9 +1678,9 @@
       "name": "김태연",
       "team": "한화",
       "innings_by_position": {
-        "1루수": 91.0
+        "1루수": 80.0
       },
-      "games": 10,
+      "games": 9,
       "auto_position": "1루수",
       "manual_position": null,
       "effective_position": "1루수"
@@ -1694,9 +1689,9 @@
       "name": "최재훈",
       "team": "한화",
       "innings_by_position": {
-        "포수": 29.0
+        "포수": 18.0
       },
-      "games": 3,
+      "games": 2,
       "auto_position": "포수",
       "manual_position": null,
       "effective_position": "포수"
@@ -1705,9 +1700,9 @@
       "name": "장규현",
       "team": "한화",
       "innings_by_position": {
-        "포수": 29.0
+        "포수": 18.0
       },
-      "games": 5,
+      "games": 4,
       "auto_position": "포수",
       "manual_position": null,
       "effective_position": "포수"
@@ -1716,7 +1711,7 @@
       "name": "김원중",
       "team": "롯데",
       "innings_by_position": {},
-      "games": 2,
+      "games": 1,
       "auto_position": "지명타자",
       "manual_position": null,
       "effective_position": "지명타자"
@@ -1725,13 +1720,13 @@
       "name": "김세민",
       "team": "롯데",
       "innings_by_position": {
-        "3루수": 27.0,
+        "3루수": 18.0,
         "유격수": 27.0
       },
-      "games": 7,
-      "auto_position": "3루수",
+      "games": 6,
+      "auto_position": "유격수",
       "manual_position": null,
-      "effective_position": "3루수"
+      "effective_position": "유격수"
     },
     "66291": {
       "name": "이영하",
@@ -1777,9 +1772,9 @@
       "name": "박동원",
       "team": "LG",
       "innings_by_position": {
-        "포수": 79.0
+        "포수": 70.0
       },
-      "games": 9,
+      "games": 8,
       "auto_position": "포수",
       "manual_position": null,
       "effective_position": "포수"
@@ -1801,7 +1796,7 @@
       "innings_by_position": {
         "1루수": 18.0
       },
-      "games": 6,
+      "games": 5,
       "auto_position": "1루수",
       "manual_position": null,
       "effective_position": "1루수"
@@ -1810,10 +1805,9 @@
       "name": "이재원",
       "team": "LG",
       "innings_by_position": {
-        "좌익수": 26.0,
-        "우익수": 9.0
+        "좌익수": 26.0
       },
-      "games": 5,
+      "games": 4,
       "auto_position": "좌익수",
       "manual_position": null,
       "effective_position": "좌익수"
@@ -1844,11 +1838,11 @@
       "name": "김규성",
       "team": "KIA",
       "innings_by_position": {
-        "유격수": 39.5,
+        "유격수": 35.0,
         "1루수": 4.5,
-        "2루수": 18.0
+        "2루수": 13.5
       },
-      "games": 7,
+      "games": 6,
       "auto_position": "유격수",
       "manual_position": null,
       "effective_position": "유격수"
@@ -1880,7 +1874,7 @@
       "name": "장성우",
       "team": "KT",
       "innings_by_position": {},
-      "games": 5,
+      "games": 4,
       "auto_position": "지명타자",
       "manual_position": null,
       "effective_position": "지명타자"
@@ -1922,9 +1916,9 @@
       "name": "황영묵",
       "team": "한화",
       "innings_by_position": {
-        "2루수": 38.0
+        "2루수": 27.0
       },
-      "games": 5,
+      "games": 4,
       "auto_position": "2루수",
       "manual_position": null,
       "effective_position": "2루수"
@@ -1944,7 +1938,7 @@
       "innings_by_position": {
         "1루수": 17.0
       },
-      "games": 4,
+      "games": 3,
       "auto_position": "1루수",
       "manual_position": null,
       "effective_position": "1루수"
@@ -1964,10 +1958,10 @@
       "name": "오재원",
       "team": "한화",
       "innings_by_position": {
-        "좌익수": 46.0,
+        "좌익수": 35.0,
         "중견수": 9.0
       },
-      "games": 6,
+      "games": 5,
       "auto_position": "좌익수",
       "manual_position": null,
       "effective_position": "좌익수"
@@ -1977,9 +1971,9 @@
       "team": "NC",
       "innings_by_position": {
         "중견수": 8.0,
-        "좌익수": 18.0
+        "좌익수": 9.0
       },
-      "games": 3,
+      "games": 2,
       "auto_position": "좌익수",
       "manual_position": null,
       "effective_position": "좌익수"
@@ -1988,10 +1982,10 @@
       "name": "박시원",
       "team": "NC",
       "innings_by_position": {
-        "우익수": 22.5,
+        "우익수": 13.5,
         "좌익수": 4.5
       },
-      "games": 4,
+      "games": 3,
       "auto_position": "우익수",
       "manual_position": null,
       "effective_position": "우익수"
@@ -2000,9 +1994,9 @@
       "name": "김기연",
       "team": "두산",
       "innings_by_position": {
-        "포수": 18.0
+        "포수": 9.0
       },
-      "games": 2,
+      "games": 1,
       "auto_position": "포수",
       "manual_position": null,
       "effective_position": "포수"
@@ -2011,9 +2005,9 @@
       "name": "홍성호",
       "team": "두산",
       "innings_by_position": {
-        "1루수": 18.0
+        "1루수": 9.0
       },
-      "games": 3,
+      "games": 2,
       "auto_position": "1루수",
       "manual_position": null,
       "effective_position": "1루수"
@@ -2034,9 +2028,9 @@
       "team": "KIA",
       "innings_by_position": {
         "3루수": 18.0,
-        "1루수": 18.0
+        "1루수": 9.0
       },
-      "games": 4,
+      "games": 3,
       "auto_position": "3루수",
       "manual_position": null,
       "effective_position": "3루수"
@@ -2047,7 +2041,7 @@
       "innings_by_position": {
         "3루수": 9.0
       },
-      "games": 3,
+      "games": 2,
       "auto_position": "3루수",
       "manual_position": null,
       "effective_position": "3루수"
@@ -2096,7 +2090,7 @@
       "innings_by_position": {
         "좌익수": 20.0
       },
-      "games": 4,
+      "games": 3,
       "auto_position": "좌익수",
       "manual_position": null,
       "effective_position": "좌익수"
@@ -2105,9 +2099,9 @@
       "name": "최재영",
       "team": "키움",
       "innings_by_position": {
-        "유격수": 22.0
+        "유격수": 11.0
       },
-      "games": 3,
+      "games": 2,
       "auto_position": "유격수",
       "manual_position": null,
       "effective_position": "유격수"
@@ -2127,10 +2121,9 @@
       "name": "손호영",
       "team": "롯데",
       "innings_by_position": {
-        "우익수": 9.0,
-        "중견수": 9.0
+        "우익수": 9.0
       },
-      "games": 2,
+      "games": 1,
       "auto_position": "우익수",
       "manual_position": null,
       "effective_position": "우익수"
@@ -2139,72 +2132,10 @@
       "name": "류효승",
       "team": "SSG",
       "innings_by_position": {},
-      "games": 2,
-      "auto_position": "지명타자",
-      "manual_position": null,
-      "effective_position": "지명타자"
-    },
-    "51868": {
-      "name": "고명준",
-      "team": "SSG",
-      "innings_by_position": {
-        "3루수": 9.0
-      },
-      "games": 1,
-      "auto_position": "3루수",
-      "manual_position": null,
-      "effective_position": "3루수"
-    },
-    "55631": {
-      "name": "엄준현",
-      "team": "KIA",
-      "innings_by_position": {},
       "games": 1,
       "auto_position": "지명타자",
       "manual_position": null,
       "effective_position": "지명타자"
-    },
-    "50054": {
-      "name": "천성호",
-      "team": "LG",
-      "innings_by_position": {
-        "1루수": 9.0
-      },
-      "games": 1,
-      "auto_position": "1루수",
-      "manual_position": null,
-      "effective_position": "1루수"
-    },
-    "69508": {
-      "name": "신윤후",
-      "team": "롯데",
-      "innings_by_position": {
-        "우익수": 9.0
-      },
-      "games": 1,
-      "auto_position": "우익수",
-      "manual_position": null,
-      "effective_position": "우익수"
-    },
-    "56708": {
-      "name": "이도훈",
-      "team": "한화",
-      "innings_by_position": {},
-      "games": 1,
-      "auto_position": "지명타자",
-      "manual_position": null,
-      "effective_position": "지명타자"
-    },
-    "64340": {
-      "name": "임지열",
-      "team": "키움",
-      "innings_by_position": {
-        "좌익수": 11.0
-      },
-      "games": 1,
-      "auto_position": "좌익수",
-      "manual_position": null,
-      "effective_position": "좌익수"
     }
   }
 }
