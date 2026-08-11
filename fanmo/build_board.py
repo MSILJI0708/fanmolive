@@ -55,7 +55,7 @@ last_update = datetime.now(timezone(timedelta(hours=9))).strftime("%m월 %d일 %
 payload = json.dumps(active_payload, ensure_ascii=False)
 date_index_payload = json.dumps(date_index, ensure_ascii=False)
 
-html_doc = """<!doctype html>
+html_doc = r"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>KBO 판타지 LP 보드 · __DATE__</title>
@@ -501,6 +501,57 @@ tbody tr.clickable:hover { background: var(--chip-bg); }
 .modal-view-toggle .expand-controls button:hover { color: var(--ink-0); }
 
 .modal-empty { color: var(--ink-1); font-size: 13px; padding: 10px 0; }
+
+.modal-history-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.modal-history-controls label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-0);
+  cursor: pointer;
+}
+.modal-history-controls input {
+  width: 14px;
+  height: 14px;
+  accent-color: var(--accent);
+}
+.modal-history-note {
+  color: var(--ink-1);
+  font-size: 12px;
+  margin-left: auto;
+  min-width: 220px;
+}
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+.history-row {
+  display: grid;
+  grid-template-columns: 100px minmax(96px, 1fr) 80px;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--chip-bg);
+}
+.history-row:last-child { border-bottom: none; }
+.history-row-meta { display: flex; gap: 10px; align-items: center; font-size: 13px; color: var(--ink-1); }
+.history-date { min-width: 100px; font-weight: 700; color: var(--ink-0); }
+.history-pos { min-width: 96px; }
+.history-value { text-align: right; min-width: 80px; font-variant-numeric: tabular-nums; font-weight: 700; }
+.history-bar { position: relative; height: 18px; border-radius: 999px; background: var(--chip-bg); overflow: hidden; }
+.history-bar-inner { height: 100%; border-radius: 999px; }
+.history-bar-inner.positive { background: var(--hot); }
+.history-bar-inner.negative { background: var(--cool); }
+.history-bar-label { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-size: 11px; color: #fff; font-weight: 700; text-shadow: 0 1px 2px rgba(0,0,0,.4); }
 
 /* 카테고리 보기 (아코디언) */
 .cat-group {
@@ -1825,7 +1876,8 @@ modalCollapseAllBtn.addEventListener('click', () => {
 });
 
 let currentModalRow = null;
-let currentModalView = 'category'; // 'category' | 'timeline'
+let currentModalView = 'category'; // 'category' | 'timeline' | 'history'
+let historyViewMode = { relative: false, cost: false };
 
 function renderTimelineView(row) {
   modalBody.innerHTML = '';
@@ -2002,6 +2054,36 @@ function renderHistoryView(row) {
   title.textContent = '월별 LP 히스토리';
   modalBody.appendChild(title);
 
+  const controlRow = document.createElement('div');
+  controlRow.className = 'modal-history-controls';
+  const relativeLabel = document.createElement('label');
+  const relativeToggle = document.createElement('input');
+  relativeToggle.type = 'checkbox';
+  relativeToggle.checked = historyViewMode.relative;
+  relativeToggle.addEventListener('change', () => {
+    historyViewMode.relative = relativeToggle.checked;
+    renderHistoryView(row);
+  });
+  relativeLabel.appendChild(relativeToggle);
+  relativeLabel.appendChild(document.createTextNode('상대평가'));
+
+  const costLabel = document.createElement('label');
+  const costToggle = document.createElement('input');
+  costToggle.type = 'checkbox';
+  costToggle.checked = historyViewMode.cost;
+  costToggle.addEventListener('change', () => {
+    historyViewMode.cost = costToggle.checked;
+    renderHistoryView(row);
+  });
+  costLabel.appendChild(costToggle);
+  costLabel.appendChild(document.createTextNode('코스트당 LP'));
+
+  const note = document.createElement('div');
+  note.className = 'modal-history-note';
+  note.textContent = '토글을 켜면 그래프가 해당 수치로 전환됩니다.';
+  controlRow.append(relativeLabel, costLabel, note);
+  modalBody.appendChild(controlRow);
+
   const historyContainer = document.createElement('div');
   historyContainer.className = 'modal-history-body';
   const loading = document.createElement('div');
@@ -2014,6 +2096,49 @@ function renderHistoryView(row) {
   if (availableDates.length === 0) {
     loading.textContent = '이 달에는 데이터가 없습니다.';
     return;
+  }
+
+  function normalizePos(pos) {
+    if (!pos) return '';
+    return pos.toString().trim().replace(/\//g, '').replace(/\s+/g, '').toUpperCase();
+  }
+  function isOutfield(pos) {
+    const p = normalizePos(pos);
+    return ['LF','CF','RF','외야수','좌익수','중견수','우익수'].includes(p);
+  }
+  function getCategory(player) {
+    if (player.role === '선발') return 'starter';
+    if (player.role === '구원') return 'reliever';
+    const pos = normalizePos(player.fanmo_position || player.position);
+    if (pos.includes('지명')) return 'DH';
+    if (isOutfield(pos)) return 'outfield';
+    return 'position';
+  }
+  function getThreshold(player, data) {
+    const category = getCategory(player);
+    const allPlayers = [...(data.batters || []), ...(data.pitchers || [])];
+    const normalizedPos = normalizePos(player.fanmo_position || player.position);
+    const cmp = (a, b) => (b.lp || 0) - (a.lp || 0);
+    let candidates = [];
+    let rank = 2;
+    if (category === 'starter') {
+      candidates = (data.pitchers || []).filter(p => p.role === '선발');
+      rank = 3;
+    } else if (category === 'reliever') {
+      candidates = (data.pitchers || []).filter(p => p.role === '구원');
+      rank = 5;
+    } else if (category === 'outfield') {
+      candidates = allPlayers.filter(p => isOutfield(normalizePos(p.fanmo_position || p.position)));
+      rank = 5;
+    } else if (category === 'DH') {
+      candidates = data.batters || [];
+      rank = 5;
+    } else {
+      candidates = allPlayers.filter(p => normalizePos(p.fanmo_position || p.position) === normalizedPos);
+      rank = 2;
+    }
+    candidates.sort(cmp);
+    return candidates.length >= rank ? (candidates[rank - 1].lp || 0) : 0;
   }
 
   const rows = [];
@@ -2033,7 +2158,20 @@ function renderHistoryView(row) {
       const allPlayers = [...(data.batters || []), ...(data.pitchers || [])];
       const matched = allPlayers.find(p => `${p.name}||${p.team}` === playerKey);
       if (matched) {
-        rows.push({ date: dateStr, lp: matched.lp, position: matched.fanmo_position || matched.position || '-', status: matched.status || '' });
+        const threshold = getThreshold(matched, data);
+        const relativeValue = (matched.lp || 0) - threshold;
+        const costValue = matched.fanmo_cost ? (matched.lp || 0) / matched.fanmo_cost : null;
+        rows.push({
+          date: dateStr,
+          lp: matched.lp || 0,
+          position: matched.fanmo_position || matched.position || '-',
+          role: matched.role || '',
+          cost: matched.fanmo_cost || null,
+          threshold,
+          relativeValue,
+          costValue,
+          category: getCategory(matched),
+        });
       }
     });
     historyContainer.innerHTML = '';
@@ -2045,19 +2183,81 @@ function renderHistoryView(row) {
       return;
     }
 
-    const table = document.createElement('table');
-    table.className = 'history-table';
-    const thead = document.createElement('thead');
-    thead.innerHTML = '<tr><th>일자</th><th>포지션</th><th>LP</th></tr>';
-    table.appendChild(thead);
-    const tbody = document.createElement('tbody');
-    rows.sort((a, b) => a.date.localeCompare(b.date)).forEach(entry => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${entry.date}</td><td>${entry.position}</td><td class="num ${entry.lp > 0 ? 'hot' : entry.lp < 0 ? 'cool' : ''}">${entry.lp > 0 ? '+' : ''}${entry.lp}</td>`;
-      tbody.appendChild(tr);
+    const displayValues = rows.map(entry => {
+      if (historyViewMode.relative && historyViewMode.cost && entry.cost) {
+        return entry.relativeValue / entry.cost;
+      }
+      if (historyViewMode.relative) return entry.relativeValue;
+      if (historyViewMode.cost) return entry.costValue ?? entry.lp;
+      return entry.lp;
     });
-    table.appendChild(tbody);
-    historyContainer.appendChild(table);
+    const maxBar = Math.max(1, ...displayValues.map(v => Math.abs(v)));
+
+    const noteText = historyViewMode.relative && historyViewMode.cost
+      ? '비용 대비 상대평가 LP를 표시합니다.'
+      : historyViewMode.relative
+        ? '포지션별 기준 LP 대비 차이를 표시합니다.'
+        : historyViewMode.cost
+          ? '코스트당 LP로 표시합니다.'
+          : '기본 LP를 표시합니다.';
+    note.textContent = noteText;
+
+    rows.sort((a, b) => a.date.localeCompare(b.date)).forEach(entry => {
+      const entryValue = historyViewMode.relative && historyViewMode.cost && entry.cost
+        ? entry.relativeValue / entry.cost
+        : historyViewMode.relative
+          ? entry.relativeValue
+          : historyViewMode.cost
+            ? entry.costValue ?? entry.lp
+            : entry.lp;
+      const relativeText = entry.relativeValue >= 0 ? `+${entry.relativeValue}` : `${entry.relativeValue}`;
+      const costText = entry.cost ? `${entry.costValue.toFixed(1)}/코스트` : '비용 없음';
+      const rateText = entry.cost ? `${(entry.relativeValue / entry.cost).toFixed(1)}` : '-';
+      const displayText = historyViewMode.relative && historyViewMode.cost
+        ? `vs ${entry.threshold}${relativeText} · ${costText}`
+        : historyViewMode.relative
+          ? `vs ${entry.threshold}${relativeText}`
+          : historyViewMode.cost
+            ? entry.cost ? `${entry.costValue.toFixed(1)} / ${entry.cost}` : '비용 없음'
+            : `${entry.lp > 0 ? '+' : ''}${entry.lp}`;
+
+      const rowEl = document.createElement('div');
+      rowEl.className = 'history-row';
+      if (entryValue < 0) rowEl.classList.add('negative');
+
+      const meta = document.createElement('div');
+      meta.className = 'history-row-meta';
+      const dateEl = document.createElement('span');
+      dateEl.className = 'history-date';
+      dateEl.textContent = entry.date;
+      const posEl = document.createElement('span');
+      posEl.className = 'history-pos';
+      posEl.textContent = entry.position;
+      const valueEl = document.createElement('span');
+      valueEl.className = 'history-value';
+      valueEl.textContent = displayText;
+      meta.append(dateEl, posEl, valueEl);
+
+      const bar = document.createElement('div');
+      bar.className = 'history-bar';
+      const barInner = document.createElement('div');
+      barInner.className = 'history-bar-inner ' + (entryValue >= 0 ? 'positive' : 'negative');
+      barInner.style.width = Math.min(100, Math.abs(entryValue) / maxBar * 100) + '%';
+      const barLabel = document.createElement('span');
+      barLabel.className = 'history-bar-label';
+      barLabel.textContent = historyViewMode.relative && historyViewMode.cost
+        ? rateText
+        : historyViewMode.relative
+          ? relativeText
+          : historyViewMode.cost
+            ? entry.cost ? `${entry.costValue.toFixed(1)}` : '-'
+            : `${entry.lp > 0 ? '+' : ''}${entry.lp}`;
+      barInner.appendChild(barLabel);
+      bar.appendChild(barInner);
+
+      rowEl.append(meta, bar);
+      historyContainer.appendChild(rowEl);
+    });
   });
 }
 
