@@ -482,19 +482,19 @@ tbody tr.clickable:hover { background: var(--chip-bg); }
   grid-template-columns: 100px minmax(96px, 1fr) 80px;
   align-items: center;
   gap: 10px;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--chip-bg);
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 .history-row:last-child { border-bottom: none; }
 .history-row-meta { display: flex; gap: 10px; align-items: center; font-size: 13px; color: var(--ink-1); }
 .history-date { min-width: 100px; font-weight: 700; color: var(--ink-0); }
 .history-pos { min-width: 96px; }
 .history-value { text-align: right; min-width: 80px; font-variant-numeric: tabular-nums; font-weight: 700; }
-.history-bar { position: relative; height: 18px; border-radius: 999px; background: var(--chip-bg); overflow: hidden; }
-.history-bar-inner { height: 100%; border-radius: 999px; }
-.history-bar-inner.positive { background: var(--hot); }
-.history-bar-inner.negative { background: var(--cool); }
-.history-bar-label { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-size: 11px; color: #fff; font-weight: 700; text-shadow: 0 1px 2px rgba(0,0,0,.4); }
+.history-bar { position: relative; height: 28px; border-radius: 999px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); overflow: hidden; }
+.history-bar-inner { height: 100%; border-radius: 999px; min-width: 18px; transition: width 180ms ease; box-shadow: inset 0 1px 0 rgba(255,255,255,.18); background-color: rgba(255, 0, 0, 0.85) !important; }
+.history-bar-inner.positive { background: linear-gradient(90deg, var(--hot) 0%, #ec6b67 100%) !important; }
+.history-bar-inner.negative { background: linear-gradient(90deg, var(--cool) 0%, #5f82c4 100%) !important; }
+.history-bar-label { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 12px; letter-spacing: .02em; color: #fff; font-weight: 700; text-shadow: 0 1px 2px rgba(0,0,0,.4); }
 
 /* 카테고리 보기 (아코디언) */
 .cat-group {
@@ -705,6 +705,8 @@ footer.notes b { color: var(--ink-0); }
   .cat-item { font-size: 14.5px; padding: 9px 4px; }
   .cat-item .cat-item-count { font-size: 12.5px; }
   .date-picker-btn { font-size: 14.5px; padding: 6px 12px; }
+  .force-refresh-btn { font-size: 14px; padding: 6px 10px; margin-left: 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper-2); color: var(--ink-0); cursor: pointer; transition: background 120ms ease, border-color 120ms ease; }
+  .force-refresh-btn:hover { border-color: var(--accent); background: var(--paper-1); }
   .theme-toggle { width: 44px; height: 44px; font-size: 20px; }
 }
 </style>
@@ -733,6 +735,7 @@ footer.notes b { color: var(--ink-0); }
       <button type="button" class="date-picker-btn" id="date-picker-btn">
         <span id="dp-btn-label">2026-08-11</span> <span aria-hidden="true">▾</span>
       </button>
+      <button type="button" class="force-refresh-btn" id="force-refresh-btn" title="강제 로드">강제 로드</button>
       <div class="date-picker-backdrop" id="date-picker-backdrop"></div>
       <div class="date-picker-pop" id="date-picker-pop">
         <div class="dp-selects">
@@ -1588,6 +1591,7 @@ if (savedPrefs.chapter === 'pitchers') activateChapter('pitchers');
 // --- 기준일 선택(달력 클릭 + 년/월/일 드롭다운) ---
 const dpBtn = document.getElementById('date-picker-btn');
 const dpBtnLabel = document.getElementById('dp-btn-label');
+const forceRefreshBtn = document.getElementById('force-refresh-btn');
 const dpPop = document.getElementById('date-picker-pop');
 const dpBackdrop = document.getElementById('date-picker-backdrop');
 
@@ -1617,6 +1621,12 @@ const dpPrev = document.getElementById('dp-prev');
 const dpNext = document.getElementById('dp-next');
 const dpTitle = document.getElementById('dp-title');
 const dpGrid = document.getElementById('dp-grid');
+
+forceRefreshBtn.addEventListener('click', () => {
+  const url = new URL(window.location.href);
+  url.searchParams.set('_', Date.now().toString());
+  window.location.replace(url.toString());
+});
 
 const YEARS = [...new Set(AVAILABLE_DATES.map(d => d.slice(0, 4)))].sort();
 YEARS.forEach(y => {
@@ -2185,7 +2195,8 @@ function renderHistoryView(row) {
       bar.className = 'history-bar';
       const barInner = document.createElement('div');
       barInner.className = 'history-bar-inner ' + (entryValue >= 0 ? 'positive' : 'negative');
-      barInner.style.width = Math.min(100, Math.abs(entryValue) / maxBar * 100) + '%';
+      const barPct = Math.min(100, Math.max(1, Math.abs(entryValue) / maxBar * 100));
+      barInner.style.width = barPct + '%';
       const barLabel = document.createElement('span');
       barLabel.className = 'history-bar-label';
       barLabel.textContent = historyViewMode.relative && historyViewMode.cost
