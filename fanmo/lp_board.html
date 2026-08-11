@@ -699,6 +699,7 @@ footer.notes b { color: var(--ink-0); }
     </span>
     · 데이터 출처 <code>api-gw.sports.naver.com</code> (Selenium 불필요, 공개 JSON 응답 직접 호출)
     · <a href="mlb.html">MLB 실험판 보기 →</a>
+<<<<<<< HEAD
     · 마지막 업데이트 08월 12일 00:24 (KST)
   </p>
 </header>
@@ -789,6 +790,7 @@ footer.notes b { color: var(--ink-0); }
       <div class="tabs">
         <button id="modal-view-category" class="active">카테고리 보기</button>
         <button id="modal-view-timeline">타임라인 보기</button>
+        <button id="modal-view-history">히스토리 보기</button>
       </div>
       <div class="expand-controls">
         <button id="modal-expand-all">전체 펼치기 [+]</button>
@@ -1130,7 +1132,7 @@ function makeRowCells(row, cols, i) {
       td.appendChild(span);
     } else if (col.key === 'position') {
       td.className = 'left posbadge';
-      td.textContent = row.position || '-';
+      td.textContent = row.fanmo_position || row.position || '-';
       if (row.position_override) {
         const s = document.createElement('span');
         s.className = 'override';
@@ -1754,6 +1756,7 @@ const modalLp = document.getElementById('modal-lp');
 const modalBody = document.getElementById('modal-body');
 const modalViewCategoryBtn = document.getElementById('modal-view-category');
 const modalViewTimelineBtn = document.getElementById('modal-view-timeline');
+const modalViewHistoryBtn = document.getElementById('modal-view-history');
 const modalExpandAllBtn = document.getElementById('modal-expand-all');
 const modalCollapseAllBtn = document.getElementById('modal-collapse-all');
 // 카테고리 보기/타임라인 보기 둘 다 같은 .cat-group 아코디언 구조를 쓰기 때문에,
@@ -1936,9 +1939,76 @@ function renderCategoryView(row) {
   });
 }
 
+function renderHistoryView(row) {
+  modalBody.innerHTML = '';
+  const title = document.createElement('div');
+  title.className = 'modal-history-title';
+  title.textContent = '월별 LP 히스토리';
+  modalBody.appendChild(title);
+
+  const historyContainer = document.createElement('div');
+  historyContainer.className = 'modal-history-body';
+  const loading = document.createElement('div');
+  loading.className = 'modal-empty';
+  loading.textContent = '히스토리를 불러오는 중입니다...';
+  historyContainer.appendChild(loading);
+  modalBody.appendChild(historyContainer);
+
+  const availableDates = AVAILABLE_DATES.filter(d => d.slice(0, 7) === activeDate.slice(0, 7));
+  if (availableDates.length === 0) {
+    loading.textContent = '이 달에는 데이터가 없습니다.';
+    return;
+  }
+
+  const rows = [];
+  const fetches = availableDates.map(dateStr => {
+    if (ALL_DATA[dateStr]) {
+      return Promise.resolve({ dateStr, data: ALL_DATA[dateStr] });
+    }
+    return fetch(dateToFile(dateStr))
+      .then(resp => resp.json())
+      .then(json => ({ dateStr, data: { batters: json.batters || [], pitchers: json.pitchers || [] } }))
+      .catch(() => ({ dateStr, data: { batters: [], pitchers: [] } }));
+  });
+
+  Promise.all(fetches).then(results => {
+    const playerKey = `${row.name}||${row.team}`;
+    results.forEach(({ dateStr, data }) => {
+      const allPlayers = [...(data.batters || []), ...(data.pitchers || [])];
+      const matched = allPlayers.find(p => `${p.name}||${p.team}` === playerKey);
+      if (matched) {
+        rows.push({ date: dateStr, lp: matched.lp, position: matched.fanmo_position || matched.position || '-', status: matched.status || '' });
+      }
+    });
+    historyContainer.innerHTML = '';
+    if (rows.length === 0) {
+      const empty = document.createElement('div');
+      empty.className = 'modal-empty';
+      empty.textContent = '이 선수에 대한 이번 달 히스토리가 없습니다.';
+      historyContainer.appendChild(empty);
+      return;
+    }
+
+    const table = document.createElement('table');
+    table.className = 'history-table';
+    const thead = document.createElement('thead');
+    thead.innerHTML = '<tr><th>일자</th><th>포지션</th><th>LP</th></tr>';
+    table.appendChild(thead);
+    const tbody = document.createElement('tbody');
+    rows.sort((a, b) => a.date.localeCompare(b.date)).forEach(entry => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${entry.date}</td><td>${entry.position}</td><td class="num ${entry.lp > 0 ? 'hot' : entry.lp < 0 ? 'cool' : ''}">${entry.lp > 0 ? '+' : ''}${entry.lp}</td>`;
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    historyContainer.appendChild(table);
+  });
+}
+
 function renderModalBody() {
   if (!currentModalRow) return;
   if (currentModalView === 'timeline') renderTimelineView(currentModalRow);
+  else if (currentModalView === 'history') renderHistoryView(currentModalRow);
   else renderCategoryView(currentModalRow);
 }
 
@@ -1946,19 +2016,28 @@ modalViewCategoryBtn.addEventListener('click', () => {
   currentModalView = 'category';
   modalViewCategoryBtn.classList.add('active');
   modalViewTimelineBtn.classList.remove('active');
+  modalViewHistoryBtn.classList.remove('active');
   renderModalBody();
 });
 modalViewTimelineBtn.addEventListener('click', () => {
   currentModalView = 'timeline';
   modalViewTimelineBtn.classList.add('active');
   modalViewCategoryBtn.classList.remove('active');
+  modalViewHistoryBtn.classList.remove('active');
+  renderModalBody();
+});
+modalViewHistoryBtn.addEventListener('click', () => {
+  currentModalView = 'history';
+  modalViewHistoryBtn.classList.add('active');
+  modalViewCategoryBtn.classList.remove('active');
+  modalViewTimelineBtn.classList.remove('active');
   renderModalBody();
 });
 
 function openPlayerModal(row) {
   currentModalRow = row;
   modalName.textContent = row.name;
-  const posOrRole = row.position ? row.position : (row.role || '');
+  const posOrRole = row.fanmo_position || row.position || row.role || '';
   const vsOpponent = row.opponent ? ('vs ' + row.opponent) : '';
   modalMeta.textContent = [posOrRole, row.team, vsOpponent, row.date].filter(Boolean).join(' · ');
   modalLp.textContent = row.lp + ' LP';
