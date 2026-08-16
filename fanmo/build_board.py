@@ -421,6 +421,56 @@ section.board.active { display: block; }
 .rule-bar input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--accent); cursor: pointer; }
 .rule-bar .rule-note { color: var(--ink-1); font-size: 11px; margin-left: auto; }
 
+.optimizer-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 14px;
+  padding: 10px 14px;
+  background: var(--chip-bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 12.5px;
+}
+.optimizer-budget-label { display: flex; align-items: center; gap: 8px; font-weight: 700; white-space: nowrap; }
+.optimizer-budget-label input {
+  font: inherit;
+  font-size: 13px;
+  width: 72px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--paper-1);
+  color: var(--ink-0);
+}
+.optimizer-note { color: var(--ink-1); font-size: 11px; line-height: 1.5; }
+.optimizer-summary { font-size: 14.5px; margin-bottom: 12px; }
+.optimizer-summary b { color: var(--accent); font-size: 16px; }
+.optimizer-list { display: flex; flex-direction: column; gap: 6px; }
+.optimizer-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper-1);
+  cursor: pointer;
+}
+.optimizer-row:hover { border-color: var(--accent); }
+.optimizer-slot {
+  flex: 0 0 64px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-1);
+  text-transform: uppercase;
+}
+.optimizer-name { flex: 1; display: flex; align-items: center; gap: 6px; font-weight: 600; }
+.optimizer-team { font-weight: 500; color: var(--ink-1); font-size: 12px; }
+.optimizer-lp { flex: 0 0 56px; text-align: right; }
+.optimizer-cost { flex: 0 0 72px; text-align: right; color: var(--ink-1); font-size: 12px; }
+
 tbody tr.clickable { cursor: pointer; }
 tbody tr.clickable:hover { background: var(--chip-bg); }
 
@@ -849,6 +899,7 @@ footer.notes b { color: var(--ink-0); }
   <nav class="chapters">
     <button class="chip-tab active" data-chapter="batters">타자 <span class="n" id="tab-nb">__NB__명</span></button>
     <button class="chip-tab" data-chapter="pitchers">투수 <span class="n" id="tab-np">__NP__명</span></button>
+    <button class="chip-tab" data-chapter="optimizer">최고 조합</button>
   </nav>
 
   <section class="board active" id="chapter-batters">
@@ -885,6 +936,19 @@ footer.notes b { color: var(--ink-0); }
     <div class="chips" id="pitcher-mode-chips"></div>
     <div class="chips" id="pitcher-group-chips"></div>
     <div class="tablewrap"><table id="tbl-p"></table></div>
+  </section>
+
+  <section class="board" id="chapter-optimizer">
+    <div class="optimizer-head">
+      <label class="optimizer-budget-label">
+        총 코스트 한도
+        <input type="number" id="optimizer-budget" min="1" step="1" value="40" />
+      </label>
+      <span class="optimizer-note">타자 9명(포지션별 1명 + 지명타자 1명, 이미 쓴 8명 제외 아무 타자나) +
+        선발투수 2명 + 구원투수 3명 = 총 14명. 코스트 정보가 없는 선수는 후보에서 빠지고,
+        투수는 그날 실제로 선발/구원으로 등판한 기록 기준으로만 후보가 됩니다.</span>
+    </div>
+    <div id="optimizer-result"></div>
   </section>
 </main>
 
@@ -1155,6 +1219,7 @@ const batterColsFlat = [
   {h:'상대', key:'opponent', cls:'left'},
   {h:'구장', key:'stadium', cls:'left'},
   {h:'LP', key:'lp', num:true},
+  {h:'코스트', key:'cost', num:true},
   {h:'타수', key:'ab', num:true},
   {h:'안타', key:'H', num:true},
   {h:'2B', key:'2B', num:true},
@@ -1187,6 +1252,7 @@ const pitcherColsFlat = [
   {h:'상대', key:'opponent', cls:'left'},
   {h:'구장', key:'stadium', cls:'left'},
   {h:'LP', key:'lp', num:true},
+  {h:'코스트', key:'cost', num:true},
   {h:'IP', key:'inn', cls:'left'},
   {h:'피안타', key:'H', num:true},
   {h:'자책', key:'ER', num:true},
@@ -1221,6 +1287,7 @@ function cellValue(row, col) {
     return col.merge.reduce((sum, k) => sum + (row.stat ? (row.stat[k] || 0) : 0), 0);
   }
   if (col.key === null) return null;
+  if (col.key === 'cost') return row.fanmo_cost;
   if (col.key === 'name' || col.key === 'team' || col.key === 'opponent' ||
       col.key === 'stadium' || col.key === 'date' || col.key === 'ab' ||
       col.key === 'inn' || col.key === 'lp' || col.key === 'position' || col.key === 'role') {
@@ -1250,6 +1317,10 @@ function makeRowCells(row, cols, i) {
         s.title = '유저 수동 재지정';
         td.appendChild(s);
       }
+    } else if (col.key === 'cost') {
+      td.textContent = (row.fanmo_cost === undefined || row.fanmo_cost === null) ? '-' : row.fanmo_cost;
+      td.className = 'num';
+      if (row.fanmo_cost === undefined || row.fanmo_cost === null) td.title = '코스트 데이터 없음(수기 명단에 없는 선수)';
     } else if (col.key === 'role') {
       const span = document.createElement('span');
       span.className = 'role ' + (row.role === '선발' ? 'starter' : 'reliever');
@@ -1387,6 +1458,7 @@ const BATTER_LEADING_COLS = [
   {h:'상대', key:'opponent', cls:'left'},
   {h:'구장', key:'stadium', cls:'left'},
   {h:'LP', key:'lp', num:true},
+  {h:'코스트', key:'cost', num:true},
   {h:'타수', key:'ab', num:true},
 ];
 const PITCHER_LEADING_COLS = [
@@ -1396,6 +1468,7 @@ const PITCHER_LEADING_COLS = [
   {h:'상대', key:'opponent', cls:'left'},
   {h:'구장', key:'stadium', cls:'left'},
   {h:'LP', key:'lp', num:true},
+  {h:'코스트', key:'cost', num:true},
   {h:'IP', key:'inn', cls:'left'},
 ];
 
@@ -1630,11 +1703,257 @@ document.getElementById('search-p').addEventListener('input', () => {
 rebuildBatterTable();
 rebuildPitcherTable();
 
+// --- 최고 조합(코스트 한도 내 최대 LP 로스터) ---
+// 그룹(각 자리에서 정확히 1명씩 뽑아야 하는 제약)이 여러 개 겹칠 때도 실제로 뽑힌 선수
+// 목록을 복원할 수 있도록, dp 배열뿐 아니라 "이 비용에서 어떤 선택을 했는지"를 클로저로
+// 함께 들고 다니는 Layer 객체로 표현한다(Layer.dp[cost]=그 "정확한" 비용에서 최대 LP,
+// Layer.reconstruct(cost)=그 값을 만든 실제 선수 배열).
+function emptyLayer(budget) {
+  const dp = new Float64Array(budget + 1).fill(-Infinity);
+  dp[0] = 0;
+  return { dp, reconstruct: () => [] };
+}
+function singleGroupLayer(group, budget) {
+  const dp = new Float64Array(budget + 1).fill(-Infinity);
+  const choice = new Array(budget + 1).fill(null);
+  group.forEach(item => {
+    if (item.cost > budget) return;
+    if (item.lp > dp[item.cost]) { dp[item.cost] = item.lp; choice[item.cost] = item; }
+  });
+  return { dp, reconstruct: cost => (choice[cost] ? [choice[cost]] : []) };
+}
+function combineLayers(layerA, layerB, budget) {
+  const dp = new Float64Array(budget + 1).fill(-Infinity);
+  const split = new Array(budget + 1).fill(null);
+  for (let c1 = 0; c1 <= budget; c1++) {
+    if (layerA.dp[c1] === -Infinity) continue;
+    for (let c2 = 0; c1 + c2 <= budget; c2++) {
+      if (layerB.dp[c2] === -Infinity) continue;
+      const c = c1 + c2;
+      const v = layerA.dp[c1] + layerB.dp[c2];
+      if (v > dp[c]) { dp[c] = v; split[c] = [c1, c2]; }
+    }
+  }
+  return {
+    dp,
+    reconstruct(cost) {
+      const sp = split[cost];
+      if (!sp) return [];
+      return [...layerA.reconstruct(sp[0]), ...layerB.reconstruct(sp[1])];
+    },
+  };
+}
+// 그룹당 정확히 1명씩 뽑는 8개 포지션 그룹의 prefix[i]=앞에서부터 i개 그룹 결합,
+// suffix[i]=i번째 그룹부터 끝까지 결합 — DH 후보가 특정 그룹 소속일 때 그 그룹만
+// "그 선수를 뺀 버전"으로 바꿔 끼워 넣을 수 있게 해준다(그룹 자체를 통째로 비우면 그
+// 포지션의 필수 슬롯이 아예 안 채워지는 게 되므로, 그룹을 빼는 게 아니라 그 그룹 안에서
+// "이 한 명만 빼고" 다시 골라야 한다 — 나머지 7개 그룹은 그대로 재사용).
+function buildPrefixSuffix(groupLayers, budget) {
+  const n = groupLayers.length;
+  const prefix = [emptyLayer(budget)];
+  for (let i = 0; i < n; i++) prefix.push(combineLayers(prefix[i], groupLayers[i], budget));
+  const suffix = new Array(n + 1);
+  suffix[n] = emptyLayer(budget);
+  for (let i = n - 1; i >= 0; i--) suffix[i] = combineLayers(groupLayers[i], suffix[i + 1], budget);
+  return { prefix, suffix };
+}
+function computeBatterRosterLayer(groups, dhPool, budget) {
+  const groupLayers = groups.map(g => singleGroupLayer(g, budget));
+  const { prefix, suffix } = buildPrefixSuffix(groupLayers, budget);
+  const fullLayer = prefix[groups.length]; // DH 후보가 8개 그룹 어디에도 안 속할 때(=DH 전용 선수) 그대로 씀
+  const groupIndexById = new Map();
+  groups.forEach((g, gi) => g.forEach(item => groupIndexById.set(item.id, gi)));
+  const exclItemCache = new Map();
+  function layerExcludingItem(k, excludedItem) {
+    const key = k + '::' + excludedItem.id;
+    if (exclItemCache.has(key)) return exclItemCache.get(key);
+    const reducedGroupLayer = singleGroupLayer(groups[k].filter(x => x.id !== excludedItem.id), budget);
+    const combined = combineLayers(combineLayers(prefix[k], reducedGroupLayer, budget), suffix[k + 1], budget);
+    exclItemCache.set(key, combined);
+    return combined;
+  }
+  const dp = new Float64Array(budget + 1).fill(-Infinity);
+  const bestChoice = new Array(budget + 1).fill(null);
+  dhPool.forEach(dh => {
+    if (dh.cost > budget) return;
+    const k = groupIndexById.has(dh.id) ? groupIndexById.get(dh.id) : null;
+    const otherLayer = k === null ? fullLayer : layerExcludingItem(k, dh);
+    for (let c8 = 0; c8 + dh.cost <= budget; c8++) {
+      if (otherLayer.dp[c8] === -Infinity) continue;
+      const totalCost = c8 + dh.cost;
+      const totalVal = otherLayer.dp[c8] + dh.lp;
+      if (totalVal > dp[totalCost]) { dp[totalCost] = totalVal; bestChoice[totalCost] = { dh, otherLayer, c8 }; }
+    }
+  });
+  return {
+    dp,
+    reconstruct(cost) {
+      const ch = bestChoice[cost];
+      if (!ch) return [];
+      return [...ch.otherLayer.reconstruct(ch.c8), ch.dh];
+    },
+  };
+}
+// pool에서 정확히 k명을 뽑는 0/1 배낭(개수 차원 추가) — 선발 2명/구원 3명처럼 "몇 명 고정"
+// 슬롯에 쓴다. 각 셀에 "prevCost 좌표"만 저장하면, 그 좌표가 나중에(같은 아이템 처리
+// 도중이든 다른 아이템 처리 때든) 더 나은 값으로 덮어써질 때 예전 체인이 깨져 같은 선수가
+// 중복 선택될 수 있다(고전적인 개수-차원 배낭 복원 버그) — 그래서 좌표 대신 그 순간의
+// 선택 목록 자체를 배열로 스냅샷해서 각 셀에 저장한다(셀 개수가 작아 메모리 부담 없음).
+function chooseKLayer(pool, k, budget) {
+  const dpRows = [];
+  const picks = [];
+  for (let cnt = 0; cnt <= k; cnt++) {
+    dpRows.push(new Float64Array(budget + 1).fill(-Infinity));
+    picks.push(new Array(budget + 1).fill(null));
+  }
+  dpRows[0][0] = 0;
+  picks[0][0] = [];
+  pool.forEach(item => {
+    if (item.cost > budget) return;
+    for (let cnt = k; cnt >= 1; cnt--) {
+      for (let c = budget; c >= item.cost; c--) {
+        const prevPicks = picks[cnt - 1][c - item.cost];
+        if (prevPicks === null) continue;
+        const v = dpRows[cnt - 1][c - item.cost] + item.lp;
+        if (v > dpRows[cnt][c]) { dpRows[cnt][c] = v; picks[cnt][c] = [...prevPicks, item]; }
+      }
+    }
+  });
+  return {
+    dp: dpRows[k],
+    reconstruct(cost) {
+      return picks[k][cost] || [];
+    },
+  };
+}
+
+const OPTIMIZER_FIELD_SLOTS = ['포수', '1루수', '2루수', '3루수', '유격수', '좌익수', '중견수', '우익수'];
+
+function solveOptimalRoster(batters, pitchers, budget) {
+  const costedBatters = batters
+    .filter(r => r.fanmo_cost != null)
+    .map((r, i) => ({ id: 'b' + i, name: r.name, team: r.team, lp: r.lp || 0, cost: r.fanmo_cost, row: r }));
+  const groups = OPTIMIZER_FIELD_SLOTS.map(pos =>
+    costedBatters.filter(item => (item.row.fanmo_position || item.row.position) === pos).map(item => ({ ...item, slot: pos }))
+  );
+  if (groups.some(g => g.length === 0)) {
+    return { ok: false, reason: '오늘 데이터로는 채울 수 없는 포지션이 있습니다(해당 포지션 출전 기록 또는 코스트 정보 없음).' };
+  }
+  const dhPool = costedBatters.map(item => ({ ...item, slot: '지명타자' }));
+
+  const spPool = pitchers
+    .filter(r => r.role === '선발' && r.fanmo_cost != null)
+    .map((r, i) => ({ id: 'sp' + i, name: r.name, team: r.team, lp: r.lp || 0, cost: r.fanmo_cost, slot: '선발투수', row: r }));
+  const rpPool = pitchers
+    .filter(r => r.role === '구원' && r.fanmo_cost != null)
+    .map((r, i) => ({ id: 'rp' + i, name: r.name, team: r.team, lp: r.lp || 0, cost: r.fanmo_cost, slot: '구원투수', row: r }));
+  if (spPool.length < 2 || rpPool.length < 3) {
+    return { ok: false, reason: '오늘 선발 2명·구원 3명을 채울 만큼 코스트 정보가 있는 투수가 부족합니다.' };
+  }
+
+  const batterLayer = computeBatterRosterLayer(groups, dhPool, budget);
+  const spLayer = chooseKLayer(spPool, 2, budget);
+  const rpLayer = chooseKLayer(rpPool, 3, budget);
+  const pitcherLayer = combineLayers(spLayer, rpLayer, budget);
+  const fullLayer = combineLayers(batterLayer, pitcherLayer, budget);
+
+  let bestCost = -1, bestVal = -Infinity;
+  for (let c = 0; c <= budget; c++) {
+    if (fullLayer.dp[c] > bestVal) { bestVal = fullLayer.dp[c]; bestCost = c; }
+  }
+  if (bestCost === -1) {
+    return { ok: false, reason: '이 코스트 한도로는 로스터를 채울 수 없습니다(한도를 늘려보세요).' };
+  }
+  const roster = fullLayer.reconstruct(bestCost);
+  return { ok: true, totalLp: bestVal, totalCost: bestCost, roster };
+}
+
+function runOptimizer() {
+  const container = document.getElementById('optimizer-result');
+  const budgetInput = document.getElementById('optimizer-budget');
+  const budget = Math.max(1, Math.min(999, Math.round(Number(budgetInput.value) || 40)));
+  savePrefs({ optimizerBudget: budget });
+
+  const result = solveOptimalRoster(data.batters || [], data.pitchers || [], budget);
+  container.innerHTML = '';
+  if (!result.ok) {
+    const empty = document.createElement('div');
+    empty.className = 'modal-empty';
+    empty.textContent = result.reason;
+    container.appendChild(empty);
+    return;
+  }
+
+  const summary = document.createElement('div');
+  summary.className = 'optimizer-summary';
+  const lpB = document.createElement('b'); lpB.textContent = result.totalLp;
+  const costB = document.createElement('b'); costB.textContent = result.totalCost;
+  summary.append('총 LP ', lpB, ' · 총 코스트 ', costB, ` / ${budget}`);
+  container.appendChild(summary);
+
+  const slotOrder = [...OPTIMIZER_FIELD_SLOTS, '지명타자', '선발투수', '구원투수'];
+  const bySlot = new Map();
+  result.roster.forEach(item => {
+    if (!bySlot.has(item.slot)) bySlot.set(item.slot, []);
+    bySlot.get(item.slot).push(item);
+  });
+
+  const list = document.createElement('div');
+  list.className = 'optimizer-list';
+  slotOrder.forEach(slot => {
+    (bySlot.get(slot) || []).forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'optimizer-row clickable';
+      row.title = '클릭하면 타석/수비별 포인트 내역을 볼 수 있어요';
+      row.addEventListener('click', () => openPlayerModal(item.row));
+
+      const slotSpan = document.createElement('span');
+      slotSpan.className = 'optimizer-slot';
+      slotSpan.textContent = slot;
+
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'optimizer-name';
+      const logoUrl = TEAM_LOGO_URL[item.team];
+      if (logoUrl) {
+        const img = document.createElement('img');
+        img.src = logoUrl; img.alt = item.team; img.title = item.team;
+        img.className = 'team-logo'; img.loading = 'lazy'; img.referrerPolicy = 'no-referrer';
+        nameSpan.appendChild(img);
+      }
+      nameSpan.appendChild(document.createTextNode(item.name + ' '));
+      const teamSpan = document.createElement('span');
+      teamSpan.className = 'optimizer-team';
+      teamSpan.textContent = item.team;
+      nameSpan.appendChild(teamSpan);
+
+      const lpSpan = document.createElement('span');
+      lpSpan.className = 'optimizer-lp lp num ' + lpClass(item.lp);
+      lpSpan.textContent = item.lp;
+
+      const costSpan = document.createElement('span');
+      costSpan.className = 'optimizer-cost';
+      costSpan.textContent = '코스트 ' + item.cost;
+
+      row.append(slotSpan, nameSpan, lpSpan, costSpan);
+      list.appendChild(row);
+    });
+  });
+  container.appendChild(list);
+}
+
+const optimizerBudgetInput = document.getElementById('optimizer-budget');
+if (savedPrefs.optimizerBudget) optimizerBudgetInput.value = savedPrefs.optimizerBudget;
+optimizerBudgetInput.addEventListener('input', () => {
+  if (document.getElementById('chapter-optimizer').classList.contains('active')) runOptimizer();
+});
+
 // --- 챕터(타자/투수) 탭 전환 ---
 function activateChapter(target) {
   document.querySelectorAll('.chip-tab').forEach(b => b.classList.toggle('active', b.dataset.chapter === target));
   document.getElementById('chapter-batters').classList.toggle('active', target === 'batters');
   document.getElementById('chapter-pitchers').classList.toggle('active', target === 'pitchers');
+  document.getElementById('chapter-optimizer').classList.toggle('active', target === 'optimizer');
+  if (target === 'optimizer') runOptimizer();
 }
 document.querySelectorAll('.chip-tab').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -1643,7 +1962,7 @@ document.querySelectorAll('.chip-tab').forEach(btn => {
     savePrefs({ chapter: target });
   });
 });
-if (savedPrefs.chapter === 'pitchers') activateChapter('pitchers');
+if (['pitchers', 'optimizer'].includes(savedPrefs.chapter)) activateChapter(savedPrefs.chapter);
 
 // --- 기준일 선택(달력 클릭 + 년/월/일 드롭다운) ---
 const dpBtn = document.getElementById('date-picker-btn');
@@ -1861,6 +2180,7 @@ async function switchDate(dateStr) {
   renderTiles(dateStr);
   rebuildBatterTable();
   rebuildPitcherTable();
+  if (document.getElementById('chapter-optimizer').classList.contains('active')) runOptimizer();
 }
 
 renderTiles(activeDate);

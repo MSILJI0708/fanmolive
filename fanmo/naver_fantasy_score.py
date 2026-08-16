@@ -36,6 +36,8 @@ import ssl
 import urllib.request
 from collections import Counter, defaultdict
 
+from fanmo_cost import lookup_batter_cost, lookup_pitcher_cost
+
 HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
@@ -387,13 +389,15 @@ def process_game(
                 "ADVANCE_OUT": 0,
             }
             pos_info = (position_map or {}).get(p.get("playerCode"), {})
+            row_position = pos_info.get("position", "")
             batter_rows.append({
                 "name": name, "team": team_name[side], "opponent": opp_name[side],
                 "date": date_disp, "stadium": stadium, "pos": p.get("pos", ""),
-                "position": pos_info.get("position", ""),
+                "position": row_position,
                 "position_override": pos_info.get("is_override", False),
                 "ab": int(p.get("ab") or 0), "stat": stat,
                 "lp": score_batter(stat),
+                "fanmo_cost": lookup_batter_cost(name, team_name[side], row_position),
                 "_error_innings": list(etc["error_innings"].get(name, [])),
             })
 
@@ -445,6 +449,7 @@ def process_game(
                 "date": date_disp, "stadium": stadium, "inn": p.get("inn"),
                 "role": "선발" if is_starter else "구원",
                 "stat": stat, "lp": score_pitcher(stat),
+                "fanmo_cost": lookup_pitcher_cost(name, team_name[side]),
             })
 
     _merge_relay_stats(game_id, rd, batter_rows, pitcher_rows)
