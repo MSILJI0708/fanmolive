@@ -20,7 +20,35 @@ import csv
 import os
 from functools import lru_cache
 
-CSV_PATH = os.path.join(os.path.dirname(__file__), "fanmo260715_copy.csv")
+_HERE = os.path.dirname(__file__)
+
+# 코스트 스냅샷은 게임 갱신 주기(매월 1일 / 16일)마다 갈린다.
+# (시작일, 종료일, 파일) — 둘 다 포함(inclusive). 날짜는 'YYYYMMDD' 문자열로 비교한다.
+SNAPSHOTS = [
+    ("20260816", "20260831", "fanmo260816.csv"),
+    ("20260901", "20260915", "fanmo260901.csv"),
+]
+# 스냅샷이 정해지기 전(2026-08-15 이하) 구간에 쓰던 기존 파일.
+LEGACY_CSV = "fanmo260715_copy.csv"
+CSV_PATH = os.path.join(_HERE, LEGACY_CSV)   # 하위 호환용(날짜 미지정 시)
+
+
+def snapshot_for(date_str: str | None) -> str | None:
+    """경기 날짜에 해당하는 코스트 스냅샷 파일명. 없으면 None.
+
+    date_str 은 'YYYYMMDD' 또는 'YYYY-MM-DD'. None 이면 기존 동작(LEGACY_CSV)을 유지한다.
+    등록된 어느 구간에도 안 들어가는 미래 날짜는 None 을 돌려준다 —
+    지난 스냅샷을 그대로 갖다 쓰면 조용히 틀린 코스트가 박히기 때문이다.
+    """
+    if not date_str:
+        return LEGACY_CSV
+    d = date_str.replace("-", "")
+    if d < SNAPSHOTS[0][0]:
+        return LEGACY_CSV
+    for lo, hi, fname in SNAPSHOTS:
+        if lo <= d <= hi:
+            return fname
+    return None
 
 # CSV 포지션 코드 -> naver_fantasy_score/position.py가 쓰는 한글 포지션명
 BATTER_POS_TRANSLATE = {
@@ -98,20 +126,25 @@ class CostIndex:
         return matched[0] if len(matched) == 1 else None
 
 
-@lru_cache(maxsize=1)
-def _load_index() -> CostIndex | None:
-    if not os.path.exists(CSV_PATH):
+@lru_cache(maxsize=8)
+def _load_index(fname: str | None) -> CostIndex | None:
+    if not fname:
         return None
-    with open(CSV_PATH, encoding="utf-8-sig") as f:
+    path = os.path.join(_HERE, fname)
+    if not os.path.exists(path):
+        return None
+    with open(path, encoding="utf-8-sig") as f:
         rows = list(csv.DictReader(f))
     return CostIndex(rows)
 
 
-def lookup_batter_cost(name: str, team: str, position: str) -> int | None:
-    idx = _load_index()
+def lookup_batter_cost(name: str, team: str, position: str,
+                       date_str: str | None = None) -> int | None:
+    idx = _load_index(snapshot_for(date_str))
     return idx.lookup_batter(name, team, position) if idx else None
 
 
-def lookup_pitcher_cost(name: str, team: str) -> int | None:
-    idx = _load_index()
+def lookup_pitcher_cost(name: str, team: str,
+                        date_str: str | None = None) -> int | None:
+    idx = _load_index(snapshot_for(date_str))
     return idx.lookup_pitcher(name, team) if idx else None

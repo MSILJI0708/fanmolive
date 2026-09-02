@@ -7,11 +7,12 @@
 """
 import glob
 import json
+import re
 
 from fanmo_cost import lookup_batter_cost, lookup_pitcher_cost
 
 
-def backfill_file(path: str) -> tuple[int, int]:
+def backfill_file(path: str, date_str: str | None) -> tuple[int, int]:
     with open(path, encoding="utf-8") as f:
         data = json.load(f)
 
@@ -19,13 +20,13 @@ def backfill_file(path: str) -> tuple[int, int]:
     total = 0
     for row in data.get("batters", []):
         total += 1
-        cost = lookup_batter_cost(row.get("name", ""), row.get("team", ""), row.get("position", ""))
+        cost = lookup_batter_cost(row.get("name", ""), row.get("team", ""), row.get("position", ""), date_str)
         row["fanmo_cost"] = cost
         if cost is not None:
             matched += 1
     for row in data.get("pitchers", []):
         total += 1
-        cost = lookup_pitcher_cost(row.get("name", ""), row.get("team", ""))
+        cost = lookup_pitcher_cost(row.get("name", ""), row.get("team", ""), date_str)
         row["fanmo_cost"] = cost
         if cost is not None:
             matched += 1
@@ -39,7 +40,9 @@ def main():
     files = sorted(glob.glob("data_[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].json"))
     grand_matched = grand_total = 0
     for path in files:
-        matched, total = backfill_file(path)
+        m = re.search(r"data_(\d{8})\.json$", path)
+        date_str = m.group(1) if m else None
+        matched, total = backfill_file(path, date_str)
         grand_matched += matched
         grand_total += total
     print(f"{len(files)}개 파일 처리 완료, 총 {grand_matched}/{grand_total}행 코스트 매칭")

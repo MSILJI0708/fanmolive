@@ -391,13 +391,14 @@ def process_game(
             pos_info = (position_map or {}).get(p.get("playerCode"), {})
             row_position = pos_info.get("position", "")
             batter_rows.append({
-                "name": name, "team": team_name[side], "opponent": opp_name[side],
+                "name": name, "player_code": p.get("playerCode") or p.get("pcode"),
+                "team": team_name[side], "opponent": opp_name[side],
                 "date": date_disp, "stadium": stadium, "pos": p.get("pos", ""),
                 "position": row_position,
                 "position_override": pos_info.get("is_override", False),
                 "ab": int(p.get("ab") or 0), "stat": stat,
                 "lp": score_batter(stat),
-                "fanmo_cost": lookup_batter_cost(name, team_name[side], row_position),
+                "fanmo_cost": lookup_batter_cost(name, team_name[side], row_position, game_id[:8]),
                 "_error_innings": list(etc["error_innings"].get(name, [])),
             })
 
@@ -445,12 +446,22 @@ def process_game(
                 "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0, "SAVE_OPP": False,
             }
             pitcher_rows.append({
-                "name": name, "team": team_name[side], "opponent": opp_name[side],
+                "name": name, "player_code": p.get("playerCode") or p.get("pcode"),
+                "team": team_name[side], "opponent": opp_name[side],
                 "date": date_disp, "stadium": stadium, "inn": p.get("inn"),
                 "role": "선발" if is_starter else "구원",
                 "stat": stat, "lp": score_pitcher(stat),
-                "fanmo_cost": lookup_pitcher_cost(name, team_name[side]),
+                "fanmo_cost": lookup_pitcher_cost(name, team_name[side], game_id[:8]),
             })
+
+    # player_code 는 동명이인(이승현 삼성26/57, 김현수 KIA 등)을 사후에 구분하는 유일한 키다.
+    # 키 이름이 다르다: battersBoxscore 는 playerCode, pitchersBoxscore 는 pcode.
+    # 비면 조용히 넘어가지 않고 한 번 알린다.
+    for label, rows in (("타자", batter_rows), ("투수", pitcher_rows)):
+        missing = sum(1 for r in rows if not r.get("player_code"))
+        if missing:
+            print(f"  [주의] {game_id} {label} {missing}/{len(rows)}명 playerCode 없음 "
+                  f"— 동명이인 구분 불가")
 
     _merge_relay_stats(game_id, rd, batter_rows, pitcher_rows)
     return batter_rows, pitcher_rows
