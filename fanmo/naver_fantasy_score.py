@@ -452,6 +452,7 @@ def process_game(
                 "role": "선발" if is_starter else "구원",
                 "stat": stat, "lp": score_pitcher(stat),
                 "fanmo_cost": lookup_pitcher_cost(name, team_name[side], game_id[:8]),
+                "_wls": wls,  # _merge_relay_stats에서 블론 억제 판정에만 쓰고 반환 전에 지운다
             })
 
     # player_code 는 동명이인(이승현 삼성26/57, 김현수 KIA 등)을 사후에 구분하는 유일한 키다.
@@ -464,6 +465,8 @@ def process_game(
                   f"— 동명이인 구분 불가")
 
     _merge_relay_stats(game_id, rd, batter_rows, pitcher_rows)
+    for row in pitcher_rows:
+        row.pop("_wls", None)  # 블론 억제 판정용 내부 필드 — 저장 전에 제거
     return batter_rows, pitcher_rows
 
 
@@ -611,11 +614,12 @@ def _merge_relay_stats(game_id: str, rd: dict, batter_rows: list[dict], pitcher_
             # 있었는지"를 보여주기 위한 부가 조건일 뿐, SVO 자체의 정의에는 없다.
             row["stat"]["SAVE_OPP"] = bool(svo and team_won)
 
-        # 블론세이브: 네이버 wls는 "그 투수가 최종적으로 승/패 결정을 받았는지"만 보고 매겨서
-        # (블론 후 팀이 재역전하면 wls가 '승'이 되어 블론 자체가 통째로 안 잡힌다 — 2026-09-10
-        # NC전 손주환/전사민 사례로 확인됨), relay.py가 스코어 흐름으로 직접 판정한 결과를
-        # 우선한다(둘 중 하나라도 블론이면 블론).
-        if row["name"] in blown_pitchers and not row["stat"]["BLOWN"]:
+        # 블론세이브: 네이버 wls(승/패/세/홀)만 보면 "동점/역전을 허용했는지"를 못 잡아서
+        # (그 투수 본인이 이후 승리투수가 안 되는 한, 즉 팀이 그대로 지거나 다른 투수가
+        # 승리투수가 되는 경우) relay.py가 스코어 흐름으로 직접 판정한 블론을 덧붙인다.
+        # 단, 세이브 상황으로 등판했더라도 그 투수 본인이 승리투수(wls=='승')가 되면
+        # 세이브/홀드가 없던 일이 되는 것과 마찬가지로 블론도 기록하지 않는다.
+        if row["name"] in blown_pitchers and not row["stat"]["BLOWN"] and row.get("_wls") != "승":
             row["stat"]["BLOWN"] = 1
             row["lp"] = score_pitcher(row["stat"])
 
