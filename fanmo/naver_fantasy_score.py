@@ -107,6 +107,15 @@ def innings_to_outs(s) -> int:
         return 0
 
 
+def outs_to_innings_str(outs: int) -> str:
+    """아웃카운트를 야구 관례상의 "이닝.아웃수" 소수 표기로 바꾼다(진짜 소수가 아니라
+    소수부가 0~2인 아웃 수 — MLB 쪽(mlb_fantasy_score.py)이 이미 이 표기를 쓰고 있어서,
+    KBO도 여기 맞춘다. 기존엔 네이버가 주는 그대로(⅓/⅔ 유니코드 분수, 또는 정수만)를
+    표시해서 두 리그 화면의 이닝 표기가 서로 달랐다)."""
+    whole, rem = divmod(max(outs, 0), 3)
+    return f"{whole}.{rem}"
+
+
 # ───────────────────────── 타자 타석 결과 코드 분류 ─────────────────────────
 # 네이버 박스스코어의 inn1..inn25 필드는 "몇 회"가 아니라 그 타자의 N번째 타석 결과다.
 # 예: '우안'=우익수 앞 안타(1루타), '2안'/'3안'=("2루타"/"3루타"가 아니라) 2루수·3루수
@@ -459,7 +468,7 @@ def process_game(
             pitcher_rows.append({
                 "name": name, "player_code": p.get("playerCode") or p.get("pcode"),
                 "team": team_name[side], "opponent": opp_name[side],
-                "date": date_disp, "stadium": stadium, "inn": p.get("inn"),
+                "date": date_disp, "stadium": stadium, "inn": outs_to_innings_str(outs),
                 "role": "선발" if is_starter else "구원",
                 "stat": stat, "lp": score_pitcher(stat),
                 "fanmo_cost": lookup_pitcher_cost(name, team_name[side], game_id[:8]),
