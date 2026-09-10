@@ -539,6 +539,7 @@ def _merge_relay_stats(game_id: str, rd: dict, batter_rows: list[dict], pitcher_
     batter_extra = stats["batter_extra"]
     timeline = stats["timeline"]
     entry_margin = stats["pitcher_entry_margin"]
+    blown_pitchers = stats.get("blown_pitchers", set())
     final_score = stats["final_score"]
     earned_run_events = stats.get("earned_run_events", {})
     bunt_out = stats.get("bunt_out", {})
@@ -611,6 +612,14 @@ def _merge_relay_stats(game_id: str, rd: dict, batter_rows: list[dict], pitcher_
             row["stat"]["SAVE_OPP"] = bool(
                 team_won and ((1 <= margin <= 3 and outs >= 3) or outs >= 9)
             )
+
+        # 블론세이브: 네이버 wls는 "그 투수가 최종적으로 승/패 결정을 받았는지"만 보고 매겨서
+        # (블론 후 팀이 재역전하면 wls가 '승'이 되어 블론 자체가 통째로 안 잡힌다 — 2026-09-10
+        # NC전 손주환/전사민 사례로 확인됨), relay.py가 스코어 흐름으로 직접 판정한 결과를
+        # 우선한다(둘 중 하나라도 블론이면 블론).
+        if row["name"] in blown_pitchers and not row["stat"]["BLOWN"]:
+            row["stat"]["BLOWN"] = 1
+            row["lp"] = score_pitcher(row["stat"])
 
     for row in batter_rows + pitcher_rows:
         is_pitcher_row = "OUT" in row["stat"]
