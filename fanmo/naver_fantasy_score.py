@@ -538,7 +538,7 @@ def _merge_relay_stats(game_id: str, rd: dict, batter_rows: list[dict], pitcher_
     pitcher_extra = stats["pitcher_extra"]
     batter_extra = stats["batter_extra"]
     timeline = stats["timeline"]
-    entry_margin = stats["pitcher_entry_margin"]
+    pitcher_svo = stats.get("pitcher_svo", {})
     blown_pitchers = stats.get("blown_pitchers", set())
     final_score = stats["final_score"]
     earned_run_events = stats.get("earned_run_events", {})
@@ -601,17 +601,15 @@ def _merge_relay_stats(game_id: str, rd: dict, batter_rows: list[dict], pitcher_
             row["stat"]["PICKOFF_A"] += pe.get("PICKOFF_A", 0)
             row["lp"] = score_pitcher(row["stat"])
 
-        margin = entry_margin.get(row["name"])
-        if margin is not None and final_score is not None:
+        svo = pitcher_svo.get(row["name"])
+        if svo is not None and final_score is not None:
             side = "home" if row["team"] == home_team_name else "away"
             opp_side = "away" if side == "home" else "home"
             team_won = final_score[side] > final_score[opp_side]
-            outs = row["stat"]["OUT"]
-            # 조건1: 3점 이내 리드로 등판해 1이닝 이상 / 조건3: 이닝 무관 3이닝 이상
-            # ("동점주자가 누상/타석/다음타자"인 조건2는 미구현 — 주자 신원까지 필요해 생략)
-            row["stat"]["SAVE_OPP"] = bool(
-                team_won and ((1 <= margin <= 3 and outs >= 3) or outs >= 9)
-            )
+            # "세이브 기회가 있었다"는 등판 시점(SVO)만으로 결정되고, 팀이 최종적으로
+            # 이겼는지는 별개다 — team_won은 화면에 "기회가 실제로 세이브로 이어질 수
+            # 있었는지"를 보여주기 위한 부가 조건일 뿐, SVO 자체의 정의에는 없다.
+            row["stat"]["SAVE_OPP"] = bool(svo and team_won)
 
         # 블론세이브: 네이버 wls는 "그 투수가 최종적으로 승/패 결정을 받았는지"만 보고 매겨서
         # (블론 후 팀이 재역전하면 wls가 '승'이 되어 블론 자체가 통째로 안 잡힌다 — 2026-09-10

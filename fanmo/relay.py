@@ -219,6 +219,33 @@ def _detect_productive_outs(events: list[dict]) -> dict[str, int]:
     return dict(credit)
 
 
+def _entry_save_opportunity(margin: int, base: tuple[str, str, str], inn: int) -> bool:
+    """세이브 상황(SVO) 판정 — 등판 "순간"의 리드폭·주자·이닝만으로 결정한다(이후 실제로
+    막았는지/블론당했는지는 전혀 안 본다. 그건 호출부가 별도로 판정).
+
+    [기본조건] margin > 0(앞선 상태)이어야 함 — 여기서 확인.
+    [조건1] 백투백 홈런(누상 주자 전원 + 타자 1인이 첫 홈런으로 득점, 이어서 솔로 홈런
+            하나 더)을 맞으면 동점 이하가 되는 리드+주자 상황. 즉 margin이
+            (누상 주자 수 + 2) 이하. 예: 무사/유사 주자 없이 1~2점차, 주자 2명 4점차,
+            만루 5점차 — 전부 여기 해당.
+    [조건2] 점수차 무관하게 늘 적용되는 표준 세이브 상황: 3점차 이내로 앞선 상태.
+    [조건3] 점수차 상관없이, 등판 시점부터 정규이닝(9회) 종료까지 남은 이닝이 3이닝
+            이상(예: 7회 등판 = 7·8·9회 = 3이닝 남음). 이미 연장에 들어간 뒤의 등판은
+            "9회까지 남은 이닝"이라는 기준 자체가 안 맞아서 이 조건은 적용하지 않는다
+            (조건1·조건2로 커버되는 경우가 대부분이라 실무적으로 문제 없음).
+    """
+    if margin <= 0:
+        return False
+    runners_on_base = sum(1 for slot in base if slot != "0")
+    if margin <= runners_on_base + 2:  # 조건1
+        return True
+    if margin <= 3:  # 조건2
+        return True
+    if inn <= 9 and (9 - inn + 1) >= 3:  # 조건3
+        return True
+    return False
+
+
 def compute_relay_stats(
     events: list[dict],
     home_starting_defense: dict,
@@ -242,12 +269,12 @@ def compute_relay_stats(
       'fielding_events': {name: [{'type':'ASSIST'|'OF_ASSIST'|'DP'|'TP', 'pos':실제 수비 위치}, ...]},
       'batter_extra': {name: {'ADVANCE':n}},
       'timeline': {name: [{'inn':int, 'text':str, 'points':int, 'tags':{stat:count}}, ...]},
-      'pitcher_entry_margin': {name: int},  # 구원투수가 등판한 순간의 (자팀-상대) 점수차. 세이브
-                                             # 기회 판정용(조건1: 0<margin<=3 and 1이닝 이상 / 조건3:
-                                             # 3이닝 이상 무관. "동점주자가 누상/타석"인 조건2는 미구현)
-      'blown_pitchers': {name},  # 3점차 이내로 앞선 상태로 등판했다가, 자기가 마운드에 있는
-                                  # 동안 동점/역전을 허용한 투수 이름 집합(자책 여부 무관, wls와 무관하게
-                                  # 스코어 흐름으로 직접 판정)
+      'pitcher_entry_margin': {name: int},  # 구원투수가 등판한 순간의 (자팀-상대) 점수차.
+      'pitcher_svo': {name: bool},  # 구원투수가 등판한 순간 세이브 상황(SVO)이었는지.
+                                     # _entry_save_opportunity() 참고.
+      'blown_pitchers': {name},  # 등판 시 SVO였던 투수가, 자기가 마운드에 있는 동안
+                                  # 동점/역전을 허용한 경우의 이름 집합(자책 여부 무관, wls와
+                                  # 무관하게 스코어 흐름으로 직접 판정)
       'final_score': {'home': int, 'away': int} | None,  # 승/패 판정용 최종 스코어
     }
     catcher_events/fielding_events는 "그 순간 실제로 뛴 포지션"을 이벤트마다 태그해 원본 그대로
@@ -298,11 +325,13 @@ def compute_relay_stats(
     # 세이브 기회 판정용: 구원투수가 등판한 "순간"의 (자기 팀 점수 - 상대 팀 점수) 마진.
     # 선발은 여기 안 걸리는 게 맞다(등판 자체가 '교체'로 안 잡히니까).
     pitcher_entry_margin: dict = {}
-    # 블론세이브: "등판 시점에 3점차 이내로 앞선(세이브 상황) 구원투수가, 자기가 마운드에
-    # 있는 동안 동점 또는 역전을 허용"하면 블론이다(자책/비자책 무관, 승계주자가 들어온
-    # 득점이든 자기가 직접 내준 득점이든 무관 — 그 순간 마운드에 있었다는 사실만 본다).
-    # 승/패 결정과도 무관해서(블론 후 자기 팀이 재역전하면 승리투수가 될 수도 있음) 네이버
-    # wls 필드만으로는 못 잡는다 — 그래서 스코어 흐름을 직접 추적해서 판정한다.
+    # 구원투수가 "등판한 순간" 세이브 상황(SVO)이었는지 — _entry_save_opportunity() 참고.
+    pitcher_svo: dict[str, bool] = {}
+    # 블론세이브: "등판 시점에 SVO였던 구원투수가, 자기가 마운드에 있는 동안 동점 또는
+    # 역전을 허용"하면 블론이다(자책/비자책 무관, 승계주자가 들어온 득점이든 자기가 직접
+    # 내준 득점이든 무관 — 그 순간 마운드에 있었다는 사실만 본다). 승/패 결정과도
+    # 무관해서(블론 후 자기 팀이 재역전하면 승리투수가 될 수도 있음) 네이버 wls 필드만으로는
+    # 못 잡는다 — 그래서 스코어 흐름을 직접 추적해서 판정한다.
     blown_pitchers: set[str] = set()
     # 자책점을 "이닝별"로 보여주기 위한 추적: 주자 이름 -> 그 주자를 출루시킨 투수.
     # 이후 그 주자가 득점하면 이 투수에게 "자책점 후보"를 그 득점이 일어난 이닝에 매긴다.
@@ -350,6 +379,7 @@ def compute_relay_stats(
                     # half='0'이면 수비팀=홈, half='1'이면 수비팀=원정
                     margin = (ev["home_score"] - ev["away_score"]) if half == "0" else (ev["away_score"] - ev["home_score"])
                     pitcher_entry_margin[in_name] = margin
+                    pitcher_svo[in_name] = _entry_save_opportunity(margin, base, ev["inn"])
             elif in_label in FIELDING_POSITIONS:
                 defense[half][in_label] = in_name
             prev_base[half] = base
@@ -381,10 +411,9 @@ def compute_relay_stats(
             margin_after = defending_after - batting_after
             if margin_before > 0 and margin_after <= 0:
                 on_mound = current_pitcher[half]
-                entry_margin = pitcher_entry_margin.get(on_mound)
-                # 세이브 상황(3점차 이내 리드로 등판)이었던 투수에게만 블론이 성립한다 —
-                # 선발은 애초에 pitcher_entry_margin에 없어서(교체로 안 잡힘) 자동으로 제외됨.
-                if on_mound and entry_margin is not None and 1 <= entry_margin <= 3:
+                # 등판 시점에 SVO였던 투수에게만 블론이 성립한다 — 선발은 애초에
+                # pitcher_svo에 없어서(등판 자체가 '교체'로 안 잡힘) 자동으로 제외됨.
+                if on_mound and pitcher_svo.get(on_mound):
                     blown_pitchers.add(on_mound)
 
         # _SB_RE를 _RUN_RE보다 먼저 검사해야 한다 — "도루로 홈인"(홈 스틸)은 도루 성공
@@ -739,6 +768,7 @@ def compute_relay_stats(
         "batter_extra": batter_extra,
         "timeline": {k: v for k, v in timeline.items()},
         "pitcher_entry_margin": pitcher_entry_margin,
+        "pitcher_svo": pitcher_svo,
         "blown_pitchers": blown_pitchers,
         "final_score": final_score,
         "earned_run_events": {k: v for k, v in earned_run_events.items()},
