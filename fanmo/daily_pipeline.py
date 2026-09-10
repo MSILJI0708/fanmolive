@@ -25,7 +25,7 @@ import os
 import time
 from datetime import date
 
-from naver_fantasy_score import collect_date, load_position_map
+from naver_fantasy_score import collect_date, fetch_round, fetch_schedule, load_position_map
 from position import build_position_db
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -82,10 +82,23 @@ def main():
     if refresh_position:
         _mark_position_refreshed()
 
+    # round: 올스타전(kbo_as) 등 이벤트성 경기를 실제 시즌 성적(세이브/홀드 누적 등) 집계에서
+    # 가려낼 수 있게 표시만 해 둔다 — 데이터 자체는 지우지 않고 계속 그대로 수집·저장한다.
+    round_code = None
+    try:
+        games = [g for g in fetch_schedule(date_str) if not g.get("cancel")]
+        if games:
+            round_code = fetch_round(games[0]["gameId"])
+    except Exception as exc:  # noqa: BLE001
+        print(f"  라운드 조회 실패(무시하고 계속): {exc}")
+
     out_path = os.path.join(HERE, f"data_{date_str.replace('-', '')}.json")
     with open(out_path, "w", encoding="utf-8") as f:
-        json.dump({"batters": batters, "pitchers": pitchers, "date": date_str}, f, ensure_ascii=False)
-    print(f"저장 완료: {out_path}")
+        json.dump(
+            {"batters": batters, "pitchers": pitchers, "date": date_str, "round": round_code},
+            f, ensure_ascii=False,
+        )
+    print(f"저장 완료: {out_path} (round={round_code})")
 
 
 if __name__ == "__main__":

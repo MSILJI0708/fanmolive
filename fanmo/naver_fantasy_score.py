@@ -71,6 +71,17 @@ def fetch_record(game_id: str) -> dict:
     return fetch_json(RECORD_URL.format(game_id=game_id))["result"]["recordData"]
 
 
+def fetch_round(game_id: str) -> str | None:
+    """경기의 roundCode(kbo_e=시범경기, kbo_r=정규시즌, kbo_as=올스타, kbo_ps_*=포스트시즌 등).
+    올스타전처럼 실제 성적(세이브/홀드 등 시즌 누적)에 반영되면 안 되는 이벤트성 경기를
+    가려내는 용도 — 데이터 자체는 그대로 수집하되(달력에서 계속 조회 가능), round 필드로
+    표시만 해 둔다."""
+    try:
+        return fetch_json(GAME_URL.format(game_id=game_id))["result"]["game"].get("roundCode")
+    except Exception:  # noqa: BLE001
+        return None
+
+
 def fetch_game_status(game_id: str) -> str:
     """'BEFORE' | 'LIVE' | 'RESULT' | ... (recordData의 gameInfo.statusCode는 숫자코드라
     신뢰할 수 없어, 별도로 이 정제된 문자열 상태를 쓴다)."""
