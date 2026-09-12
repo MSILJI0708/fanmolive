@@ -117,12 +117,19 @@ jobs:
           python build_board.py --date "$TODAY_KST"
           python build_mlb_board.py --date "$TODAY_KST" || true
 
+      - name: "시즌·통산 기록실 갱신 (KBO 데이터가 실제로 바뀌었을 때만)"
+        if: steps.check_active.outputs.active == 'true'
+        working-directory: fanmo
+        run: |
+          python build_stats.py
+          python build_records_board.py
+
       - name: 수집 결과 커밋 & 푸시
         if: steps.combine.outputs.do_work == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add fanmo/data_*.json fanmo/position_db.json fanmo/lp_board.html fanmo/lp_board_mlb.html fanmo/mlb_last_run.txt fanmo/position_last_refresh.txt
+          git add fanmo/data_*.json fanmo/position_db.json fanmo/lp_board.html fanmo/lp_board_mlb.html fanmo/mlb_last_run.txt fanmo/position_last_refresh.txt fanmo/season_stats.json fanmo/career_stats.json fanmo/records.html
           if git diff --cached --quiet; then
             echo "변경 사항 없음, 커밋 생략"
           else
@@ -137,6 +144,9 @@ jobs:
           cp fanmo/lp_board.html _site/index.html
           if [ -f fanmo/lp_board_mlb.html ]; then
             cp fanmo/lp_board_mlb.html _site/mlb.html
+          fi
+          if [ -f fanmo/records.html ]; then
+            cp fanmo/records.html _site/records.html
           fi
           # KBO 보드는 날짜별 JSON을 지연 로딩(fetch)하므로, 배포 폴더에도 개별 날짜 파일을
           # 그대로 복사해 둬야 달력에서 다른 날짜를 고를 때 fetch가 실제로 성공한다.

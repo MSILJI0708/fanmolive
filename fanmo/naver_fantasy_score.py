@@ -461,6 +461,8 @@ def process_game(
                 "HOLD": 1 if wls == "홀" else 0,
                 "SAVE": 1 if wls == "세" else 0,
                 "BLOWN": 1 if wls == "블" else 0,
+                "WIN": 1 if wls == "승" else 0,
+                "LOSS": 1 if wls == "패" else 0,
                 "PERFECT": perfect, "NOHIT": nohit, "SHO": sho, "CG": cg,
                 "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0,
                 "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0, "SAVE_OPP": False,
