@@ -219,45 +219,57 @@ def _detect_productive_outs(events: list[dict]) -> dict[str, int]:
     return dict(credit)
 
 
-def _entry_save_opportunity(margin: int, base: tuple[str, str, str], inn: int) -> dict:
-    """세이브 상황(SVO) 판정 — 등판 "순간"의 리드폭·주자·이닝만으로 결정한다(이후 실제로
-    막았는지/블론당했는지는 전혀 안 본다. 그건 호출부가 별도로 판정). 실제 규정의 세 조건
-    문자(a/b/c)를 그대로 따른다 — 어느 조건으로 통과했는지도 같이 돌려준다. 조건에 따라
-    "실제로 세이브/홀드를 인정받으려면 얼마나 던져야 하는지"가 다르기 때문이다(조건b만
-    이닝 완수 요건이 없다 — 나머지는 등판 시점 조건만으론 부족하고 실제로 그만큼 던져야
-    한다. 2026-09-12 NC전 손주환(조건a로만 통과, 1이닝 못 채워 세이브/홀드 둘 다 불인정)·
-    신영우(조건c로만 통과, 3이닝은커녕 1이닝도 안 됨) 사례로 이 구분이 실제로 필요함을
-    확인했다).
+def _svo_conditions(margin: int, base: tuple[str, str, str], inn: int) -> dict:
+    """세이브 상황(SVO) 판정 — 등판 "순간"의 리드폭·주자·이닝만으로 결정한다. 실제로
+    막았는지/블론당했는지, 몇 아웃을 잡았는지는 여기서 전혀 안 본다 — SVO는 등판 시점의
+    사실 판단일 뿐이고, 그걸로 세이브/홀드/블론을 "기록에 추가"하는 건 이후 완수 여부를
+    보는 완전히 별개의 단계다(그 단계는 이 함수를 호출하는 쪽 — self_save_pitcher/
+    self_hold_pitchers/blown_pitchers 계산부 — 의 몫이다).
+
+    실제 규정의 세 조건 문자(a/b/c)를 그대로 따르고, 어느 조건(들)을 만족했는지 전부
+    돌려준다 — 나중에 "실제로 세이브/홀드로 인정하려면 얼마나 던졌어야 했는지"를 판단할
+    때, 조건마다 필요한 완수량이 다르기 때문에 이 정보가 필요하다(조건b만 완수 요건이
+    없다 — 그건 이 함수의 관심사가 아니라 호출부가 판단한다. _award_min_outs() 참고).
 
     [기본조건] margin > 0(앞선 상태)이어야 함 — 여기서 확인.
     [조건a] 점수차 무관하게 늘 적용되는 표준 세이브 상황: 3점차 이내로 앞선 상태.
-            실제로 인정받으려면 최소 1이닝(아웃카운트 3개)을 채워야 한다.
     [조건b] 동점/역전 주자가 누상·타석·"대기타석"(다음 타자) 중 어디에 있어도 성립 —
             즉 margin이 (누상 주자 수 + 2) 이하. 예: 무사/유사 주자 없이 1~2점차, 주자
-            2명 4점차, 만루 5점차 — 전부 여기 해당. 유일하게 이닝 완수 요건이 없다(짧게
-            막고 끝나도 인정 — "1아웃 세이브/홀드"가 실제로 존재하는 이유).
+            2명 4점차, 만루 5점차 — 전부 여기 해당.
     [조건c] 점수차 상관없이, 등판 시점부터 정규이닝(9회) 종료까지 남은 이닝이 3이닝
-            이상(예: 7회 등판 = 7·8·9회 = 3이닝 남음). 실제로 인정받으려면 3이닝(아웃
-            카운트 9개)을 채워야 한다. 이미 연장에 들어간 뒤의 등판은 "9회까지 남은
-            이닝"이라는 기준 자체가 안 맞아서 이 조건은 적용하지 않는다.
+            이상(예: 7회 등판 = 7·8·9회 = 3이닝 남음). 이미 연장에 들어간 뒤의 등판은
+            "9회까지 남은 이닝"이라는 기준 자체가 안 맞아서 이 조건은 적용하지 않는다.
 
-    반환: {"svo": bool, "min_outs": int}. min_outs는 "실제 인정에 필요한 최소 아웃카운트"
-    (조건b만으로 통과했으면 0, 조건a만이면 3, 조건c만이면 9 — 여러 조건을 동시에
-    만족하면 그 중 가장 낮은 min_outs를 쓴다, 어느 쪽으로든 인정되면 되니까).
+    반환: {"a": bool, "b": bool, "c": bool} — margin<=0이면 셋 다 False.
     """
     if margin <= 0:
-        return {"svo": False, "min_outs": 0}
+        return {"a": False, "b": False, "c": False}
     runners_on_base = sum(1 for slot in base if slot != "0")
-    thresholds = []
-    if margin <= runners_on_base + 2:  # 조건b
-        thresholds.append(0)
-    if margin <= 3:  # 조건a
-        thresholds.append(3)
-    if inn <= 9 and (9 - inn + 1) >= 3:  # 조건c
-        thresholds.append(9)
-    if not thresholds:
-        return {"svo": False, "min_outs": 0}
-    return {"svo": True, "min_outs": min(thresholds)}
+    return {
+        "a": margin <= 3,
+        "b": margin <= runners_on_base + 2,
+        "c": inn <= 9 and (9 - inn + 1) >= 3,
+    }
+
+
+def _award_min_outs(conditions: dict) -> int:
+    """SVO를 실제 기록(세이브/홀드)으로 인정하려면 완수해야 하는 최소 아웃카운트 —
+    SVO 판정(_svo_conditions) 자체와는 별개의, "완수 기준" 단계다. 조건b로 통과했으면
+    완수 요건이 아예 없어서(짧게 막고 끝나도 인정 — "1아웃 세이브/홀드"가 실제로 존재하는
+    이유) 0, 조건a만으로 통과했으면 최소 1이닝(아웃카운트 3개), 조건c만으로 통과했으면
+    최소 3이닝(아웃카운트 9개). 여러 조건을 동시에 만족하면 그 중 가장 낮은 요건을 쓴다
+    (어느 쪽으로든 완수하면 인정되니까).
+
+    2026-09-12 NC전 손주환(조건a로만 SVO, 2아웃뿐이라 3아웃 요건 미달로 세이브/홀드 둘 다
+    불인정)·신영우(조건c로만 SVO, 2아웃뿐이라 9아웃 요건 미달)로 이 구분이 실제로
+    필요함을 확인했다."""
+    if conditions.get("b"):
+        return 0
+    if conditions.get("a"):
+        return 3
+    if conditions.get("c"):
+        return 9
+    return 0  # SVO 자체가 없으면(호출부에서 이미 걸러짐) 의미 없는 값
 
 
 def compute_relay_stats(
@@ -284,11 +296,14 @@ def compute_relay_stats(
       'batter_extra': {name: {'ADVANCE':n}},
       'timeline': {name: [{'inn':int, 'text':str, 'points':int, 'tags':{stat:count}}, ...]},
       'pitcher_entry_margin': {name: int},  # 구원투수가 등판한 순간의 (자팀-상대) 점수차.
-      'pitcher_svo': {name: bool},  # 구원투수가 등판한 순간 세이브 상황(SVO)이었는지.
-                                     # _entry_save_opportunity() 참고.
-      'pitcher_min_outs': {name: int},  # SVO를 실제로 인정받으려면 채워야 하는 최소
-                                         # 아웃카운트(조건b=0, 조건a=3, 조건c=9). 등판 시점
-                                         # 조건 충족만으론 부족하고 실제로 완수해야 한다 —
+      'pitcher_svo': {name: bool},  # 구원투수가 등판한 순간 세이브 상황(SVO)이었는지 —
+                                     # 순수한 등판 시점 판단(_svo_conditions() 참고), 완수
+                                     # 여부와는 무관.
+      'pitcher_min_outs': {name: int},  # SVO를 실제 세이브/홀드 기록으로 "추가"하려면
+                                         # 채워야 하는 최소 아웃카운트(조건b=0, 조건a=3,
+                                         # 조건c=9) — SVO 판단과는 별개의, 완수 여부를 보는
+                                         # 단계(_award_min_outs() 참고). 등판 시점 조건
+                                         # 충족만으론 부족하고 실제로 완수해야 한다 —
                                          # naver_fantasy_score.py가 박스스코어 아웃카운트와
                                          # 대조해서 세이브/홀드 인정 여부를 가린다.
       'blown_pitchers': {name},  # 등판 시 SVO였던 투수가, 자기가 마운드에 있는 동안
@@ -360,8 +375,17 @@ def compute_relay_stats(
     # 세이브 기회 판정용: 구원투수가 등판한 "순간"의 (자기 팀 점수 - 상대 팀 점수) 마진.
     # 선발은 여기 안 걸리는 게 맞다(등판 자체가 '교체'로 안 잡히니까).
     pitcher_entry_margin: dict = {}
-    # 구원투수가 "등판한 순간" 세이브 상황(SVO)이었는지 — _entry_save_opportunity() 참고.
+    # 구원투수가 "등판한 순간" 세이브 상황(SVO)이었는지 — _svo_conditions() 참고. 조건c
+    # (긴 이닝을 커버하는 등판)는 여기 포함하지 않는다 — 점수차와 무관하게 성립해서 대량
+    # 득점 차 리드에서도 "세이브 상황"이 되는 비정상적인 경우라, 블론세이브·홀드 무효화
+    # 판정(mound-presence/responsibility 추적)의 트리거로는 쓰지 않는다. 대신 실제로 그
+    # 결과(완투성 계투로 팀이 이김/리드 유지)가 "일어났을 때"만 pitcher_c_only로 별도 인정한다.
     pitcher_svo: dict[str, bool] = {}
+    # 조건c만으로 SVO 후보가 된 투수(조건a/b는 해당 없음) — 등판 시점엔 세이브 상황으로
+    # 취급하지 않다가, 게임이 끝나고 실제로 완수(min_outs 충족 + 팀 승리/리드 유지)했을 때만
+    # self_save/self_hold 후보에 넣는다. 아래 pitcher_svo와 달리 블론·홀드 무효화의 트리거는
+    # 아니다(그 판정 없이 "결과만" 본다).
+    pitcher_c_only: dict[str, bool] = {}
     # SVO를 인정받기 위해 실제로 채워야 하는 최소 아웃카운트(조건b=0, 조건a=3, 조건c=9) —
     # 등판 시점 조건만으론 안 끝나고 "완수"까지 봐야 세이브/홀드를 실제로 인정할 수 있어서
     # naver_fantasy_score.py가 박스스코어의 실제 아웃카운트와 비교하는 데 쓴다.
@@ -436,9 +460,10 @@ def compute_relay_stats(
                     # half='0'이면 수비팀=홈, half='1'이면 수비팀=원정
                     margin = (ev["home_score"] - ev["away_score"]) if half == "0" else (ev["away_score"] - ev["home_score"])
                     pitcher_entry_margin[in_name] = margin
-                    svo_result = _entry_save_opportunity(margin, base, ev["inn"])
-                    pitcher_svo[in_name] = svo_result["svo"]
-                    pitcher_min_outs[in_name] = svo_result["min_outs"]
+                    conditions = _svo_conditions(margin, base, ev["inn"])
+                    pitcher_svo[in_name] = conditions["a"] or conditions["b"]
+                    pitcher_c_only[in_name] = conditions["c"] and not pitcher_svo[in_name]
+                    pitcher_min_outs[in_name] = _award_min_outs(conditions)
                     pitcher_half[in_name] = half
             elif in_label in FIELDING_POSITIONS:
                 defense[half][in_label] = in_name
@@ -867,15 +892,23 @@ def compute_relay_stats(
     # "이긴 팀의 마지막 수비 이닝에 있던 투수" = current_pitcher[승리팀이 수비하는 half]를
     # 게임 종료 시점 값 그대로 읽으면 된다 — 끝내기로 끝났든 마지막 아웃으로 끝났든, 이긴
     # 팀이 실제로 수비한 마지막 시점의 투수를 가리키므로 항상 맞다.
+    # 조건c만으로 SVO 후보가 됐던 투수는 블론·홀드 무효화 추적 대상이 아니었으므로, 여기서는
+    # "결과가 실제로 그렇게 됐는지"(팀이 이긴 채로 자신이 마운드에 남아있었는지/그 half
+    # 소속인지)만 보고 인정한다 — pitcher_min_outs(9아웃) 충족 여부는 naver_fantasy_score.py가
+    # 박스스코어로 최종 확인한다.
     self_save_pitcher = None
     self_hold_pitchers: set[str] = set()
     if final_score is not None and final_score["home"] != final_score["away"]:
         winner_half = "0" if final_score["home"] > final_score["away"] else "1"
         finishing_pitcher = current_pitcher.get(winner_half)
-        if finishing_pitcher and pitcher_svo.get(finishing_pitcher) and finishing_pitcher not in blown_pitchers:
-            self_save_pitcher = finishing_pitcher
-        for name, svo in pitcher_svo.items():
-            if (svo and pitcher_half.get(name) == winner_half
+        if finishing_pitcher:
+            if pitcher_svo.get(finishing_pitcher) and finishing_pitcher not in blown_pitchers:
+                self_save_pitcher = finishing_pitcher
+            elif pitcher_c_only.get(finishing_pitcher):
+                self_save_pitcher = finishing_pitcher
+        for name in set(pitcher_svo) | set(pitcher_c_only):
+            eligible = pitcher_svo.get(name) or pitcher_c_only.get(name)
+            if (eligible and pitcher_half.get(name) == winner_half
                     and name != finishing_pitcher and name not in blown_pitchers
                     and name not in hold_broken_pitchers):
                 self_hold_pitchers.add(name)
