@@ -219,31 +219,45 @@ def _detect_productive_outs(events: list[dict]) -> dict[str, int]:
     return dict(credit)
 
 
-def _entry_save_opportunity(margin: int, base: tuple[str, str, str], inn: int) -> bool:
+def _entry_save_opportunity(margin: int, base: tuple[str, str, str], inn: int) -> dict:
     """세이브 상황(SVO) 판정 — 등판 "순간"의 리드폭·주자·이닝만으로 결정한다(이후 실제로
-    막았는지/블론당했는지는 전혀 안 본다. 그건 호출부가 별도로 판정).
+    막았는지/블론당했는지는 전혀 안 본다. 그건 호출부가 별도로 판정). 실제 규정의 세 조건
+    문자(a/b/c)를 그대로 따른다 — 어느 조건으로 통과했는지도 같이 돌려준다. 조건에 따라
+    "실제로 세이브/홀드를 인정받으려면 얼마나 던져야 하는지"가 다르기 때문이다(조건b만
+    이닝 완수 요건이 없다 — 나머지는 등판 시점 조건만으론 부족하고 실제로 그만큼 던져야
+    한다. 2026-09-12 NC전 손주환(조건a로만 통과, 1이닝 못 채워 세이브/홀드 둘 다 불인정)·
+    신영우(조건c로만 통과, 3이닝은커녕 1이닝도 안 됨) 사례로 이 구분이 실제로 필요함을
+    확인했다).
 
     [기본조건] margin > 0(앞선 상태)이어야 함 — 여기서 확인.
-    [조건1] 백투백 홈런(누상 주자 전원 + 타자 1인이 첫 홈런으로 득점, 이어서 솔로 홈런
-            하나 더)을 맞으면 동점 이하가 되는 리드+주자 상황. 즉 margin이
-            (누상 주자 수 + 2) 이하. 예: 무사/유사 주자 없이 1~2점차, 주자 2명 4점차,
-            만루 5점차 — 전부 여기 해당.
-    [조건2] 점수차 무관하게 늘 적용되는 표준 세이브 상황: 3점차 이내로 앞선 상태.
-    [조건3] 점수차 상관없이, 등판 시점부터 정규이닝(9회) 종료까지 남은 이닝이 3이닝
-            이상(예: 7회 등판 = 7·8·9회 = 3이닝 남음). 이미 연장에 들어간 뒤의 등판은
-            "9회까지 남은 이닝"이라는 기준 자체가 안 맞아서 이 조건은 적용하지 않는다
-            (조건1·조건2로 커버되는 경우가 대부분이라 실무적으로 문제 없음).
+    [조건a] 점수차 무관하게 늘 적용되는 표준 세이브 상황: 3점차 이내로 앞선 상태.
+            실제로 인정받으려면 최소 1이닝(아웃카운트 3개)을 채워야 한다.
+    [조건b] 동점/역전 주자가 누상·타석·"대기타석"(다음 타자) 중 어디에 있어도 성립 —
+            즉 margin이 (누상 주자 수 + 2) 이하. 예: 무사/유사 주자 없이 1~2점차, 주자
+            2명 4점차, 만루 5점차 — 전부 여기 해당. 유일하게 이닝 완수 요건이 없다(짧게
+            막고 끝나도 인정 — "1아웃 세이브/홀드"가 실제로 존재하는 이유).
+    [조건c] 점수차 상관없이, 등판 시점부터 정규이닝(9회) 종료까지 남은 이닝이 3이닝
+            이상(예: 7회 등판 = 7·8·9회 = 3이닝 남음). 실제로 인정받으려면 3이닝(아웃
+            카운트 9개)을 채워야 한다. 이미 연장에 들어간 뒤의 등판은 "9회까지 남은
+            이닝"이라는 기준 자체가 안 맞아서 이 조건은 적용하지 않는다.
+
+    반환: {"svo": bool, "min_outs": int}. min_outs는 "실제 인정에 필요한 최소 아웃카운트"
+    (조건b만으로 통과했으면 0, 조건a만이면 3, 조건c만이면 9 — 여러 조건을 동시에
+    만족하면 그 중 가장 낮은 min_outs를 쓴다, 어느 쪽으로든 인정되면 되니까).
     """
     if margin <= 0:
-        return False
+        return {"svo": False, "min_outs": 0}
     runners_on_base = sum(1 for slot in base if slot != "0")
-    if margin <= runners_on_base + 2:  # 조건1
-        return True
-    if margin <= 3:  # 조건2
-        return True
-    if inn <= 9 and (9 - inn + 1) >= 3:  # 조건3
-        return True
-    return False
+    thresholds = []
+    if margin <= runners_on_base + 2:  # 조건b
+        thresholds.append(0)
+    if margin <= 3:  # 조건a
+        thresholds.append(3)
+    if inn <= 9 and (9 - inn + 1) >= 3:  # 조건c
+        thresholds.append(9)
+    if not thresholds:
+        return {"svo": False, "min_outs": 0}
+    return {"svo": True, "min_outs": min(thresholds)}
 
 
 def compute_relay_stats(
@@ -272,17 +286,24 @@ def compute_relay_stats(
       'pitcher_entry_margin': {name: int},  # 구원투수가 등판한 순간의 (자팀-상대) 점수차.
       'pitcher_svo': {name: bool},  # 구원투수가 등판한 순간 세이브 상황(SVO)이었는지.
                                      # _entry_save_opportunity() 참고.
+      'pitcher_min_outs': {name: int},  # SVO를 실제로 인정받으려면 채워야 하는 최소
+                                         # 아웃카운트(조건b=0, 조건a=3, 조건c=9). 등판 시점
+                                         # 조건 충족만으론 부족하고 실제로 완수해야 한다 —
+                                         # naver_fantasy_score.py가 박스스코어 아웃카운트와
+                                         # 대조해서 세이브/홀드 인정 여부를 가린다.
       'blown_pitchers': {name},  # 등판 시 SVO였던 투수가, 자기가 마운드에 있는 동안
                                   # 동점/역전을 허용한 경우의 이름 집합(자책 여부 무관, wls와
                                   # 무관하게 스코어 흐름으로 직접 판정)
       'self_save_pitcher': str | None,  # wls 없이 자체 판정한 세이브 투수(승리팀 마지막 수비
-                                         # 투수가 SVO였고 안 블론당했을 때). wls가 붙으면 그쪽 우선.
-                                         # naver_fantasy_score.py가 실제로 적용한다.
-      'self_hold_pitchers': {name},  # 위와 같은 원리의 자체 판정 홀드 후보 집합. 처음엔
-                                      # "안 블론당했으면 홀드"로만 봐서, 승계주자로 넘겨준
-                                      # 주자가 나중에 실점해도(마운드엔 없었으니) 안 걸러지는
-                                      # 오탐이 있었다 — hold_broken_pitchers(책임 소재 기준,
-                                      # run_origin 재사용)로 추가 제외해서 해결.
+                                         # 투수가 SVO였고 안 블론당했을 때). wls가 붙으면 그쪽
+                                         # 우선. naver_fantasy_score.py가 pitcher_min_outs와
+                                         # 대조한 뒤 실제로 적용한다.
+      'self_hold_pitchers': {name},  # 위와 같은 원리의 자체 판정 홀드 후보 집합. "그 주자를
+                                      # 내보낸 책임 투수"(hold_broken_pitchers, run_origin
+                                      # 재사용)로 승계주자 실점 무효화까지 반영한다. 실제
+                                      # 인정 여부는 역시 pitcher_min_outs 대조가 필요하다
+                                      # (2026-09-12 NC전 신영우·손주환 — 조건c/a로만 SVO를
+                                      # 얻었는데 필요 이닝을 못 채운 사례로 확인).
       'self_win_pitcher': str | None,  # 자체 판정 승리투수. "그 이후로 안 뒤집힌 결승 리드가
                                         # 만들어진 순간, 이긴 팀 마운드에 있던 투수". 선발이
                                         # 5이닝을 못 채우고 내려간 예외(공식기록원 재량)는
@@ -341,6 +362,10 @@ def compute_relay_stats(
     pitcher_entry_margin: dict = {}
     # 구원투수가 "등판한 순간" 세이브 상황(SVO)이었는지 — _entry_save_opportunity() 참고.
     pitcher_svo: dict[str, bool] = {}
+    # SVO를 인정받기 위해 실제로 채워야 하는 최소 아웃카운트(조건b=0, 조건a=3, 조건c=9) —
+    # 등판 시점 조건만으론 안 끝나고 "완수"까지 봐야 세이브/홀드를 실제로 인정할 수 있어서
+    # naver_fantasy_score.py가 박스스코어의 실제 아웃카운트와 비교하는 데 쓴다.
+    pitcher_min_outs: dict[str, int] = {}
     # 그 투수가 어느 팀 소속인지(half로 구분) — 자체 세이브/홀드 판정에서 "이긴 팀 소속인지"를
     # 가리는 데 쓴다(진 팀의 구원투수가 마침 SVO로 등판했다가 안 무너졌어도 세이브/홀드가
     # 아니다 — 그 팀 자체가 졌으니까).
@@ -411,7 +436,9 @@ def compute_relay_stats(
                     # half='0'이면 수비팀=홈, half='1'이면 수비팀=원정
                     margin = (ev["home_score"] - ev["away_score"]) if half == "0" else (ev["away_score"] - ev["home_score"])
                     pitcher_entry_margin[in_name] = margin
-                    pitcher_svo[in_name] = _entry_save_opportunity(margin, base, ev["inn"])
+                    svo_result = _entry_save_opportunity(margin, base, ev["inn"])
+                    pitcher_svo[in_name] = svo_result["svo"]
+                    pitcher_min_outs[in_name] = svo_result["min_outs"]
                     pitcher_half[in_name] = half
             elif in_label in FIELDING_POSITIONS:
                 defense[half][in_label] = in_name
@@ -872,6 +899,7 @@ def compute_relay_stats(
         "timeline": {k: v for k, v in timeline.items()},
         "pitcher_entry_margin": pitcher_entry_margin,
         "pitcher_svo": pitcher_svo,
+        "pitcher_min_outs": pitcher_min_outs,
         "blown_pitchers": blown_pitchers,
         "self_save_pitcher": self_save_pitcher,
         "self_hold_pitchers": self_hold_pitchers,

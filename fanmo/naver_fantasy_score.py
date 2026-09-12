@@ -564,8 +564,10 @@ def _merge_relay_stats(game_id: str, rd: dict, batter_rows: list[dict], pitcher_
     batter_extra = stats["batter_extra"]
     timeline = stats["timeline"]
     pitcher_svo = stats.get("pitcher_svo", {})
+    pitcher_min_outs = stats.get("pitcher_min_outs", {})
     blown_pitchers = stats.get("blown_pitchers", set())
     self_save_pitcher = stats.get("self_save_pitcher")
+    self_hold_pitchers = stats.get("self_hold_pitchers", set())
     self_win_pitcher = stats.get("self_win_pitcher")
     self_loss_pitcher = stats.get("self_loss_pitcher")
     final_score = stats["final_score"]
@@ -654,20 +656,28 @@ def _merge_relay_stats(game_id: str, rd: dict, batter_rows: list[dict], pitcher_
         # 판정한 값을 임시로 채워 넣는다 — 나중에 재수집해서 wls가 실제로 붙으면 그 값이
         # 항상 이 임시값을 덮어쓴다.
         #
-        # 홀드는 자체 판정을 안 쓴다. "안 블론당했으면 홀드"로만 볼 땐 승계주자로 넘겨준
-        # 주자가 나중에 실점해도 안 걸러지는 오탐이 있었고(2026-09-10 전사민), "그 주자를
-        # 내보낸 책임 투수" 기준(hold_broken_pitchers)을 추가해도 여전히 오탐이 남았다
-        # (2026-09-12 스기모토 — 자책점을 허용했지만 팀 리드 자체는 안 깨졌는데도 공식
-        # wls엔 홀드가 없음). 승리투수의 "선발 5이닝 미만" 예외처럼, 홀드에도 기계적 규칙만
-        # 으로는 못 잡는 기록원 재량이 있는 것으로 보여 자체 판정은 포기하고 wls만 믿는다.
+        # 홀드는 처음엔 "안 블론당했으면 홀드"로만 봐서, 승계주자로 넘겨준 주자가 나중에
+        # 실점해도 안 걸러지는 오탐이 있었고(2026-09-10 전사민), "그 주자를 내보낸 책임
+        # 투수" 기준(hold_broken_pitchers)을 추가해도 여전히 오탐이 남았다(2026-09-12
+        # 스기모토·손주환·신영우). 진짜 원인은 등판 시점에 SVO 조건 중 어느 걸로 통과했는지를
+        # 안 가리고 있었던 것 — 조건a(3점차 이내)·조건c(3이닝 이상 남음)는 "등판 시점
+        # 조건 충족"만으론 부족하고 실제로 그만큼(각각 1이닝·3이닝) 던져야 인정되는데, 그걸
+        # 안 보고 있었다(조건c로만 통과한 신영우는 2아웃, 조건a로만 통과한 손주환은 2아웃 —
+        # 둘 다 필요 이닝을 못 채웠다). 유일하게 조건b(동점/역전 주자가 누상·타석·대기타석에
+        # 있는 상황)만 이닝 완수 요건이 없다. relay.py의 pitcher_min_outs(조건별 필요
+        # 아웃카운트, 조건b면 0)와 실제 아웃카운트를 대조해서 정확히 가린다.
         #
         # 승리투수는 선발이 5이닝(15아웃)을 못 채우고 내려갔는데 그 이후 팀이 리드를 유지한
         # 채 이겼다면, 공식기록원이 재량으로 다른 구원투수에게 승을 넘기는 예외가 있어서
         # relay.py의 "결승 리드 순간 마운드 투수" 판정만으로는 못 미더워 그 경우엔 적용하지
         # 않는다(wls만 믿는다). 패전투수는 이런 예외가 없어 기계적으로 신뢰한다.
         if not row.get("_wls"):
-            if row["name"] == self_save_pitcher:
+            min_outs = pitcher_min_outs.get(row["name"], 0)
+            if row["name"] == self_save_pitcher and row["stat"]["OUT"] >= min_outs:
                 row["stat"]["SAVE"] = 1
+                row["lp"] = score_pitcher(row["stat"])
+            elif row["name"] in self_hold_pitchers and row["stat"]["OUT"] >= min_outs:
+                row["stat"]["HOLD"] = 1
                 row["lp"] = score_pitcher(row["stat"])
 
             starter_left_early = row["role"] == "선발" and row["stat"]["OUT"] < 15
