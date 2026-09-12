@@ -565,6 +565,7 @@ def _merge_relay_stats(game_id: str, rd: dict, batter_rows: list[dict], pitcher_
     timeline = stats["timeline"]
     pitcher_svo = stats.get("pitcher_svo", {})
     blown_pitchers = stats.get("blown_pitchers", set())
+    self_save_pitcher = stats.get("self_save_pitcher")
     final_score = stats["final_score"]
     earned_run_events = stats.get("earned_run_events", {})
     bunt_out = stats.get("bunt_out", {})
@@ -643,6 +644,19 @@ def _merge_relay_stats(game_id: str, rd: dict, batter_rows: list[dict], pitcher_
         # 세이브/홀드가 없던 일이 되는 것과 마찬가지로 블론도 기록하지 않는다.
         if row["name"] in blown_pitchers and not row["stat"]["BLOWN"] and row.get("_wls") != "승":
             row["stat"]["BLOWN"] = 1
+            row["lp"] = score_pitcher(row["stat"])
+
+        # 세이브 임시 자체 판정: 경기가 막 끝난 직후엔 네이버 공식 결정(wls)이 아직 안
+        # 붙어서(반영까지 시차가 있음) 세이브가 한동안 0으로 비어 보이는 문제가 있었다.
+        # wls가 비어있는 동안만(row.get("_wls")가 falsy), relay.py가 스코어 흐름으로 직접
+        # 판정한("승리팀의 마지막 수비 투수 + SVO + 안 블론") 값을 임시로 채워 넣는다 —
+        # 나중에 재수집해서 wls가 실제로 붙으면 그 값이 항상 이 임시값을 덮어쓴다.
+        # (홀드는 자체 판정을 안 쓴다 — 승계주자가 나중에 실점해 동점이 되면, 정작 마운드에
+        # 없었던 원 투수 본인의 홀드가 취소되는 규정상 미묘함이 있어서 검증해보니 오탐이
+        # 났다. 예: 2026-09-10 NC전 전사민은 SVO+안블론 조건은 만족했지만 공식 wls는
+        # 이틀이 지나도 계속 비어있음 — 지연이 아니라 애초에 홀드가 아니었던 것.)
+        if not row.get("_wls") and row["name"] == self_save_pitcher:
+            row["stat"]["SAVE"] = 1
             row["lp"] = score_pitcher(row["stat"])
 
     for row in batter_rows + pitcher_rows:

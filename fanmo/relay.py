@@ -275,6 +275,13 @@ def compute_relay_stats(
       'blown_pitchers': {name},  # 등판 시 SVO였던 투수가, 자기가 마운드에 있는 동안
                                   # 동점/역전을 허용한 경우의 이름 집합(자책 여부 무관, wls와
                                   # 무관하게 스코어 흐름으로 직접 판정)
+      'self_save_pitcher': str | None,  # wls 없이 자체 판정한 세이브 투수(승리팀 마지막 수비
+                                         # 투수가 SVO였고 안 블론당했을 때). wls가 붙으면 그쪽 우선.
+                                         # naver_fantasy_score.py가 실제로 적용한다.
+      'self_hold_pitchers': {name},  # 위와 같은 원리의 자체 판정 홀드 후보 집합 — 검증해보니
+                                      # 승계주자가 나중에 실점해 동점이 되면 원 투수 본인의
+                                      # 홀드가 취소되는 규정상 미묘함을 못 잡아 오탐이 있었다.
+                                      # 그래서 지금은 참고용으로만 남겨두고 실제로 안 쓴다.
       'final_score': {'home': int, 'away': int} | None,  # 승/패 판정용 최종 스코어
     }
     catcher_events/fielding_events는 "그 순간 실제로 뛴 포지션"을 이벤트마다 태그해 원본 그대로
@@ -327,6 +334,10 @@ def compute_relay_stats(
     pitcher_entry_margin: dict = {}
     # 구원투수가 "등판한 순간" 세이브 상황(SVO)이었는지 — _entry_save_opportunity() 참고.
     pitcher_svo: dict[str, bool] = {}
+    # 그 투수가 어느 팀 소속인지(half로 구분) — 자체 세이브/홀드 판정에서 "이긴 팀 소속인지"를
+    # 가리는 데 쓴다(진 팀의 구원투수가 마침 SVO로 등판했다가 안 무너졌어도 세이브/홀드가
+    # 아니다 — 그 팀 자체가 졌으니까).
+    pitcher_half: dict[str, str] = {}
     # 블론세이브: "등판 시점에 SVO였던 구원투수가, 자기가 마운드에 있는 동안 동점 또는
     # 역전을 허용"하면 블론이다(자책/비자책 무관, 승계주자가 들어온 득점이든 자기가 직접
     # 내준 득점이든 무관 — 그 순간 마운드에 있었다는 사실만 본다). 승/패 결정과도
@@ -380,6 +391,7 @@ def compute_relay_stats(
                     margin = (ev["home_score"] - ev["away_score"]) if half == "0" else (ev["away_score"] - ev["home_score"])
                     pitcher_entry_margin[in_name] = margin
                     pitcher_svo[in_name] = _entry_save_opportunity(margin, base, ev["inn"])
+                    pitcher_half[in_name] = half
             elif in_label in FIELDING_POSITIONS:
                 defense[half][in_label] = in_name
             prev_base[half] = base
@@ -761,6 +773,24 @@ def compute_relay_stats(
         if events else None
     )
 
+    # 자체 세이브/홀드 판정: 네이버 wls(공식 결정)가 아직 안 붙었을 때 임시로 채워 넣는 값이다
+    # (경기 종료 직후엔 공식 결정이 붙기까지 시간이 걸려서, 그 사이엔 세이브/홀드가 통째로
+    # 0으로 비어 보이는 문제가 있었다 — 나중에 wls가 실제로 붙으면 그쪽이 항상 우선한다).
+    # "이긴 팀의 마지막 수비 이닝에 있던 투수" = current_pitcher[승리팀이 수비하는 half]를
+    # 게임 종료 시점 값 그대로 읽으면 된다 — 끝내기로 끝났든 마지막 아웃으로 끝났든, 이긴
+    # 팀이 실제로 수비한 마지막 시점의 투수를 가리키므로 항상 맞다.
+    self_save_pitcher = None
+    self_hold_pitchers: set[str] = set()
+    if final_score is not None and final_score["home"] != final_score["away"]:
+        winner_half = "0" if final_score["home"] > final_score["away"] else "1"
+        finishing_pitcher = current_pitcher.get(winner_half)
+        if finishing_pitcher and pitcher_svo.get(finishing_pitcher) and finishing_pitcher not in blown_pitchers:
+            self_save_pitcher = finishing_pitcher
+        for name, svo in pitcher_svo.items():
+            if (svo and pitcher_half.get(name) == winner_half
+                    and name != finishing_pitcher and name not in blown_pitchers):
+                self_hold_pitchers.add(name)
+
     return {
         "pitcher_extra": {k: dict(v) for k, v in pitcher_extra.items()},
         "catcher_events": dict(catcher_events),
@@ -770,6 +800,8 @@ def compute_relay_stats(
         "pitcher_entry_margin": pitcher_entry_margin,
         "pitcher_svo": pitcher_svo,
         "blown_pitchers": blown_pitchers,
+        "self_save_pitcher": self_save_pitcher,
+        "self_hold_pitchers": self_hold_pitchers,
         "final_score": final_score,
         "earned_run_events": {k: v for k, v in earned_run_events.items()},
         "bunt_out": dict(bunt_out),
