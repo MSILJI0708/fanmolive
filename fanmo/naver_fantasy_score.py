@@ -31,12 +31,35 @@ from __future__ import annotations
 import argparse
 import html
 import json
+import os
 import re
 import ssl
 import urllib.request
 from collections import Counter, defaultdict
 
 from fanmo_cost import lookup_batter_cost, lookup_pitcher_cost
+
+SELF_PRED_LOG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "self_pred_mismatches.json")
+
+
+def _log_self_pred_mismatch(game_id: str, name: str, team: str, wls: str,
+                             predicted: dict, official: dict) -> None:
+    """공식 wls가 이미 붙어 정답을 아는 행에 대해, "wls가 없었다면 우리 자체판정 로직이
+    뭐라고 했을지"를 항상 계산해 정답과 비교해둔다(_merge_relay_stats에서 매 수집마다
+    호출) — 세이브/홀드/승/패 자체판정 규칙이 앞으로도 계속 맞는지, 다루지 못한 새 사례가
+    생기면 여기 쌓여서 detect_errors.py로 볼 수 있다. 틀린 경우만 기록하고, 같은
+    경기·선수 조합이면 최신 판정으로 덮어쓴다(재수집 때마다 중복이 쌓이지 않게)."""
+    try:
+        with open(SELF_PRED_LOG_PATH, encoding="utf-8") as f:
+            log = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        log = {}
+    log[f"{game_id}:{name}"] = {
+        "game_id": game_id, "name": name, "team": team, "official_wls": wls,
+        "predicted": predicted, "official": official,
+    }
+    with open(SELF_PRED_LOG_PATH, "w", encoding="utf-8") as f:
+        json.dump(log, f, ensure_ascii=False, indent=1)
 
 HEADERS = {
     "User-Agent": (
@@ -687,6 +710,28 @@ def _merge_relay_stats(game_id: str, rd: dict, batter_rows: list[dict], pitcher_
             elif row["name"] == self_loss_pitcher:
                 row["stat"]["LOSS"] = 1
                 row["lp"] = score_pitcher(row["stat"])
+        else:
+            # 자체판정 정확도 감시: 이 행은 wls가 이미 붙어서 정답을 아는 경우다. wls가
+            # 없었다면 위와 완전히 같은 규칙으로 우리 로직이 뭐라고 판정했을지를 계산해서
+            # 정답과 비교해둔다 — 세이브/홀드/승/패 자체판정이 이후 새 경기에서도 계속
+            # 맞는지 지속적으로 확인하기 위함(오늘 다룬 특정 사례들에 국한하지 않는
+            # 상시 감시). 블론세이브는 wls에 공식 값이 사실상 안 붙어(위 주석 참고) 정답
+            # 자체가 없으므로 비교 대상에서 뺀다.
+            min_outs = pitcher_min_outs.get(row["name"], 0)
+            starter_left_early = row["role"] == "선발" and row["stat"]["OUT"] < 15
+            predicted = {
+                "SAVE": row["name"] == self_save_pitcher and row["stat"]["OUT"] >= min_outs,
+                "HOLD": row["name"] in self_hold_pitchers and row["stat"]["OUT"] >= min_outs,
+                "WIN": row["name"] == self_win_pitcher and not starter_left_early,
+                "LOSS": row["name"] == self_loss_pitcher,
+            }
+            wls = row["_wls"]
+            official = {
+                "SAVE": wls == "세", "HOLD": wls == "홀",
+                "WIN": wls == "승", "LOSS": wls == "패",
+            }
+            if predicted != official:
+                _log_self_pred_mismatch(game_id, row["name"], row["team"], wls, predicted, official)
 
     for row in batter_rows + pitcher_rows:
         is_pitcher_row = "OUT" in row["stat"]

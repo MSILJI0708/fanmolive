@@ -124,12 +124,17 @@ jobs:
           python build_stats.py
           python build_records_board.py
 
+      - name: "데이터 정합성·자체판정 정확도 점검 (KBO 데이터가 실제로 바뀌었을 때만)"
+        if: steps.check_active.outputs.active == 'true'
+        working-directory: fanmo
+        run: python detect_errors.py
+
       - name: 수집 결과 커밋 & 푸시
         if: steps.combine.outputs.do_work == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add fanmo/data_*.json fanmo/position_db.json fanmo/lp_board.html fanmo/lp_board_mlb.html fanmo/mlb_last_run.txt fanmo/position_last_refresh.txt fanmo/season_stats.json fanmo/career_stats.json fanmo/records.html fanmo/active_window_state.json
+          git add fanmo/data_*.json fanmo/position_db.json fanmo/lp_board.html fanmo/lp_board_mlb.html fanmo/mlb_last_run.txt fanmo/position_last_refresh.txt fanmo/season_stats.json fanmo/career_stats.json fanmo/records.html fanmo/active_window_state.json fanmo/self_pred_mismatches.json fanmo/error_report.json
           if git diff --cached --quiet; then
             echo "변경 사항 없음, 커밋 생략"
           else
