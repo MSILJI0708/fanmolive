@@ -278,10 +278,17 @@ def compute_relay_stats(
       'self_save_pitcher': str | None,  # wls 없이 자체 판정한 세이브 투수(승리팀 마지막 수비
                                          # 투수가 SVO였고 안 블론당했을 때). wls가 붙으면 그쪽 우선.
                                          # naver_fantasy_score.py가 실제로 적용한다.
-      'self_hold_pitchers': {name},  # 위와 같은 원리의 자체 판정 홀드 후보 집합 — 검증해보니
-                                      # 승계주자가 나중에 실점해 동점이 되면 원 투수 본인의
-                                      # 홀드가 취소되는 규정상 미묘함을 못 잡아 오탐이 있었다.
-                                      # 그래서 지금은 참고용으로만 남겨두고 실제로 안 쓴다.
+      'self_hold_pitchers': {name},  # 위와 같은 원리의 자체 판정 홀드 후보 집합. 처음엔
+                                      # "안 블론당했으면 홀드"로만 봐서, 승계주자로 넘겨준
+                                      # 주자가 나중에 실점해도(마운드엔 없었으니) 안 걸러지는
+                                      # 오탐이 있었다 — hold_broken_pitchers(책임 소재 기준,
+                                      # run_origin 재사용)로 추가 제외해서 해결.
+      'self_win_pitcher': str | None,  # 자체 판정 승리투수. "그 이후로 안 뒤집힌 결승 리드가
+                                        # 만들어진 순간, 이긴 팀 마운드에 있던 투수". 선발이
+                                        # 5이닝을 못 채우고 내려간 예외(공식기록원 재량)는
+                                        # naver_fantasy_score.py가 이닝 수를 보고 따로 걸러낸다.
+      'self_loss_pitcher': str | None,  # 자체 판정 패전투수(같은 원리, 진 팀 쪽). 이쪽은
+                                         # 예외 규정이 없어 기계적으로 신뢰할 수 있다.
       'final_score': {'home': int, 'away': int} | None,  # 승/패 판정용 최종 스코어
     }
     catcher_events/fielding_events는 "그 순간 실제로 뛴 포지션"을 이벤트마다 태그해 원본 그대로
@@ -344,6 +351,20 @@ def compute_relay_stats(
     # 무관해서(블론 후 자기 팀이 재역전하면 승리투수가 될 수도 있음) 네이버 wls 필드만으로는
     # 못 잡는다 — 그래서 스코어 흐름을 직접 추적해서 판정한다.
     blown_pitchers: set[str] = set()
+    # 승/패 자체 판정: "그 이후로 한 번도 안 뒤집힌 결승 리드를 상대가 가져간 순간, 양쪽
+    # 마운드에 있던 투수"를 승리/패전투수 후보로 본다 — 리드가 바뀔 때마다(동점→역전 포함)
+    # 계속 덮어써서, 마지막에 남는 값이 곧 "최종 결승 리드가 만들어진 순간"이 된다. 패전
+    # 쪽은 이 규정이 거의 기계적이라 자체 판정을 그대로 쓰지만(naver_fantasy_score.py),
+    # 승리 쪽은 선발이 5이닝을 못 채우고 내려갔을 때 공식기록원이 재량으로 다른 구원투수에게
+    # 넘기는 예외가 있어서, 그 경우는 naver_fantasy_score.py가 박스스코어의 이닝 수를 보고
+    # 따로 걸러낸다.
+    leading_side: str | None = None  # 'home' | 'away' | None(동점)
+    last_go_ahead: dict = {"win_pitcher": None, "loss_pitcher": None, "winner_side": None}
+    # 홀드 자체 판정용 "책임 소재" 무효화 집합 — 블론(마운드 위 투수 기준)과는 다른 기준이다.
+    # 승계주자를 남겨주고 내려간 투수든, 자기가 직접 내보낸 주자든, "그 주자가 나중에 동점/
+    # 역전을 만드는 득점"을 하면 지금 누가 마운드에 있는지와 무관하게 그 투수의 홀드가
+    # 깨진다(run_origin이 "누가 이 주자를 내보냈는지"를 이미 추적하고 있어 그대로 재사용).
+    hold_broken_pitchers: set[str] = set()
     # 자책점을 "이닝별"로 보여주기 위한 추적: 주자 이름 -> 그 주자를 출루시킨 투수.
     # 이후 그 주자가 득점하면 이 투수에게 "자책점 후보"를 그 득점이 일어난 이닝에 매긴다.
     # (진짜 자책/비자책 판정은 박스스코어에만 있어서, 상한은 naver_fantasy_score.py에서
@@ -397,6 +418,50 @@ def compute_relay_stats(
             prev_base[half] = base
             continue
 
+        def _note_scoring_event(responsible_pitcher: str | None) -> None:
+            """득점 한 건이 스코어보드에 반영된 직후 호출한다(주자가 베이스를 밟고 들어오는
+            _credit_run 경로든, 타자 본인이 만드는 홈런이든 전부 여기를 거쳐야 한다 — 안 그러면
+            홈런으로 동점/역전되는 경우 블론·승패 자체 판정이 통째로 안 잡힌다).
+
+            - 블론: "그 순간 마운드에 있던" 투수 기준(mound-presence). SVO였던 투수가 리드를
+              0 이하로 내주면 블론.
+            - 홀드 무효화: "이 득점 주자를 내보낸" 투수 기준(responsibility) — 지금 마운드에
+              누가 있는지와 무관하게, 승계주자로 넘겨줬든 자기가 직접 내보낸 주자든 그 주자가
+              동점/역전 득점을 하면 원래 투수의 홀드가 깨진다. 이 두 기준은 서로 다른 투수를
+              가리킬 수 있다(예: A가 볼넷을 내주고 내려가고, 물려받은 B가 안타를 맞아 그
+              주자가 득점 — 블론은 B, 홀드 무효화는 A).
+            - 승/패 자체 판정: 리드가 바뀔 때마다(동점 포함) 마지막으로 갱신해서, 게임이
+              끝났을 때 남아있는 값이 "그 이후로 안 뒤집힌 결승 리드"가 된다.
+            """
+            nonlocal leading_side
+            batting_after = ev["away_score"] if half == "0" else ev["home_score"]
+            defending_after = ev["home_score"] if half == "0" else ev["away_score"]
+            margin_before = defending_after - (batting_after - 1)
+            margin_after = defending_after - batting_after
+            if margin_before > 0 and margin_after <= 0:
+                on_mound = current_pitcher[half]
+                # 등판 시점에 SVO였던 투수에게만 블론이 성립한다 — 선발은 애초에
+                # pitcher_svo에 없어서(등판 자체가 '교체'로 안 잡힘) 자동으로 제외됨.
+                if on_mound and pitcher_svo.get(on_mound):
+                    blown_pitchers.add(on_mound)
+                if responsible_pitcher and pitcher_svo.get(responsible_pitcher):
+                    hold_broken_pitchers.add(responsible_pitcher)
+
+            home_score, away_score = ev["home_score"], ev["away_score"]
+            new_leader = "home" if home_score > away_score else ("away" if away_score > home_score else None)
+            if new_leader is not None and new_leader != leading_side:
+                # 승리투수는 "그 순간 마운드에 있었는지"(mound-presence, 세이브/블론과 같은
+                # 기준)로 잡지만, 패전투수는 "이 결승 득점 주자를 누가 책임지는지"
+                # (responsibility, 홀드 무효화와 같은 기준)로 잡는다 — 실제 규정이 이렇게
+                # 서로 다르다(예: A가 볼넷을 내주고 내려간 뒤 물려받은 B가 그 주자에게
+                # 득점을 허용해 결승점이 나면, 패전은 B가 아니라 A에게 간다).
+                win_pitcher = current_pitcher["0"] if new_leader == "home" else current_pitcher["1"]
+                loss_pitcher = responsible_pitcher
+                last_go_ahead["win_pitcher"] = win_pitcher
+                last_go_ahead["loss_pitcher"] = loss_pitcher
+                last_go_ahead["winner_side"] = new_leader
+                leading_side = new_leader
+
         def _credit_run(runner: str, base_slot: str) -> None:
             """득점(R) 포인트 + 승계주자 실점 허용/자책점 후보 추적 — 어떤 이유로 홈에
             들어왔든(타구/폭투/실책/보크/도루) 득점 자체는 항상 그 주자에게 인정된다."""
@@ -414,19 +479,10 @@ def compute_relay_stats(
             if origin:
                 earned_run_events[origin].append({"inn": ev["inn"], "runner": runner})
 
-            # 이 득점 직후 수비팀이 동점 이하(리드 소멸/역전)가 됐고, 득점 직전까지는
-            # 수비팀이 앞서 있었다면 "리드가 깨진" 순간이다. half는 공격 측 기준이라
-            # current_pitcher[half]가 곧 그 순간 마운드에 있던 수비팀 투수다.
-            batting_after = ev["away_score"] if half == "0" else ev["home_score"]
-            defending_after = ev["home_score"] if half == "0" else ev["away_score"]
-            margin_before = defending_after - (batting_after - 1)
-            margin_after = defending_after - batting_after
-            if margin_before > 0 and margin_after <= 0:
-                on_mound = current_pitcher[half]
-                # 등판 시점에 SVO였던 투수에게만 블론이 성립한다 — 선발은 애초에
-                # pitcher_svo에 없어서(등판 자체가 '교체'로 안 잡힘) 자동으로 제외됨.
-                if on_mound and pitcher_svo.get(on_mound):
-                    blown_pitchers.add(on_mound)
+            # 홀드 무효화 책임 소재는 "이 주자를 원래 내보낸 투수"(run_origin)가 우선이다 —
+            # 승계주자로 물려받은 쪽(pending_inherited)이 아니다. 물려받은 쪽의 홀드는
+            # 마운드-현재 기준(on_mound) 블론 체크에서 이미 별도로 걸러진다.
+            _note_scoring_event(origin or pitcher)
 
         # _SB_RE를 _RUN_RE보다 먼저 검사해야 한다 — "도루로 홈인"(홈 스틸)은 도루 성공
         # 포인트와 득점 포인트를 둘 다 받아야 하는데, _RUN_RE는 "...홈인"으로 끝나는 문구를
@@ -679,6 +735,11 @@ def compute_relay_stats(
                     if bat_tags["HR"]:
                         # 홈런은 타자 본인이 그 자리에서 득점까지 확정되므로 별도 조회 없이 바로 기록
                         earned_run_events[p].append({"inn": ev["inn"], "runner": batter})
+                        # 홈런은 _credit_run을 안 거치므로(주자가 베이스를 밟고 들어오는 경로가
+                        # 아니라 타자 본인이 바로 득점) 여기서 직접 스코어 이벤트를 알려야 한다
+                        # — 안 그러면 동점/끝내기 홈런으로 블론·승패가 갈리는 경우를 놓친다.
+                        # 자기가 던진 공에 맞은 홈런이라 책임 소재도 마운드 위 투수(p) 그대로.
+                        _note_scoring_event(p)
                     elif bat_tags["H"] or bat_tags["BB"] or bat_tags["HBP"]:
                         run_origin[batter] = p
                     if bat_tags["H"]:
@@ -788,8 +849,20 @@ def compute_relay_stats(
             self_save_pitcher = finishing_pitcher
         for name, svo in pitcher_svo.items():
             if (svo and pitcher_half.get(name) == winner_half
-                    and name != finishing_pitcher and name not in blown_pitchers):
+                    and name != finishing_pitcher and name not in blown_pitchers
+                    and name not in hold_broken_pitchers):
                 self_hold_pitchers.add(name)
+
+    # 승/패 자체 판정: 마지막으로 갱신된 결승 리드가 실제 최종 스코어의 승자와 일치할
+    # 때만 신뢰한다(정상적인 경기라면 항상 일치해야 하지만, 중계 파싱 누락 등으로 어긋날
+    # 가능성에 대비한 안전장치 — 어긋나면 그냥 None으로 둬서 wls만 믿게 한다).
+    self_win_pitcher = None
+    self_loss_pitcher = None
+    if final_score is not None and final_score["home"] != final_score["away"]:
+        actual_winner = "home" if final_score["home"] > final_score["away"] else "away"
+        if last_go_ahead["winner_side"] == actual_winner:
+            self_win_pitcher = last_go_ahead["win_pitcher"]
+            self_loss_pitcher = last_go_ahead["loss_pitcher"]
 
     return {
         "pitcher_extra": {k: dict(v) for k, v in pitcher_extra.items()},
@@ -802,6 +875,8 @@ def compute_relay_stats(
         "blown_pitchers": blown_pitchers,
         "self_save_pitcher": self_save_pitcher,
         "self_hold_pitchers": self_hold_pitchers,
+        "self_win_pitcher": self_win_pitcher,
+        "self_loss_pitcher": self_loss_pitcher,
         "final_score": final_score,
         "earned_run_events": {k: v for k, v in earned_run_events.items()},
         "bunt_out": dict(bunt_out),

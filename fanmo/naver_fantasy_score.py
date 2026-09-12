@@ -566,6 +566,8 @@ def _merge_relay_stats(game_id: str, rd: dict, batter_rows: list[dict], pitcher_
     pitcher_svo = stats.get("pitcher_svo", {})
     blown_pitchers = stats.get("blown_pitchers", set())
     self_save_pitcher = stats.get("self_save_pitcher")
+    self_win_pitcher = stats.get("self_win_pitcher")
+    self_loss_pitcher = stats.get("self_loss_pitcher")
     final_score = stats["final_score"]
     earned_run_events = stats.get("earned_run_events", {})
     bunt_out = stats.get("bunt_out", {})
@@ -646,18 +648,35 @@ def _merge_relay_stats(game_id: str, rd: dict, batter_rows: list[dict], pitcher_
             row["stat"]["BLOWN"] = 1
             row["lp"] = score_pitcher(row["stat"])
 
-        # 세이브 임시 자체 판정: 경기가 막 끝난 직후엔 네이버 공식 결정(wls)이 아직 안
-        # 붙어서(반영까지 시차가 있음) 세이브가 한동안 0으로 비어 보이는 문제가 있었다.
-        # wls가 비어있는 동안만(row.get("_wls")가 falsy), relay.py가 스코어 흐름으로 직접
-        # 판정한("승리팀의 마지막 수비 투수 + SVO + 안 블론") 값을 임시로 채워 넣는다 —
-        # 나중에 재수집해서 wls가 실제로 붙으면 그 값이 항상 이 임시값을 덮어쓴다.
-        # (홀드는 자체 판정을 안 쓴다 — 승계주자가 나중에 실점해 동점이 되면, 정작 마운드에
-        # 없었던 원 투수 본인의 홀드가 취소되는 규정상 미묘함이 있어서 검증해보니 오탐이
-        # 났다. 예: 2026-09-10 NC전 전사민은 SVO+안블론 조건은 만족했지만 공식 wls는
-        # 이틀이 지나도 계속 비어있음 — 지연이 아니라 애초에 홀드가 아니었던 것.)
-        if not row.get("_wls") and row["name"] == self_save_pitcher:
-            row["stat"]["SAVE"] = 1
-            row["lp"] = score_pitcher(row["stat"])
+        # 세이브·승·패 임시 자체 판정: 경기가 막 끝난 직후엔 네이버 공식 결정(wls)이 아직
+        # 안 붙어서(반영까지 시차가 있음) 이 셋이 한동안 0으로 비어 보이는 문제가 있었다.
+        # wls가 비어있는 동안만(row.get("_wls")가 falsy) relay.py가 스코어 흐름으로 직접
+        # 판정한 값을 임시로 채워 넣는다 — 나중에 재수집해서 wls가 실제로 붙으면 그 값이
+        # 항상 이 임시값을 덮어쓴다.
+        #
+        # 홀드는 자체 판정을 안 쓴다. "안 블론당했으면 홀드"로만 볼 땐 승계주자로 넘겨준
+        # 주자가 나중에 실점해도 안 걸러지는 오탐이 있었고(2026-09-10 전사민), "그 주자를
+        # 내보낸 책임 투수" 기준(hold_broken_pitchers)을 추가해도 여전히 오탐이 남았다
+        # (2026-09-12 스기모토 — 자책점을 허용했지만 팀 리드 자체는 안 깨졌는데도 공식
+        # wls엔 홀드가 없음). 승리투수의 "선발 5이닝 미만" 예외처럼, 홀드에도 기계적 규칙만
+        # 으로는 못 잡는 기록원 재량이 있는 것으로 보여 자체 판정은 포기하고 wls만 믿는다.
+        #
+        # 승리투수는 선발이 5이닝(15아웃)을 못 채우고 내려갔는데 그 이후 팀이 리드를 유지한
+        # 채 이겼다면, 공식기록원이 재량으로 다른 구원투수에게 승을 넘기는 예외가 있어서
+        # relay.py의 "결승 리드 순간 마운드 투수" 판정만으로는 못 미더워 그 경우엔 적용하지
+        # 않는다(wls만 믿는다). 패전투수는 이런 예외가 없어 기계적으로 신뢰한다.
+        if not row.get("_wls"):
+            if row["name"] == self_save_pitcher:
+                row["stat"]["SAVE"] = 1
+                row["lp"] = score_pitcher(row["stat"])
+
+            starter_left_early = row["role"] == "선발" and row["stat"]["OUT"] < 15
+            if row["name"] == self_win_pitcher and not starter_left_early:
+                row["stat"]["WIN"] = 1
+                row["lp"] = score_pitcher(row["stat"])
+            elif row["name"] == self_loss_pitcher:
+                row["stat"]["LOSS"] = 1
+                row["lp"] = score_pitcher(row["stat"])
 
     for row in batter_rows + pitcher_rows:
         is_pitcher_row = "OUT" in row["stat"]
