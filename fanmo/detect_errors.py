@@ -74,7 +74,10 @@ def check_file(fp: str) -> list[dict]:
     # 같은 상대와 하루 두 경기를 뛰거나(실제 확인됨: 2025-05-10 LG 타자들), 한 팀에
     # 동명이인이 있는 경우(2025-03-26 삼성 이승현 둘)가 정상적으로 존재한다. 두 경기의
     # 스탯이 다르면 그런 정상적인 경우고, stat 딕셔너리가 완전히 똑같은 행이 두 번
-    # 들어있을 때만 "같은 경기 결과를 실수로 두 번 저장한" 진짜 버그로 본다.
+    # 들어있을 때만 "같은 경기 결과를 실수로 두 번 저장한" 진짜 버그로 본다 — 다만
+    # 타수 0(그 경기에서 아예 타석에 안 선 경우)은 더블헤더 양쪽 경기 모두 벤치에만
+    # 있었어도 "완전히 똑같이 0"인 게 정상이라(2025-05-17 다중 더블헤더에서 실제 확인),
+    # 진짜 버그 신호가 되려면 최소한 타수는 있어야 한다.
     seen: dict[tuple, dict] = {}
     for row in d.get("batters", []):
         name, team = row.get("name"), row.get("team")
@@ -84,7 +87,8 @@ def check_file(fp: str) -> list[dict]:
         else:
             key = (team, pc)
             prev = seen.get(key)
-            if prev is not None and prev.get("stat") == row.get("stat") and prev.get("ab") == row.get("ab"):
+            if (prev is not None and row.get("ab", 0) > 0
+                    and prev.get("stat") == row.get("stat") and prev.get("ab") == row.get("ab")):
                 issues.append(_issue(date, "DUPLICATE_ROW", f"타자 {name}({team}) player_code={pc} 완전 동일 행 중복"))
             seen[key] = row
         s = row.get("stat", {})
@@ -104,7 +108,8 @@ def check_file(fp: str) -> list[dict]:
         else:
             key = (team, pc)
             prev = seen.get(key)
-            if prev is not None and prev.get("stat") == row.get("stat"):
+            if (prev is not None and row.get("stat", {}).get("OUT", 0) > 0
+                    and prev.get("stat") == row.get("stat")):
                 issues.append(_issue(date, "DUPLICATE_ROW", f"투수 {name}({team}) player_code={pc} 완전 동일 행 중복"))
             seen[key] = row
         inn = row.get("inn", "")
