@@ -24,6 +24,9 @@ import json
 import os
 import re
 from collections import Counter
+from datetime import datetime, timedelta, timezone
+
+KST = timezone(timedelta(hours=9))
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -54,6 +57,18 @@ def check_file(fp: str) -> list[dict]:
     issues = []
     if d.get("round") not in VALID_ROUNDS:
         issues.append(_issue(date, "UNKNOWN_ROUND", f"round={d.get('round')!r}"))
+
+    # 2026-09-13 실제 사고: 경기가 다 끝났는데도 "라인업만 있는 0점 placeholder"로
+    # 되돌아간 채 굳어버린 적이 있다(네이버 일정 API가 종료 후에도 일시적으로 낡은
+    # BEFORE/READY 상태를 돌려줘서 collect_date()가 placeholder를 다시 만들어버림 —
+    # daily_pipeline.py에 재발 방지 가드를 넣었지만, 그 가드가 생기기 전 첫 수집부터
+    # 이미 이 상태로 시작된 경우까지는 못 잡으므로 여기서도 한 번 더 확인한다).
+    # 오늘 날짜는 실제로 아직 경기 전이라 정상적으로 0점일 수 있어 검사에서 뺀다.
+    today_kst = datetime.now(KST).date().isoformat().replace("-", "")
+    batters = d.get("batters", [])
+    if date != today_kst and batters and all(r.get("ab", 0) == 0 for r in batters):
+        issues.append(_issue(date, "ALL_ZERO_STATS",
+                              f"타자 {len(batters)}명 전원 타수 0 — 라인업 placeholder에서 안 벗어난 것으로 보임"))
 
     # player_code가 같은 행이 하루에 여럿 있는 건 그 자체로는 이상하지 않다 — 더블헤더로
     # 같은 상대와 하루 두 경기를 뛰거나(실제 확인됨: 2025-05-10 LG 타자들), 한 팀에
