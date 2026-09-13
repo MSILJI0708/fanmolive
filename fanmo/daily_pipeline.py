@@ -97,8 +97,11 @@ def main():
     # round: 올스타전(kbo_as) 등 이벤트성 경기를 실제 시즌 성적(세이브/홀드 누적 등) 집계에서
     # 가려낼 수 있게 표시만 해 둔다 — 데이터 자체는 지우지 않고 계속 그대로 수집·저장한다.
     round_code = None
+    any_canceled = False
     try:
-        games = [g for g in fetch_schedule(date_str) if not g.get("cancel")]
+        all_games = fetch_schedule(date_str)
+        any_canceled = any(g.get("cancel") for g in all_games)
+        games = [g for g in all_games if not g.get("cancel")]
         if games:
             round_code = fetch_round(games[0]["gameId"])
     except Exception as exc:  # noqa: BLE001
@@ -110,8 +113,13 @@ def main():
     # 건너뛴다 — 네이버 일정 API가 경기 종료 후에도 일시적으로 낡은 상태(BEFORE/READY)를
     # 돌려주는 경우가 실제로 있어서, 그걸 그대로 믿고 덮어쓰면 이미 모아둔 실제 기록이
     # 라인업만 있는 0점 placeholder로 되돌아간다(2026-09-13 실제 발생).
+    #
+    # 다만 "경기 도중 노게임 처리"(진행되던 경기가 취소돼 그날까지의 개인 기록이 공식적으로
+    # 전부 무효가 되는 경우)도 richness가 정상적으로 줄어드는 정당한 사례라 이 가드에 걸리면
+    # 안 된다 — 그 순간 일정 API에 cancel=true가 실제로 붙어 있는지를 같이 확인해서, 취소가
+    # 확인되면(any_canceled) 줄어든 값도 그대로 믿고 저장한다.
     new_richness = _richness(batters, pitchers)
-    if os.path.exists(out_path):
+    if os.path.exists(out_path) and not any_canceled:
         try:
             with open(out_path, encoding="utf-8") as f:
                 old = json.load(f)
@@ -120,8 +128,9 @@ def main():
             old_richness = 0
         if new_richness < old_richness:
             print(f"[경고] 새로 수집한 데이터가 기존 파일보다 부실합니다"
-                  f"(신규={new_richness} < 기존={old_richness}) — 네이버 API가 일시적으로 낡은"
-                  f" 상태를 돌려준 것으로 보여 저장을 건너뛰고 기존 파일을 그대로 둡니다.")
+                  f"(신규={new_richness} < 기존={old_richness}) — 취소된 경기도 없는데"
+                  f" 줄어들어서, 네이버 API가 일시적으로 낡은 상태를 돌려준 것으로 보여"
+                  f" 저장을 건너뛰고 기존 파일을 그대로 둡니다.")
             return
 
     with open(out_path, "w", encoding="utf-8") as f:

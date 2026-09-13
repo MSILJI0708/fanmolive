@@ -1095,6 +1095,14 @@ def collect_date(date_str: str, position_map: dict | None = None) -> tuple[list[
     all_batters, all_pitchers = [], []
     for g in fetch_schedule(date_str):
         gid = g["gameId"]
+        # cancel=true는 원래 "시작 전 우천취소"(statusCode가 BEFORE에 계속 머무름) 용도로만
+        # 확인해왔는데, 경기 도중에 노게임 처리되는 경우 statusCode가 BEFORE가 아닌 채로
+        # (LIVE에 머물거나 RESULT로 넘어간 채) cancel만 붙을 수 있다 — 그러면 이 검사를
+        # statusCode 분기 안쪽에서만 하던 예전 코드는 그 경기를 process_game()으로 그대로
+        # 넘겨서, KBO 규정상 전부 무효가 됐어야 할 그날까지의 부분 기록을 실제 성적처럼
+        # 집계해버린다. statusCode와 무관하게 cancel부터 먼저 확인해서 이 경우를 막는다.
+        if g.get("cancel"):
+            continue
         if g.get("statusCode") in ("BEFORE", "READY"):
             try:
                 b, p = build_pregame_rows(g)
