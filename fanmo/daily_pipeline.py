@@ -47,6 +47,18 @@ def _mark_position_refreshed() -> None:
         f.write(str(time.time()))
 
 
+def _richness(batters: list[dict], pitchers: list[dict]) -> int:
+    """이 수집 결과가 얼마나 "실제 경기가 진행된" 내용을 담고 있는지 보는 대략적인 지표
+    (타자 타수 합 + 투수 아웃카운트 합). 경기가 실제로 진행되는 동안엔 이 값이 절대
+    줄어들 수 없다 — 그래서 새로 수집한 값이 이미 저장된 파일보다 작으면(특히 0이면)
+    "경기가 아직 시작 안 함(BEFORE) → 라인업만 있는 0점 placeholder"로 잘못 되돌아간
+    것이지, 정상적인 진행이 아니다(2026-09-13 실제 사례: 네이버 일정 API가 경기 종료
+    후에도 일시적으로 옛 상태를 돌려줘서, 이미 다 모은 실제 기록이 placeholder로
+    통째로 덮어써진 적이 있다)."""
+    return (sum(b.get("ab", 0) for b in batters)
+            + sum(p.get("stat", {}).get("OUT", 0) for p in pitchers))
+
+
 def run(date_str: str, days: int = 14, refresh_position: bool = True) -> tuple[list[dict], list[dict]]:
     if refresh_position:
         print(f"[1/2] {date_str} 기준 최근 {days}일 수비 기록으로 포지션 갱신 중...")
@@ -93,6 +105,25 @@ def main():
         print(f"  라운드 조회 실패(무시하고 계속): {exc}")
 
     out_path = os.path.join(HERE, f"data_{date_str.replace('-', '')}.json")
+
+    # 이미 저장된 파일보다 이번에 수집한 내용이 더 부실하면(특히 완전히 0이면) 저장을
+    # 건너뛴다 — 네이버 일정 API가 경기 종료 후에도 일시적으로 낡은 상태(BEFORE/READY)를
+    # 돌려주는 경우가 실제로 있어서, 그걸 그대로 믿고 덮어쓰면 이미 모아둔 실제 기록이
+    # 라인업만 있는 0점 placeholder로 되돌아간다(2026-09-13 실제 발생).
+    new_richness = _richness(batters, pitchers)
+    if os.path.exists(out_path):
+        try:
+            with open(out_path, encoding="utf-8") as f:
+                old = json.load(f)
+            old_richness = _richness(old.get("batters", []), old.get("pitchers", []))
+        except (json.JSONDecodeError, OSError):
+            old_richness = 0
+        if new_richness < old_richness:
+            print(f"[경고] 새로 수집한 데이터가 기존 파일보다 부실합니다"
+                  f"(신규={new_richness} < 기존={old_richness}) — 네이버 API가 일시적으로 낡은"
+                  f" 상태를 돌려준 것으로 보여 저장을 건너뛰고 기존 파일을 그대로 둡니다.")
+            return
+
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(
             {"batters": batters, "pitchers": pitchers, "date": date_str, "round": round_code},
