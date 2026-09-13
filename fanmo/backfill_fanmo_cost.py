@@ -20,13 +20,14 @@ def backfill_file(path: str, date_str: str | None) -> tuple[int, int]:
     total = 0
     for row in data.get("batters", []):
         total += 1
-        cost = lookup_batter_cost(row.get("name", ""), row.get("team", ""), row.get("position", ""), date_str)
+        cost = lookup_batter_cost(row.get("name", ""), row.get("team", ""), row.get("position", ""),
+                                   date_str, row.get("player_code"))
         row["fanmo_cost"] = cost
         if cost is not None:
             matched += 1
     for row in data.get("pitchers", []):
         total += 1
-        cost = lookup_pitcher_cost(row.get("name", ""), row.get("team", ""), date_str)
+        cost = lookup_pitcher_cost(row.get("name", ""), row.get("team", ""), date_str, row.get("player_code"))
         row["fanmo_cost"] = cost
         if cost is not None:
             matched += 1

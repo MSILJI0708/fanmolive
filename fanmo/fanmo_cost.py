@@ -6,10 +6,13 @@
 
 CSV 컬럼: 동명, 포지션, 이름, 코스트
   - 포지션은 1B/2B/3B/SS/C/LF/CF/RF/DH(타자) 또는 SP/P(투수, P=구원) 표기.
-  - 동명은 "같은 포지션에 동명이인이 있을 때만" 팀명(+등번호)을 적어 구분한 것이고,
-    나머지 절대다수 행은 비어 있다(그 포지션에서 이름이 유일하다는 뜻).
-  - 이 프로젝트의 실제 데이터는 팀명을 "KIA/삼성/LG/KT/두산/SSG/한화/롯데/NC/키움"로
-    쓰므로 동명 문자열이 이 팀명으로 시작하는지만 보면 구분된다.
+  - 동명은 "같은 포지션에 동명이인이 있을 때만" 채우는 구분자다. fanmo260901.csv부터는
+    네이버가 주는 고유 식별자 player_code(숫자 문자열)를 적는다 — 팀명 텍스트는 트레이드가
+    나면 못 쓰게 되고, 9UP 앱 화면을 다시 캡쳐할 때마다 사진으로 사람을 재확인해야 하는
+    번거로움이 있어서, 한 번 data_*.json에서 실제 player_code를 찾아 박아두면 그 뒤로는
+    앱 화면을 다시 볼 필요 없이 이름+player_code만으로 영구히 구분된다. 예전 스냅샷
+    (fanmo260816.csv, fanmo260715_copy.csv)은 여전히 팀명(+등번호) 텍스트 방식이라
+    두 형식을 함께 지원한다(동명 값이 숫자면 player_code, 아니면 팀명 힌트로 취급).
 
 이 스냅샷은 특정 시점(2026-07-15) 기준이라 시간이 지나며 선수 이동/코스트 변동과
 어긋날 수 있다 — 그래도 이름 기준 매칭이라 웬만한 기간에는 그대로 들어맞는다.
@@ -60,8 +63,17 @@ PITCHER_POS_CODES = {"SP", "P"}
 TEAM_NAMES = ["KIA", "삼성", "LG", "KT", "두산", "SSG", "한화", "롯데", "NC", "키움"]
 
 
-def _team_hint_matches(hint: str, team: str) -> bool:
-    if not hint or not team:
+def _hint_matches(hint: str, team: str, player_code: str | None) -> bool:
+    """동명 힌트 하나가 지금 조회 중인 선수와 같은 사람을 가리키는지 판정한다.
+
+    힌트가 숫자로만 이루어져 있으면 player_code로 취급해 정확히 일치하는지만 본다
+    (신규 방식 — fanmo260901.csv부터). 그렇지 않으면 예전 방식대로 팀명(+등번호)
+    텍스트가 team으로 시작하는지로 판정한다(구 스냅샷 하위 호환)."""
+    if not hint:
+        return False
+    if hint.isdigit():
+        return player_code is not None and hint == player_code
+    if not team:
         return False
     for t in TEAM_NAMES:
         if hint.startswith(t):
@@ -100,12 +112,13 @@ class CostIndex:
             self.batter_by_pos_name.setdefault((kor, name), []).append((hint, cost))
             self.batter_by_name.setdefault(name, []).append((kor, hint, cost))
 
-    def lookup_batter(self, name: str, team: str, position: str) -> int | None:
+    def lookup_batter(self, name: str, team: str, position: str,
+                      player_code: str | None = None) -> int | None:
         exact = self.batter_by_pos_name.get((position, name))
         if exact:
             if len(exact) == 1:
                 return exact[0][1]
-            matched = [c for hint, c in exact if _team_hint_matches(hint, team)]
+            matched = [c for hint, c in exact if _hint_matches(hint, team, player_code)]
             return matched[0] if len(matched) == 1 else None
 
         fallback = self.batter_by_name.get(name)
@@ -113,16 +126,16 @@ class CostIndex:
             return None
         if len(fallback) == 1:
             return fallback[0][2]
-        matched = [c for _pos, hint, c in fallback if _team_hint_matches(hint, team)]
+        matched = [c for _pos, hint, c in fallback if _hint_matches(hint, team, player_code)]
         return matched[0] if len(matched) == 1 else None
 
-    def lookup_pitcher(self, name: str, team: str) -> int | None:
+    def lookup_pitcher(self, name: str, team: str, player_code: str | None = None) -> int | None:
         candidates = self.pitcher_by_name.get(name)
         if not candidates:
             return None
         if len(candidates) == 1:
             return candidates[0][2]
-        matched = [c for _pos, hint, c in candidates if _team_hint_matches(hint, team)]
+        matched = [c for _pos, hint, c in candidates if _hint_matches(hint, team, player_code)]
         return matched[0] if len(matched) == 1 else None
 
 
@@ -139,12 +152,12 @@ def _load_index(fname: str | None) -> CostIndex | None:
 
 
 def lookup_batter_cost(name: str, team: str, position: str,
-                       date_str: str | None = None) -> int | None:
+                       date_str: str | None = None, player_code: str | None = None) -> int | None:
     idx = _load_index(snapshot_for(date_str))
-    return idx.lookup_batter(name, team, position) if idx else None
+    return idx.lookup_batter(name, team, position, player_code) if idx else None
 
 
 def lookup_pitcher_cost(name: str, team: str,
-                        date_str: str | None = None) -> int | None:
+                        date_str: str | None = None, player_code: str | None = None) -> int | None:
     idx = _load_index(snapshot_for(date_str))
-    return idx.lookup_pitcher(name, team) if idx else None
+    return idx.lookup_pitcher(name, team, player_code) if idx else None

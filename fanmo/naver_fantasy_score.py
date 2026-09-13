@@ -433,15 +433,17 @@ def process_game(
             }
             pos_info = (position_map or {}).get(p.get("playerCode"), {})
             row_position = pos_info.get("position", "")
+            player_code = p.get("playerCode") or p.get("pcode")
             batter_rows.append({
-                "name": name, "player_code": p.get("playerCode") or p.get("pcode"),
+                "name": name, "player_code": player_code,
                 "team": team_name[side], "opponent": opp_name[side],
                 "date": date_disp, "stadium": stadium, "pos": p.get("pos", ""),
                 "position": row_position,
                 "position_override": pos_info.get("is_override", False),
                 "ab": int(p.get("ab") or 0), "stat": stat,
                 "lp": score_batter(stat),
-                "fanmo_cost": lookup_batter_cost(name, team_name[side], row_position, game_id[:8]),
+                "fanmo_cost": lookup_batter_cost(
+                    name, team_name[side], row_position, game_id[:8], player_code),
                 "_error_innings": list(etc["error_innings"].get(name, [])),
             })
 
@@ -490,13 +492,15 @@ def process_game(
                 "2B_A": 0, "3B_A": 0, "INHERITED_SCORED": 0, "INHERITED_STRANDED": 0,
                 "CS_A": 0, "SB_ALLOWED": 0, "PICKOFF_A": 0, "SAVE_OPP": False,
             }
+            pitcher_player_code = p.get("playerCode") or p.get("pcode")
             pitcher_rows.append({
-                "name": name, "player_code": p.get("playerCode") or p.get("pcode"),
+                "name": name, "player_code": pitcher_player_code,
                 "team": team_name[side], "opponent": opp_name[side],
                 "date": date_disp, "stadium": stadium, "inn": outs_to_innings_str(outs),
                 "role": "선발" if is_starter else "구원",
                 "stat": stat, "lp": score_pitcher(stat),
-                "fanmo_cost": lookup_pitcher_cost(name, team_name[side], game_id[:8]),
+                "fanmo_cost": lookup_pitcher_cost(
+                    name, team_name[side], game_id[:8], pitcher_player_code),
                 "_wls": wls,  # _merge_relay_stats에서 블론 억제 판정에만 쓰고 반환 전에 지운다
             })
 
