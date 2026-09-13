@@ -1,11 +1,16 @@
-"""2025-03-01 ~ 2026-06-30 범위의 모든 날짜를 스캔해서, 그날 경기가 있었는지 및
-roundCode(kbo_e=시범경기, kbo_r=정규시즌, kbo_as=올스타, 그 외=포스트시즌 등)를
-확인해 season_calendar.json에 저장한다. 하루에 여러 경기가 있어도 그 날의 라운드는
-전부 동일하므로(같은 날 시범경기와 정규시즌이 섞이지 않음), 첫 경기 하나만 상세조회해서
-그 날짜 전체의 roundCode로 취급한다."""
+"""주어진 범위(기본 2025-03-01 ~ 2026-06-30)의 모든 날짜를 스캔해서, 그날 경기가
+있었는지 및 roundCode(kbo_e=시범경기, kbo_r=정규시즌, kbo_as=올스타, 그 외=포스트시즌
+등)를 확인해 season_calendar.json에 저장한다. 하루에 여러 경기가 있어도 그 날의
+라운드는 전부 동일하므로(같은 날 시범경기와 정규시즌이 섞이지 않음), 첫 경기 하나만
+상세조회해서 그 날짜 전체의 roundCode로 취급한다.
+
+사용법:
+    python scan_season_calendar.py                        # 기본 범위(2025-03-01~2026-06-30)
+    python scan_season_calendar.py 2023-01-01 2024-12-31   # 다른 범위 지정
+"""
 import json
 import os
-import time
+import sys
 from datetime import date, timedelta
 
 from naver_fantasy_score import fetch_schedule, fetch_json, GAME_URL
@@ -18,6 +23,11 @@ END = date(2026, 6, 30)
 
 
 def main():
+    global START, END
+    if len(sys.argv) >= 3:
+        START = date.fromisoformat(sys.argv[1])
+        END = date.fromisoformat(sys.argv[2])
+
     result = {}
     if os.path.exists(OUT_PATH):
         with open(OUT_PATH, encoding="utf-8") as f:
