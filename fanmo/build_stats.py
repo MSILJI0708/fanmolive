@@ -128,6 +128,30 @@ def aggregate():
                 for k in PITCHER_SUM_KEYS:
                     acc[k] += s.get(k, 0)
 
+    # 1982~2000년은 경기 단위 데이터가 없어(네이버 API·KBO 공식 사이트 둘 다 그 구간을
+    # 안 줌) data_*.json으로 못 채운다. 대신 KBO 공식 기록대백과 PDF를 파싱해 만든
+    # "그 해 누적 한 줄"짜리 legacy_batter_seasons.json을 같은 누적기에 얹어서 합친다
+    # (build_legacy_batter_stats.py 참고). 경기 단위가 아니라 이미 시즌 합계라 G/AB/스탯을
+    # 한 번만 더하면 된다.
+    legacy_path = os.path.join(HERE, "legacy_batter_seasons.json")
+    if os.path.exists(legacy_path):
+        with open(legacy_path, encoding="utf-8") as f:
+            legacy_rows = json.load(f)
+        for row in legacy_rows:
+            pc = row.get("player_code")
+            if not pc:
+                continue
+            season = str(row["year"])
+            for bucket in (season_batters[season], career_batters):
+                acc = bucket.setdefault(pc, _new_batter_acc())
+                acc["name"] = row["name"]
+                acc["team"] = row["team"]
+                acc["player_code"] = pc
+                acc["G"] += row.get("G", 0)
+                acc["AB"] += row.get("AB", 0)
+                for k in BATTER_SUM_KEYS:
+                    acc[k] += row["stat"].get(k, 0)
+
     season_out = {}
     for season, table in season_batters.items():
         season_out.setdefault(season, {})["batters"] = [_finalize_batter(a) for a in table.values()]
