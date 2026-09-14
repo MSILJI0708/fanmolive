@@ -804,7 +804,8 @@ footer.notes b { color: var(--ink-0); }
     · 데이터 출처 <code>api-gw.sports.naver.com</code> (Selenium 불필요, 공개 JSON 응답 직접 호출)
     · <a href="mlb.html">MLB 실험판 보기 →</a>
     · <a href="records.html">기록실 보기 →</a>
-    · 마지막 업데이트 09월 14일 15:59 (KST)
+    · <a href="options.html">설정 →</a>
+    · 마지막 업데이트 09월 14일 16:00 (KST)
   </p>
 </header>
 
@@ -2566,15 +2567,30 @@ modalViewHistoryBtn.addEventListener('click', () => {
 });
 
 // 이름(행) 클릭 시 그 날 경기만의 카테고리/타임라인 팝업(openPlayerModal, 아래) 대신
-// 시즌별+통산 누적 기록을 보여주는 player.html을 새 창으로 연다 — KBO 공식 기록실처럼
-// 선수 하나를 따로 떼어서 보는 화면. player_code가 없는 행(코스트 CSV 미등록 등)은
-// 열 대상이 없으니 조용히 무시한다. 투수 행에만 있는 role 필드로 타자/투수를 가린다.
+// 시즌별+통산 누적 기록을 보여주는 player.html을 연다 — KBO 공식 기록실처럼 선수
+// 하나를 따로 떼어서 보는 화면. player_code가 없는 행(코스트 CSV 미등록 등)은 열
+// 대상이 없으니 조용히 무시한다. 투수 행에만 있는 role 필드로 타자/투수를 가린다.
+// 실제로 어디에 여는지(현재 탭 대체/새 탭/새 창)는 옵션 페이지(options.html)에서
+// 고른 값을 openPlayerLink()가 공통 처리한다 — 이 함수는 URL만 만든다.
 function openPlayerPage(row) {
   if (!row.player_code) return;
   const role = row.role ? 'pitchers' : 'batters';
-  const url = 'player.html?code=' + encodeURIComponent(row.player_code)
-    + '&role=' + role + '&name=' + encodeURIComponent(row.name || '');
-  window.open(url, 'player_' + row.player_code, 'width=720,height=680,noopener');
+  openPlayerLink(row.player_code, role, row.name || '');
+}
+
+// 옵션 페이지에서 고른 "선수 기록 열기 방식"(playerLinkMode: replace/tab/window, 기본값
+// window)을 따라 player.html을 연다 — lp_board.html·records.html이 공통으로 쓴다.
+function openPlayerLink(code, role, name) {
+  if (!code) return;
+  const url = 'player.html?code=' + encodeURIComponent(code)
+    + '&role=' + role + '&name=' + encodeURIComponent(name || '');
+  let mode = 'window';
+  try {
+    mode = JSON.parse(localStorage.getItem('kboBoardPrefs_v1') || '{}').playerLinkMode || 'window';
+  } catch (e) { /* 저장값이 깨져 있으면 기본값(새 창)으로 */ }
+  if (mode === 'replace') location.href = url;
+  else if (mode === 'tab') window.open(url, '_blank');
+  else window.open(url, 'player_' + code, 'width=720,height=680,noopener');
 }
 
 function openPlayerModal(row) {

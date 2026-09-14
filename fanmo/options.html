@@ -1,0 +1,157 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>설정</title>
+<script>
+(function() {
+  try {
+    var p = JSON.parse(localStorage.getItem('kboBoardPrefs_v1') || '{}');
+    if (p.theme === 'light' || p.theme === 'dark') document.documentElement.setAttribute('data-theme', p.theme);
+  } catch (e) {}
+})();
+</script>
+<style>
+:root {
+  --paper-0: #f3f1ea; --paper-1: #ffffff; --ink-0: #1c1a15; --ink-1: #58554a;
+  --line: #dcd8cc; --accent: #b9822f; --accent-ink: #6b4e1c; --chip-bg: #efe9d8;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper-0: #14120d; --paper-1: #1c1a14; --ink-0: #ede8db; --ink-1: #a9a290;
+    --line: #38352a; --accent: #d9a24d; --accent-ink: #f2cf95; --chip-bg: #262218;
+  }
+}
+:root[data-theme="dark"] {
+  --paper-0: #14120d; --paper-1: #1c1a14; --ink-0: #ede8db; --ink-1: #a9a290;
+  --line: #38352a; --accent: #d9a24d; --accent-ink: #f2cf95; --chip-bg: #262218;
+}
+:root[data-theme="light"] {
+  --paper-0: #f3f1ea; --paper-1: #ffffff; --ink-0: #1c1a15; --ink-1: #58554a;
+  --line: #dcd8cc; --accent: #b9822f; --accent-ink: #6b4e1c; --chip-bg: #efe9d8;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--paper-0); color: var(--ink-0);
+  font-family: -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; }
+header { padding: 22px 24px 14px; border-bottom: 1px solid var(--line); }
+a.back { color: var(--accent-ink); text-decoration: none; font-size: 12.5px; }
+h1 { font-size: 20px; margin: 8px 0 4px; }
+header p { margin: 0; color: var(--ink-1); font-size: 12.5px; }
+main { padding: 8px 24px 60px; max-width: 640px; }
+section.group { border: 1px solid var(--line); background: var(--paper-1); border-radius: 10px;
+  padding: 16px 18px; margin: 16px 0; }
+section.group h2 { font-size: 14px; margin: 0 0 4px; }
+section.group .desc { font-size: 12px; color: var(--ink-1); margin: 0 0 12px; }
+.opt-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; font-size: 13.5px; cursor: pointer; }
+.opt-row input[type=radio], .opt-row input[type=checkbox] { accent-color: var(--accent); width: 16px; height: 16px; }
+.opt-row .sub { color: var(--ink-1); font-size: 12px; margin-left: auto; }
+select { border: 1px solid var(--line); background: var(--paper-1); color: var(--ink-0);
+  border-radius: 8px; padding: 7px 10px; font-size: 13px; width: 100%; margin-top: 4px; }
+.saved-note { display: inline-block; font-size: 12px; color: var(--accent-ink); opacity: 0;
+  transition: opacity .2s; margin-left: 10px; }
+.saved-note.show { opacity: 1; }
+.reset-btn { border: 1px solid var(--line); background: var(--paper-1); color: var(--ink-1);
+  border-radius: 8px; padding: 8px 14px; font-size: 12.5px; cursor: pointer; }
+.reset-btn:hover { color: var(--ink-0); border-color: var(--accent); }
+</style>
+<body>
+<header>
+  <a class="back" href="lp_board.html">← LP 보드로</a>
+  <h1>설정</h1>
+  <p>이 브라우저에만 저장됩니다(로그인·서버 없음) · LP 보드·기록실·선수 기록실이 전부 공유합니다</p>
+</header>
+<main>
+
+  <section class="group">
+    <h2>테마</h2>
+    <p class="desc">시스템 설정을 따르거나, 라이트/다크를 직접 고정할 수 있습니다.</p>
+    <label class="opt-row"><input type="radio" name="theme" value="auto"> 시스템 설정 따르기(자동)</label>
+    <label class="opt-row"><input type="radio" name="theme" value="light"> 라이트</label>
+    <label class="opt-row"><input type="radio" name="theme" value="dark"> 다크</label>
+  </section>
+
+  <section class="group">
+    <h2>선수 기록 클릭 시 열기 방식</h2>
+    <p class="desc">LP 보드에서 선수 행을 클릭하거나 기록실에서 이름을 클릭/검색했을 때, 개별 선수 기록(player.html)을 어떻게 열지 정합니다.</p>
+    <label class="opt-row"><input type="radio" name="playerLinkMode" value="window"> 새 창으로 열기<span class="sub">기본값</span></label>
+    <label class="opt-row"><input type="radio" name="playerLinkMode" value="tab"> 새 탭으로 열기</label>
+    <label class="opt-row"><input type="radio" name="playerLinkMode" value="replace"> 현재 탭 대체(지금 보던 페이지가 바뀜)</label>
+  </section>
+
+  <section class="group">
+    <h2>타 포지션 수비기록 인정 범위</h2>
+    <p class="desc">등록 포지션과 실제 수비 위치가 다를 때(보살·외야보살·병살가담·삼중살가담·도루저지(포)·도루허용(포)에만 적용) 그 기록을 인정할지 정합니다. LP 보드에서도 같은 값을 바로 바꿀 수 있습니다.</p>
+    <select id="posMode">
+      <option value="1">그 포지션에서만</option>
+      <option value="2">내야는 내야끼리, 외야는 외야끼리 허용</option>
+      <option value="3">제약 없음</option>
+    </select>
+  </section>
+
+  <section class="group">
+    <h2>지명타자 등록 선수의 수비기록 인정</h2>
+    <p class="desc">지명타자로 등록된 선수가 실제로 수비를 했을 때 그 기록을 인정할지 정합니다.</p>
+    <label class="opt-row"><input type="checkbox" id="dhOn"> 인정함</label>
+  </section>
+
+  <button class="reset-btn" id="resetBtn">기본값으로 초기화</button>
+  <span class="saved-note" id="savedNote">저장됨</span>
+
+</main>
+<script>
+const PREF_KEY = 'kboBoardPrefs_v1';
+const DEFAULTS = { theme: 'auto', playerLinkMode: 'window', posMode: '3', dhOn: true };
+
+function loadPrefs() {
+  try { return JSON.parse(localStorage.getItem(PREF_KEY)) || {}; } catch (e) { return {}; }
+}
+function savePrefs(patch) {
+  const p = Object.assign(loadPrefs(), patch);
+  try { localStorage.setItem(PREF_KEY, JSON.stringify(p)); } catch (e) { /* 저장 실패해도 무시 */ }
+  return p;
+}
+function applyTheme(theme) {
+  if (theme === 'light' || theme === 'dark') document.documentElement.setAttribute('data-theme', theme);
+  else document.documentElement.removeAttribute('data-theme');
+}
+function flashSaved() {
+  const el = document.getElementById('savedNote');
+  el.classList.add('show');
+  clearTimeout(flashSaved._t);
+  flashSaved._t = setTimeout(() => el.classList.remove('show'), 1200);
+}
+
+function renderForm() {
+  const p = Object.assign({}, DEFAULTS, loadPrefs());
+  document.querySelector(`input[name="theme"][value="${p.theme}"]`).checked = true;
+  document.querySelector(`input[name="playerLinkMode"][value="${p.playerLinkMode}"]`).checked = true;
+  document.getElementById('posMode').value = p.posMode;
+  document.getElementById('dhOn').checked = !!p.dhOn;
+}
+
+document.querySelectorAll('input[name="theme"]').forEach(el => {
+  el.addEventListener('change', () => {
+    savePrefs({ theme: el.value });
+    applyTheme(el.value);
+    flashSaved();
+  });
+});
+document.querySelectorAll('input[name="playerLinkMode"]').forEach(el => {
+  el.addEventListener('change', () => { savePrefs({ playerLinkMode: el.value }); flashSaved(); });
+});
+document.getElementById('posMode').addEventListener('change', (e) => {
+  savePrefs({ posMode: e.target.value });
+  flashSaved();
+});
+document.getElementById('dhOn').addEventListener('change', (e) => {
+  savePrefs({ dhOn: e.target.checked });
+  flashSaved();
+});
+document.getElementById('resetBtn').addEventListener('click', () => {
+  savePrefs(DEFAULTS);
+  applyTheme(DEFAULTS.theme);
+  renderForm();
+  flashSaved();
+});
+
+renderForm();
+</script>

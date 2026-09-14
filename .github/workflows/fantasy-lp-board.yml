@@ -135,7 +135,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add fanmo/data_*.json fanmo/position_db.json fanmo/lp_board.html fanmo/lp_board_mlb.html fanmo/mlb_last_run.txt fanmo/position_last_refresh.txt fanmo/season_stats.json fanmo/career_stats.json fanmo/records.html fanmo/active_window_state.json fanmo/self_pred_mismatches.json fanmo/error_report.json fanmo/player
+          git add fanmo/data_*.json fanmo/position_db.json fanmo/lp_board.html fanmo/lp_board_mlb.html fanmo/mlb_last_run.txt fanmo/position_last_refresh.txt fanmo/season_stats.json fanmo/career_stats.json fanmo/records.html fanmo/active_window_state.json fanmo/self_pred_mismatches.json fanmo/error_report.json fanmo/player fanmo/options.html
           if git diff --cached --quiet; then
             echo "변경 사항 없음, 커밋 생략"
           else
@@ -153,6 +153,9 @@ jobs:
           fi
           if [ -f fanmo/records.html ]; then
             cp fanmo/records.html _site/records.html
+          fi
+          if [ -f fanmo/options.html ]; then
+            cp fanmo/options.html _site/options.html
           fi
           # player.html(선수 개별 기록 팝업 창)은 season_stats.json/career_stats.json을
           # fetch로 직접 읽으므로, records.html처럼 데이터를 내장하지 않는 대신 이 두

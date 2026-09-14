@@ -2,6 +2,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>선수 기록실</title>
+<script>
+// lp_board.html·옵션 페이지(options.html)와 같은 localStorage 키를 공유해 테마 설정을
+// 따라간다 — CSS보다 먼저 실행해야 어두운 테마 선택 시 화면이 번쩍이지 않는다.
+(function() {
+  try {
+    var p = JSON.parse(localStorage.getItem('kboBoardPrefs_v1') || '{}');
+    if (p.theme === 'light' || p.theme === 'dark') document.documentElement.setAttribute('data-theme', p.theme);
+  } catch (e) {}
+})();
+</script>
 <style>
 :root {
   --paper-0: #f3f1ea; --paper-1: #ffffff; --ink-0: #1c1a15; --ink-1: #58554a;
