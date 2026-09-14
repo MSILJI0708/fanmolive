@@ -52,10 +52,27 @@ tbody td.left { text-align: left; }
 tbody tr.career { background: var(--chip-bg); font-weight: 700; }
 tbody tr:hover { background: var(--row-alt); }
 .empty { color: var(--ink-1); font-size: 12.5px; padding: 20px 0; }
+.error { color: var(--hot); font-size: 12.5px; padding: 20px 0; }
+.site-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.site-nav a {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12.5px; font-weight: 600;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--paper-1);
+  color: var(--ink-1);
+  text-decoration: none;
+}
+.site-nav a:hover { border-color: var(--accent); color: var(--accent-ink); }
 </style>
 <body>
 <header>
   <h1 id="title">선수 기록실<span class="team" id="teamLine"></span></h1>
+  <nav class="site-nav">
+    <a href="index.html">← LP 보드</a>
+    <a href="records.html">📊 기록실</a>
+  </nav>
   <p>정규시즌(올스타·포스트시즌 제외) 기록 · 자동 집계</p>
 </header>
 <main>
@@ -104,25 +121,52 @@ function renderTable(tblId, cols, rows, extraClass) {
     }).join('') + '</tr>').join('');
 }
 
+function findRows(seasonStats, careerStats, role) {
+  const seasonRows = [];
+  Object.keys(seasonStats).sort().forEach(season => {
+    const list = (seasonStats[season] || {})[role] || [];
+    const row = list.find(r => String(r.player_code) === String(CODE));
+    if (row) seasonRows.push(Object.assign({ season }, row));
+  });
+  const careerList = (careerStats || {})[role] || [];
+  const careerRow = careerList.find(r => String(r.player_code) === String(CODE));
+  return { seasonRows, careerRow };
+}
+
 async function main() {
   if (!CODE) {
     document.getElementById('title').textContent = '선수를 찾을 수 없습니다';
     return;
   }
-  const [seasonStats, careerStats] = await Promise.all([
-    fetch('season_stats.json').then(r => r.json()),
-    fetch('career_stats.json').then(r => r.json()),
-  ]);
 
-  const seasonRows = [];
-  Object.keys(seasonStats).sort().forEach(season => {
-    const list = (seasonStats[season] || {})[ROLE] || [];
-    const row = list.find(r => String(r.player_code) === String(CODE));
-    if (row) seasonRows.push(Object.assign({ season }, row));
-  });
+  let seasonStats, careerStats;
+  try {
+    [seasonStats, careerStats] = await Promise.all([
+      fetch('season_stats.json').then(r => { if (!r.ok) throw new Error('season_stats.json HTTP ' + r.status); return r.json(); }),
+      fetch('career_stats.json').then(r => { if (!r.ok) throw new Error('career_stats.json HTTP ' + r.status); return r.json(); }),
+    ]);
+  } catch (e) {
+    // fetch 실패를 조용히 삼키면(예전엔 이랬다) 화면이 빈 채로 남아서 원인을 알 수 없다 —
+    // 새로고침해보라는 안내라도 보이게 한다.
+    document.querySelector('main').innerHTML =
+      '<p class="error">기록을 불러오지 못했습니다(' + (e && e.message || e) + '). 새로고침해 보세요.</p>';
+    return;
+  }
 
-  const careerList = (careerStats || {})[ROLE] || [];
-  const careerRow = careerList.find(r => String(r.player_code) === String(CODE));
+  let role = ROLE;
+  let { seasonRows, careerRow } = findRows(seasonStats, careerStats, role);
+  // URL의 role이 실제와 다를 수 있다(예전 링크를 즐겨찾기해 뒀거나 한 경우) — 못 찾으면
+  // 반대 role로 한 번 더 찾아본다. 타자/투수 양쪽에 다 기록이 있는 극소수 선수는 원래
+  // role을 그대로 우선한다(여기까지 왔다는 건 원래 role에서 못 찾았다는 뜻).
+  if (!seasonRows.length && !careerRow) {
+    const otherRole = role === 'pitchers' ? 'batters' : 'pitchers';
+    const alt = findRows(seasonStats, careerStats, otherRole);
+    if (alt.seasonRows.length || alt.careerRow) {
+      role = otherRole;
+      seasonRows = alt.seasonRows;
+      careerRow = alt.careerRow;
+    }
+  }
 
   const name = (careerRow && careerRow.name) || (seasonRows[0] && seasonRows[0].name) || FALLBACK_NAME || '알 수 없음';
   const teams = [...new Set(seasonRows.map(r => r.team).filter(Boolean))].join(' · ');
@@ -130,10 +174,13 @@ async function main() {
   document.getElementById('title').textContent = name;
   document.getElementById('teamLine').textContent = teams;
 
-  const cols = ROLE === 'pitchers' ? PITCHER_COLS : BATTER_COLS;
+  const cols = role === 'pitchers' ? PITCHER_COLS : BATTER_COLS;
   renderTable('seasonTbl', cols, seasonRows);
   renderTable('careerTbl', cols, careerRow ? [Object.assign({ season: '통산' }, careerRow)] : [], 'career');
 }
 
-main();
+main().catch(e => {
+  const main = document.querySelector('main');
+  if (main) main.innerHTML = '<p class="error">알 수 없는 오류가 발생했습니다: ' + (e && e.message || e) + '</p>';
+});
 </script>
