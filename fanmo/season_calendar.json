@@ -8884,5 +8884,72 @@
  "2024-12-31": {
   "round": null,
   "game_ids": []
+ },
+ "2008-01-01": {
+  "round": null,
+  "game_ids": []
+ },
+ "2008-01-02": {
+  "round": null,
+  "game_ids": []
+ },
+ "2008-01-03": {
+  "round": null,
+  "game_ids": []
+ },
+ "2008-01-04": {
+  "round": null,
+  "game_ids": []
+ },
+ "2008-01-05": {
+  "round": null,
+  "game_ids": []
+ },
+ "2008-01-06": {
+  "round": null,
+  "game_ids": []
+ },
+ "2008-01-07": {
+  "round": null,
+  "game_ids": []
+ },
+ "2008-01-08": {
+  "round": null,
+  "game_ids": []
+ },
+ "2008-01-09": {
+  "round": null,
+  "game_ids": []
+ },
+ "2008-01-10": {
+  "round": null,
+  "game_ids": []
+ },
+ "2008-04-01": {
+  "round": "kbo_r",
+  "game_ids": [
+   "20080401HHWO0",
+   "20080401OBHT0",
+   "20080401SKLT0",
+   "20080401SSLG0"
+  ]
+ },
+ "2008-04-02": {
+  "round": "kbo_r",
+  "game_ids": [
+   "20080402HHWO0",
+   "20080402OBHT0",
+   "20080402SKLT0",
+   "20080402SSLG0"
+  ]
+ },
+ "2008-04-03": {
+  "round": "kbo_r",
+  "game_ids": [
+   "20080403HHWO0",
+   "20080403OBHT0",
+   "20080403SKLT0",
+   "20080403SSLG0"
+  ]
  }
 }

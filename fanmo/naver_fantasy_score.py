@@ -41,6 +41,20 @@ from fanmo_cost import lookup_batter_cost, lookup_pitcher_cost
 
 SELF_PRED_LOG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "self_pred_mismatches.json")
 
+# 네이버는 hName/aName을 "그 경기 당시 쓰이던 팀 이름"으로 그대로 내려준다. 2008년 이후로도
+# 구단명이 바뀐 적이 있어서(SK 와이번스 -> SSG 랜더스(2021), 히어로즈/넥센 -> 키움(2019)),
+# 옛날 경기를 과거 이름 그대로 저장하면 TEAM_COLORS/TEAM_LOGO_URL(현재 이름 기준)이나
+# 이름 기준 통산 집계에서 같은 팀이 다른 팀처럼 갈라진다. 그래서 팀 이름은 여기서 항상
+# 현재 구단명으로 정규화해서 저장한다(선수 개인 소속 이력이 아니라 "지금 몇 팀인가" 표기 목적).
+TEAM_NAME_ALIASES = {
+    "히어로즈": "키움", "우리": "키움", "넥센": "키움",
+    "SK": "SSG",
+}
+
+
+def normalize_team_name(name: str) -> str:
+    return TEAM_NAME_ALIASES.get(name, name)
+
 
 def _log_self_pred_mismatch(game_id: str, name: str, team: str, wls: str,
                              predicted: dict, official: dict) -> None:
@@ -390,8 +404,8 @@ def process_game(
     info = rd.get("gameInfo", {})
     date_disp = f"{str(info.get('gdate'))[4:6]}월 {str(info.get('gdate'))[6:8]}일"
     stadium = info.get("stadium", "")
-    team_name = {"home": info.get("hName", ""), "away": info.get("aName", "")}
-    opp_name = {"home": info.get("aName", ""), "away": info.get("hName", "")}
+    team_name = {"home": normalize_team_name(info.get("hName", "")), "away": normalize_team_name(info.get("aName", ""))}
+    opp_name = {"home": normalize_team_name(info.get("aName", "")), "away": normalize_team_name(info.get("hName", ""))}
 
     etc = parse_etc_records(rd.get("etcRecords", []))
 
@@ -601,7 +615,7 @@ def _merge_relay_stats(game_id: str, rd: dict, batter_rows: list[dict], pitcher_
     earned_run_events = stats.get("earned_run_events", {})
     bunt_out = stats.get("bunt_out", {})
     info = rd.get("gameInfo", {})
-    home_team_name = info.get("hName", "")
+    home_team_name = normalize_team_name(info.get("hName", ""))
 
     # 릴레이 텍스트는 선수를 이름으로만 가리켜서, 같은 팀에 이름이 완전히 같은 선수가
     # 둘 있으면(흔치 않지만 실제로 있음 — 예: 삼성 계투진에 "이승현"이 둘) 어느 쪽이 그

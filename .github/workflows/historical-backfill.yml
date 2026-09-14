@@ -1,0 +1,63 @@
+name: KBO 2008~2022년 과거 데이터 백그라운드 수집
+
+# 목적: 지금까지는 2023년 이후 데이터만 있었는데, 2008~2022년치도 채운다. 이 작업은
+# 사람이 컴퓨터를 켜 두거나 세션을 유지하지 않아도 계속 진행돼야 하므로(사용자 요청:
+# "내가 컴퓨터 껐을때 백그라운드로 조사할수 있도록"), 메인 파이프라인(fantasy-lp-board.yml)처럼
+# 외부 cron-job.org에 의존하지 않고 GitHub 자체 schedule: 트리거를 쓴다 — 트리거 자체가
+# GitHub 서버에서 도니까 사용자 PC/세션 상태와 완전히 무관하게 계속 돌아간다.
+# (메인 파이프라인은 실시간성 때문에 자체 schedule이 못 미더워 cron-job.org로 바꿨지만,
+# 이 작업은 급할 게 없는 과거 백필이라 자체 schedule의 "가끔 몇 분~수십 분 늦게 도는" 특성이
+# 문제되지 않는다.)
+#
+# historical_backfill_step.py 한 번 호출마다 "시간 예산 안에서 할 수 있는 만큼만" 진행하고
+# season_calendar.json/data_*.json을 커밋·푸시한다 — 전체 15년치를 끝낼 때까지 이 워크플로우가
+# 계속 스스로를 다시 트리거한다(아래 30분 주기 schedule).
+on:
+  schedule:
+    - cron: "*/30 * * * *" # 30분마다 — 급하지 않은 백필이라 촘촘할 필요 없음
+  workflow_dispatch: {} # Actions 탭에서 수동 실행/테스트용
+
+permissions:
+  contents: write
+
+concurrency:
+  group: historical-backfill
+  cancel-in-progress: false
+
+jobs:
+  backfill-step:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: 저장소 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Python 설치
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 이번 회차 백필 실행 (시간 예산 안에서 할 수 있는 만큼)
+        working-directory: fanmo
+        timeout-minutes: 8
+        run: python historical_backfill_step.py
+
+      - name: 결과 커밋 & 푸시 (메인 파이프라인과 동시에 돌아도 충돌 안 나게 재시도)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add fanmo/season_calendar.json fanmo/data_[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].json
+          if git diff --cached --quiet; then
+            echo "변경 사항 없음, 커밋 생략"
+            exit 0
+          fi
+          git commit -m "chore: 2008~2022년 과거 데이터 백필 진행 ($(date -u +'%Y-%m-%dT%H:%MZ'))"
+          for i in 1 2 3 4 5; do
+            if git push; then
+              exit 0
+            fi
+            echo "push 실패, rebase 후 재시도 ($i)"
+            git fetch origin
+            git rebase origin/main || { git rebase --abort; git pull --no-rebase origin main --no-edit; }
+          done
+          git push
