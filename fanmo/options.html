@@ -33,7 +33,18 @@
 html, body { margin: 0; background: var(--paper-0); color: var(--ink-0);
   font-family: -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; }
 header { padding: 22px 24px 14px; border-bottom: 1px solid var(--line); }
-a.back { color: var(--accent-ink); text-decoration: none; font-size: 12.5px; }
+.site-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.site-nav a {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12.5px; font-weight: 600;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--paper-1);
+  color: var(--ink-1);
+  text-decoration: none;
+}
+.site-nav a:hover { border-color: var(--accent); color: var(--accent-ink); }
 h1 { font-size: 20px; margin: 8px 0 4px; }
 header p { margin: 0; color: var(--ink-1); font-size: 12.5px; }
 main { padding: 8px 24px 60px; max-width: 640px; }
@@ -55,8 +66,12 @@ select { border: 1px solid var(--line); background: var(--paper-1); color: var(-
 </style>
 <body>
 <header>
-  <a class="back" href="lp_board.html">← LP 보드로</a>
   <h1>설정</h1>
+  <nav class="site-nav">
+    <a href="index.html">← LP 보드</a>
+    <a href="records.html">📊 기록실</a>
+    <a href="mlb.html">⚾ MLB 실험판</a>
+  </nav>
   <p>이 브라우저에만 저장됩니다(로그인·서버 없음) · LP 보드·기록실·선수 기록실이 전부 공유합니다</p>
 </header>
 <main>

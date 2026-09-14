@@ -783,6 +783,18 @@ footer.notes b { color: var(--ink-0); }
   justify-content: center;
 }
 .theme-toggle:hover { border-color: var(--accent); }
+.site-nav { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 2px; }
+.site-nav a {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12.5px; font-weight: 600;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--paper-1);
+  color: var(--ink-1);
+  text-decoration: none;
+}
+.site-nav a:hover { border-color: var(--accent); color: var(--accent-ink); }
 .settings-link {
   position: fixed;
   top: 12px;
@@ -858,6 +870,11 @@ footer.notes b { color: var(--ink-0); }
 <header class="top">
   <p class="eyebrow">KBO 판타지 모드 · 라이브 포인트</p>
   <h1>선수 카드 LP 보드</h1>
+  <nav class="site-nav">
+    <a href="mlb.html">⚾ MLB 실험판</a>
+    <a href="records.html">📊 기록실</a>
+    <a href="options.html">⚙️ 설정</a>
+  </nav>
   <p class="sub">
     기준일
     <span class="date-picker" id="date-picker">
@@ -881,9 +898,6 @@ footer.notes b { color: var(--ink-0); }
       </div>
     </span>
     · 데이터 출처 <code>api-gw.sports.naver.com</code> (Selenium 불필요, 공개 JSON 응답 직접 호출)
-    · <a href="mlb.html">MLB 실험판 보기 →</a>
-    · <a href="records.html">기록실 보기 →</a>
-    · <a href="options.html">설정 →</a>
     · 마지막 업데이트 __LAST_UPDATE__ (KST)
   </p>
 </header>

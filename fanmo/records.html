@@ -69,14 +69,28 @@ tbody tr:hover { background: var(--chip-bg); }
 .name { font-weight: 600; }
 .team { color: var(--ink-1); font-size: 11px; margin-left: 4px; }
 footer { padding: 16px 24px 40px; color: var(--ink-1); font-size: 11px; }
-a.back { color: var(--accent-ink); text-decoration: none; font-size: 12.5px; }
 .name.clickable { color: var(--accent-ink); cursor: pointer; text-decoration: underline dotted; text-underline-offset: 3px; }
+.site-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.site-nav a {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12.5px; font-weight: 600;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--paper-1);
+  color: var(--ink-1);
+  text-decoration: none;
+}
+.site-nav a:hover { border-color: var(--accent); color: var(--accent-ink); }
 </style>
 <body>
 <header>
-  <a class="back" href="lp_board.html">← LP 보드로</a>
-  <a class="back" href="options.html" style="float:right;">설정 →</a>
   <h1>KBO 판타지 기록실</h1>
+  <nav class="site-nav">
+    <a href="index.html">← LP 보드</a>
+    <a href="mlb.html">⚾ MLB 실험판</a>
+    <a href="options.html">⚙️ 설정</a>
+  </nav>
   <p>정규시즌(올스타·포스트시즌 제외) 누적 기록 · 자동 집계</p>
 </header>
 <div class="tabs" id="scopeTabs"></div>
