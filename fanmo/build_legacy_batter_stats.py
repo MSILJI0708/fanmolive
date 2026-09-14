@@ -84,7 +84,7 @@ def parse_file(path: str) -> tuple[list[dict], list[str]]:
             continue
         if line.startswith("데뷔 첫 경기"):
             continue
-        if line.endswith("▸"):
+        if "▸" in line:
             skip_section = True
             continue
         if skip_section or current_name is None:

@@ -152,6 +152,26 @@ def aggregate():
                 for k in BATTER_SUM_KEYS:
                     acc[k] += row["stat"].get(k, 0)
 
+    legacy_pitcher_path = os.path.join(HERE, "legacy_pitcher_seasons.json")
+    if os.path.exists(legacy_pitcher_path):
+        with open(legacy_pitcher_path, encoding="utf-8") as f:
+            legacy_pitcher_rows = json.load(f)
+        for row in legacy_pitcher_rows:
+            pc = row.get("player_code")
+            if not pc:
+                continue
+            season = str(row["year"])
+            for bucket in (season_pitchers[season], career_pitchers):
+                acc = bucket.setdefault(pc, _new_pitcher_acc())
+                acc["name"] = row["name"]
+                acc["team"] = row["team"]
+                acc["player_code"] = pc
+                acc["G"] += row.get("G", 0)
+                acc["GS"] += row.get("GS", 0)
+                acc["OUT"] += row.get("OUT", 0)
+                for k in PITCHER_SUM_KEYS:
+                    acc[k] += row["stat"].get(k, 0)
+
     season_out = {}
     for season, table in season_batters.items():
         season_out.setdefault(season, {})["batters"] = [_finalize_batter(a) for a in table.values()]
