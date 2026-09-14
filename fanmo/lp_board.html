@@ -726,6 +726,26 @@ footer.notes b { color: var(--ink-0); }
   justify-content: center;
 }
 .theme-toggle:hover { border-color: var(--accent); }
+.settings-link {
+  position: fixed;
+  top: 12px;
+  right: 60px;
+  z-index: 50;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--paper-1);
+  color: var(--ink-0);
+  font-size: 18px;
+  line-height: 1;
+  text-decoration: none;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.settings-link:hover { border-color: var(--accent); }
 
 /* 모바일에서는 한 화면에 보이는 데이터 양이 줄어도 되니, 촘촘한 표/칩 글씨 크기를
    전반적으로 키운다. 표는 이미 가로 스크롤(.tablewrap, min-width)로 넘치는 걸 처리하고
@@ -758,6 +778,7 @@ footer.notes b { color: var(--ink-0); }
   .force-refresh-btn { font-size: 14px; padding: 6px 10px; margin-left: 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper-2); color: var(--ink-0); cursor: pointer; transition: background 120ms ease, border-color 120ms ease; }
   .force-refresh-btn:hover { border-color: var(--accent); background: var(--paper-1); }
   .theme-toggle { width: 44px; height: 44px; font-size: 20px; }
+  .settings-link { width: 44px; height: 44px; font-size: 20px; right: 64px; }
 }
 </style>
 <script>
@@ -774,6 +795,7 @@ footer.notes b { color: var(--ink-0); }
 })();
 </script>
 
+<a class="settings-link" href="options.html" title="설정" aria-label="설정">⚙️</a>
 <button type="button" class="theme-toggle" id="theme-toggle" title="테마 전환(자동/라이트/다크)" aria-label="테마 전환">🌓</button>
 
 <header class="top">
@@ -805,7 +827,7 @@ footer.notes b { color: var(--ink-0); }
     · <a href="mlb.html">MLB 실험판 보기 →</a>
     · <a href="records.html">기록실 보기 →</a>
     · <a href="options.html">설정 →</a>
-    · 마지막 업데이트 09월 14일 16:17 (KST)
+    · 마지막 업데이트 09월 14일 16:34 (KST)
   </p>
 </header>
 
