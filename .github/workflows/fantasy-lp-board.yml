@@ -153,6 +153,14 @@ jobs:
           if [ -f fanmo/records.html ]; then
             cp fanmo/records.html _site/records.html
           fi
+          # player.html(선수 개별 기록 팝업 창)은 season_stats.json/career_stats.json을
+          # fetch로 직접 읽으므로, records.html처럼 데이터를 내장하지 않는 대신 이 두
+          # JSON을 배포 폴더에도 그대로 복사해 둬야 한다.
+          if [ -f fanmo/player.html ]; then
+            cp fanmo/player.html _site/player.html
+            cp fanmo/season_stats.json _site/season_stats.json 2>/dev/null || true
+            cp fanmo/career_stats.json _site/career_stats.json 2>/dev/null || true
+          fi
           # KBO 보드는 날짜별 JSON을 지연 로딩(fetch)하므로, 배포 폴더에도 개별 날짜 파일을
           # 그대로 복사해 둬야 달력에서 다른 날짜를 고를 때 fetch가 실제로 성공한다.
           cp fanmo/data_[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].json _site/ 2>/dev/null || true

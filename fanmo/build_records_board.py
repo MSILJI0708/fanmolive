@@ -82,6 +82,7 @@ tbody tr:hover { background: var(--chip-bg); }
 .team { color: var(--ink-1); font-size: 11px; margin-left: 4px; }
 footer { padding: 16px 24px 40px; color: var(--ink-1); font-size: 11px; }
 a.back { color: var(--accent-ink); text-decoration: none; font-size: 12.5px; }
+.name.clickable { color: var(--accent-ink); cursor: pointer; text-decoration: underline dotted; text-underline-offset: 3px; }
 </style>
 <body>
 <header>
@@ -156,6 +157,17 @@ const seasonSelect = document.getElementById('seasonSelect');
 seasonSelect.innerHTML = SEASONS.map(s => `<option value="${s}">${s}시즌</option>`).join('');
 seasonSelect.onchange = () => { state.season = seasonSelect.value; render(); };
 document.getElementById('search').oninput = (e) => { state.q = e.target.value.trim(); render(); };
+document.getElementById('search').addEventListener('keydown', (e) => {
+  if (e.key !== 'Enter') return;
+  const matches = currentRows().filter(r => (r.name || '').toLowerCase().includes(state.q.toLowerCase()) && r.player_code);
+  if (matches.length === 1) {
+    const r = matches[0];
+    window.open(
+      'player.html?code=' + encodeURIComponent(r.player_code) + '&role=' + encodeURIComponent(state.role) + '&name=' + encodeURIComponent(r.name || ''),
+      'player_' + r.player_code, 'width=720,height=680,noopener'
+    );
+  }
+});
 
 function currentRows() {
   const src = state.scope === 'season' ? (SEASON_STATS[state.season] || {}) : CAREER_STATS;
@@ -204,12 +216,23 @@ function render() {
   const tbody = document.querySelector('#tbl tbody');
   tbody.innerHTML = rows.map((r, i) => '<tr>' + cols.map(c => {
     if (c.key === 'rank') return `<td class="rank">${i + 1}</td>`;
-    if (c.key === 'name') return `<td class="left"><span class="name">${r.name || ''}</span><span class="team">${r.team || ''}</span></td>`;
+    if (c.key === 'name') {
+      if (!r.player_code) return `<td class="left"><span class="name">${r.name || ''}</span><span class="team">${r.team || ''}</span></td>`;
+      return `<td class="left"><span class="name clickable" data-code="${r.player_code}" data-role="${state.role}" data-name="${(r.name || '').replace(/"/g, '&quot;')}">${r.name || ''}</span><span class="team">${r.team || ''}</span></td>`;
+    }
     let v = r[c.key];
     if (v == null) v = 0;
     if (c.dec != null) v = Number(v).toFixed(c.dec);
     return `<td>${v}</td>`;
   }).join('') + '</tr>').join('');
+  tbody.querySelectorAll('.name.clickable').forEach(el => {
+    el.onclick = () => {
+      const url = 'player.html?code=' + encodeURIComponent(el.dataset.code)
+        + '&role=' + encodeURIComponent(el.dataset.role)
+        + '&name=' + encodeURIComponent(el.dataset.name);
+      window.open(url, 'player_' + el.dataset.code, 'width=720,height=680,noopener');
+    };
+  });
   document.getElementById('rowCount').textContent = rows.length + '명';
 }
 
