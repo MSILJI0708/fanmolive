@@ -32,7 +32,7 @@ CAL_PATH = os.path.join(HERE, "season_calendar.json")
 START = date(2008, 1, 1)
 END = date(2022, 12, 31)
 
-BUDGET_SECONDS = 150  # 메인 파이프라인(fantasy-lp-board.yml)의 한 회차 안에 얹혀서 도니까 짧게 잡음
+BUDGET_SECONDS = 90  # 메인 파이프라인 한 회차 안에서 kbo_2001_2007_backfill_step.py와 시간을 나눠 씀
 WAVE_SIZE = 6
 MAX_WORKERS = 8
 

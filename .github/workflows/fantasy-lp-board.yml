@@ -125,13 +125,18 @@ jobs:
           python mlb_fantasy_score.py --date "$TOMORROW_KST"
           date -u +%s > mlb_last_run.txt
 
-      - name: "2008~2022년 과거 데이터 백필 (10분 주기, 한 번에 할 수 있는 만큼만)"
+      - name: "2001~2022년 과거 데이터 백필 (10분 주기, 한 번에 할 수 있는 만큼만)"
         if: steps.check_historical_due.outputs.due == 'true'
         working-directory: fanmo
         continue-on-error: true
-        timeout-minutes: 3
+        timeout-minutes: 4
         run: |
+          # 2008~2022년(네이버 API)과 2001~2007년(KBO 공식 사이트, 로그인 없이 가능한 구간)을
+          # 한 회차 시간 예산을 나눠서 같이 진행한다 — 2001~2007년 쪽이 한 번 호출로 한 달치
+          # 일정을 다 가져올 수 있어 훨씬 빨리 끝나므로, 먼저 다 끝내놓고 2008~2022년은
+          # 오래 걸리는 대로 계속 이어간다.
           python historical_backfill_step.py
+          python kbo_2001_2007_backfill_step.py
           date -u +%s > historical_last_run.txt
 
       - name: 보드 HTML 빌드
@@ -160,7 +165,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add fanmo/data_*.json fanmo/position_db.json fanmo/lp_board.html fanmo/lp_board_mlb.html fanmo/mlb_last_run.txt fanmo/position_last_refresh.txt fanmo/season_stats.json fanmo/career_stats.json fanmo/records.html fanmo/active_window_state.json fanmo/self_pred_mismatches.json fanmo/error_report.json fanmo/player fanmo/options.html fanmo/jersey_numbers.json fanmo/jersey_last_refresh.txt fanmo/season_calendar.json fanmo/historical_last_run.txt
+          git add fanmo/data_*.json fanmo/position_db.json fanmo/lp_board.html fanmo/lp_board_mlb.html fanmo/mlb_last_run.txt fanmo/position_last_refresh.txt fanmo/season_stats.json fanmo/career_stats.json fanmo/records.html fanmo/active_window_state.json fanmo/self_pred_mismatches.json fanmo/error_report.json fanmo/player fanmo/options.html fanmo/jersey_numbers.json fanmo/jersey_last_refresh.txt fanmo/season_calendar.json fanmo/historical_last_run.txt fanmo/kbo_official_calendar.json fanmo/kbo_player_code_cache.json fanmo/kbo_2001_2007_unresolved_players.json
           if git diff --cached --quiet; then
             echo "변경 사항 없음, 커밋 생략"
           else

@@ -1,0 +1,537 @@
+{
+ "2005-06-01": [
+  {
+   "game_id": "20050601HDOB0",
+   "away": "현대",
+   "home": "두산"
+  }
+ ],
+ "2005-06-02": [
+  {
+   "game_id": "20050602LGHT0",
+   "away": "LG",
+   "home": "KIA"
+  },
+  {
+   "game_id": "20050602LTSS0",
+   "away": "롯데",
+   "home": "삼성"
+  },
+  {
+   "game_id": "20050602HDOB0",
+   "away": "현대",
+   "home": "두산"
+  },
+  {
+   "game_id": "20050602HHSK0",
+   "away": "한화",
+   "home": "SK"
+  }
+ ],
+ "2005-06-04": [
+  {
+   "game_id": "20050604SSHT0",
+   "away": "삼성",
+   "home": "KIA"
+  },
+  {
+   "game_id": "20050604SKLG0",
+   "away": "SK",
+   "home": "LG"
+  },
+  {
+   "game_id": "20050604LTHD0",
+   "away": "롯데",
+   "home": "현대"
+  },
+  {
+   "game_id": "20050604OBHH0",
+   "away": "두산",
+   "home": "한화"
+  }
+ ],
+ "2005-06-05": [
+  {
+   "game_id": "20050605SSHT0",
+   "away": "삼성",
+   "home": "KIA"
+  },
+  {
+   "game_id": "20050605SKLG0",
+   "away": "SK",
+   "home": "LG"
+  },
+  {
+   "game_id": "20050605LTHD0",
+   "away": "롯데",
+   "home": "현대"
+  },
+  {
+   "game_id": "20050605OBHH0",
+   "away": "두산",
+   "home": "한화"
+  }
+ ],
+ "2005-06-06": [
+  {
+   "game_id": "20050606SSHT0",
+   "away": "삼성",
+   "home": "KIA"
+  },
+  {
+   "game_id": "20050606SKLG0",
+   "away": "SK",
+   "home": "LG"
+  },
+  {
+   "game_id": "20050606LTHD0",
+   "away": "롯데",
+   "home": "현대"
+  },
+  {
+   "game_id": "20050606OBHH0",
+   "away": "두산",
+   "home": "한화"
+  }
+ ],
+ "2005-06-07": [
+  {
+   "game_id": "20050607OBSS0",
+   "away": "두산",
+   "home": "삼성"
+  },
+  {
+   "game_id": "20050607HDLG0",
+   "away": "현대",
+   "home": "LG"
+  },
+  {
+   "game_id": "20050607HHLT0",
+   "away": "한화",
+   "home": "롯데"
+  },
+  {
+   "game_id": "20050607HTSK0",
+   "away": "KIA",
+   "home": "SK"
+  }
+ ],
+ "2005-06-08": [
+  {
+   "game_id": "20050608OBSS0",
+   "away": "두산",
+   "home": "삼성"
+  },
+  {
+   "game_id": "20050608HDLG0",
+   "away": "현대",
+   "home": "LG"
+  },
+  {
+   "game_id": "20050608HHLT0",
+   "away": "한화",
+   "home": "롯데"
+  },
+  {
+   "game_id": "20050608HTSK0",
+   "away": "KIA",
+   "home": "SK"
+  }
+ ],
+ "2005-06-09": [
+  {
+   "game_id": "20050609OBSS0",
+   "away": "두산",
+   "home": "삼성"
+  },
+  {
+   "game_id": "20050609HDLG0",
+   "away": "현대",
+   "home": "LG"
+  },
+  {
+   "game_id": "20050609HHLT0",
+   "away": "한화",
+   "home": "롯데"
+  },
+  {
+   "game_id": "20050609HTSK0",
+   "away": "KIA",
+   "home": "SK"
+  }
+ ],
+ "2005-06-10": [
+  {
+   "game_id": "20050610HTOB0",
+   "away": "KIA",
+   "home": "두산"
+  },
+  {
+   "game_id": "20050610LTSK0",
+   "away": "롯데",
+   "home": "SK"
+  },
+  {
+   "game_id": "20050610SSHD0",
+   "away": "삼성",
+   "home": "현대"
+  }
+ ],
+ "2005-06-11": [
+  {
+   "game_id": "20050611LGHH0",
+   "away": "LG",
+   "home": "한화"
+  },
+  {
+   "game_id": "20050611HTOB0",
+   "away": "KIA",
+   "home": "두산"
+  },
+  {
+   "game_id": "20050611LTSK0",
+   "away": "롯데",
+   "home": "SK"
+  },
+  {
+   "game_id": "20050611SSHD0",
+   "away": "삼성",
+   "home": "현대"
+  }
+ ],
+ "2005-06-12": [
+  {
+   "game_id": "20050612LGHH0",
+   "away": "LG",
+   "home": "한화"
+  },
+  {
+   "game_id": "20050612HTOB0",
+   "away": "KIA",
+   "home": "두산"
+  },
+  {
+   "game_id": "20050612LTSK0",
+   "away": "롯데",
+   "home": "SK"
+  },
+  {
+   "game_id": "20050612SSHD0",
+   "away": "삼성",
+   "home": "현대"
+  }
+ ],
+ "2005-06-14": [
+  {
+   "game_id": "20050614OBLT0",
+   "away": "두산",
+   "home": "롯데"
+  },
+  {
+   "game_id": "20050614HHHT0",
+   "away": "한화",
+   "home": "KIA"
+  },
+  {
+   "game_id": "20050614SKHD0",
+   "away": "SK",
+   "home": "현대"
+  }
+ ],
+ "2005-06-15": [
+  {
+   "game_id": "20050615HHHT0",
+   "away": "한화",
+   "home": "KIA"
+  },
+  {
+   "game_id": "20050615OBLT0",
+   "away": "두산",
+   "home": "롯데"
+  },
+  {
+   "game_id": "20050615SSLG0",
+   "away": "삼성",
+   "home": "LG"
+  },
+  {
+   "game_id": "20050615SKHD0",
+   "away": "SK",
+   "home": "현대"
+  }
+ ],
+ "2005-06-16": [
+  {
+   "game_id": "20050616HHHT0",
+   "away": "한화",
+   "home": "KIA"
+  },
+  {
+   "game_id": "20050616OBLT0",
+   "away": "두산",
+   "home": "롯데"
+  },
+  {
+   "game_id": "20050616SSLG0",
+   "away": "삼성",
+   "home": "LG"
+  },
+  {
+   "game_id": "20050616SKHD0",
+   "away": "SK",
+   "home": "현대"
+  }
+ ],
+ "2005-06-17": [
+  {
+   "game_id": "20050617HDHT0",
+   "away": "현대",
+   "home": "KIA"
+  },
+  {
+   "game_id": "20050617SKSS0",
+   "away": "SK",
+   "home": "삼성"
+  },
+  {
+   "game_id": "20050617HHOB0",
+   "away": "한화",
+   "home": "두산"
+  },
+  {
+   "game_id": "20050617LGLT0",
+   "away": "LG",
+   "home": "롯데"
+  }
+ ],
+ "2005-06-18": [
+  {
+   "game_id": "20050618HDHT0",
+   "away": "현대",
+   "home": "KIA"
+  },
+  {
+   "game_id": "20050618SKSS0",
+   "away": "SK",
+   "home": "삼성"
+  },
+  {
+   "game_id": "20050618HHOB0",
+   "away": "한화",
+   "home": "두산"
+  },
+  {
+   "game_id": "20050618LGLT0",
+   "away": "LG",
+   "home": "롯데"
+  }
+ ],
+ "2005-06-19": [
+  {
+   "game_id": "20050619HDHT0",
+   "away": "현대",
+   "home": "KIA"
+  },
+  {
+   "game_id": "20050619SKSS0",
+   "away": "SK",
+   "home": "삼성"
+  },
+  {
+   "game_id": "20050619HHOB0",
+   "away": "한화",
+   "home": "두산"
+  },
+  {
+   "game_id": "20050619LGLT0",
+   "away": "LG",
+   "home": "롯데"
+  }
+ ],
+ "2005-06-21": [
+  {
+   "game_id": "20050621HDSS0",
+   "away": "현대",
+   "home": "삼성"
+  },
+  {
+   "game_id": "20050621LTHH0",
+   "away": "롯데",
+   "home": "한화"
+  },
+  {
+   "game_id": "20050621HTLG0",
+   "away": "KIA",
+   "home": "LG"
+  },
+  {
+   "game_id": "20050621OBSK0",
+   "away": "두산",
+   "home": "SK"
+  }
+ ],
+ "2005-06-22": [
+  {
+   "game_id": "20050622HDSS0",
+   "away": "현대",
+   "home": "삼성"
+  },
+  {
+   "game_id": "20050622LTHH0",
+   "away": "롯데",
+   "home": "한화"
+  },
+  {
+   "game_id": "20050622HTLG0",
+   "away": "KIA",
+   "home": "LG"
+  },
+  {
+   "game_id": "20050622OBSK0",
+   "away": "두산",
+   "home": "SK"
+  }
+ ],
+ "2005-06-23": [
+  {
+   "game_id": "20050623HDSS0",
+   "away": "현대",
+   "home": "삼성"
+  },
+  {
+   "game_id": "20050623LTHH0",
+   "away": "롯데",
+   "home": "한화"
+  },
+  {
+   "game_id": "20050623HTLG0",
+   "away": "KIA",
+   "home": "LG"
+  },
+  {
+   "game_id": "20050623OBSK0",
+   "away": "두산",
+   "home": "SK"
+  }
+ ],
+ "2005-06-24": [
+  {
+   "game_id": "20050624HHLG0",
+   "away": "한화",
+   "home": "LG"
+  },
+  {
+   "game_id": "20050624HTLT0",
+   "away": "KIA",
+   "home": "롯데"
+  },
+  {
+   "game_id": "20050624SSSK0",
+   "away": "삼성",
+   "home": "SK"
+  },
+  {
+   "game_id": "20050624OBHD0",
+   "away": "두산",
+   "home": "현대"
+  }
+ ],
+ "2005-06-25": [
+  {
+   "game_id": "20050625HHLG0",
+   "away": "한화",
+   "home": "LG"
+  },
+  {
+   "game_id": "20050625HTLT0",
+   "away": "KIA",
+   "home": "롯데"
+  },
+  {
+   "game_id": "20050625SSSK0",
+   "away": "삼성",
+   "home": "SK"
+  },
+  {
+   "game_id": "20050625OBHD0",
+   "away": "두산",
+   "home": "현대"
+  }
+ ],
+ "2005-06-26": [
+  {
+   "game_id": "20050626HHLG0",
+   "away": "한화",
+   "home": "LG"
+  },
+  {
+   "game_id": "20050626HTLT0",
+   "away": "KIA",
+   "home": "롯데"
+  },
+  {
+   "game_id": "20050626SSSK0",
+   "away": "삼성",
+   "home": "SK"
+  },
+  {
+   "game_id": "20050626OBHD0",
+   "away": "두산",
+   "home": "현대"
+  }
+ ],
+ "2005-06-28": [
+  {
+   "game_id": "20050628SSHH0",
+   "away": "삼성",
+   "home": "한화"
+  },
+  {
+   "game_id": "20050628LTOB0",
+   "away": "롯데",
+   "home": "두산"
+  },
+  {
+   "game_id": "20050628LGHD0",
+   "away": "LG",
+   "home": "현대"
+  }
+ ],
+ "2005-06-29": [
+  {
+   "game_id": "20050629SKHT0",
+   "away": "SK",
+   "home": "KIA"
+  },
+  {
+   "game_id": "20050629SSHH0",
+   "away": "삼성",
+   "home": "한화"
+  }
+ ],
+ "2005-06-30": [
+  {
+   "game_id": "20050630SKHT0",
+   "away": "SK",
+   "home": "KIA"
+  },
+  {
+   "game_id": "20050630SSHH0",
+   "away": "삼성",
+   "home": "한화"
+  },
+  {
+   "game_id": "20050630LTOB0",
+   "away": "롯데",
+   "home": "두산"
+  },
+  {
+   "game_id": "20050630LGHD0",
+   "away": "LG",
+   "home": "현대"
+  }
+ ],
+ "__months_done__": [
+  "2005-06"
+ ]
+}
