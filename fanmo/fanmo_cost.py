@@ -36,16 +36,24 @@ LEGACY_CSV = "fanmo260715_copy.csv"
 CSV_PATH = os.path.join(_HERE, LEGACY_CSV)   # 하위 호환용(날짜 미지정 시)
 
 
-def snapshot_for(date_str: str | None) -> str | None:
-    """경기 날짜에 해당하는 코스트 스냅샷 파일명. 없으면 None.
+EARLIEST_INVESTIGATED = "20260101"  # 이보다 이전(2023~2025시즌 등)은 코스트를 조사한 적이 없다.
 
-    date_str 은 'YYYYMMDD' 또는 'YYYY-MM-DD'. None 이면 기존 동작(LEGACY_CSV)을 유지한다.
-    등록된 어느 구간에도 안 들어가는 미래 날짜는 None 을 돌려준다 —
-    지난 스냅샷을 그대로 갖다 쓰면 조용히 틀린 코스트가 박히기 때문이다.
+
+def snapshot_for(date_str: str | None) -> str | None:
+    """경기 날짜에 해당하는 코스트 스냅샷 파일명. 없으면 None(코스트 공란 처리).
+
+    date_str 은 'YYYYMMDD' 또는 'YYYY-MM-DD'. 코스트는 매달 1일/16일 두 번 갱신되는
+    9UP 앱 화면을 실제로 캡쳐해서 조사한 값이라, 우리가 그 시점을 조사한 적이 없으면
+    (2026년 이전 시즌 전체, 또는 등록된 스냅샷 구간에 안 들어가는 미래 날짜) 지난
+    스냅샷을 그대로 갖다 쓰지 않고 None을 돌려준다 — 조용히 틀린 코스트가 박히는 것보다
+    "코스트 데이터 없음"으로 공란 표시되는 게 낫다(2023~2024시즌을 재수집한 뒤, 전혀
+    다른 시즌 경기에 2026-07-15 스냅샷 코스트가 그대로 붙어있던 걸 이렇게 고쳤다).
     """
     if not date_str:
-        return LEGACY_CSV
+        return None
     d = date_str.replace("-", "")
+    if d < EARLIEST_INVESTIGATED:
+        return None
     if d < SNAPSHOTS[0][0]:
         return LEGACY_CSV
     for lo, hi, fname in SNAPSHOTS:
