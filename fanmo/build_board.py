@@ -1413,8 +1413,8 @@ function render(tableId, cols, rows) {
     sorted.forEach((row, i) => {
       const tr = document.createElement('tr');
       tr.className = 'clickable';
-      tr.title = '클릭하면 타석/수비별 포인트 내역을 볼 수 있어요';
-      tr.addEventListener('click', () => openPlayerModal(row));
+      tr.title = '클릭하면 이 선수의 시즌별·통산 기록이 새 창으로 열려요';
+      tr.addEventListener('click', () => openPlayerPage(row));
       makeRowCells(row, cols, i).forEach(td => tr.appendChild(td));
       tbody.appendChild(tr);
     });
@@ -1905,8 +1905,8 @@ function runOptimizer() {
     (bySlot.get(slot) || []).forEach(item => {
       const row = document.createElement('div');
       row.className = 'optimizer-row clickable';
-      row.title = '클릭하면 타석/수비별 포인트 내역을 볼 수 있어요';
-      row.addEventListener('click', () => openPlayerModal(item.row));
+      row.title = '클릭하면 이 선수의 시즌별·통산 기록이 새 창으로 열려요';
+      row.addEventListener('click', () => openPlayerPage(item.row));
 
       const slotSpan = document.createElement('span');
       slotSpan.className = 'optimizer-slot';
@@ -2621,6 +2621,18 @@ modalViewHistoryBtn.addEventListener('click', () => {
   modalViewTimelineBtn.classList.remove('active');
   renderModalBody();
 });
+
+// 이름(행) 클릭 시 그 날 경기만의 카테고리/타임라인 팝업(openPlayerModal, 아래) 대신
+// 시즌별+통산 누적 기록을 보여주는 player.html을 새 창으로 연다 — KBO 공식 기록실처럼
+// 선수 하나를 따로 떼어서 보는 화면. player_code가 없는 행(코스트 CSV 미등록 등)은
+// 열 대상이 없으니 조용히 무시한다. 투수 행에만 있는 role 필드로 타자/투수를 가린다.
+function openPlayerPage(row) {
+  if (!row.player_code) return;
+  const role = row.role ? 'pitchers' : 'batters';
+  const url = 'player.html?code=' + encodeURIComponent(row.player_code)
+    + '&role=' + role + '&name=' + encodeURIComponent(row.name || '');
+  window.open(url, 'player_' + row.player_code, 'width=720,height=680,noopener');
+}
 
 function openPlayerModal(row) {
   currentModalRow = row;
