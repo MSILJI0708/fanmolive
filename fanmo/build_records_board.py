@@ -15,11 +15,17 @@ def main():
         season_stats = json.load(f)
     with open(os.path.join(HERE, "career_stats.json"), encoding="utf-8") as f:
         career_stats = json.load(f)
+    jersey_path = os.path.join(HERE, "jersey_numbers.json")
+    jersey_numbers = {}
+    if os.path.exists(jersey_path):
+        with open(jersey_path, encoding="utf-8") as f:
+            jersey_numbers = json.load(f)
 
     seasons = sorted(season_stats.keys(), reverse=True)
     season_payload = json.dumps(season_stats, ensure_ascii=False)
     career_payload = json.dumps(career_stats, ensure_ascii=False)
     seasons_payload = json.dumps(seasons, ensure_ascii=False)
+    jersey_payload = json.dumps(jersey_numbers, ensure_ascii=False)
 
     html_doc = r"""<!doctype html>
 <meta charset="utf-8">
@@ -86,11 +92,17 @@ thead th.left, td.left { text-align: left; }
 thead th:hover { color: var(--accent-ink); }
 thead th.sorted { color: var(--accent-ink); font-weight: 700; }
 tbody td { padding: 6px 10px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
+/* 구단 배경색: 팀별 고유색을 아주 옅게 깔아서 표에서 같은 팀 선수를 한눈에 훑어볼 수
+   있게 한다 — 진하게 칠하면 다크 테마에서 글씨가 묻히므로 낮은 투명도만 쓴다. 뒤에 오는
+   nth-child/hover 규칙과 클래스 선택자 하나로 명시도가 같아서, 소스 순서상 이 규칙보다
+   뒤에 있는 nth-child·hover가 그대로 우선 적용된다(짝수 줄무늬·마우스오버가 안 묻힘). */
+tr[data-team] { background: var(--team-tint); }
 tbody tr:nth-child(even) { background: var(--row-alt); }
 tbody tr:hover { background: var(--chip-bg); }
 .rank { color: var(--ink-1); width: 30px; }
 .name { font-weight: 600; }
 .team { color: var(--ink-1); font-size: 11px; margin-left: 4px; }
+.jersey { color: var(--ink-1); font-size: 10.5px; margin-left: 3px; font-weight: 400; }
 footer { padding: 16px 24px 40px; color: var(--ink-1); font-size: 11px; }
 .name.clickable { color: var(--accent-ink); cursor: pointer; text-decoration: underline dotted; text-underline-offset: 3px; }
 .site-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
@@ -154,6 +166,42 @@ const PITCHER_COLS = [
   {h:'H', key:'H', num:true}, {h:'HR', key:'HR', num:true}, {h:'BB', key:'BB', num:true},
   {h:'K', key:'K', num:true}, {h:'QS', key:'QS', num:true},
 ];
+
+// 구단 고유색 — 표 배경에 아주 옅게(alpha 낮게) 깔아서 팀별로 눈에 띄게 구분한다.
+// 여러 구단이 실제로 빨강 계열을 쓰기 때문에(KIA·LG·SSG·롯데) 완전히 안 겹치진 않지만,
+// 그건 실제 KBO 구단 색 자체가 그런 것이라 어쩔 수 없다 — 팀명 글자가 항상 같이 보이므로
+// 구분에는 문제없다.
+const TEAM_COLORS = {
+  'KIA': '208,16,32', '삼성': '0,86,159', 'LG': '196,30,58', 'KT': '215,0,54',
+  '두산': '19,26,84', 'SSG': '206,14,45', '한화': '255,102,0', '롯데': '200,16,46',
+  'NC': '31,58,98', '키움': '130,2,46',
+};
+// player_code -> {number, name, team} — build_jersey_numbers.py가 KBO 공식 등록
+// 현황에서 긁어온 등번호(오늘 기준 1군 로스터만 포함, 은퇴·2군 선수는 없을 수 있음).
+const JERSEY_NUMBERS = __JERSEY_NUMBERS__;
+// "팀|이름"이 2명 이상 겹치는 조합 — 이 조합에 걸리는 행에만 등번호를 붙인다(안 겹치면
+// 안 그래도 유일하게 구분되니 군더더기를 안 붙임).
+const DUPE_TEAM_NAMES = (() => {
+  const count = {};
+  Object.values(JERSEY_NUMBERS).forEach(p => {
+    const key = p.team + '|' + p.name;
+    count[key] = (count[key] || 0) + 1;
+  });
+  return new Set(Object.keys(count).filter(k => count[k] > 1));
+})();
+
+function teamRowAttrs(team) {
+  const rgb = TEAM_COLORS[team];
+  if (!rgb) return '';
+  return ` data-team="${team}" style="--team-tint: rgba(${rgb},0.1)"`;
+}
+
+function jerseySuffix(row) {
+  if (!row.player_code || !row.team) return '';
+  if (!DUPE_TEAM_NAMES.has(row.team + '|' + row.name)) return '';
+  const j = JERSEY_NUMBERS[row.player_code];
+  return j ? `<span class="jersey">#${j.number}</span>` : '';
+}
 
 let state = { scope: 'season', role: 'batters', season: SEASONS[0] || '', sortKey: null, sortDir: -1, q: '' };
 
@@ -252,11 +300,11 @@ function render() {
   });
 
   const tbody = document.querySelector('#tbl tbody');
-  tbody.innerHTML = rows.map((r, i) => '<tr>' + cols.map(c => {
+  tbody.innerHTML = rows.map((r, i) => `<tr${teamRowAttrs(r.team)}>` + cols.map(c => {
     if (c.key === 'rank') return `<td class="rank">${i + 1}</td>`;
     if (c.key === 'name') {
-      if (!r.player_code) return `<td class="left"><span class="name">${r.name || ''}</span><span class="team">${r.team || ''}</span></td>`;
-      return `<td class="left"><span class="name clickable" data-code="${r.player_code}" data-role="${state.role}" data-name="${(r.name || '').replace(/"/g, '&quot;')}">${r.name || ''}</span><span class="team">${r.team || ''}</span></td>`;
+      if (!r.player_code) return `<td class="left"><span class="name">${r.name || ''}</span>${jerseySuffix(r)}<span class="team">${r.team || ''}</span></td>`;
+      return `<td class="left"><span class="name clickable" data-code="${r.player_code}" data-role="${state.role}" data-name="${(r.name || '').replace(/"/g, '&quot;')}">${r.name || ''}</span>${jerseySuffix(r)}<span class="team">${r.team || ''}</span></td>`;
     }
     let v = r[c.key];
     if (v == null) v = 0;
@@ -275,7 +323,8 @@ render();
     html_doc = (html_doc
                 .replace("__SEASON_STATS__", season_payload)
                 .replace("__CAREER_STATS__", career_payload)
-                .replace("__SEASONS__", seasons_payload))
+                .replace("__SEASONS__", seasons_payload)
+                .replace("__JERSEY_NUMBERS__", jersey_payload))
 
     out_path = os.path.join(HERE, "records.html")
     with open(out_path, "w", encoding="utf-8") as f:

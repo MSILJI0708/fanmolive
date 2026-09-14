@@ -121,6 +121,7 @@ jobs:
         if: steps.check_active.outputs.active == 'true'
         working-directory: fanmo
         run: |
+          python build_jersey_numbers.py
           python build_stats.py
           python build_records_board.py
           python build_player_pages.py
@@ -135,7 +136,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add fanmo/data_*.json fanmo/position_db.json fanmo/lp_board.html fanmo/lp_board_mlb.html fanmo/mlb_last_run.txt fanmo/position_last_refresh.txt fanmo/season_stats.json fanmo/career_stats.json fanmo/records.html fanmo/active_window_state.json fanmo/self_pred_mismatches.json fanmo/error_report.json fanmo/player fanmo/options.html
+          git add fanmo/data_*.json fanmo/position_db.json fanmo/lp_board.html fanmo/lp_board_mlb.html fanmo/mlb_last_run.txt fanmo/position_last_refresh.txt fanmo/season_stats.json fanmo/career_stats.json fanmo/records.html fanmo/active_window_state.json fanmo/self_pred_mismatches.json fanmo/error_report.json fanmo/player fanmo/options.html fanmo/jersey_numbers.json fanmo/jersey_last_refresh.txt
           if git diff --cached --quiet; then
             echo "변경 사항 없음, 커밋 생략"
           else
@@ -169,6 +170,10 @@ jobs:
           # 만든 player/<이름>/index.html 트리를 그대로 배포 폴더에 옮긴다.
           if [ -d fanmo/player ]; then
             cp -r fanmo/player _site/player
+          fi
+          # 등번호(동명이인 구분용) — lp_board.html이 fetch로 직접 읽는다.
+          if [ -f fanmo/jersey_numbers.json ]; then
+            cp fanmo/jersey_numbers.json _site/jersey_numbers.json
           fi
           # KBO 보드는 날짜별 JSON을 지연 로딩(fetch)하므로, 배포 폴더에도 개별 날짜 파일을
           # 그대로 복사해 둬야 달력에서 다른 날짜를 고를 때 fetch가 실제로 성공한다.

@@ -696,9 +696,16 @@ tbody tr.clickable:hover { background: var(--chip-bg); }
   white-space: nowrap;
   border-bottom: 1px solid var(--line);
 }
+/* 구단 배경색: 팀별 고유색을 아주 옅게 깔아서 표에서 같은 팀 선수를 한눈에 훑어볼 수
+   있게 한다 — 뒤에 오는 nth-child/hover 규칙과 명시도가 같아서(클래스 없이도 속성
+   선택자는 클래스와 같은 명시도), 소스 순서상 이 규칙보다 뒤에 있는 nth-child·hover가
+   그대로 우선 적용된다. 이름 열은 sticky라 자체 배경이 따로 있어서 한 번 더 맞춰준다. */
+tr[data-team] { background: var(--team-tint); }
+tr[data-team] td.name { background: var(--team-tint); }
 tbody tr:nth-child(even) { background: var(--row-alt); }
 tbody tr:hover { background: var(--chip-bg); }
 td.name { text-align: left; font-weight: 600; }
+.jersey { color: var(--ink-1); font-size: 10.5px; margin-left: 3px; font-weight: 400; }
 .team-logo {
   width: 16px;
   height: 16px;
@@ -1112,6 +1119,42 @@ const TEAM_LOGO_URL = {
   '키움': 'https://sports-phinf.pstatic.net/team/kbo/default/WO.png',
 };
 
+// 구단 고유색 — 표 행 배경에 아주 옅게(alpha 낮게) 깔아서 팀별로 훑어보기 쉽게 한다.
+// 여러 구단이 실제로 빨강 계열이라(KIA·LG·SSG·롯데) 완전히 안 겹치진 않지만 실제 KBO
+// 구단 색 자체가 그렇다 — 팀 엠블럼이 항상 같이 보이므로 구분에는 문제없다.
+const TEAM_COLORS = {
+  'KIA': '208,16,32', '삼성': '0,86,159', 'LG': '196,30,58', 'KT': '215,0,54',
+  '두산': '19,26,84', 'SSG': '206,14,45', '한화': '255,102,0', '롯데': '200,16,46',
+  'NC': '31,58,98', '키움': '130,2,46',
+};
+
+// player_code -> {number, name, team} — build_jersey_numbers.py가 KBO 공식 등록
+// 현황에서 긁어온 등번호(오늘 기준 1군 로스터만, 비동기로 따로 불러온다). 로드 전엔
+// 빈 객체라 jerseySuffix()가 그냥 아무것도 안 붙이고, 로드되면 다시 그려준다.
+let JERSEY_NUMBERS = {};
+let DUPE_TEAM_NAMES = new Set();
+fetch('jersey_numbers.json').then(r => r.ok ? r.json() : {}).then(data => {
+  JERSEY_NUMBERS = data || {};
+  const count = {};
+  Object.values(JERSEY_NUMBERS).forEach(p => {
+    const key = p.team + '|' + p.name;
+    count[key] = (count[key] || 0) + 1;
+  });
+  DUPE_TEAM_NAMES = new Set(Object.keys(count).filter(k => count[k] > 1));
+  rebuildBatterTable();
+  rebuildPitcherTable();
+}).catch(() => { /* 등번호 없이도 나머지 보드는 정상 동작해야 한다 */ });
+
+function jerseySuffix(row) {
+  if (!row.player_code || !row.team || !DUPE_TEAM_NAMES.has(row.team + '|' + row.name)) return null;
+  const j = JERSEY_NUMBERS[row.player_code];
+  if (!j) return null;
+  const s = document.createElement('span');
+  s.className = 'jersey';
+  s.textContent = '#' + j.number;
+  return s;
+}
+
 const POSITION_GROUPS = {
   '전체': null,
   '포수': ['포수'],
@@ -1378,6 +1421,8 @@ function makeRowCells(row, cols, i) {
         td.appendChild(img);
       }
       td.appendChild(document.createTextNode(row.name));
+      const jerseyEl = jerseySuffix(row);
+      if (jerseyEl) td.appendChild(jerseyEl);
       td.className = col.cls || 'name left';
       if (row.is_starter) {
         const s = document.createElement('span');
@@ -1452,6 +1497,11 @@ function render(tableId, cols, rows) {
       tr.className = 'clickable';
       tr.title = '클릭하면 이 선수의 시즌별·통산 기록이 새 창으로 열려요';
       tr.addEventListener('click', () => openPlayerPage(row));
+      const teamRgb = TEAM_COLORS[row.team];
+      if (teamRgb) {
+        tr.dataset.team = row.team;
+        tr.style.setProperty('--team-tint', `rgba(${teamRgb},0.1)`);
+      }
       makeRowCells(row, cols, i).forEach(td => tr.appendChild(td));
       tbody.appendChild(tr);
     });
