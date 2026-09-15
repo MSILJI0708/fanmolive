@@ -345,15 +345,34 @@ def score_pitcher(stat: dict) -> int:
     return pts
 
 
-def load_position_map() -> dict:
+# position_db.json은 코스트(fanmo_cost.py의 SNAPSHOTS)와 달리 그때그때의 스냅샷을 따로
+# 안 쌓고 계속 덮어써왔다 — 그런데 9UP 포지션 자동 캡쳐(2026-09-15)로 최근 포지션이
+# 대거 갱신되면서, 예전 날짜(9/13 이전)를 나중에 재수집/재처리하면 그 날 당시가 아니라
+# "지금" 기준 포지션이 잘못 붙는 문제가 생겼다. 코스트처럼 최소한의 스냅샷 하나(9/1
+# 기준, position_db_20260901.json — 2026-09-01T07:31Z 커밋에서 그대로 떠온 것)를 남겨서,
+# 9/13 이전 날짜는 이 스냅샷을, 그 이후는 지금의 position_db.json을 쓰도록 나눴다.
+_POSITION_SNAPSHOT_CUTOFF = "2026-09-13"
+_POSITION_SNAPSHOT_PATH = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "position_db_20260901.json"
+)
+
+
+def load_position_map(date_str: str | None = None) -> dict:
     """playerCode -> {"position": 적용 포지션, "is_override": 수동 재지정 여부}.
+    date_str(그 데이터가 속한 날짜, 'YYYY-MM-DD')를 주면 _POSITION_SNAPSHOT_CUTOFF
+    이전 날짜에 대해서는 9/1 스냅샷을 쓴다 — 생략하면 예전처럼 항상 최신
+    position_db.json을 쓴다(daily_pipeline.py처럼 "오늘"만 다루는 경우는 이걸로 충분).
     position.py는 이 모듈의 fetch 함수를 가져다 쓰므로, 순환 임포트를 피하려고
     여기서만 지연 임포트한다."""
-    try:
-        from position import load_db
-    except ImportError:
-        return {}
-    db = load_db()
+    if date_str is not None and date_str < _POSITION_SNAPSHOT_CUTOFF and os.path.exists(_POSITION_SNAPSHOT_PATH):
+        with open(_POSITION_SNAPSHOT_PATH, encoding="utf-8") as f:
+            db = json.load(f)
+    else:
+        try:
+            from position import load_db
+        except ImportError:
+            return {}
+        db = load_db()
     return {
         code: {
             "position": rec["effective_position"],

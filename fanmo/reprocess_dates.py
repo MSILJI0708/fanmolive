@@ -36,7 +36,9 @@ def main():
         with open(cal_path, encoding="utf-8") as f:
             calendar = json.load(f)
 
-    position_map = load_position_map()
+    # 날짜별로 그때그때 맞는 포지션 맵을 쓴다(9/13 이전은 9/1 스냅샷) — 한 번만 로드해서
+    # 여러 날짜에 재사용하면 최근 포지션이 옛날 데이터에 잘못 덮어씌워진다.
+    position_map_by_date = {ds: load_position_map(ds) for ds in dates}
     batters_by_date = {ds: [] for ds in dates}
     pitchers_by_date = {ds: [] for ds in dates}
 
@@ -47,7 +49,7 @@ def main():
             if not game_ids:
                 game_ids = [g["gameId"] for g in fetch_schedule(ds) if not g.get("cancel")]
             for gid in game_ids:
-                fut = ex.submit(process_game, gid, position_map=position_map)
+                fut = ex.submit(process_game, gid, position_map=position_map_by_date[ds])
                 futures[fut] = (ds, gid)
         for fut in cf.as_completed(futures):
             ds, gid = futures[fut]

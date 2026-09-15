@@ -43,7 +43,6 @@ def main():
     remaining = [ds for ds in all_dates() if ds not in done]
     print(f"전체 대상 중 미완료 {len(remaining)}일", flush=True)
 
-    position_map = load_position_map()
     start = time.time()
     i = 0
     with cf.ThreadPoolExecutor(max_workers=MAX_WORKERS) as ex:
@@ -63,8 +62,11 @@ def main():
 
             batters_by_date = {ds: [] for ds in wave}
             pitchers_by_date = {ds: [] for ds in wave}
+            # 날짜별로 그때그때 맞는 포지션 맵을 쓴다(9/13 이전은 9/1 스냅샷) — wave 안에
+            # 날짜가 섞여 있어도 한 번씩만 로드하도록 캐싱.
+            position_map_by_date = {ds: load_position_map(ds) for ds in wave}
             futures = {
-                ex.submit(process_game, gid, position_map=position_map): (ds, gid)
+                ex.submit(process_game, gid, position_map=position_map_by_date[ds]): (ds, gid)
                 for ds in wave for gid in game_ids_by_date[ds]
             }
             for fut in cf.as_completed(futures):

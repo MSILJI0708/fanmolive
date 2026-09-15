@@ -67,7 +67,7 @@ def run(date_str: str, days: int = 14, refresh_position: bool = True) -> tuple[l
     else:
         print("[1/2] 포지션 갱신 생략(--skip-position)")
 
-    position_map = load_position_map()
+    position_map = load_position_map(date_str)
 
     print(f"[2/2] {date_str} 경기 데이터 수집 중...")
     batters, pitchers = collect_date(date_str, position_map=position_map)

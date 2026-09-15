@@ -11,13 +11,14 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 
 
 def main():
-    position_map = load_position_map()
-    print(f"포지션 맵 {len(position_map)}명 로드 완료")
-
     files = glob_data_files()
     for fp in files:
         date_compact = os.path.basename(fp)[len("data_"):-len(".json")]
         date_str = f"{date_compact[0:4]}-{date_compact[4:6]}-{date_compact[6:8]}"
+        # 날짜별로 그때그때 맞는 포지션 맵을 쓴다(9/13 이전은 9/1 스냅샷) — 그냥 한 번만
+        # 로드해서 전체 날짜에 재사용하면, 최근 갱신된 "지금" 포지션이 옛날 데이터에도
+        # 잘못 덮어씌워진다(naver_fantasy_score.load_position_map 참고).
+        position_map = load_position_map(date_str)
         print(f"[{date_str}] 재수집 시작...")
         batters, pitchers = collect_date(date_str, position_map=position_map)
         batters.sort(key=lambda r: -r["lp"])
