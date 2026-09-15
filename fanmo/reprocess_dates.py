@@ -7,6 +7,7 @@ import json
 import os
 import sys
 
+from data_paths import fname_for
 from naver_fantasy_score import fetch_schedule, load_position_map, process_game
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -25,8 +26,6 @@ DATES = [
 ]
 
 
-def fname_for(date_str: str) -> str:
-    return os.path.join(HERE, f"data_{date_str.replace('-', '')}.json")
 
 
 def main():

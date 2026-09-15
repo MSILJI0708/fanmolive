@@ -1,9 +1,10 @@
 import argparse
-import glob
 import json
 import os
 import re
 from datetime import datetime, timedelta, timezone
+
+from data_paths import glob_data_files
 
 ap = argparse.ArgumentParser(description="수집된 data_<date>.json 전부를 모아 날짜 선택이 가능한 LP 보드 HTML을 만든다")
 ap.add_argument("--date", default=None, help="처음 열었을 때 보여줄 기준일 YYYY-MM-DD (생략 시 가장 최근 수집일)")
@@ -23,7 +24,7 @@ here = os.path.dirname(os.path.abspath(__file__))
 # 네이버 API 기반 2008년 이후와 품질이 달라 같은 화면에 섞지 않기로 함(사용자 요청).
 # 시즌·통산 기록실(records.html)은 이 제한과 무관하게 1982년부터 그대로 보여준다.
 LP_BOARD_MIN_DATE = "2008-01-01"
-paths_all = sorted(glob.glob(os.path.join(here, "data_????????.json")))
+paths_all = glob_data_files()
 paths = []
 file_dates = []
 for path in paths_all:

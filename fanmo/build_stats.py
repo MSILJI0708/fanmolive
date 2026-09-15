@@ -11,11 +11,11 @@
 """
 from __future__ import annotations
 
-import glob
 import json
 import os
 from collections import defaultdict
 
+from data_paths import glob_data_files
 from naver_fantasy_score import outs_to_innings_str
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -78,7 +78,7 @@ def _season_of(date_str: str) -> str:
 
 
 def aggregate():
-    files = sorted(glob.glob(os.path.join(HERE, "data_????????.json")))
+    files = glob_data_files()
 
     # season -> player_code -> acc
     season_batters: dict[str, dict[str, dict]] = defaultdict(dict)

@@ -1,11 +1,11 @@
 """전체 수집된 날짜에서, "홈런" etcRecords 한 줄에 선수가 2명 이상 묶여 나온 경기 중
 구버전 _HR_RE(단일 매치)로 파싱했을 때와 신버전 _HR_ITEM_RE(findall)로 파싱했을 때
 grand_slam_batters 결과가 달라지는(즉 만루홈런이 누락됐던) 날짜를 찾는다."""
-import glob
 import json
 import os
 import re
 
+from data_paths import glob_data_files
 from naver_fantasy_score import fetch_record, fetch_schedule, _HR_ITEM_RE
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -25,7 +25,7 @@ def new_parse(result: str) -> set:
 
 def main():
     file_dates = []
-    for fp in sorted(glob.glob(os.path.join(HERE, "data_????????.json"))):
+    for fp in glob_data_files():
         dc = os.path.basename(fp)[len("data_"):-len(".json")]
         file_dates.append(f"{dc[0:4]}-{dc[4:6]}-{dc[6:8]}")
 

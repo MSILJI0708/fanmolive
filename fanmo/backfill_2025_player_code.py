@@ -13,11 +13,11 @@ backfill_2025_done.json에 기록해 두고 다음 실행에서 이어감)이되
 사용법: python backfill_2025_player_code.py  (여러 번 나눠 실행해도 안전)
 """
 import concurrent.futures as cf
-import glob
 import json
 import os
 import time
 
+from data_paths import fname_for, glob_data_files
 from naver_fantasy_score import fetch_round, fetch_schedule, load_position_map, process_game
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -27,15 +27,12 @@ WAVE_SIZE = 6
 MAX_WORKERS = 8
 
 
-def fname_for(date_str: str) -> str:
-    return os.path.join(HERE, f"data_{date_str.replace('-', '')}.json")
-
-
 def all_2025_dates() -> list:
     dates = []
-    for fp in sorted(glob.glob(os.path.join(HERE, "data_2025????.json"))):
+    for fp in glob_data_files():
         dc = os.path.basename(fp)[len("data_"):-len(".json")]
-        dates.append(f"{dc[0:4]}-{dc[4:6]}-{dc[6:8]}")
+        if dc.startswith("2025"):
+            dates.append(f"{dc[0:4]}-{dc[4:6]}-{dc[6:8]}")
     return dates
 
 

@@ -13,11 +13,10 @@ data_*.json을 손으로 뒤지지 않도록, 이름 하나를 던지면 그 이
 from __future__ import annotations
 
 import argparse
-import glob
 import json
 from collections import Counter, defaultdict
 
-HERE_GLOB = "data_????????.json"
+from data_paths import glob_data_files
 
 
 def collect(names: set[str]) -> dict:
@@ -28,7 +27,7 @@ def collect(names: set[str]) -> dict:
         "is_batter": False, "is_pitcher": False, "dates": [],
     }))
 
-    files = sorted(glob.glob(HERE_GLOB))
+    files = glob_data_files()
     for fp in files:
         with open(fp, encoding="utf-8") as f:
             d = json.load(f)

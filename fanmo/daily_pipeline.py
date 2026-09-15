@@ -25,6 +25,7 @@ import os
 import time
 from datetime import date
 
+from data_paths import fname_for
 from naver_fantasy_score import collect_date, fetch_round, fetch_schedule, load_position_map
 from position import build_position_db
 
@@ -107,7 +108,7 @@ def main():
     except Exception as exc:  # noqa: BLE001
         print(f"  라운드 조회 실패(무시하고 계속): {exc}")
 
-    out_path = os.path.join(HERE, f"data_{date_str.replace('-', '')}.json")
+    out_path = fname_for(date_str)
 
     # 이미 저장된 파일보다 이번에 수집한 내용이 더 부실하면(특히 완전히 0이면) 저장을
     # 건너뛴다 — 네이버 일정 API가 경기 종료 후에도 일시적으로 낡은 상태(BEFORE/READY)를

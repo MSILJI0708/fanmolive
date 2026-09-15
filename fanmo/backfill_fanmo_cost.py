@@ -5,10 +5,10 @@
 
 사용법: python backfill_fanmo_cost.py
 """
-import glob
 import json
 import re
 
+from data_paths import glob_data_files
 from fanmo_cost import lookup_batter_cost, lookup_pitcher_cost
 
 
@@ -38,7 +38,7 @@ def backfill_file(path: str, date_str: str | None) -> tuple[int, int]:
 
 
 def main():
-    files = sorted(glob.glob("data_[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].json"))
+    files = glob_data_files()
     grand_matched = grand_total = 0
     for path in files:
         m = re.search(r"data_(\d{8})\.json$", path)

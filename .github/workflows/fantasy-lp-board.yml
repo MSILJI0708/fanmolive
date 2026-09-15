@@ -165,7 +165,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add fanmo/data_*.json fanmo/position_db.json fanmo/lp_board.html fanmo/lp_board_mlb.html fanmo/mlb_last_run.txt fanmo/position_last_refresh.txt fanmo/season_stats.json fanmo/career_stats.json fanmo/records.html fanmo/active_window_state.json fanmo/self_pred_mismatches.json fanmo/error_report.json fanmo/player fanmo/options.html fanmo/jersey_numbers.json fanmo/jersey_last_refresh.txt fanmo/season_calendar.json fanmo/historical_last_run.txt fanmo/kbo_official_calendar.json fanmo/kbo_player_code_cache.json fanmo/kbo_2001_2007_unresolved_players.json
+          git add fanmo/data fanmo/data_mlb_*.json fanmo/position_db.json fanmo/lp_board.html fanmo/lp_board_mlb.html fanmo/mlb_last_run.txt fanmo/position_last_refresh.txt fanmo/season_stats.json fanmo/career_stats.json fanmo/records.html fanmo/active_window_state.json fanmo/self_pred_mismatches.json fanmo/error_report.json fanmo/player fanmo/options.html fanmo/jersey_numbers.json fanmo/jersey_last_refresh.txt fanmo/season_calendar.json fanmo/historical_last_run.txt fanmo/kbo_official_calendar.json fanmo/kbo_player_code_cache.json fanmo/kbo_2001_2007_unresolved_players.json
           if git diff --cached --quiet; then
             echo "변경 사항 없음, 커밋 생략"
           else
@@ -206,7 +206,10 @@ jobs:
           fi
           # KBO 보드는 날짜별 JSON을 지연 로딩(fetch)하므로, 배포 폴더에도 개별 날짜 파일을
           # 그대로 복사해 둬야 달력에서 다른 날짜를 고를 때 fetch가 실제로 성공한다.
-          cp fanmo/data_[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].json _site/ 2>/dev/null || true
+          # 저장소 안에서는 fanmo/data/<연도>/data_YYYYMMDD.json 로 정리돼 있지만
+          # (fanmo/data_paths.py 참고), 배포 폴더에는 lp_board.html의 클라이언트 JS가
+          # 그대로 'data_YYYYMMDD.json'을 fetch하므로 연도 폴더 없이 평평하게 복사한다.
+          find fanmo/data -maxdepth 2 -name 'data_????????.json' -exec cp {} _site/ \; 2>/dev/null || true
 
       - name: Pages 아티팩트 업로드
         if: steps.combine.outputs.do_work == 'true'

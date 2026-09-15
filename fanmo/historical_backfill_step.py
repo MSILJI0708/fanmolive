@@ -24,6 +24,7 @@ import os
 import time
 from datetime import date, timedelta
 
+from data_paths import fname_for
 from naver_fantasy_score import fetch_json, fetch_schedule, load_position_map, process_game, GAME_URL
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -35,10 +36,6 @@ END = date(2022, 12, 31)
 BUDGET_SECONDS = 90  # 메인 파이프라인 한 회차 안에서 kbo_2001_2007_backfill_step.py와 시간을 나눠 씀
 WAVE_SIZE = 6
 MAX_WORKERS = 8
-
-
-def fname_for(date_str: str) -> str:
-    return os.path.join(HERE, f"data_{date_str.replace('-', '')}.json")
 
 
 def load_calendar() -> dict:

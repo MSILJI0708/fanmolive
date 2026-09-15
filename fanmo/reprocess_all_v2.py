@@ -6,11 +6,11 @@
 여러 번 나눠 실행해도 안전하다(시간 예산을 넘기면 그 시점까지 완료한 날짜만 남기고
 깔끔하게 끝난다 — 다음 실행이 이어서 진행)."""
 import concurrent.futures as cf
-import glob
 import json
 import os
 import time
 
+from data_paths import fname_for, glob_data_files
 from naver_fantasy_score import fetch_schedule, load_position_map, process_game
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -20,13 +20,9 @@ WAVE_SIZE = 6
 MAX_WORKERS = 8
 
 
-def fname_for(date_str: str) -> str:
-    return os.path.join(HERE, f"data_{date_str.replace('-', '')}.json")
-
-
 def all_dates() -> list:
     dates = []
-    for fp in sorted(glob.glob(os.path.join(HERE, "data_????????.json"))):
+    for fp in glob_data_files():
         dc = os.path.basename(fp)[len("data_"):-len(".json")]
         dates.append(f"{dc[0:4]}-{dc[4:6]}-{dc[6:8]}")
     return dates

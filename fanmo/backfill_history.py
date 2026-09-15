@@ -12,6 +12,7 @@ import json
 import os
 import time
 
+from data_paths import fname_for
 from naver_fantasy_score import load_position_map, process_game
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -22,8 +23,6 @@ WAVE_SIZE = 6  # 한 번에 동시 처리할 날짜 수
 MAX_WORKERS = 8  # 경기 단위 동시 요청 수(네이버 서버에 과도한 부담을 주지 않는 선)
 
 
-def fname_for(date_str: str) -> str:
-    return os.path.join(HERE, f"data_{date_str.replace('-', '')}.json")
 
 
 def main():

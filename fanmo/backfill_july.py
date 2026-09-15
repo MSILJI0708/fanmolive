@@ -7,6 +7,7 @@ import json
 import os
 from datetime import date, timedelta
 
+from data_paths import fname_for
 from naver_fantasy_score import collect_date, fetch_schedule, load_position_map
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -23,7 +24,7 @@ def main():
 
     for d in dates:
         date_str = d.isoformat()
-        out_path = os.path.join(HERE, f"data_{date_str.replace('-', '')}.json")
+        out_path = fname_for(date_str)
         if os.path.exists(out_path):
             print(f"[skip] {date_str} 이미 존재")
             continue

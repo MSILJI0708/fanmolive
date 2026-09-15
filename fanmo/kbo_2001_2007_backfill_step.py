@@ -21,6 +21,7 @@ import json
 import os
 import time
 
+from data_paths import fname_for
 from kbo_official import (
     _load_player_cache, _save_player_cache, fetch_and_parse_box_score, fetch_schedule_month,
 )
@@ -33,10 +34,6 @@ END_SEASON = 2007
 MONTHS = [f"{m:02d}" for m in range(1, 13)]
 
 BUDGET_SECONDS = 90  # 메인 파이프라인 한 회차 안에서 historical_backfill_step.py(2008~2022)와 시간을 나눠 씀
-
-
-def fname_for(date_str: str) -> str:
-    return os.path.join(HERE, f"data_{date_str.replace('-', '')}.json")
 
 
 def load_calendar() -> dict:

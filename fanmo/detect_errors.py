@@ -19,12 +19,13 @@
 from __future__ import annotations
 
 import argparse
-import glob
 import json
 import os
 import re
 from collections import Counter
 from datetime import datetime, timedelta, timezone
+
+from data_paths import fname_for, glob_data_files
 
 KST = timezone(timedelta(hours=9))
 
@@ -141,10 +142,10 @@ def main():
     args = ap.parse_args()
 
     if args.date:
-        files = [os.path.join(HERE, f"data_{args.date}.json")]
+        files = [fname_for(args.date)]
         files = [fp for fp in files if os.path.exists(fp)]
     else:
-        files = sorted(glob.glob(os.path.join(HERE, "data_????????.json")))
+        files = glob_data_files()
 
     all_issues = []
     for fp in files:

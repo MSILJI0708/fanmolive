@@ -1,9 +1,191 @@
 {
- "files_checked": 711,
+ "files_checked": 960,
  "issue_counts_by_kind": {
-  "DUPLICATE_ROW": 6
+  "MISSING_PLAYER_CODE": 2813,
+  "INNING_FORMAT": 6529,
+  "DUPLICATE_ROW": 12
  },
  "issues": [
+  {
+   "date": "20010405",
+   "kind": "INNING_FORMAT",
+   "detail": "투수 최상덕(KIA) inn=''"
+  },
+  {
+   "date": "20010405",
+   "kind": "INNING_FORMAT",
+   "detail": "투수 기론(롯데) inn=''"
+  },
+  {
+   "date": "20010405",
+   "kind": "INNING_FORMAT",
+   "detail": "투수 임선동(키움) inn=''"
+  },
+  {
+   "date": "20010405",
+   "kind": "INNING_FORMAT",
+   "detail": "투수 송진우(한화) inn=''"
+  },
+  {
+   "date": "20010405",
+   "kind": "INNING_FORMAT",
+   "detail": "투수 김현욱(삼성) inn=''"
+  },
+  {
+   "date": "20010405",
+   "kind": "INNING_FORMAT",
+   "detail": "투수 에르난데스(SSG) inn=''"
+  },
+  {
+   "date": "20010405",
+   "kind": "INNING_FORMAT",
+   "detail": "투수 박명환(두산) inn=''"
+  },
+  {
+   "date": "20010405",
+   "kind": "INNING_FORMAT",
+   "detail": "투수 김영수(롯데) inn=''"
+  },
+  {
+   "date": "20010405",
+   "kind": "INNING_FORMAT",
+   "detail": "투수 조계현(두산) inn=''"
+  },
+  {
+   "date": "20010405",
+   "kind": "INNING_FORMAT",
+   "detail": "투수 박지철(롯데) inn=''"
+  },
+  {
+   "date": "20010405",
+   "kind": "INNING_FORMAT",
+   "detail": "투수 강상수(롯데) inn=''"
+  },
+  {
+   "date": "20010405",
+   "kind": "INNING_FORMAT",
+   "detail": "투수 이강철(삼성) inn=''"
+  },
+  {
+   "date": "20010405",
+   "kind": "INNING_FORMAT",
+   "detail": "투수 조웅천(SSG) inn=''"
+  },
+  {
+   "date": "20010405",
+   "kind": "INNING_FORMAT",
+   "detail": "투수 리베라(삼성) inn=''"
+  },
+  {
+   "date": "20010405",
+   "kind": "INNING_FORMAT",
+   "detail": "투수 최창호(LG) inn=''"
+  },
+  {
+   "date": "20010405",
+   "kind": "INNING_FORMAT",
+   "detail": "투수 최영완(KIA) inn=''"
+  },
+  {
+   "date": "20010405",
+   "kind": "INNING_FORMAT",
+   "detail": "투수 권준헌(키움) inn=''"
+  },
+  {
+   "date": "20010405",
+   "kind": "INNING_FORMAT",
+   "detail": "투수 김정수(한화) inn=''"
+  },
+  {
+   "date": "20010405",
+   "kind": "INNING_FORMAT",
+   "detail": "투수 임창용(삼성) inn=''"
+  },
+  {
+   "date": "20010405",
+   "kind": "INNING_FORMAT",
+   "detail": "투수 배영수(삼성) inn=''"
+  },
+  {
+   "date": "20010405",
+   "kind": "INNING_FORMAT",
+   "detail": "투수 경헌호(LG) inn=''"
+  },
+  {
+   "date": "20010405",
+   "kind": "INNING_FORMAT",
+   "detail": "투수 지연규(한화) inn=''"
+  },
+  {
+   "date": "20010405",
+   "kind": "INNING_FORMAT",
+   "detail": "투수 이성수(삼성) inn=''"
+  },
+  {
+   "date": "20010405",
+   "kind": "INNING_FORMAT",
+   "detail": "투수 해리거(LG) inn=''"
+  },
+  {
+   "date": "20010405",
+   "kind": "INNING_FORMAT",
+   "detail": "투수 김혁섭(LG) inn=''"
+  },
+  {
+   "date": "20010405",
+   "kind": "INNING_FORMAT",
+   "detail": "투수 정수찬(SSG) inn=''"
+  },
+  {
+   "date": "20010405",
+   "kind": "INNING_FORMAT",
+   "detail": "투수 박철홍(LG) inn=''"
+  },
+  {
+   "date": "20010405",
+   "kind": "INNING_FORMAT",
+   "detail": "투수 진필중(두산) inn=''"
+  },
+  {
+   "date": "20010405",
+   "kind": "INNING_FORMAT",
+   "detail": "투수 오상민(SSG) inn=''"
+  },
+  {
+   "date": "20010405",
+   "kind": "INNING_FORMAT",
+   "detail": "투수 이병석(KIA) inn=''"
+  },
+  {
+   "date": "20010523",
+   "kind": "DUPLICATE_ROW",
+   "detail": "타자 김진삼(한화) player_code=95458 완전 동일 행 중복"
+  },
+  {
+   "date": "20010708",
+   "kind": "DUPLICATE_ROW",
+   "detail": "타자 정영규(KIA) player_code=93411 완전 동일 행 중복"
+  },
+  {
+   "date": "20020509",
+   "kind": "DUPLICATE_ROW",
+   "detail": "타자 장재중(LG) player_code=94843 완전 동일 행 중복"
+  },
+  {
+   "date": "20020516",
+   "kind": "DUPLICATE_ROW",
+   "detail": "타자 신명철(롯데) player_code=71504 완전 동일 행 중복"
+  },
+  {
+   "date": "20020516",
+   "kind": "DUPLICATE_ROW",
+   "detail": "타자 엄정대(롯데) player_code=98569 완전 동일 행 중복"
+  },
+  {
+   "date": "20020519",
+   "kind": "DUPLICATE_ROW",
+   "detail": "타자 김태균(한화) player_code=71752 완전 동일 행 중복"
+  },
   {
    "date": "20230909",
    "kind": "DUPLICATE_ROW",
