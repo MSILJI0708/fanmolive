@@ -18,12 +18,22 @@ here = os.path.dirname(os.path.abspath(__file__))
 # 데이터만 HTML에 심고, 나머지 날짜는 "그날 경기 수" 정도의 가벼운 색인만 심어서 달력에
 # 점으로 표시하고, 실제로 그 날짜를 클릭하면 JS가 해당 data_YYYYMMDD.json을 그때 가서
 # fetch로 받아온다(day_index.py의 "지연 로딩"과 동일한 발상).
-paths = sorted(glob.glob(os.path.join(here, "data_????????.json")))
+# LP 보드(경기별 순위표)는 2008년부터만 보여준다 — 2001~2007년도 data_*.json이 있긴
+# 하지만(KBO 공식 사이트 박스스코어 기반), 도루 시점·주자 상황 같은 세부가 없어서
+# 네이버 API 기반 2008년 이후와 품질이 달라 같은 화면에 섞지 않기로 함(사용자 요청).
+# 시즌·통산 기록실(records.html)은 이 제한과 무관하게 1982년부터 그대로 보여준다.
+LP_BOARD_MIN_DATE = "2008-01-01"
+paths_all = sorted(glob.glob(os.path.join(here, "data_????????.json")))
+paths = []
 file_dates = []
-for path in paths:
+for path in paths_all:
     m = re.search(r"data_(\d{8})\.json$", path)
     dc = m.group(1)
-    file_dates.append(f"{dc[0:4]}-{dc[4:6]}-{dc[6:8]}")
+    ds = f"{dc[0:4]}-{dc[4:6]}-{dc[6:8]}"
+    if ds < LP_BOARD_MIN_DATE:
+        continue
+    paths.append(path)
+    file_dates.append(ds)
 
 if not file_dates:
     raise SystemExit("data_*.json 파일이 없습니다. 먼저 daily_pipeline.py로 데이터를 수집하세요.")
