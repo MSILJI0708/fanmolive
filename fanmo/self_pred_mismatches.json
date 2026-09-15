@@ -1,1320 +1,6 @@
 {
- "20080919WOSK0:이영욱": {
-  "game_id": "20080919WOSK0",
-  "name": "이영욱",
-  "team": "SSG",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20080919WOSK0:가득염": {
-  "game_id": "20080919WOSK0",
-  "name": "가득염",
-  "team": "SSG",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080919WOSK0:윤길현": {
-  "game_id": "20080919WOSK0",
-  "name": "윤길현",
-  "team": "SSG",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080919WOSK0:정우람": {
-  "game_id": "20080919WOSK0",
-  "name": "정우람",
-  "team": "SSG",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080919WOSK0:마일영": {
-  "game_id": "20080919WOSK0",
-  "name": "마일영",
-  "team": "키움",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20080920OBLT0:손민한": {
-  "game_id": "20080920OBLT0",
-  "name": "손민한",
-  "team": "롯데",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20080920OBLT0:김상현": {
-  "game_id": "20080920OBLT0",
-  "name": "김상현",
-  "team": "두산",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20080921HTSK0:김광현": {
-  "game_id": "20080921HTSK0",
-  "name": "김광현",
-  "team": "SSG",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20080921HTSK0:채병용": {
-  "game_id": "20080921HTSK0",
-  "name": "채병용",
-  "team": "SSG",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080921HTSK0:얀": {
-  "game_id": "20080921HTSK0",
-  "name": "얀",
-  "team": "SSG",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080921HTSK0:임준혁": {
-  "game_id": "20080921HTSK0",
-  "name": "임준혁",
-  "team": "KIA",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20080921OBLT0:이용훈": {
-  "game_id": "20080921OBLT0",
-  "name": "이용훈",
-  "team": "롯데",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20080921OBLT0:이혜천": {
-  "game_id": "20080921OBLT0",
-  "name": "이혜천",
-  "team": "두산",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20080921OBLT0:이승학": {
-  "game_id": "20080921OBLT0",
-  "name": "이승학",
-  "team": "두산",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080919OBLT0:최향남": {
-  "game_id": "20080919OBLT0",
-  "name": "최향남",
-  "team": "롯데",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20080919OBLT0:이승학": {
-  "game_id": "20080919OBLT0",
-  "name": "이승학",
-  "team": "두산",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20080921SSLG0:정재복": {
-  "game_id": "20080921SSLG0",
-  "name": "정재복",
-  "team": "LG",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20080921SSLG0:윤성환": {
-  "game_id": "20080921SSLG0",
-  "name": "윤성환",
-  "team": "삼성",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080921SSLG0:전병호": {
-  "game_id": "20080921SSLG0",
-  "name": "전병호",
-  "team": "삼성",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20080924LGSK0:채병용": {
-  "game_id": "20080924LGSK0",
-  "name": "채병용",
-  "team": "SSG",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20080924LGSK0:이승호": {
-  "game_id": "20080924LGSK0",
-  "name": "이승호",
-  "team": "SSG",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080924LGSK0:옥스프링": {
-  "game_id": "20080924LGSK0",
-  "name": "옥스프링",
-  "team": "LG",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20080924LTSS0:배영수": {
-  "game_id": "20080924LTSS0",
-  "name": "배영수",
-  "team": "삼성",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20080924LTSS0:안지만": {
-  "game_id": "20080924LTSS0",
-  "name": "안지만",
-  "team": "삼성",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080924LTSS0:오승환": {
-  "game_id": "20080924LTSS0",
-  "name": "오승환",
-  "team": "삼성",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080924LTSS0:조정훈": {
-  "game_id": "20080924LTSS0",
-  "name": "조정훈",
-  "team": "롯데",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20080925LGSK0:이영욱": {
-  "game_id": "20080925LGSK0",
-  "name": "이영욱",
-  "team": "SSG",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080925LGSK0:정우람": {
-  "game_id": "20080925LGSK0",
-  "name": "정우람",
-  "team": "SSG",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080925LGSK0:얀": {
-  "game_id": "20080925LGSK0",
-  "name": "얀",
-  "team": "SSG",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20080925LGSK0:우규민": {
-  "game_id": "20080925LGSK0",
-  "name": "우규민",
-  "team": "LG",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20080923LTHT0:서재응": {
-  "game_id": "20080923LTHT0",
-  "name": "서재응",
-  "team": "KIA",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20080923LTHT0:유동훈": {
-  "game_id": "20080923LTHT0",
-  "name": "유동훈",
-  "team": "KIA",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080923LTHT0:한기주": {
-  "game_id": "20080923LTHT0",
-  "name": "한기주",
-  "team": "KIA",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080923LTHT0:장원준": {
-  "game_id": "20080923LTHT0",
-  "name": "장원준",
-  "team": "롯데",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20080925LTSS0:전병호": {
-  "game_id": "20080925LTSS0",
-  "name": "전병호",
-  "team": "삼성",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20080925LTSS0:송승준": {
-  "game_id": "20080925LTSS0",
-  "name": "송승준",
-  "team": "롯데",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20080925LTSS0:배장호": {
-  "game_id": "20080925LTSS0",
-  "name": "배장호",
-  "team": "롯데",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080925LTSS0:김이슬": {
-  "game_id": "20080925LTSS0",
-  "name": "김이슬",
-  "team": "롯데",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080925LTSS0:최향남": {
-  "game_id": "20080925LTSS0",
-  "name": "최향남",
-  "team": "롯데",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080925LTSS0:코르테스": {
-  "game_id": "20080925LTSS0",
-  "name": "코르테스",
-  "team": "롯데",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080924WOOB0:김선우": {
-  "game_id": "20080924WOOB0",
-  "name": "김선우",
-  "team": "두산",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20080924WOOB0:장원삼": {
-  "game_id": "20080924WOOB0",
-  "name": "장원삼",
-  "team": "키움",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20080924WOOB0:다카쓰": {
-  "game_id": "20080924WOOB0",
-  "name": "다카쓰",
-  "team": "키움",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080923WOOB0:임태훈": {
-  "game_id": "20080923WOOB0",
-  "name": "임태훈",
-  "team": "두산",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20080923WOOB0:이현승": {
-  "game_id": "20080923WOOB0",
-  "name": "이현승",
-  "team": "키움",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20080923HHSK0:김원형": {
-  "game_id": "20080923HHSK0",
-  "name": "김원형",
-  "team": "SSG",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20080923HHSK0:송진우": {
-  "game_id": "20080923HHSK0",
-  "name": "송진우",
-  "team": "한화",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20080923HHSK0:토마스": {
-  "game_id": "20080923HHSK0",
-  "name": "토마스",
-  "team": "한화",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080926LGSK0:송은범": {
-  "game_id": "20080926LGSK0",
-  "name": "송은범",
-  "team": "SSG",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20080926LGSK0:이범준": {
-  "game_id": "20080926LGSK0",
-  "name": "이범준",
-  "team": "LG",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20080926LGSK0:이재영": {
-  "game_id": "20080926LGSK0",
-  "name": "이재영",
-  "team": "LG",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080926LGSK0:오상민": {
-  "game_id": "20080926LGSK0",
-  "name": "오상민",
-  "team": "LG",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080926LGSK0:정재복": {
-  "game_id": "20080926LGSK0",
-  "name": "정재복",
-  "team": "LG",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080926SSOB0:이혜천": {
-  "game_id": "20080926SSOB0",
-  "name": "이혜천",
-  "team": "두산",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20080926SSOB0:김명제": {
-  "game_id": "20080926SSOB0",
-  "name": "김명제",
-  "team": "두산",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080926SSOB0:정재훈": {
-  "game_id": "20080926SSOB0",
-  "name": "정재훈",
-  "team": "두산",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080926SSOB0:에니스": {
-  "game_id": "20080926SSOB0",
-  "name": "에니스",
-  "team": "삼성",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20080927SSOB0:랜들": {
-  "game_id": "20080927SSOB0",
-  "name": "랜들",
-  "team": "두산",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20080927SSOB0:이재우": {
-  "game_id": "20080927SSOB0",
-  "name": "이재우",
-  "team": "두산",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080927SSOB0:윤성환": {
-  "game_id": "20080927SSOB0",
-  "name": "윤성환",
-  "team": "삼성",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20080925WOOB0:이재우": {
-  "game_id": "20080925WOOB0",
-  "name": "이재우",
-  "team": "두산",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20080925WOOB0:다카쓰": {
-  "game_id": "20080925WOOB0",
-  "name": "다카쓰",
-  "team": "키움",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20080925WOOB0:조용훈": {
-  "game_id": "20080925WOOB0",
-  "name": "조용훈",
-  "team": "키움",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080926WOHT0:곽정철": {
-  "game_id": "20080926WOHT0",
-  "name": "곽정철",
-  "team": "KIA",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20080926WOHT0:마일영": {
-  "game_id": "20080926WOHT0",
-  "name": "마일영",
-  "team": "키움",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20080926WOHT0:박준수": {
-  "game_id": "20080926WOHT0",
-  "name": "박준수",
-  "team": "키움",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080926WOHT0:송신영": {
-  "game_id": "20080926WOHT0",
-  "name": "송신영",
-  "team": "키움",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080926WOHT0:다카쓰": {
-  "game_id": "20080926WOHT0",
-  "name": "다카쓰",
-  "team": "키움",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080927SKWO0:김성현": {
-  "game_id": "20080927SKWO0",
-  "name": "김성현",
-  "team": "키움",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20080927SKWO0:김광현": {
-  "game_id": "20080927SKWO0",
-  "name": "김광현",
-  "team": "SSG",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20080927SKWO0:얀": {
-  "game_id": "20080927SKWO0",
-  "name": "얀",
-  "team": "SSG",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080927HHLT0:강영식": {
-  "game_id": "20080927HHLT0",
-  "name": "강영식",
-  "team": "롯데",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20080927HHLT0:송진우": {
-  "game_id": "20080927HHLT0",
-  "name": "송진우",
-  "team": "한화",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080927HHLT0:마정길": {
-  "game_id": "20080927HHLT0",
+ "20090408OBHH0:마정길": {
+  "game_id": "20090408OBHH0",
   "name": "마정길",
   "team": "한화",
   "official_wls": "홀",
@@ -1331,135 +17,9 @@
    "LOSS": false
   }
  },
- "20080927HHLT0:김혁민": {
-  "game_id": "20080927HHLT0",
-  "name": "김혁민",
-  "team": "한화",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20080927LGHT0:한기주": {
-  "game_id": "20080927LGHT0",
-  "name": "한기주",
-  "team": "KIA",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20080927LGHT0:류택현": {
-  "game_id": "20080927LGHT0",
-  "name": "류택현",
-  "team": "LG",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20080928HTLT0:이용훈": {
-  "game_id": "20080928HTLT0",
-  "name": "이용훈",
-  "team": "롯데",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20080928HTLT0:김일엽": {
-  "game_id": "20080928HTLT0",
-  "name": "김일엽",
-  "team": "롯데",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080928HTLT0:염종석": {
-  "game_id": "20080928HTLT0",
-  "name": "염종석",
-  "team": "롯데",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080928HTLT0:김사율": {
-  "game_id": "20080928HTLT0",
-  "name": "김사율",
-  "team": "롯데",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080928HTLT0:코르테스": {
-  "game_id": "20080928HTLT0",
-  "name": "코르테스",
+ "20090408LTLG0:애킨스": {
+  "game_id": "20090408LTLG0",
+  "name": "애킨스",
   "team": "롯데",
   "official_wls": "세",
   "predicted": {
@@ -1475,9 +35,27 @@
    "LOSS": false
   }
  },
- "20080928HTLT0:임준혁": {
-  "game_id": "20080928HTLT0",
-  "name": "임준혁",
+ "20090408OBHH0:노경은": {
+  "game_id": "20090408OBHH0",
+  "name": "노경은",
+  "team": "두산",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090407SKHT0:구톰슨": {
+  "game_id": "20090407SKHT0",
+  "name": "구톰슨",
   "team": "KIA",
   "official_wls": "패",
   "predicted": {
@@ -1493,10 +71,10 @@
    "LOSS": true
   }
  },
- "20080928SKWO0:민성기": {
-  "game_id": "20080928SKWO0",
-  "name": "민성기",
-  "team": "키움",
+ "20090407SKHT0:김광현": {
+  "game_id": "20090407SKHT0",
+  "name": "김광현",
+  "team": "SSG",
   "official_wls": "승",
   "predicted": {
    "SAVE": false,
@@ -1511,82 +89,28 @@
    "LOSS": false
   }
  },
- "20080928SKWO0:이승호": {
-  "game_id": "20080928SKWO0",
+ "20090407SKHT0:정대현": {
+  "game_id": "20090407SKHT0",
+  "name": "정대현",
+  "team": "SSG",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090407SKHT0:이승호": {
+  "game_id": "20090407SKHT0",
   "name": "이승호",
   "team": "SSG",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080928SKWO0:얀": {
-  "game_id": "20080928SKWO0",
-  "name": "얀",
-  "team": "SSG",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20080928SSOB0:이승학": {
-  "game_id": "20080928SSOB0",
-  "name": "이승학",
-  "team": "두산",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20080928SSOB0:정현욱": {
-  "game_id": "20080928SSOB0",
-  "name": "정현욱",
-  "team": "삼성",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20080928SSOB0:오승환": {
-  "game_id": "20080928SSOB0",
-  "name": "오승환",
-  "team": "삼성",
   "official_wls": "세",
   "predicted": {
    "SAVE": false,
@@ -1601,98 +125,8 @@
    "LOSS": false
   }
  },
- "20080930OBHH0:류현진": {
-  "game_id": "20080930OBHH0",
-  "name": "류현진",
-  "team": "한화",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20080930OBHH0:김상현": {
-  "game_id": "20080930OBHH0",
-  "name": "김상현",
-  "team": "두산",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20080930WOLG0:우규민": {
-  "game_id": "20080930WOLG0",
-  "name": "우규민",
-  "team": "LG",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20080930WOLG0:송신영": {
-  "game_id": "20080930WOLG0",
-  "name": "송신영",
-  "team": "키움",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20081001LGOB0:이혜천": {
-  "game_id": "20081001LGOB0",
-  "name": "이혜천",
-  "team": "두산",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20081001LGOB0:심수창": {
-  "game_id": "20081001LGOB0",
+ "20090407LTLG0:심수창": {
+  "game_id": "20090407LTLG0",
   "name": "심수창",
   "team": "LG",
   "official_wls": "승",
@@ -1709,28 +143,10 @@
    "LOSS": false
   }
  },
- "20081001LTSK0:레이번": {
-  "game_id": "20081001LTSK0",
-  "name": "레이번",
-  "team": "SSG",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20081001LTSK0:윤길현": {
-  "game_id": "20081001LTSK0",
-  "name": "윤길현",
-  "team": "SSG",
+ "20090407LTLG0:류택현": {
+  "game_id": "20090407LTLG0",
+  "name": "류택현",
+  "team": "LG",
   "official_wls": "홀",
   "predicted": {
    "SAVE": false,
@@ -1745,46 +161,10 @@
    "LOSS": false
   }
  },
- "20081001LTSK0:송승준": {
-  "game_id": "20081001LTSK0",
-  "name": "송승준",
-  "team": "롯데",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20080930LTSK0:이승호": {
-  "game_id": "20080930LTSK0",
-  "name": "이승호",
-  "team": "SSG",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20080930LTSK0:김이슬": {
-  "game_id": "20080930LTSK0",
-  "name": "김이슬",
-  "team": "롯데",
+ "20090407LTLG0:최동환": {
+  "game_id": "20090407LTLG0",
+  "name": "최동환",
+  "team": "LG",
   "official_wls": "홀",
   "predicted": {
    "SAVE": false,
@@ -1799,46 +179,64 @@
    "LOSS": false
   }
  },
- "20080930LTSK0:조정훈": {
-  "game_id": "20080930LTSK0",
+ "20090407LTLG0:김경태": {
+  "game_id": "20090407LTLG0",
+  "name": "김경태",
+  "team": "LG",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090407LTLG0:이재영": {
+  "game_id": "20090407LTLG0",
+  "name": "이재영",
+  "team": "LG",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090407LTLG0:우규민": {
+  "game_id": "20090407LTLG0",
+  "name": "우규민",
+  "team": "LG",
+  "official_wls": "세",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": true,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090407LTLG0:조정훈": {
+  "game_id": "20090407LTLG0",
   "name": "조정훈",
   "team": "롯데",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080930LTSK0:강영식": {
-  "game_id": "20080930LTSK0",
-  "name": "강영식",
-  "team": "롯데",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20080930LTSK0:코르테스": {
-  "game_id": "20080930LTSK0",
-  "name": "코르테스",
-  "team": "롯데",
   "official_wls": "패",
   "predicted": {
    "SAVE": false,
@@ -1853,81 +251,9 @@
    "LOSS": true
   }
  },
- "20081002SKHT0:한기주": {
-  "game_id": "20081002SKHT0",
-  "name": "한기주",
-  "team": "KIA",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20081002SKHT0:얀": {
-  "game_id": "20081002SKHT0",
-  "name": "얀",
-  "team": "SSG",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20081002OBWO0:마일영": {
-  "game_id": "20081002OBWO0",
-  "name": "마일영",
-  "team": "키움",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20081002OBWO0:랜들": {
-  "game_id": "20081002OBWO0",
-  "name": "랜들",
-  "team": "두산",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20081001SSWO0:송신영": {
-  "game_id": "20081001SSWO0",
-  "name": "송신영",
+ "20090407SSWO0:조용훈": {
+  "game_id": "20090407SSWO0",
+  "name": "조용훈",
   "team": "키움",
   "official_wls": "승",
   "predicted": {
@@ -1943,9 +269,45 @@
    "LOSS": false
   }
  },
- "20081001SSWO0:김상수": {
-  "game_id": "20081001SSWO0",
-  "name": "김상수",
+ "20090407SSWO0:신철인": {
+  "game_id": "20090407SSWO0",
+  "name": "신철인",
+  "team": "키움",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090407SSWO0:황두성": {
+  "game_id": "20090407SSWO0",
+  "name": "황두성",
+  "team": "키움",
+  "official_wls": "세",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": true,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090407SSWO0:권혁": {
+  "game_id": "20090407SSWO0",
+  "name": "권혁",
   "team": "삼성",
   "official_wls": "패",
   "predicted": {
@@ -1961,116 +323,8 @@
    "LOSS": true
   }
  },
- "20081003LTLG0:이범준": {
-  "game_id": "20081003LTLG0",
-  "name": "이범준",
-  "team": "LG",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20081003LTLG0:손민한": {
-  "game_id": "20081003LTLG0",
-  "name": "손민한",
-  "team": "롯데",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20081003OBWO0:이현승": {
-  "game_id": "20081003OBWO0",
-  "name": "이현승",
-  "team": "키움",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20081003OBWO0:김선우": {
-  "game_id": "20081003OBWO0",
-  "name": "김선우",
-  "team": "두산",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20081004OBHT0:윤석민": {
-  "game_id": "20081004OBHT0",
-  "name": "윤석민",
-  "team": "KIA",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20081004OBHT0:박민석": {
-  "game_id": "20081004OBHT0",
-  "name": "박민석",
-  "team": "두산",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20081004LTLG0:봉중근": {
-  "game_id": "20081004LTLG0",
+ "20090409LTLG0:봉중근": {
+  "game_id": "20090409LTLG0",
   "name": "봉중근",
   "team": "LG",
   "official_wls": "승",
@@ -2087,9 +341,27 @@
    "LOSS": false
   }
  },
- "20081004LTLG0:김휘곤": {
-  "game_id": "20081004LTLG0",
-  "name": "김휘곤",
+ "20090409LTLG0:김경태": {
+  "game_id": "20090409LTLG0",
+  "name": "김경태",
+  "team": "LG",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090409LTLG0:장원준": {
+  "game_id": "20090409LTLG0",
+  "name": "장원준",
   "team": "롯데",
   "official_wls": "패",
   "predicted": {
@@ -2105,8 +377,260 @@
    "LOSS": true
   }
  },
- "20081004SKSS0:윤성환": {
-  "game_id": "20081004SKSS0",
+ "20090409SSWO0:마일영": {
+  "game_id": "20090409SSWO0",
+  "name": "마일영",
+  "team": "키움",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20090409SSWO0:이상열": {
+  "game_id": "20090409SSWO0",
+  "name": "이상열",
+  "team": "키움",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090409SSWO0:신철인": {
+  "game_id": "20090409SSWO0",
+  "name": "신철인",
+  "team": "키움",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090409SSWO0:배영수": {
+  "game_id": "20090409SSWO0",
+  "name": "배영수",
+  "team": "삼성",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090410LTHH0:류현진": {
+  "game_id": "20090410LTHH0",
+  "name": "류현진",
+  "team": "한화",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20090410LTHH0:송승준": {
+  "game_id": "20090410LTHH0",
+  "name": "송승준",
+  "team": "롯데",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090409OBHH0:정민철": {
+  "game_id": "20090409OBHH0",
+  "name": "정민철",
+  "team": "한화",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090409OBHH0:김선우": {
+  "game_id": "20090409OBHH0",
+  "name": "김선우",
+  "team": "두산",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20090410OBLG0:정찬헌": {
+  "game_id": "20090410OBLG0",
+  "name": "정찬헌",
+  "team": "LG",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20090410OBLG0:고창성": {
+  "game_id": "20090410OBLG0",
+  "name": "고창성",
+  "team": "두산",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090410OBLG0:이용찬": {
+  "game_id": "20090410OBLG0",
+  "name": "이용찬",
+  "team": "두산",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090410SKWO0:김수경": {
+  "game_id": "20090410SKWO0",
+  "name": "김수경",
+  "team": "키움",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090410SKWO0:고효준": {
+  "game_id": "20090410SKWO0",
+  "name": "고효준",
+  "team": "SSG",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20090410SSHT0:이대진": {
+  "game_id": "20090410SSHT0",
+  "name": "이대진",
+  "team": "KIA",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090410SSHT0:윤성환": {
+  "game_id": "20090410SSHT0",
   "name": "윤성환",
   "team": "삼성",
   "official_wls": "승",
@@ -2123,26 +647,8 @@
    "LOSS": false
   }
  },
- "20081004SKSS0:에니스": {
-  "game_id": "20081004SKSS0",
-  "name": "에니스",
-  "team": "삼성",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20081004SKSS0:정현욱": {
-  "game_id": "20081004SKSS0",
+ "20090410SSHT0:정현욱": {
+  "game_id": "20090410SSHT0",
   "name": "정현욱",
   "team": "삼성",
   "official_wls": "홀",
@@ -2159,9 +665,9 @@
    "LOSS": false
   }
  },
- "20081004SKSS0:이상목": {
-  "game_id": "20081004SKSS0",
-  "name": "이상목",
+ "20090410SSHT0:권혁": {
+  "game_id": "20090410SSHT0",
+  "name": "권혁",
   "team": "삼성",
   "official_wls": "홀",
   "predicted": {
@@ -2177,8 +683,8 @@
    "LOSS": false
   }
  },
- "20081004SKSS0:오승환": {
-  "game_id": "20081004SKSS0",
+ "20090410SSHT0:오승환": {
+  "game_id": "20090410SSHT0",
   "name": "오승환",
   "team": "삼성",
   "official_wls": "세",
@@ -2195,27 +701,9 @@
    "LOSS": false
   }
  },
- "20081004SKSS0:전병두": {
-  "game_id": "20081004SKSS0",
-  "name": "전병두",
-  "team": "SSG",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20081004WOHH0:마정길": {
-  "game_id": "20081004WOHH0",
-  "name": "마정길",
+ "20090411LTHH0:김혁민": {
+  "game_id": "20090411LTHH0",
+  "name": "김혁민",
   "team": "한화",
   "official_wls": "승",
   "predicted": {
@@ -2231,8 +719,836 @@
    "LOSS": false
   }
  },
- "20081004WOHH0:토마스": {
-  "game_id": "20081004WOHH0",
+ "20090411LTHH0:송진우": {
+  "game_id": "20090411LTHH0",
+  "name": "송진우",
+  "team": "한화",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090411LTHH0:허준혁": {
+  "game_id": "20090411LTHH0",
+  "name": "허준혁",
+  "team": "롯데",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090412LTHH0:윤규진": {
+  "game_id": "20090412LTHH0",
+  "name": "윤규진",
+  "team": "한화",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090412LTHH0:조정훈": {
+  "game_id": "20090412LTHH0",
+  "name": "조정훈",
+  "team": "롯데",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20090412LTHH0:이정민": {
+  "game_id": "20090412LTHH0",
+  "name": "이정민",
+  "team": "롯데",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090412LTHH0:강영식": {
+  "game_id": "20090412LTHH0",
+  "name": "강영식",
+  "team": "롯데",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090412LTHH0:애킨스": {
+  "game_id": "20090412LTHH0",
+  "name": "애킨스",
+  "team": "롯데",
+  "official_wls": "세",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": true,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090411OBLG0:최원호": {
+  "game_id": "20090411OBLG0",
+  "name": "최원호",
+  "team": "LG",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090411OBLG0:성영훈": {
+  "game_id": "20090411OBLG0",
+  "name": "성영훈",
+  "team": "두산",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20090411OBLG0:이재우": {
+  "game_id": "20090411OBLG0",
+  "name": "이재우",
+  "team": "두산",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090411SKWO0:김성현": {
+  "game_id": "20090411SKWO0",
+  "name": "김성현",
+  "team": "키움",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090411SKWO0:송은범": {
+  "game_id": "20090411SKWO0",
+  "name": "송은범",
+  "team": "SSG",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20090411SSHT0:유동훈": {
+  "game_id": "20090411SSHT0",
+  "name": "유동훈",
+  "team": "KIA",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090411SSHT0:차우찬": {
+  "game_id": "20090411SSHT0",
+  "name": "차우찬",
+  "team": "삼성",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20090411SSHT0:오승환": {
+  "game_id": "20090411SSHT0",
+  "name": "오승환",
+  "team": "삼성",
+  "official_wls": "세",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": true,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090412OBLG0:오상민": {
+  "game_id": "20090412OBLG0",
+  "name": "오상민",
+  "team": "LG",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090412OBLG0:최동환": {
+  "game_id": "20090412OBLG0",
+  "name": "최동환",
+  "team": "LG",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090412OBLG0:김명제": {
+  "game_id": "20090412OBLG0",
+  "name": "김명제",
+  "team": "두산",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20090412OBLG0:고창성": {
+  "game_id": "20090412OBLG0",
+  "name": "고창성",
+  "team": "두산",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090412OBLG0:진야곱": {
+  "game_id": "20090412OBLG0",
+  "name": "진야곱",
+  "team": "두산",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090412OBLG0:이용찬": {
+  "game_id": "20090412OBLG0",
+  "name": "이용찬",
+  "team": "두산",
+  "official_wls": "세",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": true,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090412SKWO0:오재영": {
+  "game_id": "20090412SKWO0",
+  "name": "오재영",
+  "team": "키움",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090412SKWO0:이승호": {
+  "game_id": "20090412SKWO0",
+  "name": "이승호",
+  "team": "SSG",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20090412SKWO0:정대현": {
+  "game_id": "20090412SKWO0",
+  "name": "정대현",
+  "team": "SSG",
+  "official_wls": "세",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": true,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090412SSHT0:양현종": {
+  "game_id": "20090412SSHT0",
+  "name": "양현종",
+  "team": "KIA",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20090412SSHT0:한기주": {
+  "game_id": "20090412SSHT0",
+  "name": "한기주",
+  "team": "KIA",
+  "official_wls": "세",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": true,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090412SSHT0:크루세타": {
+  "game_id": "20090412SSHT0",
+  "name": "크루세타",
+  "team": "삼성",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090415HTLT0:애킨스": {
+  "game_id": "20090415HTLT0",
+  "name": "애킨스",
+  "team": "롯데",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20090415HTLT0:김영수": {
+  "game_id": "20090415HTLT0",
+  "name": "김영수",
+  "team": "KIA",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090414HTLT0:이용훈": {
+  "game_id": "20090414HTLT0",
+  "name": "이용훈",
+  "team": "롯데",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090414HTLT0:구톰슨": {
+  "game_id": "20090414HTLT0",
+  "name": "구톰슨",
+  "team": "KIA",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20090414WOOB0:김선우": {
+  "game_id": "20090414WOOB0",
+  "name": "김선우",
+  "team": "두산",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090414WOOB0:이현승": {
+  "game_id": "20090414WOOB0",
+  "name": "이현승",
+  "team": "키움",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20090414WOOB0:이상열": {
+  "game_id": "20090414WOOB0",
+  "name": "이상열",
+  "team": "키움",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090414WOOB0:신철인": {
+  "game_id": "20090414WOOB0",
+  "name": "신철인",
+  "team": "키움",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090414WOOB0:황두성": {
+  "game_id": "20090414WOOB0",
+  "name": "황두성",
+  "team": "키움",
+  "official_wls": "세",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": true,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090416HTLT0:송승준": {
+  "game_id": "20090416HTLT0",
+  "name": "송승준",
+  "team": "롯데",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090416HTLT0:곽정철": {
+  "game_id": "20090416HTLT0",
+  "name": "곽정철",
+  "team": "KIA",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20090416HTLT0:유동훈": {
+  "game_id": "20090416HTLT0",
+  "name": "유동훈",
+  "team": "KIA",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090416HTLT0:한기주": {
+  "game_id": "20090416HTLT0",
+  "name": "한기주",
+  "team": "KIA",
+  "official_wls": "세",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": true,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090416HHSS0:권혁": {
+  "game_id": "20090416HHSS0",
+  "name": "권혁",
+  "team": "삼성",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20090416HHSS0:양훈": {
+  "game_id": "20090416HHSS0",
+  "name": "양훈",
+  "team": "한화",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090414HHSS0:김상수": {
+  "game_id": "20090414HHSS0",
+  "name": "김상수",
+  "team": "삼성",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090414HHSS0:안영명": {
+  "game_id": "20090414HHSS0",
+  "name": "안영명",
+  "team": "한화",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20090414HHSS0:박정진": {
+  "game_id": "20090414HHSS0",
+  "name": "박정진",
+  "team": "한화",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090414HHSS0:양훈": {
+  "game_id": "20090414HHSS0",
+  "name": "양훈",
+  "team": "한화",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090414HHSS0:토마스": {
+  "game_id": "20090414HHSS0",
   "name": "토마스",
   "team": "한화",
   "official_wls": "세",
@@ -2249,27 +1565,9 @@
    "LOSS": false
   }
  },
- "20081004WOHH0:송신영": {
-  "game_id": "20081004WOHH0",
-  "name": "송신영",
-  "team": "키움",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20081005WOSK0:이영욱": {
-  "game_id": "20081005WOSK0",
-  "name": "이영욱",
+ "20090414LGSK0:김원형": {
+  "game_id": "20090414LGSK0",
+  "name": "김원형",
   "team": "SSG",
   "official_wls": "패",
   "predicted": {
@@ -2285,9 +1583,45 @@
    "LOSS": true
   }
  },
- "20081005WOSK0:장원삼": {
-  "game_id": "20081005WOSK0",
-  "name": "장원삼",
+ "20090414LGSK0:최동환": {
+  "game_id": "20090414LGSK0",
+  "name": "최동환",
+  "team": "LG",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20090416WOOB0:김상현": {
+  "game_id": "20090416WOOB0",
+  "name": "김상현",
+  "team": "두산",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090416WOOB0:마일영": {
+  "game_id": "20090416WOOB0",
+  "name": "마일영",
   "team": "키움",
   "official_wls": "승",
   "predicted": {
@@ -2303,9 +1637,99 @@
    "LOSS": false
   }
  },
- "20081003SKHT0:오준형": {
-  "game_id": "20081003SKHT0",
-  "name": "오준형",
+ "20090416WOOB0:황두성": {
+  "game_id": "20090416WOOB0",
+  "name": "황두성",
+  "team": "키움",
+  "official_wls": "세",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": true,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090417HTLG0:심수창": {
+  "game_id": "20090417HTLG0",
+  "name": "심수창",
+  "team": "LG",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090417HTLG0:로페즈": {
+  "game_id": "20090417HTLG0",
+  "name": "로페즈",
+  "team": "KIA",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20090418HTLG0:최원호": {
+  "game_id": "20090418HTLG0",
+  "name": "최원호",
+  "team": "LG",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20090418HTLG0:최동환": {
+  "game_id": "20090418HTLG0",
+  "name": "최동환",
+  "team": "LG",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090418HTLG0:윤석민": {
+  "game_id": "20090418HTLG0",
+  "name": "윤석민",
   "team": "KIA",
   "official_wls": "패",
   "predicted": {
@@ -2321,9 +1745,153 @@
    "LOSS": true
   }
  },
- "20081003SKHT0:김원형": {
-  "game_id": "20081003SKHT0",
-  "name": "김원형",
+ "20090416LGSK0:정우람": {
+  "game_id": "20090416LGSK0",
+  "name": "정우람",
+  "team": "SSG",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090416LGSK0:정찬헌": {
+  "game_id": "20090416LGSK0",
+  "name": "정찬헌",
+  "team": "LG",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20090417LTWO0:김수경": {
+  "game_id": "20090417LTWO0",
+  "name": "김수경",
+  "team": "키움",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090417LTWO0:조정훈": {
+  "game_id": "20090417LTWO0",
+  "name": "조정훈",
+  "team": "롯데",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20090417LTWO0:강영식": {
+  "game_id": "20090417LTWO0",
+  "name": "강영식",
+  "team": "롯데",
+  "official_wls": "세",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": true,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090417OBSS0:크루세타": {
+  "game_id": "20090417OBSS0",
+  "name": "크루세타",
+  "team": "삼성",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090417OBSS0:정재훈": {
+  "game_id": "20090417OBSS0",
+  "name": "정재훈",
+  "team": "두산",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20090417SKHH0:토마스": {
+  "game_id": "20090417SKHH0",
+  "name": "토마스",
+  "team": "한화",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090417SKHH0:정대현": {
+  "game_id": "20090417SKHH0",
+  "name": "정대현",
   "team": "SSG",
   "official_wls": "승",
   "predicted": {
@@ -2339,10 +1907,64 @@
    "LOSS": false
   }
  },
- "20081003SKHT0:윤길현": {
-  "game_id": "20081003SKHT0",
-  "name": "윤길현",
-  "team": "SSG",
+ "20090418LTWO0:장원삼": {
+  "game_id": "20090418LTWO0",
+  "name": "장원삼",
+  "team": "키움",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090418LTWO0:임경완": {
+  "game_id": "20090418LTWO0",
+  "name": "임경완",
+  "team": "롯데",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20090418LTWO0:김이슬": {
+  "game_id": "20090418LTWO0",
+  "name": "김이슬",
+  "team": "롯데",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090418LTWO0:이정민": {
+  "game_id": "20090418LTWO0",
+  "name": "이정민",
+  "team": "롯데",
   "official_wls": "세",
   "predicted": {
    "SAVE": false,
@@ -2354,6 +1976,312 @@
    "SAVE": true,
    "HOLD": false,
    "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090418OBSS0:윤성환": {
+  "game_id": "20090418OBSS0",
+  "name": "윤성환",
+  "team": "삼성",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20090418OBSS0:김명제": {
+  "game_id": "20090418OBSS0",
+  "name": "김명제",
+  "team": "두산",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090419OBSS0:조진호": {
+  "game_id": "20090419OBSS0",
+  "name": "조진호",
+  "team": "삼성",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090419OBSS0:지승민": {
+  "game_id": "20090419OBSS0",
+  "name": "지승민",
+  "team": "삼성",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090419OBSS0:정현욱": {
+  "game_id": "20090419OBSS0",
+  "name": "정현욱",
+  "team": "삼성",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20090419OBSS0:권혁": {
+  "game_id": "20090419OBSS0",
+  "name": "권혁",
+  "team": "삼성",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090419OBSS0:오승환": {
+  "game_id": "20090419OBSS0",
+  "name": "오승환",
+  "team": "삼성",
+  "official_wls": "세",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": true,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090419OBSS0:김선우": {
+  "game_id": "20090419OBSS0",
+  "name": "김선우",
+  "team": "두산",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090419HTLG0:이범준": {
+  "game_id": "20090419HTLG0",
+  "name": "이범준",
+  "team": "LG",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090419HTLG0:양현종": {
+  "game_id": "20090419HTLG0",
+  "name": "양현종",
+  "team": "KIA",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20090419LTWO0:이현승": {
+  "game_id": "20090419LTWO0",
+  "name": "이현승",
+  "team": "키움",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20090419LTWO0:황두성": {
+  "game_id": "20090419LTWO0",
+  "name": "황두성",
+  "team": "키움",
+  "official_wls": "세",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": true,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090419LTWO0:이용훈": {
+  "game_id": "20090419LTWO0",
+  "name": "이용훈",
+  "team": "롯데",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090418SKHH0:양훈": {
+  "game_id": "20090418SKHH0",
+  "name": "양훈",
+  "team": "한화",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20090418SKHH0:김백만": {
+  "game_id": "20090418SKHH0",
+  "name": "김백만",
+  "team": "한화",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090419SKHH0:정민철": {
+  "game_id": "20090419SKHH0",
+  "name": "정민철",
+  "team": "한화",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20090419SKHH0:송은범": {
+  "game_id": "20090419SKHH0",
+  "name": "송은범",
+  "team": "SSG",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
    "LOSS": false
   }
  }
