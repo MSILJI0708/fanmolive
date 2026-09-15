@@ -17,7 +17,10 @@
 #                     명단을 드래그하면서 스크린샷을 계속 찍음). 스크린샷은 전부 같은
 #                     폴더(SCREENSHOT_ROOT)에 쌓이고 포지션 구분이 안 되므로, 이
 #                     스크립트가 "이 매크로를 돌리기 직전까지 있던 파일" 대비 새로
-#                     생긴 파일만 골라 포지션별 하위 폴더로 옮긴다.
+#                     생긴 파일만 골라 <오늘 날짜>\<포지션> 하위 폴더로 옮긴다
+#                     (예: Screenshots\2026-09-15\1b\). 날짜별로 나눠야 다음날 다시
+#                     돌릴 때 어제 사진이 안 섞인다 — 예전에 며칠 지난 스크린샷이 최신
+#                     폴더에 그대로 남아있어서 OCR 결과가 꼬였던 적이 있었음.
 #
 # 사용법: powershell -File daily_position_capture.ps1
 #         (daily_position_capture.bat가 이 스크립트를 호출한다)
@@ -115,8 +118,13 @@ Write-Host "[1/4] 판타지 모드 진입..."
 Send-ToLDPlayer $FantasyModeHotkey
 Start-Sleep -Seconds 5
 
-$today = (Get-Date).Day
-$isCostDay = ($today -eq 1) -or ($today -eq 16)
+$todayDay = (Get-Date).Day
+$isCostDay = ($todayDay -eq 1) -or ($todayDay -eq 16)
+$dateFolder = Get-Date -Format "yyyy-MM-dd"  # 캡쳐한 날짜별로 폴더를 나눠서, 다음날 다시
+                                              # 돌릴 때 어제 사진이랑 안 섞이게 한다(예전에
+                                              # 묵은 스크린샷이 최신 것과 섞여서 OCR 결과가
+                                              # 꼬였던 적이 있었음 — 9/13 예전 사진이 9/15
+                                              # 폴더에 남아있던 문제 참고).
 
 foreach ($folder in $Targets.Keys) {
     $info = $Targets[$folder]
@@ -130,7 +138,7 @@ foreach ($folder in $Targets.Keys) {
     Send-ToLDPlayer $CaptureHotkey
     Start-Sleep -Seconds $WaitAfterCaptureSeconds
 
-    $destFolder = Join-Path $ScreenshotRoot $folder
+    $destFolder = Join-Path $ScreenshotRoot "$dateFolder\$folder"
     $moved = Move-NewScreenshots -destFolder $destFolder -since $before
     Write-Host "  -> $moved 장을 $destFolder 로 이동"
 }
@@ -138,7 +146,7 @@ foreach ($folder in $Targets.Keys) {
 Write-Host "[3/4] 스크린샷 OCR 분석 + position_db.json 반영..."
 Push-Location $RepoDir
 try {
-    python analyze_position_screenshots.py $ScreenshotRoot
+    python analyze_position_screenshots.py (Join-Path $ScreenshotRoot $dateFolder)
     if ($LASTEXITCODE -ne 0) { throw "analyze_position_screenshots.py 실패" }
 
     Write-Host "[4/4] git commit & push..."
