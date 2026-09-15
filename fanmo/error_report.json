@@ -1,9 +1,9 @@
 {
- "files_checked": 960,
+ "files_checked": 1159,
  "issue_counts_by_kind": {
-  "MISSING_PLAYER_CODE": 2813,
-  "INNING_FORMAT": 6529,
-  "DUPLICATE_ROW": 12
+  "MISSING_PLAYER_CODE": 5268,
+  "INNING_FORMAT": 12375,
+  "DUPLICATE_ROW": 27
  },
  "issues": [
   {
@@ -185,6 +185,81 @@
    "date": "20020519",
    "kind": "DUPLICATE_ROW",
    "detail": "타자 김태균(한화) player_code=71752 완전 동일 행 중복"
+  },
+  {
+   "date": "20020823",
+   "kind": "DUPLICATE_ROW",
+   "detail": "타자 김수연(한화) player_code=96777 완전 동일 행 중복"
+  },
+  {
+   "date": "20020901",
+   "kind": "DUPLICATE_ROW",
+   "detail": "타자 안상준(LG) player_code=95666 완전 동일 행 중복"
+  },
+  {
+   "date": "20030412",
+   "kind": "DUPLICATE_ROW",
+   "detail": "타자 양현석(SSG) player_code=70608 완전 동일 행 중복"
+  },
+  {
+   "date": "20030426",
+   "kind": "DUPLICATE_ROW",
+   "detail": "타자 전상렬(두산) player_code=91465 완전 동일 행 중복"
+  },
+  {
+   "date": "20030426",
+   "kind": "DUPLICATE_ROW",
+   "detail": "타자 김창희(두산) player_code=97644 완전 동일 행 중복"
+  },
+  {
+   "date": "20030426",
+   "kind": "DUPLICATE_ROW",
+   "detail": "투수 차명주(두산) player_code=96570 완전 동일 행 중복"
+  },
+  {
+   "date": "20030430",
+   "kind": "DUPLICATE_ROW",
+   "detail": "투수 가득염(롯데) player_code=92501 완전 동일 행 중복"
+  },
+  {
+   "date": "20030531",
+   "kind": "DUPLICATE_ROW",
+   "detail": "타자 양현석(SSG) player_code=70608 완전 동일 행 중복"
+  },
+  {
+   "date": "20030625",
+   "kind": "DUPLICATE_ROW",
+   "detail": "타자 임수민(한화) player_code=96766 완전 동일 행 중복"
+  },
+  {
+   "date": "20030625",
+   "kind": "DUPLICATE_ROW",
+   "detail": "투수 조웅천(SSG) player_code=90350 완전 동일 행 중복"
+  },
+  {
+   "date": "20030628",
+   "kind": "DUPLICATE_ROW",
+   "detail": "투수 이명호(롯데) player_code=70444 완전 동일 행 중복"
+  },
+  {
+   "date": "20030710",
+   "kind": "DUPLICATE_ROW",
+   "detail": "투수 차명주(두산) player_code=96570 완전 동일 행 중복"
+  },
+  {
+   "date": "20030828",
+   "kind": "DUPLICATE_ROW",
+   "detail": "타자 김용우(LG) player_code=72131 완전 동일 행 중복"
+  },
+  {
+   "date": "20030831",
+   "kind": "DUPLICATE_ROW",
+   "detail": "투수 송진우(한화) player_code=89770 완전 동일 행 중복"
+  },
+  {
+   "date": "20030903",
+   "kind": "DUPLICATE_ROW",
+   "detail": "투수 오철민(KIA) player_code=97621 완전 동일 행 중복"
   },
   {
    "date": "20230909",
