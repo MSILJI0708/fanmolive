@@ -1,0 +1,115 @@
+# 9UP 포지션(+투수 역할) 자동 캡쳐
+# ---------------------------------------------------------------------------
+# 코스트는 매달 1일/16일에만 바뀌지만 포지션은 9UP이 아무때나 바꿔서, 매일 이 스크립트를
+# 돌려 따라잡는다. 투수(선발/구원) 화면은 코스트와 같은 주기(1일/16일)에만 찍는다 —
+# 지금은 캡쳐해서 폴더별로 정리해 두는 것까지만 하고(사용자 요청: "구현만 해놔"),
+# 그 사진을 어떻게 쓸지(코스트 자동 추출 등)는 나중에 별도로 정한다.
+#
+# LD플레이어에 녹화해둔 매크로와 단축키 매핑(사용자 확정):
+#   SHIFT+F2       : 앱 시작 -> 메뉴 -> 판타지 모드 진입 (한 번만)
+#   CTRL+F1 ~ F9   : 포지션 선택(1루수~지명타자 순서)
+#   CTRL+F10       : 투수(선발/구원) 화면 선택
+#   SHIFT+F1       : 스크롤+캡쳐(포지션/투수 선택 후 실행 — 선택된 화면 안의 선수
+#                    명단을 드래그하면서 스크린샷을 계속 찍음). 스크린샷은 전부 같은
+#                    폴더(SCREENSHOT_ROOT)에 쌓이고 포지션 구분이 안 되므로, 이
+#                    스크립트가 "이 매크로를 돌리기 직전까지 있던 파일" 대비 새로
+#                    생긴 파일만 골라 포지션별 하위 폴더로 옮긴다.
+#
+# 사용법: powershell -File daily_position_capture.ps1
+#         (daily_position_capture.bat가 이 스크립트를 호출한다)
+
+$ErrorActionPreference = "Stop"
+
+$RepoDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$ScreenshotRoot = "C:\Users\HUI\OneDrive\문서\XuanZhi9\Pictures\Screenshots"
+$LDPlayerTitle = "LDPlayer"
+
+$FantasyModeHotkey = "+{F2}"   # SHIFT+F2
+$CaptureHotkey = "+{F1}"       # SHIFT+F1 (기존 매크로, 포지션/투수 선택 후 실행)
+
+# 폴더명 -> (선택 단축키, 표시용 이름). 순서대로 CTRL+F1~F10.
+$Targets = [ordered]@{
+    "1b" = @{ Key = "^{F1}";  Label = "1루수" }
+    "2b" = @{ Key = "^{F2}";  Label = "2루수" }
+    "3b" = @{ Key = "^{F3}";  Label = "3루수" }
+    "ss" = @{ Key = "^{F4}";  Label = "유격수" }
+    "c"  = @{ Key = "^{F5}";  Label = "포수" }
+    "cf" = @{ Key = "^{F6}";  Label = "중견수" }
+    "lf" = @{ Key = "^{F7}";  Label = "좌익수" }
+    "rf" = @{ Key = "^{F8}";  Label = "우익수" }
+    "dh" = @{ Key = "^{F9}";  Label = "지명타자" }
+    "p"  = @{ Key = "^{F10}"; Label = "투수(선발/구원)"; MonthlyOnly = $true }
+}
+
+$WaitAfterSelectSeconds = 3     # 포지션 선택 후 화면 전환 대기
+$WaitAfterCaptureSeconds = 60   # 스크롤+캡쳐 매크로가 다 돌 때까지 대기(실제 소요시간 보고 조절)
+
+function Send-ToLDPlayer([string]$keys) {
+    $wshell = New-Object -ComObject wscript.shell
+    if (-not $wshell.AppActivate($LDPlayerTitle)) {
+        throw "LD플레이어 창을 찾을 수 없습니다 ('$LDPlayerTitle') — 창이 켜져 있는지 확인하세요."
+    }
+    Start-Sleep -Milliseconds 500
+    $wshell.SendKeys($keys)
+}
+
+function Move-NewScreenshots([string]$destFolder, [datetime]$since) {
+    New-Item -ItemType Directory -Path $destFolder -Force | Out-Null
+    $newFiles = Get-ChildItem -Path $ScreenshotRoot -File -Filter "*.png" |
+        Where-Object { $_.CreationTime -gt $since }
+    foreach ($f in $newFiles) {
+        Move-Item -Path $f.FullName -Destination $destFolder -Force
+    }
+    return $newFiles.Count
+}
+
+Write-Host "[1/4] 판타지 모드 진입..."
+Send-ToLDPlayer $FantasyModeHotkey
+Start-Sleep -Seconds 5
+
+$today = (Get-Date).Day
+$isCostDay = ($today -eq 1) -or ($today -eq 16)
+
+foreach ($folder in $Targets.Keys) {
+    $info = $Targets[$folder]
+    if ($info.MonthlyOnly -and -not $isCostDay) {
+        continue  # 투수 화면은 1일/16일에만
+    }
+    Write-Host "[2/4] $($info.Label) 선택 + 캡쳐..."
+    $before = Get-Date
+    Send-ToLDPlayer $info.Key
+    Start-Sleep -Seconds $WaitAfterSelectSeconds
+    Send-ToLDPlayer $CaptureHotkey
+    Start-Sleep -Seconds $WaitAfterCaptureSeconds
+
+    $destFolder = Join-Path $ScreenshotRoot $folder
+    $moved = Move-NewScreenshots -destFolder $destFolder -since $before
+    Write-Host "  -> $moved 장을 $destFolder 로 이동"
+}
+
+Write-Host "[3/4] 스크린샷 OCR 분석 + position_db.json 반영..."
+Push-Location $RepoDir
+try {
+    python analyze_position_screenshots.py $ScreenshotRoot
+    if ($LASTEXITCODE -ne 0) { throw "analyze_position_screenshots.py 실패" }
+
+    Write-Host "[4/4] git commit & push..."
+    git fetch origin
+    git add position_db.json
+    $diff = git diff --cached --quiet; $hasChange = ($LASTEXITCODE -ne 0)
+    if ($hasChange) {
+        git commit -m "9UP 포지션 일일 갱신 ($(Get-Date -Format 'yyyy-MM-dd HH:mm'))"
+        git pull --rebase origin main
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "  충돌 발생 — 수동으로 확인하세요: git status"
+            exit 1
+        }
+        git push origin main
+    } else {
+        Write-Host "  변경 사항 없음, 커밋 생략"
+    }
+} finally {
+    Pop-Location
+}
+
+Write-Host "완료."
