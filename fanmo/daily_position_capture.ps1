@@ -146,23 +146,43 @@ foreach ($folder in $Targets.Keys) {
 Write-Host "[3/4] 스크린샷 OCR 분석 + position_db.json 반영..."
 Push-Location $RepoDir
 try {
-    python analyze_position_screenshots.py (Join-Path $ScreenshotRoot $dateFolder)
-    if ($LASTEXITCODE -ne 0) { throw "analyze_position_screenshots.py 실패" }
+    $screenshotDateDir = Join-Path $ScreenshotRoot $dateFolder
 
-    Write-Host "[4/4] git commit & push..."
-    git fetch origin
-    git add position_db.json
-    $diff = git diff --cached --quiet; $hasChange = ($LASTEXITCODE -ne 0)
-    if ($hasChange) {
-        git commit -m "9UP 포지션 일일 갱신 ($(Get-Date -Format 'yyyy-MM-dd HH:mm'))"
-        git pull --rebase origin main
-        if ($LASTEXITCODE -ne 0) {
-            Write-Host "  충돌 발생 — 수동으로 확인하세요: git status"
-            exit 1
+    # daily_pipeline.py도 매 주기 position_db.json을 다시 쓰기 때문에(GitHub 서버 쪽에서
+    # 몇 분 간격으로 계속 커밋), 여기서 그냥 git pull --rebase로 합치려고 하면 JSON
+    # 줄단위 충돌이 나기 쉽다(다른 생성 파일(lp_board.html 등)처럼 "그냥 다시 만들기"가
+    # 안 통함 — 원격이 방금 갱신한 auto_position까지 같이 들고 있어야 하므로). 그래서
+    # 매 시도마다 원격의 최신 position_db.json으로 맞춘 다음 그 위에 OCR 결과를 다시
+    # 얹는 방식으로 몇 번 재시도한다 — 이러면 애초에 git 차원의 충돌이 안 생긴다.
+    $maxAttempts = 3
+    $pushed = $false
+    for ($attempt = 1; $attempt -le $maxAttempts; $attempt++) {
+        git fetch origin
+        git checkout origin/main -- position_db.json
+
+        python analyze_position_screenshots.py $screenshotDateDir
+        if ($LASTEXITCODE -ne 0) { throw "analyze_position_screenshots.py 실패" }
+
+        git add position_db.json
+        git diff --cached --quiet
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "  변경 사항 없음, 커밋 생략"
+            $pushed = $true
+            break
         }
+
+        git commit -m "9UP 포지션 일일 갱신 ($(Get-Date -Format 'yyyy-MM-dd HH:mm'))"
         git push origin main
-    } else {
-        Write-Host "  변경 사항 없음, 커밋 생략"
+        if ($LASTEXITCODE -eq 0) {
+            $pushed = $true
+            break
+        }
+        Write-Host "  push 실패($attempt/$maxAttempts) — 그 사이 원격이 또 바뀐 것 같음, 다시 시도"
+        git reset --soft HEAD~1  # 커밋만 풀고 변경 내용은 유지 — 다음 시도에서 최신 기준으로 재적용
+    }
+    if (-not $pushed) {
+        Write-Host "  $maxAttempts 번 시도해도 push 실패 — 수동으로 확인하세요: git status"
+        exit 1
     }
 } finally {
     Pop-Location
