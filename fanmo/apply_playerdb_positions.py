@@ -16,7 +16,7 @@ position_db.json에 아예 없는 이름(최근 14일 무출전 등)도 건너�
 """
 from __future__ import annotations
 
-from position import load_db, save_db
+from position_override_apply import apply_positions, print_report
 
 POSITIONS: dict[str, list[str]] = {
     "1루수": [
@@ -82,48 +82,7 @@ POSITIONS: dict[str, list[str]] = {
 
 
 def main():
-    db = load_db()
-    players = db["players"]
-
-    by_name: dict[str, list[str]] = {}
-    for code, rec in players.items():
-        by_name.setdefault(rec["name"], []).append(code)
-
-    applied, ambiguous, not_found, conflicts = [], [], [], []
-    seen_code_to_pos: dict[str, str] = {}
-
-    for pos, names in POSITIONS.items():
-        for name in names:
-            codes = by_name.get(name)
-            if not codes:
-                not_found.append(f"{name}({pos})")
-                continue
-            if len(codes) > 1:
-                ambiguous.append(f"{name}({pos}) -> {codes}")
-                continue
-            code = codes[0]
-            if code in seen_code_to_pos and seen_code_to_pos[code] != pos:
-                conflicts.append(f"{name}: {seen_code_to_pos[code]} vs {pos} (같은 선수코드 {code})")
-                continue
-            seen_code_to_pos[code] = pos
-            rec = players[code]
-            if rec.get("manual_position") != pos:
-                rec["manual_position"] = pos
-                rec["effective_position"] = pos
-                applied.append(f"{name}({rec['team']}): {rec.get('auto_position')} -> {pos}")
-
-    save_db(db)
-
-    print(f"적용됨: {len(applied)}건")
-    for a in applied:
-        print("  ", a)
-    print(f"\nDB에 동명이인이 있어 건너뜀: {len(ambiguous)}건")
-    for a in ambiguous:
-        print("  ", a)
-    print(f"\n같은 선수가 스크린샷상 서로 다른 포지션에 나와 충돌: {len(conflicts)}건")
-    for c in conflicts:
-        print("  ", c)
-    print(f"\nposition_db.json에 없는 이름(최근 14일 무출전 등): {len(not_found)}건")
+    print_report(apply_positions(POSITIONS))
 
 
 if __name__ == "__main__":
