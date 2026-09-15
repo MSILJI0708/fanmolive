@@ -41122,5 +41122,696 @@
    "20211006SKLG22021",
    "20211006SSWO02021"
   ]
+ },
+ "2021-10-07": {
+  "round": "kbo_r",
+  "game_ids": [
+   "20210627LTOB02021",
+   "20211007LGHT02021",
+   "20211007LTOB02021",
+   "20211007SKHH02021",
+   "20211007SSNC02021",
+   "20211007WOKT02021"
+  ]
+ },
+ "2021-10-08": {
+  "round": "kbo_r",
+  "game_ids": [
+   "20211008LGHT02021",
+   "20211008LTOB02021",
+   "20211008SKHH02021",
+   "20211008SSNC02021"
+  ]
+ },
+ "2021-10-09": {
+  "round": "kbo_r",
+  "game_ids": [
+   "20211009HTHH02021",
+   "20211009KTLG02021",
+   "20211009LTSK02021"
+  ]
+ },
+ "2021-10-10": {
+  "round": "kbo_r",
+  "game_ids": [
+   "20211010HTHH12021",
+   "20211010OBNC02021",
+   "20211010HTHH22021"
+  ]
+ },
+ "2021-10-11": {
+  "round": "kbo_r",
+  "game_ids": [
+   "20211011KTLG02021"
+  ]
+ },
+ "2021-10-12": {
+  "round": "kbo_r",
+  "game_ids": [
+   "20211012KTOB02021",
+   "20211012LGSK02021",
+   "20211012NCWO02021",
+   "20211012SSHT02021"
+  ]
+ },
+ "2021-10-13": {
+  "round": "kbo_r",
+  "game_ids": [
+   "20211013KTOB02021",
+   "20211013LGLT02021",
+   "20211013NCWO02021",
+   "20211013SSHT02021"
+  ]
+ },
+ "2021-10-14": {
+  "round": "kbo_r",
+  "game_ids": [
+   "20211014KTOB02021",
+   "20211014LGLT02021",
+   "20211014NCWO02021",
+   "20211014SSHT02021"
+  ]
+ },
+ "2021-10-15": {
+  "round": "kbo_r",
+  "game_ids": [
+   "20211015HTKT02021",
+   "20211015LGLT02021",
+   "20211015NCOB02021",
+   "20211015WOSS02021"
+  ]
+ },
+ "2021-10-16": {
+  "round": "kbo_r",
+  "game_ids": [
+   "20211016WOSS12021",
+   "20211016HHKT02021",
+   "20211016HTOB02021",
+   "20211016LGNC02021",
+   "20211016SKLT02021",
+   "20211016WOSS22021"
+  ]
+ },
+ "2021-10-17": {
+  "round": "kbo_r",
+  "game_ids": [
+   "20211017HHKT02021",
+   "20211017HTOB12021",
+   "20211017LGNC12021",
+   "20211017SKLT12021",
+   "20211017WOSS02021",
+   "20211017LGNC22021",
+   "20211017SKLT22021",
+   "20211017HTOB22021"
+  ]
+ },
+ "2021-10-18": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-10-19": {
+  "round": "kbo_r",
+  "game_ids": [
+   "20211019KTNC02021",
+   "20211019OBSS02021",
+   "20211019SKHT02021",
+   "20211019WOLG02021"
+  ]
+ },
+ "2021-10-20": {
+  "round": "kbo_r",
+  "game_ids": [
+   "20211020KTHT02021",
+   "20211020NCSK02021",
+   "20211020WOLG02021"
+  ]
+ },
+ "2021-10-21": {
+  "round": "kbo_r",
+  "game_ids": [
+   "20211021HHHT02021",
+   "20211021OBSK02021",
+   "20211021WOLG02021"
+  ]
+ },
+ "2021-10-22": {
+  "round": "kbo_r",
+  "game_ids": [
+   "20211022HHLT02021",
+   "20211022KTSS02021",
+   "20211022OBSK02021",
+   "20211022HTNC02021"
+  ]
+ },
+ "2021-10-23": {
+  "round": "kbo_r",
+  "game_ids": [
+   "20211023HTNC12021",
+   "20211023HHLT02021",
+   "20211023KTSS02021",
+   "20211023LGOB02021",
+   "20211023HTNC22021"
+  ]
+ },
+ "2021-10-24": {
+  "round": "kbo_r",
+  "game_ids": [
+   "20211024HHLT02021",
+   "20211024HTNC02021",
+   "20211024LGOB12021",
+   "20211024SKSS02021",
+   "20211024WOKT02021",
+   "20211024LGOB22021"
+  ]
+ },
+ "2021-10-25": {
+  "round": "kbo_r",
+  "game_ids": [
+   "20211025LTLG02021",
+   "20211025WOHH02021"
+  ]
+ },
+ "2021-10-26": {
+  "round": "kbo_r",
+  "game_ids": [
+   "20211026LGHH02021",
+   "20211026SKNC02021",
+   "20211026WOOB02021"
+  ]
+ },
+ "2021-10-27": {
+  "round": "kbo_r",
+  "game_ids": [
+   "20211027HTLT02021",
+   "20211027LGHH02021",
+   "20211027NCKT02021",
+   "20211027OBSK02021",
+   "20211027SSWO02021"
+  ]
+ },
+ "2021-10-28": {
+  "round": "kbo_r",
+  "game_ids": [
+   "20211028NCKT12021",
+   "20211028HTLT02021",
+   "20211028LGHH02021",
+   "20211028OBSK02021",
+   "20211028NCKT22021"
+  ]
+ },
+ "2021-10-29": {
+  "round": "kbo_r",
+  "game_ids": [
+   "20211029KTWO02021",
+   "20211029LGLT02021",
+   "20211029OBHT02021",
+   "20211029SSNC02021"
+  ]
+ },
+ "2021-10-30": {
+  "round": "kbo_r",
+  "game_ids": [
+   "20211030KTSK02021",
+   "20211030LGLT02021",
+   "20211030OBHH02021",
+   "20211030SSNC02021",
+   "20211030WOHT02021"
+  ]
+ },
+ "2021-10-31": {
+  "round": "kbo_p",
+  "game_ids": [
+   "66661031KTSS02021"
+  ]
+ },
+ "2021-11-01": {
+  "round": "kbo_ps_wd",
+  "game_ids": [
+   "44441101WOOB02021"
+  ]
+ },
+ "2021-11-02": {
+  "round": "kbo_ps_wd",
+  "game_ids": [
+   "44441102WOOB02021"
+  ]
+ },
+ "2021-11-03": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-11-04": {
+  "round": "kbo_ps_sp",
+  "game_ids": [
+   "33331104OBLG02021"
+  ]
+ },
+ "2021-11-05": {
+  "round": "kbo_ps_sp",
+  "game_ids": [
+   "33331105LGOB02021"
+  ]
+ },
+ "2021-11-06": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-11-07": {
+  "round": "kbo_ps_sp",
+  "game_ids": [
+   "33331107OBLG02021"
+  ]
+ },
+ "2021-11-08": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-11-09": {
+  "round": "kbo_ps_po",
+  "game_ids": [
+   "55551109OBSS02021"
+  ]
+ },
+ "2021-11-10": {
+  "round": "kbo_ps_po",
+  "game_ids": [
+   "55551110SSOB02021"
+  ]
+ },
+ "2021-11-11": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-11-12": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-11-13": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-11-14": {
+  "round": "kbo_ps_ks",
+  "game_ids": [
+   "77771114OBKT02021"
+  ]
+ },
+ "2021-11-15": {
+  "round": "kbo_ps_ks",
+  "game_ids": [
+   "77771115OBKT02021"
+  ]
+ },
+ "2021-11-16": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-11-17": {
+  "round": "kbo_ps_ks",
+  "game_ids": [
+   "77771117KTOB02021"
+  ]
+ },
+ "2021-11-18": {
+  "round": "kbo_ps_ks",
+  "game_ids": [
+   "77771118KTOB02021"
+  ]
+ },
+ "2021-11-19": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-11-20": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-11-21": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-11-22": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-11-23": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-11-24": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-11-25": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-11-26": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-11-27": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-11-28": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-11-29": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-11-30": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-01": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-02": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-03": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-04": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-05": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-06": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-07": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-08": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-09": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-10": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-11": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-12": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-13": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-14": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-15": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-16": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-17": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-18": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-19": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-20": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-21": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-22": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-23": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-24": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-25": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-26": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-27": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-28": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-29": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-30": {
+  "round": null,
+  "game_ids": []
+ },
+ "2021-12-31": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-01": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-02": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-03": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-04": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-05": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-06": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-07": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-08": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-09": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-10": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-11": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-12": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-13": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-14": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-15": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-16": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-17": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-18": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-19": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-20": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-21": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-22": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-23": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-24": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-25": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-26": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-27": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-28": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-29": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-30": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-01-31": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-02-01": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-02-02": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-02-03": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-02-04": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-02-05": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-02-06": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-02-07": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-02-08": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-02-09": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-02-10": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-02-11": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-02-12": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-02-13": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-02-14": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-02-15": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-02-16": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-02-17": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-02-18": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-02-19": {
+  "round": null,
+  "game_ids": []
+ },
+ "2022-02-20": {
+  "round": null,
+  "game_ids": []
  }
 }
