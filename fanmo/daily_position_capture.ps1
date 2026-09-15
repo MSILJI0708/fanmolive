@@ -5,15 +5,19 @@
 # 지금은 캡쳐해서 폴더별로 정리해 두는 것까지만 하고(사용자 요청: "구현만 해놔"),
 # 그 사진을 어떻게 쓸지(코스트 자동 추출 등)는 나중에 별도로 정한다.
 #
-# LD플레이어에 녹화해둔 매크로와 단축키 매핑(사용자 확정):
-#   SHIFT+F2       : 앱 시작 -> 메뉴 -> 판타지 모드 진입 (한 번만)
-#   CTRL+F1 ~ F9   : 포지션 선택(1루수~지명타자 순서)
-#   CTRL+F10       : 투수(선발/구원) 화면 선택
-#   SHIFT+F1       : 스크롤+캡쳐(포지션/투수 선택 후 실행 — 선택된 화면 안의 선수
-#                    명단을 드래그하면서 스크린샷을 계속 찍음). 스크린샷은 전부 같은
-#                    폴더(SCREENSHOT_ROOT)에 쌓이고 포지션 구분이 안 되므로, 이
-#                    스크립트가 "이 매크로를 돌리기 직전까지 있던 파일" 대비 새로
-#                    생긴 파일만 골라 포지션별 하위 폴더로 옮긴다.
+# LD플레이어에 녹화해둔 매크로와 단축키 매핑(실제 테스트로 확정 — CTRL/ALT+숫자 조합은
+# SendKeys로 안정적으로 안 먹혀서(특히 ALT는 윈도우 메뉴 활성화로 새는 경우가 있음)
+# 전부 SHIFT 계열로 통일했다):
+#   SHIFT+F2        : 9UP 앱 실행(홈 화면에서 아이콘 탭)
+#   SHIFT+F3        : 판타지 모드 진입(앱 메인 -> 메뉴 -> 판타지 모드)
+#   SHIFT+F4 ~ F12  : 포지션 선택(1루수/2루수/유격수/3루수/포수/좌익수/중견수/우익수/
+#                     지명타자 순 — 녹화하신 순서 그대로, 알파벳/포지션 순서가 아님)
+#   SHIFT+0         : 투수(선발/구원) 화면 선택
+#   SHIFT+F1        : 스크롤+캡쳐(포지션/투수 선택 후 실행 — 선택된 화면 안의 선수
+#                     명단을 드래그하면서 스크린샷을 계속 찍음). 스크린샷은 전부 같은
+#                     폴더(SCREENSHOT_ROOT)에 쌓이고 포지션 구분이 안 되므로, 이
+#                     스크립트가 "이 매크로를 돌리기 직전까지 있던 파일" 대비 새로
+#                     생긴 파일만 골라 포지션별 하위 폴더로 옮긴다.
 #
 # 사용법: powershell -File daily_position_capture.ps1
 #         (daily_position_capture.bat가 이 스크립트를 호출한다)
@@ -24,32 +28,72 @@ $RepoDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $ScreenshotRoot = "C:\Users\HUI\OneDrive\문서\XuanZhi9\Pictures\Screenshots"
 $LDPlayerTitle = "LDPlayer"
 
-$FantasyModeHotkey = "+{F2}"   # SHIFT+F2
-$CaptureHotkey = "+{F1}"       # SHIFT+F1 (기존 매크로, 포지션/투수 선택 후 실행)
+$LaunchAppHotkey = "+{F2}"      # SHIFT+F2 (9UP 앱 실행)
+$FantasyModeHotkey = "+{F3}"    # SHIFT+F3 (판타지 모드 진입)
+$CaptureHotkey = "+{F1}"        # SHIFT+F1 (기존 매크로, 포지션/투수 선택 후 실행)
 
-# 폴더명 -> (선택 단축키, 표시용 이름). 순서대로 CTRL+F1~F10.
+# 폴더명 -> (선택 단축키, 표시용 이름). 녹화하신 실제 순서 그대로(SHIFT+F4~F12).
 $Targets = [ordered]@{
-    "1b" = @{ Key = "^{F1}";  Label = "1루수" }
-    "2b" = @{ Key = "^{F2}";  Label = "2루수" }
-    "3b" = @{ Key = "^{F3}";  Label = "3루수" }
-    "ss" = @{ Key = "^{F4}";  Label = "유격수" }
-    "c"  = @{ Key = "^{F5}";  Label = "포수" }
-    "cf" = @{ Key = "^{F6}";  Label = "중견수" }
-    "lf" = @{ Key = "^{F7}";  Label = "좌익수" }
-    "rf" = @{ Key = "^{F8}";  Label = "우익수" }
-    "dh" = @{ Key = "^{F9}";  Label = "지명타자" }
-    "p"  = @{ Key = "^{F10}"; Label = "투수(선발/구원)"; MonthlyOnly = $true }
+    "1b" = @{ Key = "+{F4}";  Label = "1루수" }
+    "2b" = @{ Key = "+{F5}";  Label = "2루수" }
+    "ss" = @{ Key = "+{F6}";  Label = "유격수" }
+    "3b" = @{ Key = "+{F7}";  Label = "3루수" }
+    "c"  = @{ Key = "+{F8}";  Label = "포수" }
+    "lf" = @{ Key = "+{F9}";  Label = "좌익수" }
+    "cf" = @{ Key = "+{F10}"; Label = "중견수" }
+    "rf" = @{ Key = "+{F11}"; Label = "우익수" }
+    "dh" = @{ Key = "+{F12}"; Label = "지명타자" }
+    "p"  = @{ Key = "+0";     Label = "투수(선발)"; MonthlyOnly = $true }
+    "rp" = @{ Key = "+-";    Label = "투수(구원)"; MonthlyOnly = $true }
+    # 구원투수도 선발 목록(p)에 뜨긴 하지만 스크롤 12번 안에 안 나올 수 있어서 따로 캡쳐.
 }
 
 $WaitAfterSelectSeconds = 3     # 포지션 선택 후 화면 전환 대기
 $WaitAfterCaptureSeconds = 60   # 스크롤+캡쳐 매크로가 다 돌 때까지 대기(실제 소요시간 보고 조절)
 
+Add-Type @"
+using System;
+using System.Text;
+using System.Runtime.InteropServices;
+public class LDWin {
+    public delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
+    [DllImport("user32.dll")] public static extern bool EnumWindows(EnumWindowsProc lpEnumFunc, IntPtr lParam);
+    [DllImport("user32.dll")] public static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
+    [DllImport("user32.dll")] public static extern bool IsWindowVisible(IntPtr hWnd);
+    [DllImport("user32.dll")] public static extern bool SetForegroundWindow(IntPtr hWnd);
+    [DllImport("user32.dll")] public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+}
+"@
+
+function Find-LDPlayerWindow([string]$title) {
+    # wscript.shell의 AppActivate/FindWindow(ANSI)는 이 환경에서 LDPlayer 창을 못 찾는
+    # 현상이 있어서(EnumWindows로는 정상적으로 잡힘 — 원인 불명, 유니코드/ANSI 마샬링
+    # 차이로 추정), EnumWindows 기반으로 직접 핸들을 찾는다.
+    $found = [IntPtr]::Zero
+    $callback = {
+        param($hWnd, $lParam)
+        if ([LDWin]::IsWindowVisible($hWnd)) {
+            $sb = New-Object System.Text.StringBuilder 256
+            [LDWin]::GetWindowText($hWnd, $sb, 256) | Out-Null
+            if ($sb.ToString() -eq $title) { $script:found = $hWnd; return $false }
+        }
+        return $true
+    }
+    [LDWin]::EnumWindows($callback, [IntPtr]::Zero) | Out-Null
+    return $found
+}
+
 function Send-ToLDPlayer([string]$keys) {
-    $wshell = New-Object -ComObject wscript.shell
-    if (-not $wshell.AppActivate($LDPlayerTitle)) {
+    $hwnd = Find-LDPlayerWindow $LDPlayerTitle
+    if ($hwnd -eq [IntPtr]::Zero) {
         throw "LD플레이어 창을 찾을 수 없습니다 ('$LDPlayerTitle') — 창이 켜져 있는지 확인하세요."
     }
+    [LDWin]::ShowWindow($hwnd, 9) | Out-Null  # SW_RESTORE(최소화돼 있으면 복원)
+    if (-not [LDWin]::SetForegroundWindow($hwnd)) {
+        throw "LD플레이어 창을 활성화하지 못했습니다."
+    }
     Start-Sleep -Milliseconds 500
+    $wshell = New-Object -ComObject wscript.shell
     $wshell.SendKeys($keys)
 }
 
@@ -62,6 +106,10 @@ function Move-NewScreenshots([string]$destFolder, [datetime]$since) {
     }
     return $newFiles.Count
 }
+
+Write-Host "[1/4] 9UP 앱 실행..."
+Send-ToLDPlayer $LaunchAppHotkey
+Start-Sleep -Seconds 15   # 앱 로딩 대기 — 실제 소요 시간 보고 조절
 
 Write-Host "[1/4] 판타지 모드 진입..."
 Send-ToLDPlayer $FantasyModeHotkey

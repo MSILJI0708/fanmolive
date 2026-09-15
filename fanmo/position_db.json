@@ -34,7 +34,7 @@
       },
       "games": 8,
       "auto_position": "3루수",
-      "manual_position": null,
+      "manual_position": "3루수",
       "effective_position": "3루수"
     },
     "56637": {
@@ -57,8 +57,8 @@
       },
       "games": 11,
       "auto_position": "1루수",
-      "manual_position": "좌익수",
-      "effective_position": "좌익수"
+      "manual_position": "1루수",
+      "effective_position": "1루수"
     },
     "68504": {
       "name": "이호연",
@@ -1129,7 +1129,7 @@
       },
       "games": 10,
       "auto_position": "3루수",
-      "manual_position": null,
+      "manual_position": "3루수",
       "effective_position": "3루수"
     },
     "77532": {
@@ -1261,7 +1261,7 @@
       },
       "games": 11,
       "auto_position": "3루수",
-      "manual_position": null,
+      "manual_position": "3루수",
       "effective_position": "3루수"
     },
     "50902": {
