@@ -115,6 +115,8 @@ def backfill_data(deadline: float) -> None:
                 except Exception as exc:  # noqa: BLE001
                     print(f"  {g['game_id']} 처리 실패: {exc}")
                     continue
+                for row in b + p:
+                    row["date"] = ds  # build_board.py가 r["date"]로 그날 경기 수를 셈
                 batters.extend(b)
                 pitchers.extend(p)
                 cache_dirty = True

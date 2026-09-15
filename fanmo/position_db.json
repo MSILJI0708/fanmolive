@@ -11,7 +11,7 @@
       },
       "games": 7,
       "auto_position": "우익수",
-      "manual_position": null,
+      "manual_position": "우익수",
       "effective_position": "우익수"
     },
     "55636": {
@@ -23,7 +23,7 @@
       },
       "games": 11,
       "auto_position": "좌익수",
-      "manual_position": null,
+      "manual_position": "좌익수",
       "effective_position": "좌익수"
     },
     "52605": {
@@ -45,7 +45,7 @@
       },
       "games": 7,
       "auto_position": "좌익수",
-      "manual_position": null,
+      "manual_position": "좌익수",
       "effective_position": "좌익수"
     },
     "56626": {
@@ -57,8 +57,8 @@
       },
       "games": 11,
       "auto_position": "1루수",
-      "manual_position": null,
-      "effective_position": "1루수"
+      "manual_position": "좌익수",
+      "effective_position": "좌익수"
     },
     "68504": {
       "name": "이호연",
@@ -70,7 +70,7 @@
       },
       "games": 9,
       "auto_position": "2루수",
-      "manual_position": null,
+      "manual_position": "2루수",
       "effective_position": "2루수"
     },
     "62947": {
@@ -81,7 +81,7 @@
       },
       "games": 11,
       "auto_position": "우익수",
-      "manual_position": null,
+      "manual_position": "우익수",
       "effective_position": "우익수"
     },
     "65653": {
@@ -92,7 +92,7 @@
       },
       "games": 11,
       "auto_position": "중견수",
-      "manual_position": null,
+      "manual_position": "중견수",
       "effective_position": "중견수"
     },
     "78603": {
@@ -103,7 +103,7 @@
       },
       "games": 10,
       "auto_position": "2루수",
-      "manual_position": null,
+      "manual_position": "2루수",
       "effective_position": "2루수"
     },
     "66614": {
@@ -115,8 +115,8 @@
       },
       "games": 4,
       "auto_position": "3루수",
-      "manual_position": null,
-      "effective_position": "3루수"
+      "manual_position": "유격수",
+      "effective_position": "유격수"
     },
     "62700": {
       "name": "하주석",
@@ -127,8 +127,8 @@
       },
       "games": 10,
       "auto_position": "유격수",
-      "manual_position": null,
-      "effective_position": "유격수"
+      "manual_position": "2루수",
+      "effective_position": "2루수"
     },
     "78122": {
       "name": "김태군",
@@ -138,7 +138,7 @@
       },
       "games": 10,
       "auto_position": "포수",
-      "manual_position": null,
+      "manual_position": "포수",
       "effective_position": "포수"
     },
     "69727": {
@@ -150,8 +150,8 @@
       },
       "games": 9,
       "auto_position": "3루수",
-      "manual_position": null,
-      "effective_position": "3루수"
+      "manual_position": "1루수",
+      "effective_position": "1루수"
     },
     "61353": {
       "name": "고종욱",
@@ -159,7 +159,7 @@
       "innings_by_position": {},
       "games": 7,
       "auto_position": "지명타자",
-      "manual_position": null,
+      "manual_position": "지명타자",
       "effective_position": "지명타자"
     },
     "55926": {
@@ -172,7 +172,7 @@
       },
       "games": 10,
       "auto_position": "유격수",
-      "manual_position": null,
+      "manual_position": "유격수",
       "effective_position": "유격수"
     },
     "64006": {
@@ -183,7 +183,7 @@
       },
       "games": 11,
       "auto_position": "유격수",
-      "manual_position": null,
+      "manual_position": "유격수",
       "effective_position": "유격수"
     },
     "50707": {
@@ -194,7 +194,7 @@
       },
       "games": 11,
       "auto_position": "중견수",
-      "manual_position": null,
+      "manual_position": "중견수",
       "effective_position": "중견수"
     },
     "56708": {
@@ -205,7 +205,7 @@
       },
       "games": 10,
       "auto_position": "중견수",
-      "manual_position": null,
+      "manual_position": "중견수",
       "effective_position": "중견수"
     },
     "53764": {
@@ -217,7 +217,7 @@
       },
       "games": 11,
       "auto_position": "좌익수",
-      "manual_position": null,
+      "manual_position": "좌익수",
       "effective_position": "좌익수"
     },
     "68050": {
@@ -226,7 +226,7 @@
       "innings_by_position": {},
       "games": 11,
       "auto_position": "지명타자",
-      "manual_position": null,
+      "manual_position": "지명타자",
       "effective_position": "지명타자"
     },
     "69737": {
@@ -248,7 +248,7 @@
       },
       "games": 11,
       "auto_position": "우익수",
-      "manual_position": null,
+      "manual_position": "우익수",
       "effective_position": "우익수"
     },
     "52765": {
@@ -260,8 +260,8 @@
       },
       "games": 8,
       "auto_position": "우익수",
-      "manual_position": null,
-      "effective_position": "우익수"
+      "manual_position": "좌익수",
+      "effective_position": "좌익수"
     },
     "52764": {
       "name": "허인서",
@@ -271,7 +271,7 @@
       },
       "games": 10,
       "auto_position": "포수",
-      "manual_position": null,
+      "manual_position": "포수",
       "effective_position": "포수"
     },
     "50709": {
@@ -283,8 +283,8 @@
       },
       "games": 9,
       "auto_position": "3루수",
-      "manual_position": null,
-      "effective_position": "3루수"
+      "manual_position": "유격수",
+      "effective_position": "유격수"
     },
     "66704": {
       "name": "김태연",
@@ -294,7 +294,7 @@
       },
       "games": 11,
       "auto_position": "1루수",
-      "manual_position": null,
+      "manual_position": "1루수",
       "effective_position": "1루수"
     },
     "55767": {
@@ -306,7 +306,7 @@
       },
       "games": 8,
       "auto_position": "좌익수",
-      "manual_position": null,
+      "manual_position": "좌익수",
       "effective_position": "좌익수"
     },
     "65703": {
@@ -317,7 +317,7 @@
       },
       "games": 7,
       "auto_position": "2루수",
-      "manual_position": null,
+      "manual_position": "2루수",
       "effective_position": "2루수"
     },
     "56793": {
@@ -328,7 +328,7 @@
       },
       "games": 7,
       "auto_position": "2루수",
-      "manual_position": null,
+      "manual_position": "2루수",
       "effective_position": "2루수"
     },
     "50458": {
@@ -339,7 +339,7 @@
       },
       "games": 11,
       "auto_position": "중견수",
-      "manual_position": null,
+      "manual_position": "중견수",
       "effective_position": "중견수"
     },
     "67449": {
@@ -350,7 +350,7 @@
       },
       "games": 10,
       "auto_position": "우익수",
-      "manual_position": null,
+      "manual_position": "우익수",
       "effective_position": "우익수"
     },
     "61404": {
@@ -361,7 +361,7 @@
       },
       "games": 6,
       "auto_position": "좌익수",
-      "manual_position": null,
+      "manual_position": "좌익수",
       "effective_position": "좌익수"
     },
     "69418": {
@@ -374,7 +374,7 @@
       },
       "games": 9,
       "auto_position": "우익수",
-      "manual_position": null,
+      "manual_position": "우익수",
       "effective_position": "우익수"
     },
     "54400": {
@@ -385,7 +385,7 @@
       },
       "games": 11,
       "auto_position": "1루수",
-      "manual_position": null,
+      "manual_position": "1루수",
       "effective_position": "1루수"
     },
     "65040": {
@@ -396,8 +396,8 @@
       },
       "games": 4,
       "auto_position": "1루수",
-      "manual_position": null,
-      "effective_position": "1루수"
+      "manual_position": "우익수",
+      "effective_position": "우익수"
     },
     "72443": {
       "name": "최형우",
@@ -405,7 +405,7 @@
       "innings_by_position": {},
       "games": 10,
       "auto_position": "지명타자",
-      "manual_position": null,
+      "manual_position": "지명타자",
       "effective_position": "지명타자"
     },
     "51407": {
@@ -414,7 +414,7 @@
       "innings_by_position": {},
       "games": 4,
       "auto_position": "지명타자",
-      "manual_position": null,
+      "manual_position": "지명타자",
       "effective_position": "지명타자"
     },
     "74540": {
@@ -425,7 +425,7 @@
       },
       "games": 11,
       "auto_position": "포수",
-      "manual_position": null,
+      "manual_position": "포수",
       "effective_position": "포수"
     },
     "62244": {
@@ -436,7 +436,7 @@
       },
       "games": 8,
       "auto_position": "포수",
-      "manual_position": null,
+      "manual_position": "포수",
       "effective_position": "포수"
     },
     "51417": {
@@ -447,7 +447,7 @@
       },
       "games": 4,
       "auto_position": "중견수",
-      "manual_position": null,
+      "manual_position": "중견수",
       "effective_position": "중견수"
     },
     "65132": {
@@ -458,7 +458,7 @@
       },
       "games": 1,
       "auto_position": "포수",
-      "manual_position": null,
+      "manual_position": "포수",
       "effective_position": "포수"
     },
     "62234": {
@@ -469,7 +469,7 @@
       },
       "games": 11,
       "auto_position": "2루수",
-      "manual_position": null,
+      "manual_position": "2루수",
       "effective_position": "2루수"
     },
     "69403": {
@@ -481,7 +481,7 @@
       },
       "games": 8,
       "auto_position": "유격수",
-      "manual_position": null,
+      "manual_position": "유격수",
       "effective_position": "유격수"
     },
     "52430": {
@@ -504,8 +504,8 @@
       },
       "games": 2,
       "auto_position": "3루수",
-      "manual_position": null,
-      "effective_position": "3루수"
+      "manual_position": "유격수",
+      "effective_position": "유격수"
     },
     "55438": {
       "name": "심재훈",
@@ -515,7 +515,7 @@
       },
       "games": 1,
       "auto_position": "유격수",
-      "manual_position": null,
+      "manual_position": "유격수",
       "effective_position": "유격수"
     },
     "65586": {
@@ -537,7 +537,7 @@
       },
       "games": 10,
       "auto_position": "2루수",
-      "manual_position": null,
+      "manual_position": "2루수",
       "effective_position": "2루수"
     },
     "62415": {
@@ -548,7 +548,7 @@
       },
       "games": 10,
       "auto_position": "중견수",
-      "manual_position": null,
+      "manual_position": "중견수",
       "effective_position": "중견수"
     },
     "52121": {
@@ -559,7 +559,7 @@
       },
       "games": 10,
       "auto_position": "1루수",
-      "manual_position": null,
+      "manual_position": "1루수",
       "effective_position": "1루수"
     },
     "53123": {
@@ -570,7 +570,7 @@
       },
       "games": 10,
       "auto_position": "1루수",
-      "manual_position": null,
+      "manual_position": "1루수",
       "effective_position": "1루수"
     },
     "51100": {
@@ -583,7 +583,7 @@
       },
       "games": 5,
       "auto_position": "3루수",
-      "manual_position": null,
+      "manual_position": "3루수",
       "effective_position": "3루수"
     },
     "68110": {
@@ -594,7 +594,7 @@
       },
       "games": 10,
       "auto_position": "좌익수",
-      "manual_position": null,
+      "manual_position": "좌익수",
       "effective_position": "좌익수"
     },
     "52103": {
@@ -607,8 +607,8 @@
       },
       "games": 7,
       "auto_position": "좌익수",
-      "manual_position": null,
-      "effective_position": "좌익수"
+      "manual_position": "중견수",
+      "effective_position": "중견수"
     },
     "69102": {
       "name": "문보경",
@@ -643,8 +643,8 @@
       },
       "games": 8,
       "auto_position": "유격수",
-      "manual_position": null,
-      "effective_position": "유격수"
+      "manual_position": "3루수",
+      "effective_position": "3루수"
     },
     "79109": {
       "name": "오지환",
@@ -654,7 +654,7 @@
       },
       "games": 7,
       "auto_position": "유격수",
-      "manual_position": null,
+      "manual_position": "유격수",
       "effective_position": "유격수"
     },
     "54166": {
@@ -666,8 +666,8 @@
       },
       "games": 4,
       "auto_position": "우익수",
-      "manual_position": null,
-      "effective_position": "우익수"
+      "manual_position": "중견수",
+      "effective_position": "중견수"
     },
     "79365": {
       "name": "박동원",
@@ -677,7 +677,7 @@
       },
       "games": 9,
       "auto_position": "포수",
-      "manual_position": null,
+      "manual_position": "포수",
       "effective_position": "포수"
     },
     "52154": {
@@ -688,7 +688,7 @@
       },
       "games": 7,
       "auto_position": "포수",
-      "manual_position": null,
+      "manual_position": "포수",
       "effective_position": "포수"
     },
     "66108": {
@@ -699,7 +699,7 @@
       },
       "games": 10,
       "auto_position": "우익수",
-      "manual_position": null,
+      "manual_position": "우익수",
       "effective_position": "우익수"
     },
     "66606": {
@@ -711,8 +711,8 @@
       },
       "games": 12,
       "auto_position": "중견수",
-      "manual_position": null,
-      "effective_position": "중견수"
+      "manual_position": "우익수",
+      "effective_position": "우익수"
     },
     "64004": {
       "name": "김민혁",
@@ -720,8 +720,8 @@
       "innings_by_position": {},
       "games": 11,
       "auto_position": "지명타자",
-      "manual_position": null,
-      "effective_position": "지명타자"
+      "manual_position": "좌익수",
+      "effective_position": "좌익수"
     },
     "52001": {
       "name": "안현민",
@@ -731,7 +731,7 @@
       },
       "games": 12,
       "auto_position": "우익수",
-      "manual_position": null,
+      "manual_position": "우익수",
       "effective_position": "우익수"
     },
     "56034": {
@@ -743,7 +743,7 @@
       },
       "games": 12,
       "auto_position": "좌익수",
-      "manual_position": null,
+      "manual_position": "좌익수",
       "effective_position": "좌익수"
     },
     "76290": {
@@ -754,7 +754,7 @@
       },
       "games": 12,
       "auto_position": "1루수",
-      "manual_position": null,
+      "manual_position": "1루수",
       "effective_position": "1루수"
     },
     "64504": {
@@ -766,7 +766,7 @@
       },
       "games": 10,
       "auto_position": "1루수",
-      "manual_position": null,
+      "manual_position": "1루수",
       "effective_position": "1루수"
     },
     "79402": {
@@ -777,7 +777,7 @@
       },
       "games": 12,
       "auto_position": "2루수",
-      "manual_position": null,
+      "manual_position": "2루수",
       "effective_position": "2루수"
     },
     "79240": {
@@ -800,7 +800,7 @@
       },
       "games": 8,
       "auto_position": "포수",
-      "manual_position": null,
+      "manual_position": "포수",
       "effective_position": "포수"
     },
     "63722": {
@@ -811,7 +811,7 @@
       },
       "games": 12,
       "auto_position": "포수",
-      "manual_position": null,
+      "manual_position": "포수",
       "effective_position": "포수"
     },
     "51003": {
@@ -822,7 +822,7 @@
       },
       "games": 10,
       "auto_position": "유격수",
-      "manual_position": null,
+      "manual_position": "유격수",
       "effective_position": "유격수"
     },
     "76313": {
@@ -846,7 +846,7 @@
       },
       "games": 11,
       "auto_position": "유격수",
-      "manual_position": null,
+      "manual_position": "유격수",
       "effective_position": "유격수"
     },
     "50500": {
@@ -858,7 +858,7 @@
       },
       "games": 10,
       "auto_position": "중견수",
-      "manual_position": null,
+      "manual_position": "중견수",
       "effective_position": "중견수"
     },
     "54529": {
@@ -869,7 +869,7 @@
       },
       "games": 11,
       "auto_position": "좌익수",
-      "manual_position": null,
+      "manual_position": "좌익수",
       "effective_position": "좌익수"
     },
     "69517": {
@@ -881,7 +881,7 @@
       },
       "games": 11,
       "auto_position": "2루수",
-      "manual_position": null,
+      "manual_position": "2루수",
       "effective_position": "2루수"
     },
     "68525": {
@@ -892,8 +892,8 @@
       },
       "games": 11,
       "auto_position": "3루수",
-      "manual_position": null,
-      "effective_position": "3루수"
+      "manual_position": "지명타자",
+      "effective_position": "지명타자"
     },
     "68205": {
       "name": "전민재",
@@ -903,7 +903,7 @@
       },
       "games": 11,
       "auto_position": "유격수",
-      "manual_position": null,
+      "manual_position": "유격수",
       "effective_position": "유격수"
     },
     "78513": {
@@ -914,8 +914,8 @@
       },
       "games": 5,
       "auto_position": "좌익수",
-      "manual_position": null,
-      "effective_position": "좌익수"
+      "manual_position": "지명타자",
+      "effective_position": "지명타자"
     },
     "51551": {
       "name": "나승엽",
@@ -925,7 +925,7 @@
       },
       "games": 11,
       "auto_position": "1루수",
-      "manual_position": null,
+      "manual_position": "1루수",
       "effective_position": "1루수"
     },
     "68507": {
@@ -937,7 +937,7 @@
       },
       "games": 9,
       "auto_position": "중견수",
-      "manual_position": null,
+      "manual_position": "중견수",
       "effective_position": "중견수"
     },
     "55509": {
@@ -959,7 +959,7 @@
       },
       "games": 2,
       "auto_position": "2루수",
-      "manual_position": null,
+      "manual_position": "2루수",
       "effective_position": "2루수"
     },
     "55563": {
@@ -970,7 +970,7 @@
       },
       "games": 7,
       "auto_position": "포수",
-      "manual_position": null,
+      "manual_position": "포수",
       "effective_position": "포수"
     },
     "55534": {
@@ -982,8 +982,8 @@
       },
       "games": 3,
       "auto_position": "좌익수",
-      "manual_position": null,
-      "effective_position": "좌익수"
+      "manual_position": "우익수",
+      "effective_position": "우익수"
     },
     "64646": {
       "name": "박찬호",
@@ -993,7 +993,7 @@
       },
       "games": 11,
       "auto_position": "유격수",
-      "manual_position": null,
+      "manual_position": "유격수",
       "effective_position": "유격수"
     },
     "54236": {
@@ -1004,7 +1004,7 @@
       },
       "games": 2,
       "auto_position": "3루수",
-      "manual_position": null,
+      "manual_position": "3루수",
       "effective_position": "3루수"
     },
     "66209": {
@@ -1017,7 +1017,7 @@
       },
       "games": 10,
       "auto_position": "좌익수",
-      "manual_position": null,
+      "manual_position": "좌익수",
       "effective_position": "좌익수"
     },
     "55252": {
@@ -1028,7 +1028,7 @@
       },
       "games": 9,
       "auto_position": "2루수",
-      "manual_position": null,
+      "manual_position": "2루수",
       "effective_position": "2루수"
     },
     "67207": {
@@ -1040,7 +1040,7 @@
       },
       "games": 6,
       "auto_position": "2루수",
-      "manual_position": null,
+      "manual_position": "2루수",
       "effective_position": "2루수"
     },
     "76232": {
@@ -1051,7 +1051,7 @@
       },
       "games": 10,
       "auto_position": "포수",
-      "manual_position": null,
+      "manual_position": "포수",
       "effective_position": "포수"
     },
     "53296": {
@@ -1062,7 +1062,7 @@
       },
       "games": 10,
       "auto_position": "포수",
-      "manual_position": null,
+      "manual_position": "포수",
       "effective_position": "포수"
     },
     "53554": {
@@ -1084,7 +1084,7 @@
       },
       "games": 8,
       "auto_position": "우익수",
-      "manual_position": null,
+      "manual_position": "우익수",
       "effective_position": "우익수"
     },
     "56236": {
@@ -1095,7 +1095,7 @@
       },
       "games": 10,
       "auto_position": "1루수",
-      "manual_position": null,
+      "manual_position": "1루수",
       "effective_position": "1루수"
     },
     "64153": {
@@ -1106,7 +1106,7 @@
       },
       "games": 7,
       "auto_position": "1루수",
-      "manual_position": null,
+      "manual_position": "1루수",
       "effective_position": "1루수"
     },
     "63123": {
@@ -1118,7 +1118,7 @@
       },
       "games": 7,
       "auto_position": "1루수",
-      "manual_position": null,
+      "manual_position": "1루수",
       "effective_position": "1루수"
     },
     "51203": {
@@ -1138,7 +1138,7 @@
       "innings_by_position": {},
       "games": 3,
       "auto_position": "지명타자",
-      "manual_position": null,
+      "manual_position": "지명타자",
       "effective_position": "지명타자"
     },
     "50204": {
@@ -1151,8 +1151,8 @@
       },
       "games": 6,
       "auto_position": "유격수",
-      "manual_position": null,
-      "effective_position": "유격수"
+      "manual_position": "3루수",
+      "effective_position": "3루수"
     },
     "79231": {
       "name": "정수빈",
@@ -1162,7 +1162,7 @@
       },
       "games": 11,
       "auto_position": "중견수",
-      "manual_position": null,
+      "manual_position": "중견수",
       "effective_position": "중견수"
     },
     "51907": {
@@ -1173,7 +1173,7 @@
       },
       "games": 11,
       "auto_position": "유격수",
-      "manual_position": null,
+      "manual_position": "유격수",
       "effective_position": "유격수"
     },
     "50600": {
@@ -1184,7 +1184,7 @@
       },
       "games": 5,
       "auto_position": "2루수",
-      "manual_position": null,
+      "manual_position": "2루수",
       "effective_position": "2루수"
     },
     "63963": {
@@ -1196,7 +1196,7 @@
       },
       "games": 11,
       "auto_position": "좌익수",
-      "manual_position": null,
+      "manual_position": "좌익수",
       "effective_position": "좌익수"
     },
     "62907": {
@@ -1207,7 +1207,7 @@
       },
       "games": 11,
       "auto_position": "2루수",
-      "manual_position": null,
+      "manual_position": "2루수",
       "effective_position": "2루수"
     },
     "56952": {
@@ -1229,7 +1229,7 @@
       },
       "games": 11,
       "auto_position": "1루수",
-      "manual_position": null,
+      "manual_position": "1루수",
       "effective_position": "1루수"
     },
     "51996": {
@@ -1241,8 +1241,8 @@
       },
       "games": 7,
       "auto_position": "좌익수",
-      "manual_position": null,
-      "effective_position": "좌익수"
+      "manual_position": "중견수",
+      "effective_position": "중견수"
     },
     "54910": {
       "name": "김준원",
@@ -1273,8 +1273,8 @@
       },
       "games": 8,
       "auto_position": "2루수",
-      "manual_position": null,
-      "effective_position": "2루수"
+      "manual_position": "3루수",
+      "effective_position": "3루수"
     },
     "79215": {
       "name": "박건우",
@@ -1296,8 +1296,8 @@
       },
       "games": 5,
       "auto_position": "1루수",
-      "manual_position": null,
-      "effective_position": "1루수"
+      "manual_position": "3루수",
+      "effective_position": "3루수"
     },
     "68912": {
       "name": "김형준",
@@ -1307,7 +1307,7 @@
       },
       "games": 10,
       "auto_position": "포수",
-      "manual_position": null,
+      "manual_position": "포수",
       "effective_position": "포수"
     },
     "64022": {
@@ -1318,7 +1318,7 @@
       },
       "games": 8,
       "auto_position": "포수",
-      "manual_position": null,
+      "manual_position": "포수",
       "effective_position": "포수"
     },
     "56932": {
@@ -1329,7 +1329,7 @@
       },
       "games": 1,
       "auto_position": "포수",
-      "manual_position": null,
+      "manual_position": "포수",
       "effective_position": "포수"
     },
     "50996": {
@@ -1341,7 +1341,7 @@
       },
       "games": 10,
       "auto_position": "우익수",
-      "manual_position": null,
+      "manual_position": "우익수",
       "effective_position": "우익수"
     },
     "67905": {
@@ -1354,8 +1354,8 @@
       },
       "games": 11,
       "auto_position": "좌익수",
-      "manual_position": null,
-      "effective_position": "좌익수"
+      "manual_position": "중견수",
+      "effective_position": "중견수"
     },
     "69992": {
       "name": "최정원",
@@ -1365,7 +1365,7 @@
       },
       "games": 11,
       "auto_position": "중견수",
-      "manual_position": null,
+      "manual_position": "중견수",
       "effective_position": "중견수"
     },
     "63260": {
@@ -1376,7 +1376,7 @@
       },
       "games": 8,
       "auto_position": "좌익수",
-      "manual_position": null,
+      "manual_position": "좌익수",
       "effective_position": "좌익수"
     },
     "64166": {
@@ -1387,7 +1387,7 @@
       },
       "games": 9,
       "auto_position": "중견수",
-      "manual_position": null,
+      "manual_position": "중견수",
       "effective_position": "중견수"
     },
     "53057": {
@@ -1400,7 +1400,7 @@
       },
       "games": 6,
       "auto_position": "유격수",
-      "manual_position": null,
+      "manual_position": "유격수",
       "effective_position": "유격수"
     },
     "66706": {
@@ -1412,7 +1412,7 @@
       },
       "games": 9,
       "auto_position": "좌익수",
-      "manual_position": null,
+      "manual_position": "좌익수",
       "effective_position": "좌익수"
     },
     "53036": {
@@ -1425,7 +1425,7 @@
       },
       "games": 7,
       "auto_position": "3루수",
-      "manual_position": null,
+      "manual_position": "3루수",
       "effective_position": "3루수"
     },
     "67644": {
@@ -1434,7 +1434,7 @@
       "innings_by_position": {},
       "games": 3,
       "auto_position": "지명타자",
-      "manual_position": null,
+      "manual_position": "지명타자",
       "effective_position": "지명타자"
     },
     "51013": {
@@ -1446,8 +1446,8 @@
       },
       "games": 7,
       "auto_position": "좌익수",
-      "manual_position": null,
-      "effective_position": "좌익수"
+      "manual_position": "중견수",
+      "effective_position": "중견수"
     },
     "68646": {
       "name": "한준수",
@@ -1457,7 +1457,7 @@
       },
       "games": 4,
       "auto_position": "포수",
-      "manual_position": null,
+      "manual_position": "포수",
       "effective_position": "포수"
     },
     "69636": {
@@ -1468,7 +1468,7 @@
       },
       "games": 2,
       "auto_position": "1루수",
-      "manual_position": null,
+      "manual_position": "1루수",
       "effective_position": "1루수"
     },
     "52415": {
@@ -1479,7 +1479,7 @@
       },
       "games": 10,
       "auto_position": "유격수",
-      "manual_position": null,
+      "manual_position": "유격수",
       "effective_position": "유격수"
     },
     "64468": {
@@ -1491,7 +1491,7 @@
       },
       "games": 6,
       "auto_position": "유격수",
-      "manual_position": null,
+      "manual_position": "유격수",
       "effective_position": "유격수"
     },
     "78168": {
@@ -1502,7 +1502,7 @@
       },
       "games": 10,
       "auto_position": "2루수",
-      "manual_position": null,
+      "manual_position": "2루수",
       "effective_position": "2루수"
     },
     "68362": {
@@ -1515,7 +1515,7 @@
       },
       "games": 10,
       "auto_position": "중견수",
-      "manual_position": null,
+      "manual_position": "중견수",
       "effective_position": "중견수"
     },
     "54303": {
@@ -1526,7 +1526,7 @@
       },
       "games": 8,
       "auto_position": "중견수",
-      "manual_position": null,
+      "manual_position": "중견수",
       "effective_position": "중견수"
     },
     "54944": {
@@ -1537,7 +1537,7 @@
       },
       "games": 10,
       "auto_position": "1루수",
-      "manual_position": null,
+      "manual_position": "1루수",
       "effective_position": "1루수"
     },
     "56305": {
@@ -1548,7 +1548,7 @@
       },
       "games": 10,
       "auto_position": "좌익수",
-      "manual_position": null,
+      "manual_position": "좌익수",
       "effective_position": "좌익수"
     },
     "65898": {
@@ -1560,7 +1560,7 @@
       },
       "games": 10,
       "auto_position": "3루수",
-      "manual_position": null,
+      "manual_position": "3루수",
       "effective_position": "3루수"
     },
     "52348": {
@@ -1571,7 +1571,7 @@
       },
       "games": 8,
       "auto_position": "우익수",
-      "manual_position": null,
+      "manual_position": "우익수",
       "effective_position": "우익수"
     },
     "53312": {
@@ -1582,7 +1582,7 @@
       },
       "games": 7,
       "auto_position": "포수",
-      "manual_position": null,
+      "manual_position": "포수",
       "effective_position": "포수"
     },
     "55397": {
@@ -1593,8 +1593,8 @@
       },
       "games": 4,
       "auto_position": "우익수",
-      "manual_position": null,
-      "effective_position": "우익수"
+      "manual_position": "좌익수",
+      "effective_position": "좌익수"
     },
     "53344": {
       "name": "김동헌",
@@ -1604,7 +1604,7 @@
       },
       "games": 6,
       "auto_position": "포수",
-      "manual_position": null,
+      "manual_position": "포수",
       "effective_position": "포수"
     },
     "55339": {
@@ -1615,7 +1615,7 @@
       },
       "games": 2,
       "auto_position": "2루수",
-      "manual_position": null,
+      "manual_position": "2루수",
       "effective_position": "2루수"
     },
     "55371": {
@@ -1626,7 +1626,7 @@
       },
       "games": 10,
       "auto_position": "유격수",
-      "manual_position": null,
+      "manual_position": "유격수",
       "effective_position": "유격수"
     },
     "56338": {
@@ -1638,7 +1638,7 @@
       },
       "games": 3,
       "auto_position": "유격수",
-      "manual_position": null,
+      "manual_position": "유격수",
       "effective_position": "유격수"
     },
     "52504": {
@@ -1650,7 +1650,7 @@
       },
       "games": 8,
       "auto_position": "우익수",
-      "manual_position": null,
+      "manual_position": "우익수",
       "effective_position": "우익수"
     },
     "53568": {
@@ -1662,8 +1662,8 @@
       },
       "games": 5,
       "auto_position": "1루수",
-      "manual_position": null,
-      "effective_position": "1루수"
+      "manual_position": "좌익수",
+      "effective_position": "좌익수"
     },
     "52514": {
       "name": "김세민",
@@ -1674,7 +1674,7 @@
       },
       "games": 5,
       "auto_position": "유격수",
-      "manual_position": null,
+      "manual_position": "유격수",
       "effective_position": "유격수"
     },
     "54598": {
@@ -1686,7 +1686,7 @@
       },
       "games": 5,
       "auto_position": "2루수",
-      "manual_position": null,
+      "manual_position": "2루수",
       "effective_position": "2루수"
     },
     "55530": {
@@ -1697,8 +1697,8 @@
       },
       "games": 2,
       "auto_position": "2루수",
-      "manual_position": null,
-      "effective_position": "2루수"
+      "manual_position": "3루수",
+      "effective_position": "3루수"
     },
     "62802": {
       "name": "박승욱",
@@ -1709,7 +1709,7 @@
       },
       "games": 6,
       "auto_position": "3루수",
-      "manual_position": null,
+      "manual_position": "3루수",
       "effective_position": "3루수"
     },
     "61102": {
@@ -1720,7 +1720,7 @@
       },
       "games": 2,
       "auto_position": "포수",
-      "manual_position": null,
+      "manual_position": "포수",
       "effective_position": "포수"
     },
     "50208": {
@@ -1731,8 +1731,8 @@
       },
       "games": 7,
       "auto_position": "2루수",
-      "manual_position": null,
-      "effective_position": "2루수"
+      "manual_position": "1루수",
+      "effective_position": "1루수"
     },
     "62931": {
       "name": "노진혁",
@@ -1742,8 +1742,8 @@
       },
       "games": 5,
       "auto_position": "3루수",
-      "manual_position": null,
-      "effective_position": "3루수"
+      "manual_position": "1루수",
+      "effective_position": "1루수"
     },
     "66864": {
       "name": "안상현",
@@ -1754,7 +1754,7 @@
       },
       "games": 9,
       "auto_position": "3루수",
-      "manual_position": null,
+      "manual_position": "3루수",
       "effective_position": "3루수"
     },
     "56811": {
@@ -1766,8 +1766,8 @@
       },
       "games": 5,
       "auto_position": "3루수",
-      "manual_position": null,
-      "effective_position": "3루수"
+      "manual_position": "유격수",
+      "effective_position": "유격수"
     },
     "52807": {
       "name": "임근우",
@@ -1778,7 +1778,7 @@
       },
       "games": 7,
       "auto_position": "우익수",
-      "manual_position": null,
+      "manual_position": "우익수",
       "effective_position": "우익수"
     },
     "67893": {
@@ -1789,7 +1789,7 @@
       },
       "games": 10,
       "auto_position": "유격수",
-      "manual_position": null,
+      "manual_position": "유격수",
       "effective_position": "유격수"
     },
     "78224": {
@@ -1798,7 +1798,7 @@
       "innings_by_position": {},
       "games": 10,
       "auto_position": "지명타자",
-      "manual_position": null,
+      "manual_position": "지명타자",
       "effective_position": "지명타자"
     },
     "50820": {
@@ -1809,7 +1809,7 @@
       },
       "games": 9,
       "auto_position": "1루수",
-      "manual_position": null,
+      "manual_position": "1루수",
       "effective_position": "1루수"
     },
     "50854": {
@@ -1820,7 +1820,7 @@
       },
       "games": 9,
       "auto_position": "중견수",
-      "manual_position": null,
+      "manual_position": "중견수",
       "effective_position": "중견수"
     },
     "69804": {
@@ -1832,7 +1832,7 @@
       },
       "games": 5,
       "auto_position": "우익수",
-      "manual_position": null,
+      "manual_position": "우익수",
       "effective_position": "우익수"
     },
     "66662": {
@@ -1843,7 +1843,7 @@
       },
       "games": 3,
       "auto_position": "포수",
-      "manual_position": null,
+      "manual_position": "포수",
       "effective_position": "포수"
     },
     "79456": {
@@ -1854,7 +1854,7 @@
       },
       "games": 6,
       "auto_position": "포수",
-      "manual_position": null,
+      "manual_position": "포수",
       "effective_position": "포수"
     },
     "54812": {
@@ -1865,7 +1865,7 @@
       },
       "games": 10,
       "auto_position": "2루수",
-      "manual_position": null,
+      "manual_position": "2루수",
       "effective_position": "2루수"
     },
     "62404": {
@@ -1876,7 +1876,7 @@
       },
       "games": 9,
       "auto_position": "좌익수",
-      "manual_position": null,
+      "manual_position": "좌익수",
       "effective_position": "좌익수"
     },
     "55393": {
@@ -1887,7 +1887,7 @@
       },
       "games": 8,
       "auto_position": "3루수",
-      "manual_position": null,
+      "manual_position": "3루수",
       "effective_position": "3루수"
     },
     "53827": {
@@ -1898,7 +1898,7 @@
       },
       "games": 9,
       "auto_position": "좌익수",
-      "manual_position": null,
+      "manual_position": "좌익수",
       "effective_position": "좌익수"
     },
     "62895": {
@@ -1909,7 +1909,7 @@
       },
       "games": 6,
       "auto_position": "우익수",
-      "manual_position": null,
+      "manual_position": "우익수",
       "effective_position": "우익수"
     },
     "53865": {
@@ -1921,7 +1921,7 @@
       },
       "games": 6,
       "auto_position": "우익수",
-      "manual_position": null,
+      "manual_position": "우익수",
       "effective_position": "우익수"
     },
     "51762": {
@@ -1932,7 +1932,7 @@
       },
       "games": 6,
       "auto_position": "포수",
-      "manual_position": null,
+      "manual_position": "포수",
       "effective_position": "포수"
     },
     "54795": {
@@ -1943,7 +1943,7 @@
       },
       "games": 7,
       "auto_position": "2루수",
-      "manual_position": null,
+      "manual_position": "2루수",
       "effective_position": "2루수"
     },
     "77564": {
@@ -1952,8 +1952,8 @@
       "innings_by_position": {},
       "games": 1,
       "auto_position": "지명타자",
-      "manual_position": null,
-      "effective_position": "지명타자"
+      "manual_position": "3루수",
+      "effective_position": "3루수"
     },
     "52516": {
       "name": "조세진",
@@ -1964,7 +1964,7 @@
       },
       "games": 5,
       "auto_position": "우익수",
-      "manual_position": null,
+      "manual_position": "우익수",
       "effective_position": "우익수"
     },
     "50066": {
@@ -1975,7 +1975,7 @@
       },
       "games": 1,
       "auto_position": "포수",
-      "manual_position": null,
+      "manual_position": "포수",
       "effective_position": "포수"
     },
     "67048": {
@@ -2002,8 +2002,8 @@
       "innings_by_position": {},
       "games": 4,
       "auto_position": "지명타자",
-      "manual_position": null,
-      "effective_position": "지명타자"
+      "manual_position": "1루수",
+      "effective_position": "1루수"
     },
     "51648": {
       "name": "이의리",
@@ -2032,8 +2032,8 @@
       },
       "games": 4,
       "auto_position": "좌익수",
-      "manual_position": null,
-      "effective_position": "좌익수"
+      "manual_position": "우익수",
+      "effective_position": "우익수"
     },
     "50357": {
       "name": "박주홍",
@@ -2045,7 +2045,7 @@
       },
       "games": 5,
       "auto_position": "중견수",
-      "manual_position": null,
+      "manual_position": "중견수",
       "effective_position": "중견수"
     },
     "78135": {
@@ -2057,8 +2057,8 @@
       },
       "games": 4,
       "auto_position": "우익수",
-      "manual_position": null,
-      "effective_position": "우익수"
+      "manual_position": "좌익수",
+      "effective_position": "좌익수"
     },
     "53754": {
       "name": "김서현",
@@ -2077,8 +2077,8 @@
       },
       "games": 3,
       "auto_position": "유격수",
-      "manual_position": null,
-      "effective_position": "유격수"
+      "manual_position": "2루수",
+      "effective_position": "2루수"
     },
     "54156": {
       "name": "손용준",
@@ -2088,7 +2088,7 @@
       },
       "games": 3,
       "auto_position": "3루수",
-      "manual_position": null,
+      "manual_position": "3루수",
       "effective_position": "3루수"
     },
     "53103": {
@@ -2099,7 +2099,7 @@
       },
       "games": 2,
       "auto_position": "2루수",
-      "manual_position": null,
+      "manual_position": "2루수",
       "effective_position": "2루수"
     },
     "50657": {
@@ -2112,8 +2112,8 @@
       },
       "games": 6,
       "auto_position": "2루수",
-      "manual_position": null,
-      "effective_position": "2루수"
+      "manual_position": "유격수",
+      "effective_position": "유격수"
     },
     "66354": {
       "name": "주효상",
@@ -2123,7 +2123,7 @@
       },
       "games": 3,
       "auto_position": "포수",
-      "manual_position": null,
+      "manual_position": "포수",
       "effective_position": "포수"
     },
     "51865": {
@@ -2134,7 +2134,7 @@
       },
       "games": 7,
       "auto_position": "포수",
-      "manual_position": null,
+      "manual_position": "포수",
       "effective_position": "포수"
     },
     "55897": {
@@ -2157,7 +2157,7 @@
       },
       "games": 2,
       "auto_position": "포수",
-      "manual_position": null,
+      "manual_position": "포수",
       "effective_position": "포수"
     },
     "66112": {
@@ -2168,7 +2168,7 @@
       },
       "games": 6,
       "auto_position": "포수",
-      "manual_position": null,
+      "manual_position": "포수",
       "effective_position": "포수"
     },
     "62332": {
@@ -2179,7 +2179,7 @@
       },
       "games": 4,
       "auto_position": "포수",
-      "manual_position": null,
+      "manual_position": "포수",
       "effective_position": "포수"
     },
     "79608": {
@@ -2191,8 +2191,8 @@
       },
       "games": 7,
       "auto_position": "2루수",
-      "manual_position": null,
-      "effective_position": "2루수"
+      "manual_position": "지명타자",
+      "effective_position": "지명타자"
     },
     "50903": {
       "name": "한재환",
@@ -2200,8 +2200,8 @@
       "innings_by_position": {},
       "games": 2,
       "auto_position": "지명타자",
-      "manual_position": null,
-      "effective_position": "지명타자"
+      "manual_position": "1루수",
+      "effective_position": "1루수"
     },
     "56807": {
       "name": "오시후",
@@ -2211,7 +2211,7 @@
       },
       "games": 2,
       "auto_position": "우익수",
-      "manual_position": null,
+      "manual_position": "우익수",
       "effective_position": "우익수"
     },
     "56846": {
@@ -2222,7 +2222,7 @@
       },
       "games": 3,
       "auto_position": "3루수",
-      "manual_position": null,
+      "manual_position": "3루수",
       "effective_position": "3루수"
     },
     "51528": {
@@ -2233,7 +2233,7 @@
       },
       "games": 5,
       "auto_position": "포수",
-      "manual_position": null,
+      "manual_position": "포수",
       "effective_position": "포수"
     },
     "50150": {
@@ -2244,8 +2244,8 @@
       },
       "games": 2,
       "auto_position": "우익수",
-      "manual_position": null,
-      "effective_position": "우익수"
+      "manual_position": "3루수",
+      "effective_position": "3루수"
     },
     "55392": {
       "name": "어준서",
@@ -2255,8 +2255,8 @@
       },
       "games": 3,
       "auto_position": "3루수",
-      "manual_position": null,
-      "effective_position": "3루수"
+      "manual_position": "유격수",
+      "effective_position": "유격수"
     },
     "76802": {
       "name": "김성현",
@@ -2266,8 +2266,8 @@
       },
       "games": 1,
       "auto_position": "2루수",
-      "manual_position": null,
-      "effective_position": "2루수"
+      "manual_position": "3루수",
+      "effective_position": "3루수"
     },
     "55764": {
       "name": "권민규",
@@ -2286,7 +2286,7 @@
       },
       "games": 2,
       "auto_position": "1루수",
-      "manual_position": null,
+      "manual_position": "1루수",
       "effective_position": "1루수"
     },
     "54097": {
@@ -2306,8 +2306,8 @@
       "innings_by_position": {},
       "games": 3,
       "auto_position": "지명타자",
-      "manual_position": null,
-      "effective_position": "지명타자"
+      "manual_position": "중견수",
+      "effective_position": "중견수"
     },
     "52591": {
       "name": "윤동희",
@@ -2317,7 +2317,7 @@
       },
       "games": 2,
       "auto_position": "우익수",
-      "manual_position": null,
+      "manual_position": "우익수",
       "effective_position": "우익수"
     },
     "55502": {
@@ -2326,7 +2326,7 @@
       "innings_by_position": {},
       "games": 1,
       "auto_position": "지명타자",
-      "manual_position": null,
+      "manual_position": "지명타자",
       "effective_position": "지명타자"
     },
     "60558": {
@@ -2337,8 +2337,8 @@
       },
       "games": 1,
       "auto_position": "우익수",
-      "manual_position": null,
-      "effective_position": "우익수"
+      "manual_position": "1루수",
+      "effective_position": "1루수"
     },
     "54214": {
       "name": "전다민",
@@ -2346,7 +2346,7 @@
       "innings_by_position": {},
       "games": 1,
       "auto_position": "지명타자",
-      "manual_position": null,
+      "manual_position": "지명타자",
       "effective_position": "지명타자"
     }
   }
