@@ -29284,5 +29284,571 @@
   "game_ids": [
    "77771029NCOB02016"
   ]
+ },
+ "2016-10-30": {
+  "round": "kbo_ps_ks",
+  "game_ids": [
+   "77771030NCOB02016"
+  ]
+ },
+ "2016-10-31": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-11-01": {
+  "round": "kbo_ps_ks",
+  "game_ids": [
+   "77771101OBNC02016"
+  ]
+ },
+ "2016-11-02": {
+  "round": "kbo_ps_ks",
+  "game_ids": [
+   "77771102OBNC02016"
+  ]
+ },
+ "2016-11-03": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-11-04": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-11-05": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-11-06": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-11-07": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-11-08": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-11-09": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-11-10": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-11-11": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-11-12": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-11-13": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-11-14": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-11-15": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-11-16": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-11-17": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-11-18": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-11-19": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-11-20": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-11-21": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-11-22": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-11-23": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-11-24": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-11-25": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-11-26": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-11-27": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-11-28": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-11-29": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-11-30": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-01": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-02": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-03": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-04": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-05": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-06": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-07": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-08": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-09": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-10": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-11": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-12": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-13": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-14": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-15": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-16": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-17": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-18": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-19": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-20": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-21": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-22": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-23": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-24": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-25": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-26": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-27": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-28": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-29": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-30": {
+  "round": null,
+  "game_ids": []
+ },
+ "2016-12-31": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-01": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-02": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-03": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-04": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-05": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-06": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-07": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-08": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-09": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-10": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-11": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-12": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-13": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-14": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-15": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-16": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-17": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-18": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-19": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-20": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-21": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-22": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-23": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-24": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-25": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-26": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-27": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-28": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-29": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-30": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-01-31": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-02-01": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-02-02": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-02-03": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-02-04": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-02-05": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-02-06": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-02-07": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-02-08": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-02-09": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-02-10": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-02-11": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-02-12": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-02-13": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-02-14": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-02-15": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-02-16": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-02-17": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-02-18": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-02-19": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-02-20": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-02-21": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-02-22": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-02-23": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-02-24": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-02-25": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-02-26": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-02-27": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-02-28": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-03-01": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-03-02": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-03-03": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-03-04": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-03-05": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-03-06": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-03-07": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-03-08": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-03-09": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-03-10": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-03-11": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-03-12": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-03-13": {
+  "round": null,
+  "game_ids": []
+ },
+ "2017-03-14": {
+  "round": "kbo_e",
+  "game_ids": [
+   "20170314KTSS02017",
+   "20170314LGHH02017",
+   "20170314OBHT02017",
+   "20170314SKLT02017",
+   "20170314WONC02017"
+  ]
+ },
+ "2017-03-15": {
+  "round": "kbo_e",
+  "game_ids": [
+   "20170315KTSS02017",
+   "20170315LGHH02017",
+   "20170315OBHT02017",
+   "20170315SKLT02017",
+   "20170315WONC02017"
+  ]
  }
 }
