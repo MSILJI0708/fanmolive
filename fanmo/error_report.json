@@ -1,9 +1,9 @@
 {
- "files_checked": 1159,
+ "files_checked": 1185,
  "issue_counts_by_kind": {
-  "MISSING_PLAYER_CODE": 5268,
-  "INNING_FORMAT": 12375,
-  "DUPLICATE_ROW": 27
+  "MISSING_PLAYER_CODE": 5510,
+  "INNING_FORMAT": 13061,
+  "DUPLICATE_ROW": 31
  },
  "issues": [
   {
@@ -262,6 +262,26 @@
    "detail": "투수 오철민(KIA) player_code=97621 완전 동일 행 중복"
   },
   {
+   "date": "20030913",
+   "kind": "DUPLICATE_ROW",
+   "detail": "타자 박경수(LG) player_code=73113 완전 동일 행 중복"
+  },
+  {
+   "date": "20030913",
+   "kind": "DUPLICATE_ROW",
+   "detail": "타자 김정민(LG) player_code=93112 완전 동일 행 중복"
+  },
+  {
+   "date": "20030913",
+   "kind": "DUPLICATE_ROW",
+   "detail": "타자 문희성(두산) player_code=97219 완전 동일 행 중복"
+  },
+  {
+   "date": "20030913",
+   "kind": "DUPLICATE_ROW",
+   "detail": "투수 전병두(두산) player_code=73228 완전 동일 행 중복"
+  },
+  {
    "date": "20230909",
    "kind": "DUPLICATE_ROW",
    "detail": "타자 권광민(한화) player_code=52769 완전 동일 행 중복"
@@ -285,11 +305,6 @@
    "date": "20240609",
    "kind": "DUPLICATE_ROW",
    "detail": "투수 조병현(SSG) player_code=51897 완전 동일 행 중복"
-  },
-  {
-   "date": "20250511",
-   "kind": "DUPLICATE_ROW",
-   "detail": "타자 배정대(KT) player_code=64166 완전 동일 행 중복"
   }
  ],
  "self_pred_mismatches": [
