@@ -1,260 +1,8 @@
 {
- "20140629LGSK0:신재웅": {
-  "game_id": "20140629LGSK0",
-  "name": "신재웅",
-  "team": "LG",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140629NCLT0:장원준": {
-  "game_id": "20140629NCLT0",
-  "name": "장원준",
-  "team": "롯데",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140629NCLT0:찰리": {
-  "game_id": "20140629NCLT0",
-  "name": "찰리",
-  "team": "NC",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140702LTWO0:문성현": {
-  "game_id": "20140702LTWO0",
-  "name": "문성현",
-  "team": "키움",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140702LTWO0:송신영": {
-  "game_id": "20140702LTWO0",
-  "name": "송신영",
-  "team": "키움",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140702LTWO0:옥스프링": {
-  "game_id": "20140702LTWO0",
-  "name": "옥스프링",
-  "team": "롯데",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140703LTWO0:손승락": {
-  "game_id": "20140703LTWO0",
-  "name": "손승락",
-  "team": "키움",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140703LTWO0:강영식": {
-  "game_id": "20140703LTWO0",
-  "name": "강영식",
-  "team": "롯데",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140701OBHT0:임준섭": {
-  "game_id": "20140701OBHT0",
-  "name": "임준섭",
-  "team": "KIA",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140701OBHT0:노경은": {
-  "game_id": "20140701OBHT0",
-  "name": "노경은",
-  "team": "두산",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140701OBHT0:정재훈": {
-  "game_id": "20140701OBHT0",
+ "20140801OBHH0:정재훈": {
+  "game_id": "20140801OBHH0",
   "name": "정재훈",
   "team": "두산",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140701OBHT0:이용찬": {
-  "game_id": "20140701OBHT0",
-  "name": "이용찬",
-  "team": "두산",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140701SKNC0:손정욱": {
-  "game_id": "20140701SKNC0",
-  "name": "손정욱",
-  "team": "NC",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140701SKNC0:김진성": {
-  "game_id": "20140701SKNC0",
-  "name": "김진성",
-  "team": "NC",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140701SKNC0:엄정욱": {
-  "game_id": "20140701SKNC0",
-  "name": "엄정욱",
-  "team": "SSG",
   "official_wls": "패",
   "predicted": {
    "SAVE": false,
@@ -269,1430 +17,8 @@
    "LOSS": true
   }
  },
- "20140702HHLG0:리오단": {
-  "game_id": "20140702HHLG0",
-  "name": "리오단",
-  "team": "LG",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140702HHLG0:봉중근": {
-  "game_id": "20140702HHLG0",
-  "name": "봉중근",
-  "team": "LG",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140702HHLG0:타투스코": {
-  "game_id": "20140702HHLG0",
-  "name": "타투스코",
-  "team": "한화",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140701LTWO0:한현희": {
-  "game_id": "20140701LTWO0",
-  "name": "한현희",
-  "team": "키움",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140701LTWO0:강영식": {
-  "game_id": "20140701LTWO0",
-  "name": "강영식",
-  "team": "롯데",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140703HHLG0:유원상": {
-  "game_id": "20140703HHLG0",
-  "name": "유원상",
-  "team": "LG",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140703HHLG0:이동현": {
-  "game_id": "20140703HHLG0",
-  "name": "이동현",
-  "team": "LG",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140703HHLG0:봉중근": {
-  "game_id": "20140703HHLG0",
-  "name": "봉중근",
-  "team": "LG",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140703HHLG0:박정진": {
-  "game_id": "20140703HHLG0",
-  "name": "박정진",
-  "team": "한화",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140703HHLG0:안영명": {
-  "game_id": "20140703HHLG0",
-  "name": "안영명",
-  "team": "한화",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140701HHLG0:신재웅": {
-  "game_id": "20140701HHLG0",
-  "name": "신재웅",
-  "team": "LG",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140701HHLG0:박정진": {
-  "game_id": "20140701HHLG0",
-  "name": "박정진",
-  "team": "한화",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140703OBHT0:양현종": {
-  "game_id": "20140703OBHT0",
-  "name": "양현종",
-  "team": "KIA",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140703OBHT0:김태영": {
-  "game_id": "20140703OBHT0",
-  "name": "김태영",
-  "team": "KIA",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140703OBHT0:유희관": {
-  "game_id": "20140703OBHT0",
-  "name": "유희관",
-  "team": "두산",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140704LGNC0:이성민": {
-  "game_id": "20140704LGNC0",
-  "name": "이성민",
-  "team": "NC",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140704LGNC0:류제국": {
-  "game_id": "20140704LGNC0",
-  "name": "류제국",
-  "team": "LG",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140704LGNC0:신재웅": {
-  "game_id": "20140704LGNC0",
-  "name": "신재웅",
-  "team": "LG",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140704LGNC0:정찬헌": {
-  "game_id": "20140704LGNC0",
-  "name": "정찬헌",
-  "team": "LG",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140704HTWO0:하영민": {
-  "game_id": "20140704HTWO0",
-  "name": "하영민",
-  "team": "키움",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140704HTWO0:김병현": {
-  "game_id": "20140704HTWO0",
-  "name": "김병현",
-  "team": "KIA",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140704HTWO0:최영필": {
-  "game_id": "20140704HTWO0",
-  "name": "최영필",
-  "team": "KIA",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140704SKLT0:홍성민": {
-  "game_id": "20140704SKLT0",
-  "name": "홍성민",
-  "team": "롯데",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140704SKLT0:채병용": {
-  "game_id": "20140704SKLT0",
-  "name": "채병용",
-  "team": "SSG",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140703SKNC0:이민호": {
-  "game_id": "20140703SKNC0",
-  "name": "이민호",
-  "team": "NC",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140703SKNC0:손정욱": {
-  "game_id": "20140703SKNC0",
-  "name": "손정욱",
-  "team": "NC",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140703SKNC0:울프": {
-  "game_id": "20140703SKNC0",
-  "name": "울프",
-  "team": "SSG",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140704SSOB0:니퍼트": {
-  "game_id": "20140704SSOB0",
-  "name": "니퍼트",
-  "team": "두산",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140704SSOB0:이현승": {
-  "game_id": "20140704SSOB0",
-  "name": "이현승",
-  "team": "두산",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140704SSOB0:정재훈": {
-  "game_id": "20140704SSOB0",
-  "name": "정재훈",
-  "team": "두산",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140704SSOB0:윤성환": {
-  "game_id": "20140704SSOB0",
-  "name": "윤성환",
-  "team": "삼성",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140705HTWO0:밴헤켄": {
-  "game_id": "20140705HTWO0",
-  "name": "밴헤켄",
-  "team": "키움",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140705HTWO0:한현희": {
-  "game_id": "20140705HTWO0",
-  "name": "한현희",
-  "team": "키움",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140705HTWO0:손승락": {
-  "game_id": "20140705HTWO0",
-  "name": "손승락",
-  "team": "키움",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140705HTWO0:박준표": {
-  "game_id": "20140705HTWO0",
-  "name": "박준표",
-  "team": "KIA",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140705LGNC0:찰리": {
-  "game_id": "20140705LGNC0",
-  "name": "찰리",
-  "team": "NC",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140705LGNC0:임정우": {
-  "game_id": "20140705LGNC0",
-  "name": "임정우",
-  "team": "LG",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140705LGNC0:유원상": {
-  "game_id": "20140705LGNC0",
-  "name": "유원상",
-  "team": "LG",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140705LGNC0:윤지웅": {
-  "game_id": "20140705LGNC0",
-  "name": "윤지웅",
-  "team": "LG",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140705LGNC0:이동현": {
-  "game_id": "20140705LGNC0",
-  "name": "이동현",
-  "team": "LG",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140705LGNC0:봉중근": {
-  "game_id": "20140705LGNC0",
-  "name": "봉중근",
-  "team": "LG",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140705SKLT0:최대성": {
-  "game_id": "20140705SKLT0",
-  "name": "최대성",
-  "team": "롯데",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140705SKLT0:윤길현": {
-  "game_id": "20140705SKLT0",
-  "name": "윤길현",
-  "team": "SSG",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140705SKLT0:박정배": {
-  "game_id": "20140705SKLT0",
-  "name": "박정배",
-  "team": "SSG",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140705SSOB0:볼스테드": {
-  "game_id": "20140705SSOB0",
-  "name": "볼스테드",
-  "team": "두산",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140705SSOB0:밴덴헐크": {
-  "game_id": "20140705SSOB0",
-  "name": "밴덴헐크",
-  "team": "삼성",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140706HTWO0:오재영": {
-  "game_id": "20140706HTWO0",
-  "name": "오재영",
-  "team": "키움",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140706HTWO0:한현희": {
-  "game_id": "20140706HTWO0",
-  "name": "한현희",
-  "team": "키움",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140706HTWO0:손승락": {
-  "game_id": "20140706HTWO0",
-  "name": "손승락",
-  "team": "키움",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140706HTWO0:임준섭": {
-  "game_id": "20140706HTWO0",
-  "name": "임준섭",
-  "team": "KIA",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140706SSOB0:노경은": {
-  "game_id": "20140706SSOB0",
-  "name": "노경은",
-  "team": "두산",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140706SSOB0:배영수": {
-  "game_id": "20140706SSOB0",
-  "name": "배영수",
-  "team": "삼성",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140708WOHH0:송창현": {
-  "game_id": "20140708WOHH0",
-  "name": "송창현",
-  "team": "한화",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140708WOHH0:문성현": {
-  "game_id": "20140708WOHH0",
-  "name": "문성현",
-  "team": "키움",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140708LTSS0:마틴": {
-  "game_id": "20140708LTSS0",
-  "name": "마틴",
-  "team": "삼성",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140708LTSS0:심창민": {
-  "game_id": "20140708LTSS0",
-  "name": "심창민",
-  "team": "삼성",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140708LTSS0:임창용": {
-  "game_id": "20140708LTSS0",
-  "name": "임창용",
-  "team": "삼성",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140708LTSS0:옥스프링": {
-  "game_id": "20140708LTSS0",
-  "name": "옥스프링",
-  "team": "롯데",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140709LTSS0:장원삼": {
-  "game_id": "20140709LTSS0",
-  "name": "장원삼",
-  "team": "삼성",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140709LTSS0:안지만": {
-  "game_id": "20140709LTSS0",
-  "name": "안지만",
-  "team": "삼성",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140709LTSS0:임창용": {
-  "game_id": "20140709LTSS0",
-  "name": "임창용",
-  "team": "삼성",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140709LTSS0:송승준": {
-  "game_id": "20140709LTSS0",
-  "name": "송승준",
-  "team": "롯데",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140707LGNC0:이재학": {
-  "game_id": "20140707LGNC0",
-  "name": "이재학",
-  "team": "NC",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140707LGNC0:문수호": {
-  "game_id": "20140707LGNC0",
-  "name": "문수호",
-  "team": "NC",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140707LGNC0:원종현": {
-  "game_id": "20140707LGNC0",
-  "name": "원종현",
-  "team": "NC",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140707LGNC0:이민호": {
-  "game_id": "20140707LGNC0",
-  "name": "이민호",
-  "team": "NC",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140707LGNC0:김진성": {
-  "game_id": "20140707LGNC0",
-  "name": "김진성",
-  "team": "NC",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140707LGNC0:티포드": {
-  "game_id": "20140707LGNC0",
-  "name": "티포드",
-  "team": "LG",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140707SKLT0:유먼": {
-  "game_id": "20140707SKLT0",
-  "name": "유먼",
-  "team": "롯데",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140707SKLT0:김광현": {
-  "game_id": "20140707SKLT0",
-  "name": "김광현",
-  "team": "SSG",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140708OBLG0:유원상": {
-  "game_id": "20140708OBLG0",
-  "name": "유원상",
-  "team": "LG",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140708OBLG0:변진수": {
-  "game_id": "20140708OBLG0",
-  "name": "변진수",
-  "team": "두산",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140708OBLG0:윤명준": {
-  "game_id": "20140708OBLG0",
-  "name": "윤명준",
-  "team": "두산",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140708HTSK0:박정배": {
-  "game_id": "20140708HTSK0",
-  "name": "박정배",
-  "team": "SSG",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140708HTSK0:김태영": {
-  "game_id": "20140708HTSK0",
-  "name": "김태영",
-  "team": "KIA",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140709HTSK0:박민호": {
-  "game_id": "20140709HTSK0",
-  "name": "박민호",
-  "team": "SSG",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140709HTSK0:전유수": {
-  "game_id": "20140709HTSK0",
-  "name": "전유수",
-  "team": "SSG",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140709HTSK0:김진우": {
-  "game_id": "20140709HTSK0",
-  "name": "김진우",
-  "team": "KIA",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140709WOHH0:이태양": {
-  "game_id": "20140709WOHH0",
-  "name": "이태양",
-  "team": "한화",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140709WOHH0:소사": {
-  "game_id": "20140709WOHH0",
+ "20140805SKWO0:소사": {
+  "game_id": "20140805SKWO0",
   "name": "소사",
   "team": "키움",
   "official_wls": "승",
@@ -1709,10 +35,10 @@
    "LOSS": false
   }
  },
- "20140710LTSS0:박근홍": {
-  "game_id": "20140710LTSS0",
-  "name": "박근홍",
-  "team": "삼성",
+ "20140805SKWO0:한현희": {
+  "game_id": "20140805SKWO0",
+  "name": "한현희",
+  "team": "키움",
   "official_wls": "홀",
   "predicted": {
    "SAVE": false,
@@ -1727,117 +53,9 @@
    "LOSS": false
   }
  },
- "20140710LTSS0:안지만": {
-  "game_id": "20140710LTSS0",
-  "name": "안지만",
-  "team": "삼성",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140710LTSS0:임창용": {
-  "game_id": "20140710LTSS0",
-  "name": "임창용",
-  "team": "삼성",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140710LTSS0:강영식": {
-  "game_id": "20140710LTSS0",
-  "name": "강영식",
-  "team": "롯데",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140710LTSS0:김승회": {
-  "game_id": "20140710LTSS0",
-  "name": "김승회",
-  "team": "롯데",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140709OBLG0:봉중근": {
-  "game_id": "20140709OBLG0",
-  "name": "봉중근",
-  "team": "LG",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140709OBLG0:정재훈": {
-  "game_id": "20140709OBLG0",
-  "name": "정재훈",
-  "team": "두산",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140710HTSK0:채병용": {
-  "game_id": "20140710HTSK0",
-  "name": "채병용",
+ "20140805SKWO0:김대유": {
+  "game_id": "20140805SKWO0",
+  "name": "김대유",
   "team": "SSG",
   "official_wls": "패",
   "predicted": {
@@ -1853,136 +71,10 @@
    "LOSS": true
   }
  },
- "20140710HTSK0:김태영": {
-  "game_id": "20140710HTSK0",
-  "name": "김태영",
-  "team": "KIA",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140710HTSK0:최영필": {
-  "game_id": "20140710HTSK0",
-  "name": "최영필",
-  "team": "KIA",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140710WOHH0:앨버스": {
-  "game_id": "20140710WOHH0",
-  "name": "앨버스",
-  "team": "한화",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140710WOHH0:안영명": {
-  "game_id": "20140710WOHH0",
-  "name": "안영명",
-  "team": "한화",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140710WOHH0:박정진": {
-  "game_id": "20140710WOHH0",
-  "name": "박정진",
-  "team": "한화",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140710WOHH0:하영민": {
-  "game_id": "20140710WOHH0",
-  "name": "하영민",
-  "team": "키움",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140711HHOB0:노경은": {
-  "game_id": "20140711HHOB0",
-  "name": "노경은",
+ "20140805HTOB0:유희관": {
+  "game_id": "20140805HTOB0",
+  "name": "유희관",
   "team": "두산",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140711HHOB0:정대훈": {
-  "game_id": "20140711HHOB0",
-  "name": "정대훈",
-  "team": "한화",
   "official_wls": "승",
   "predicted": {
    "SAVE": false,
@@ -1997,81 +89,9 @@
    "LOSS": false
   }
  },
- "20140711HHOB0:최영환": {
-  "game_id": "20140711HHOB0",
-  "name": "최영환",
-  "team": "한화",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140711HHOB0:마일영": {
-  "game_id": "20140711HHOB0",
-  "name": "마일영",
-  "team": "한화",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140711HHOB0:안영명": {
-  "game_id": "20140711HHOB0",
-  "name": "안영명",
-  "team": "한화",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140711HHOB0:박정진": {
-  "game_id": "20140711HHOB0",
-  "name": "박정진",
-  "team": "한화",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140711LTHT0:홀튼": {
-  "game_id": "20140711LTHT0",
-  "name": "홀튼",
+ "20140805HTOB0:양현종": {
+  "game_id": "20140805HTOB0",
+  "name": "양현종",
   "team": "KIA",
   "official_wls": "패",
   "predicted": {
@@ -2087,171 +107,9 @@
    "LOSS": true
   }
  },
- "20140711LTHT0:홍성민": {
-  "game_id": "20140711LTHT0",
-  "name": "홍성민",
-  "team": "롯데",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140710OBLG0:류제국": {
-  "game_id": "20140710OBLG0",
-  "name": "류제국",
-  "team": "LG",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140710OBLG0:볼스테드": {
-  "game_id": "20140710OBLG0",
-  "name": "볼스테드",
-  "team": "두산",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140710OBLG0:윤명준": {
-  "game_id": "20140710OBLG0",
-  "name": "윤명준",
-  "team": "두산",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140710OBLG0:이현승": {
-  "game_id": "20140710OBLG0",
-  "name": "이현승",
-  "team": "두산",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140710OBLG0:정재훈": {
-  "game_id": "20140710OBLG0",
-  "name": "정재훈",
-  "team": "두산",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140712HHOB0:함덕주": {
-  "game_id": "20140712HHOB0",
-  "name": "함덕주",
-  "team": "두산",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140712HHOB0:정재훈": {
-  "game_id": "20140712HHOB0",
-  "name": "정재훈",
-  "team": "두산",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140712HHOB0:니퍼트": {
-  "game_id": "20140712HHOB0",
-  "name": "니퍼트",
-  "team": "두산",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140712HHOB0:김혁민": {
-  "game_id": "20140712HHOB0",
-  "name": "김혁민",
+ "20140805SSHH0:이태양": {
+  "game_id": "20140805SSHH0",
+  "name": "이태양",
   "team": "한화",
   "official_wls": "패",
   "predicted": {
@@ -2267,44 +125,8 @@
    "LOSS": true
   }
  },
- "20140711NCWO0:밴헤켄": {
-  "game_id": "20140711NCWO0",
-  "name": "밴헤켄",
-  "team": "키움",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140711NCWO0:에릭": {
-  "game_id": "20140711NCWO0",
-  "name": "에릭",
-  "team": "NC",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140711SKSS0:밴덴헐크": {
-  "game_id": "20140711SKSS0",
+ "20140805SSHH0:밴덴헐크": {
+  "game_id": "20140805SSHH0",
   "name": "밴덴헐크",
   "team": "삼성",
   "official_wls": "승",
@@ -2321,44 +143,8 @@
    "LOSS": false
   }
  },
- "20140711SKSS0:고효준": {
-  "game_id": "20140711SKSS0",
-  "name": "고효준",
-  "team": "SSG",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140712SKSS0:배영수": {
-  "game_id": "20140712SKSS0",
-  "name": "배영수",
-  "team": "삼성",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140712SKSS0:밴와트": {
-  "game_id": "20140712SKSS0",
+ "20140807HTSK0:밴와트": {
+  "game_id": "20140807HTSK0",
   "name": "밴와트",
   "team": "SSG",
   "official_wls": "승",
@@ -2375,314 +161,8 @@
    "LOSS": false
   }
  },
- "20140712SKSS0:박정배": {
-  "game_id": "20140712SKSS0",
-  "name": "박정배",
-  "team": "SSG",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140712NCWO0:오재영": {
-  "game_id": "20140712NCWO0",
-  "name": "오재영",
-  "team": "키움",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140712NCWO0:찰리": {
-  "game_id": "20140712NCWO0",
-  "name": "찰리",
-  "team": "NC",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140712NCWO0:손정욱": {
-  "game_id": "20140712NCWO0",
-  "name": "손정욱",
-  "team": "NC",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140712NCWO0:이민호": {
-  "game_id": "20140712NCWO0",
-  "name": "이민호",
-  "team": "NC",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140712LTHT0:심동섭": {
-  "game_id": "20140712LTHT0",
-  "name": "심동섭",
-  "team": "KIA",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140712LTHT0:김진우": {
-  "game_id": "20140712LTHT0",
-  "name": "김진우",
-  "team": "KIA",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140712LTHT0:최대성": {
-  "game_id": "20140712LTHT0",
-  "name": "최대성",
-  "team": "롯데",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140715SSLG0:리오단": {
-  "game_id": "20140715SSLG0",
-  "name": "리오단",
-  "team": "LG",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140715SSLG0:신재웅": {
-  "game_id": "20140715SSLG0",
-  "name": "신재웅",
-  "team": "LG",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140715SSLG0:이동현": {
-  "game_id": "20140715SSLG0",
-  "name": "이동현",
-  "team": "LG",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140715SSLG0:장원삼": {
-  "game_id": "20140715SSLG0",
-  "name": "장원삼",
-  "team": "삼성",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140713LTHT0:양현종": {
-  "game_id": "20140713LTHT0",
-  "name": "양현종",
-  "team": "KIA",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140713LTHT0:옥스프링": {
-  "game_id": "20140713LTHT0",
-  "name": "옥스프링",
-  "team": "롯데",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140713LTHT0:김승회": {
-  "game_id": "20140713LTHT0",
-  "name": "김승회",
-  "team": "롯데",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140713SKSS0:마틴": {
-  "game_id": "20140713SKSS0",
-  "name": "마틴",
-  "team": "삼성",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140713SKSS0:김광현": {
-  "game_id": "20140713SKSS0",
-  "name": "김광현",
-  "team": "SSG",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140713SKSS0:진해수": {
-  "game_id": "20140713SKSS0",
+ "20140807HTSK0:진해수": {
+  "game_id": "20140807HTSK0",
   "name": "진해수",
   "team": "SSG",
   "official_wls": "홀",
@@ -2699,100 +179,10 @@
    "LOSS": false
   }
  },
- "20140713SKSS0:윤길현": {
-  "game_id": "20140713SKSS0",
+ "20140807HTSK0:윤길현": {
+  "game_id": "20140807HTSK0",
   "name": "윤길현",
   "team": "SSG",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140716HHSK0:채병용": {
-  "game_id": "20140716HHSK0",
-  "name": "채병용",
-  "team": "SSG",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140716HHSK0:앨버스": {
-  "game_id": "20140716HHSK0",
-  "name": "앨버스",
-  "team": "한화",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140715HHSK0:박민호": {
-  "game_id": "20140715HHSK0",
-  "name": "박민호",
-  "team": "SSG",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140715HHSK0:이태양": {
-  "game_id": "20140715HHSK0",
-  "name": "이태양",
-  "team": "한화",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140715HHSK0:안영명": {
-  "game_id": "20140715HHSK0",
-  "name": "안영명",
-  "team": "한화",
   "official_wls": "홀",
   "predicted": {
    "SAVE": false,
@@ -2807,64 +197,10 @@
    "LOSS": false
   }
  },
- "20140713HHOB0:정재훈": {
-  "game_id": "20140713HHOB0",
-  "name": "정재훈",
-  "team": "두산",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140713HHOB0:윤규진": {
-  "game_id": "20140713HHOB0",
-  "name": "윤규진",
-  "team": "한화",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140716OBNC0:이민호": {
-  "game_id": "20140716OBNC0",
-  "name": "이민호",
-  "team": "NC",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140716OBNC0:김진성": {
-  "game_id": "20140716OBNC0",
-  "name": "김진성",
-  "team": "NC",
+ "20140807HTSK0:울프": {
+  "game_id": "20140807HTSK0",
+  "name": "울프",
+  "team": "SSG",
   "official_wls": "세",
   "predicted": {
    "SAVE": false,
@@ -2879,28 +215,10 @@
    "LOSS": false
   }
  },
- "20140716OBNC0:오현택": {
-  "game_id": "20140716OBNC0",
-  "name": "오현택",
-  "team": "두산",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140713NCWO0:문성현": {
-  "game_id": "20140713NCWO0",
-  "name": "문성현",
-  "team": "키움",
+ "20140807HTSK0:토마스": {
+  "game_id": "20140807HTSK0",
+  "name": "토마스",
+  "team": "KIA",
   "official_wls": "패",
   "predicted": {
    "SAVE": false,
@@ -2915,26 +233,8 @@
    "LOSS": true
   }
  },
- "20140713NCWO0:이재학": {
-  "game_id": "20140713NCWO0",
-  "name": "이재학",
-  "team": "NC",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140716WOLT0:장원준": {
-  "game_id": "20140716WOLT0",
+ "20140805NCLT0:장원준": {
+  "game_id": "20140805NCLT0",
   "name": "장원준",
   "team": "롯데",
   "official_wls": "패",
@@ -2951,315 +251,9 @@
    "LOSS": true
   }
  },
- "20140716WOLT0:밴헤켄": {
-  "game_id": "20140716WOLT0",
-  "name": "밴헤켄",
-  "team": "키움",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140716WOLT0:손승락": {
-  "game_id": "20140716WOLT0",
-  "name": "손승락",
-  "team": "키움",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140716SSLG0:류제국": {
-  "game_id": "20140716SSLG0",
-  "name": "류제국",
-  "team": "LG",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140716SSLG0:유원상": {
-  "game_id": "20140716SSLG0",
-  "name": "유원상",
-  "team": "LG",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140716SSLG0:윤성환": {
-  "game_id": "20140716SSLG0",
-  "name": "윤성환",
-  "team": "삼성",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140722LGHT0:양현종": {
-  "game_id": "20140722LGHT0",
-  "name": "양현종",
-  "team": "KIA",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140722LGHT0:최영필": {
-  "game_id": "20140722LGHT0",
-  "name": "최영필",
-  "team": "KIA",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140722LGHT0:심동섭": {
-  "game_id": "20140722LGHT0",
-  "name": "심동섭",
-  "team": "KIA",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140722LGHT0:김태영": {
-  "game_id": "20140722LGHT0",
-  "name": "김태영",
-  "team": "KIA",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140722LGHT0:어센시오": {
-  "game_id": "20140722LGHT0",
-  "name": "어센시오",
-  "team": "KIA",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140722LGHT0:리오단": {
-  "game_id": "20140722LGHT0",
-  "name": "리오단",
-  "team": "LG",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140722SSLT0:유먼": {
-  "game_id": "20140722SSLT0",
-  "name": "유먼",
-  "team": "롯데",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140722SSLT0:밴덴헐크": {
-  "game_id": "20140722SSLT0",
-  "name": "밴덴헐크",
-  "team": "삼성",
-  "official_wls": "승",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": true,
-   "LOSS": false
-  }
- },
- "20140722SSLT0:차우찬": {
-  "game_id": "20140722SSLT0",
-  "name": "차우찬",
-  "team": "삼성",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140722SSLT0:안지만": {
-  "game_id": "20140722SSLT0",
-  "name": "안지만",
-  "team": "삼성",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140722SSLT0:임창용": {
-  "game_id": "20140722SSLT0",
-  "name": "임창용",
-  "team": "삼성",
-  "official_wls": "세",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": true,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140723NCHH0:이태양": {
-  "game_id": "20140723NCHH0",
-  "name": "이태양",
-  "team": "한화",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140723NCHH0:찰리": {
-  "game_id": "20140723NCHH0",
-  "name": "찰리",
+ "20140805NCLT0:원종현": {
+  "game_id": "20140805NCLT0",
+  "name": "원종현",
   "team": "NC",
   "official_wls": "승",
   "predicted": {
@@ -3275,10 +269,46 @@
    "LOSS": false
   }
  },
- "20140723NCHH0:이민호": {
-  "game_id": "20140723NCHH0",
+ "20140805NCLT0:이민호": {
+  "game_id": "20140805NCLT0",
   "name": "이민호",
   "team": "NC",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20140805NCLT0:손정욱": {
+  "game_id": "20140805NCLT0",
+  "name": "손정욱",
+  "team": "NC",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20140805NCLT0:김진성": {
+  "game_id": "20140805NCLT0",
+  "name": "김진성",
+  "team": "NC",
   "official_wls": "세",
   "predicted": {
    "SAVE": false,
@@ -3293,10 +323,64 @@
    "LOSS": false
   }
  },
- "20140723LGHT0:홀튼": {
-  "game_id": "20140723LGHT0",
-  "name": "홀튼",
-  "team": "KIA",
+ "20140806NCLT0:송승준": {
+  "game_id": "20140806NCLT0",
+  "name": "송승준",
+  "team": "롯데",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20140806NCLT0:강영식": {
+  "game_id": "20140806NCLT0",
+  "name": "강영식",
+  "team": "롯데",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20140806NCLT0:정대현": {
+  "game_id": "20140806NCLT0",
+  "name": "정대현",
+  "team": "롯데",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20140806NCLT0:이태양": {
+  "game_id": "20140806NCLT0",
+  "name": "이태양",
+  "team": "NC",
   "official_wls": "패",
   "predicted": {
    "SAVE": false,
@@ -3311,9 +395,27 @@
    "LOSS": true
   }
  },
- "20140723LGHT0:티포드": {
-  "game_id": "20140723LGHT0",
-  "name": "티포드",
+ "20140807LGNC0:원종현": {
+  "game_id": "20140807LGNC0",
+  "name": "원종현",
+  "team": "NC",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20140807LGNC0:정찬헌": {
+  "game_id": "20140807LGNC0",
+  "name": "정찬헌",
   "team": "LG",
   "official_wls": "승",
   "predicted": {
@@ -3329,8 +431,8 @@
    "LOSS": false
   }
  },
- "20140723LGHT0:이동현": {
-  "game_id": "20140723LGHT0",
+ "20140807LGNC0:이동현": {
+  "game_id": "20140807LGNC0",
   "name": "이동현",
   "team": "LG",
   "official_wls": "홀",
@@ -3347,26 +449,8 @@
    "LOSS": false
   }
  },
- "20140723LGHT0:정찬헌": {
-  "game_id": "20140723LGHT0",
-  "name": "정찬헌",
-  "team": "LG",
-  "official_wls": "홀",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": true,
-   "WIN": false,
-   "LOSS": false
-  }
- },
- "20140723LGHT0:봉중근": {
-  "game_id": "20140723LGHT0",
+ "20140807LGNC0:봉중근": {
+  "game_id": "20140807LGNC0",
   "name": "봉중근",
   "team": "LG",
   "official_wls": "세",
@@ -3383,28 +467,10 @@
    "LOSS": false
   }
  },
- "20140723SSLT0:이명우": {
-  "game_id": "20140723SSLT0",
-  "name": "이명우",
-  "team": "롯데",
-  "official_wls": "패",
-  "predicted": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": false
-  },
-  "official": {
-   "SAVE": false,
-   "HOLD": false,
-   "WIN": false,
-   "LOSS": true
-  }
- },
- "20140723SSLT0:권혁": {
-  "game_id": "20140723SSLT0",
-  "name": "권혁",
-  "team": "삼성",
+ "20140806SSHH0:윤규진": {
+  "game_id": "20140806SSHH0",
+  "name": "윤규진",
+  "team": "한화",
   "official_wls": "승",
   "predicted": {
    "SAVE": false,
@@ -3419,8 +485,44 @@
    "LOSS": false
   }
  },
- "20140723SSLT0:차우찬": {
-  "game_id": "20140723SSLT0",
+ "20140806SSHH0:안지만": {
+  "game_id": "20140806SSHH0",
+  "name": "안지만",
+  "team": "삼성",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20140806SSHH0:심창민": {
+  "game_id": "20140806SSHH0",
+  "name": "심창민",
+  "team": "삼성",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20140806SSHH0:차우찬": {
+  "game_id": "20140806SSHH0",
   "name": "차우찬",
   "team": "삼성",
   "official_wls": "홀",
@@ -3437,11 +539,11 @@
    "LOSS": false
   }
  },
- "20140723SSLT0:임창용": {
-  "game_id": "20140723SSLT0",
-  "name": "임창용",
+ "20140806SSHH0:권혁": {
+  "game_id": "20140806SSHH0",
+  "name": "권혁",
   "team": "삼성",
-  "official_wls": "세",
+  "official_wls": "패",
   "predicted": {
    "SAVE": false,
    "HOLD": false,
@@ -3449,15 +551,33 @@
    "LOSS": false
   },
   "official": {
-   "SAVE": true,
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20140809HHLG0:리오단": {
+  "game_id": "20140809HHLG0",
+  "name": "리오단",
+  "team": "LG",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
    "HOLD": false,
    "WIN": false,
    "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
   }
  },
- "20140722NCHH0:안영명": {
-  "game_id": "20140722NCHH0",
-  "name": "안영명",
+ "20140809HHLG0:유창식": {
+  "game_id": "20140809HHLG0",
+  "name": "유창식",
   "team": "한화",
   "official_wls": "승",
   "predicted": {
@@ -3473,10 +593,10 @@
    "LOSS": false
   }
  },
- "20140722NCHH0:김진성": {
-  "game_id": "20140722NCHH0",
-  "name": "김진성",
-  "team": "NC",
+ "20140809HHLG0:안영명": {
+  "game_id": "20140809HHLG0",
+  "name": "안영명",
+  "team": "한화",
   "official_wls": "홀",
   "predicted": {
    "SAVE": false,
@@ -3491,9 +611,243 @@
    "LOSS": false
   }
  },
- "20140722NCHH0:고창성": {
-  "game_id": "20140722NCHH0",
-  "name": "고창성",
+ "20140809HHLG0:박정진": {
+  "game_id": "20140809HHLG0",
+  "name": "박정진",
+  "team": "한화",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20140809HHLG0:윤규진": {
+  "game_id": "20140809HHLG0",
+  "name": "윤규진",
+  "team": "한화",
+  "official_wls": "세",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": true,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20140808HTSK0:윤길현": {
+  "game_id": "20140808HTSK0",
+  "name": "윤길현",
+  "team": "SSG",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20140808HTSK0:최영필": {
+  "game_id": "20140808HTSK0",
+  "name": "최영필",
+  "team": "KIA",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20140808HTSK0:어센시오": {
+  "game_id": "20140808HTSK0",
+  "name": "어센시오",
+  "team": "KIA",
+  "official_wls": "세",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": true,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20140809LTHT0:서재응": {
+  "game_id": "20140809LTHT0",
+  "name": "서재응",
+  "team": "KIA",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20140809LTHT0:최영필": {
+  "game_id": "20140809LTHT0",
+  "name": "최영필",
+  "team": "KIA",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20140809LTHT0:송은범": {
+  "game_id": "20140809LTHT0",
+  "name": "송은범",
+  "team": "KIA",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20140809LTHT0:강영식": {
+  "game_id": "20140809LTHT0",
+  "name": "강영식",
+  "team": "롯데",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20140808WOOB0:김강률": {
+  "game_id": "20140808WOOB0",
+  "name": "김강률",
+  "team": "두산",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20140808WOOB0:밴헤켄": {
+  "game_id": "20140808WOOB0",
+  "name": "밴헤켄",
+  "team": "키움",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20140808LTSS0:심창민": {
+  "game_id": "20140808LTSS0",
+  "name": "심창민",
+  "team": "삼성",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20140808LTSS0:김사율": {
+  "game_id": "20140808LTSS0",
+  "name": "김사율",
+  "team": "롯데",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20140808LGNC0:이재학": {
+  "game_id": "20140808LGNC0",
+  "name": "이재학",
   "team": "NC",
   "official_wls": "패",
   "predicted": {
@@ -3507,6 +861,402 @@
    "HOLD": false,
    "WIN": false,
    "LOSS": true
+  }
+ },
+ "20140808LGNC0:우규민": {
+  "game_id": "20140808LGNC0",
+  "name": "우규민",
+  "team": "LG",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20140808LGNC0:이동현": {
+  "game_id": "20140808LGNC0",
+  "name": "이동현",
+  "team": "LG",
+  "official_wls": "세",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": true,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20140809SKNC0:찰리": {
+  "game_id": "20140809SKNC0",
+  "name": "찰리",
+  "team": "NC",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20140809SKNC0:채병용": {
+  "game_id": "20140809SKNC0",
+  "name": "채병용",
+  "team": "SSG",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20140809SKNC0:전유수": {
+  "game_id": "20140809SKNC0",
+  "name": "전유수",
+  "team": "SSG",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20140809SKNC0:진해수": {
+  "game_id": "20140809SKNC0",
+  "name": "진해수",
+  "team": "SSG",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20140809SKNC0:울프": {
+  "game_id": "20140809SKNC0",
+  "name": "울프",
+  "team": "SSG",
+  "official_wls": "세",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": true,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20140807WOOB0:변진수": {
+  "game_id": "20140807WOOB0",
+  "name": "변진수",
+  "team": "두산",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20140807WOOB0:윤명준": {
+  "game_id": "20140807WOOB0",
+  "name": "윤명준",
+  "team": "두산",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20140807WOOB0:정재훈": {
+  "game_id": "20140807WOOB0",
+  "name": "정재훈",
+  "team": "두산",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20140807WOOB0:오현택": {
+  "game_id": "20140807WOOB0",
+  "name": "오현택",
+  "team": "두산",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20140807WOOB0:한현희": {
+  "game_id": "20140807WOOB0",
+  "name": "한현희",
+  "team": "키움",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20140807WOOB0:손승락": {
+  "game_id": "20140807WOOB0",
+  "name": "손승락",
+  "team": "키움",
+  "official_wls": "세",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": true,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20140810LTHT0:김병현": {
+  "game_id": "20140810LTHT0",
+  "name": "김병현",
+  "team": "KIA",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20140810LTHT0:어센시오": {
+  "game_id": "20140810LTHT0",
+  "name": "어센시오",
+  "team": "KIA",
+  "official_wls": "세",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": true,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20140810LTHT0:장원준": {
+  "game_id": "20140810LTHT0",
+  "name": "장원준",
+  "team": "롯데",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20140809SSWO0:오재영": {
+  "game_id": "20140809SSWO0",
+  "name": "오재영",
+  "team": "키움",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20140809SSWO0:배영수": {
+  "game_id": "20140809SSWO0",
+  "name": "배영수",
+  "team": "삼성",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20140809SSWO0:김현우": {
+  "game_id": "20140809SSWO0",
+  "name": "김현우",
+  "team": "삼성",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20140809SSWO0:안지만": {
+  "game_id": "20140809SSWO0",
+  "name": "안지만",
+  "team": "삼성",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20140809SSWO0:차우찬": {
+  "game_id": "20140809SSWO0",
+  "name": "차우찬",
+  "team": "삼성",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20140809SSWO0:임창용": {
+  "game_id": "20140809SSWO0",
+  "name": "임창용",
+  "team": "삼성",
+  "official_wls": "세",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": true,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
   }
  }
 }
