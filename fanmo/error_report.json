@@ -1,9 +1,9 @@
 {
- "files_checked": 1239,
+ "files_checked": 1261,
  "issue_counts_by_kind": {
-  "MISSING_PLAYER_CODE": 6287,
-  "INNING_FORMAT": 14834,
-  "DUPLICATE_ROW": 36
+  "MISSING_PLAYER_CODE": 6560,
+  "INNING_FORMAT": 15473,
+  "DUPLICATE_ROW": 39
  },
  "issues": [
   {
