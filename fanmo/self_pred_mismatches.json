@@ -4876,5 +4876,311 @@
    "WIN": false,
    "LOSS": false
   }
+ },
+ "20180529LGLT02018:진명호": {
+  "game_id": "20180529LGLT02018",
+  "name": "진명호",
+  "team": "롯데",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20180529LGLT02018:손승락": {
+  "game_id": "20180529LGLT02018",
+  "name": "손승락",
+  "team": "롯데",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20180530KTSS02018:심창민": {
+  "game_id": "20180530KTSS02018",
+  "name": "심창민",
+  "team": "삼성",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20180530NCHH02018:왕웨이중": {
+  "game_id": "20180530NCHH02018",
+  "name": "왕웨이중",
+  "team": "NC",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20180531NCHH02018:장현식": {
+  "game_id": "20180531NCHH02018",
+  "name": "장현식",
+  "team": "NC",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20180531LGLT02018:윤길현": {
+  "game_id": "20180531LGLT02018",
+  "name": "윤길현",
+  "team": "롯데",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20180531LGLT02018:진명호": {
+  "game_id": "20180531LGLT02018",
+  "name": "진명호",
+  "team": "롯데",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20180531LGLT02018:오현택": {
+  "game_id": "20180531LGLT02018",
+  "name": "오현택",
+  "team": "롯데",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20180531SKOB02018:신재웅": {
+  "game_id": "20180531SKOB02018",
+  "name": "신재웅",
+  "team": "SSG",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20180602HHLT02018:윤길현": {
+  "game_id": "20180602HHLT02018",
+  "name": "윤길현",
+  "team": "롯데",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20180602HHLT02018:서균": {
+  "game_id": "20180602HHLT02018",
+  "name": "서균",
+  "team": "한화",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20180601HHLT02018:구승민": {
+  "game_id": "20180601HHLT02018",
+  "name": "구승민",
+  "team": "롯데",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20180603HHLT02018:김민우": {
+  "game_id": "20180603HHLT02018",
+  "name": "김민우",
+  "team": "한화",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20180605HTKT02018:한승혁": {
+  "game_id": "20180605HTKT02018",
+  "name": "한승혁",
+  "team": "KIA",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": true,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20180606HTKT02018:헥터": {
+  "game_id": "20180606HTKT02018",
+  "name": "헥터",
+  "team": "KIA",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": true,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20180607HHLG02018:송은범": {
+  "game_id": "20180607HHLG02018",
+  "name": "송은범",
+  "team": "한화",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20180607SSSK02018:장필준": {
+  "game_id": "20180607SSSK02018",
+  "name": "장필준",
+  "team": "삼성",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
  }
 }
