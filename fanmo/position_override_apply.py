@@ -9,6 +9,21 @@ from __future__ import annotations
 
 from position import load_db, save_db
 
+# 동명이인은 이름만으로 구분이 안 돼서 기본적으로 건너뛰지만, 사람이 한 번 확인해서
+# 확정한 건은 여기에 적어두면 그 뒤로는 자동 반영된다. 9UP은 선수 한 명에게 포지션을
+# 하나만 주므로 (이름, 포지션) 조합이면 사람을 특정할 수 있다.
+#   (이름, 9UP 포지션) -> player_code
+_HOMONYM_OVERRIDES = {
+    # 박건우: NC 79215(실제 우익수)와 롯데 55509(실제 포수). 9UP에서 한 명은 포수,
+    # 다른 한 명은 지명타자로 나온다. 포수 명단에 외야수가 올라올 리는 없고, 지명타자
+    # 카드 사진은 두산 시절 박건우(= 두산->NC로 옮긴 그 선수)로 확인됨.
+    ("박건우", "포수"): "55509",
+    ("박건우", "지명타자"): "79215",
+    # 김민석: 두산 53554(실제 좌익수)와 KT 54097(실제 포수). 좌익수 카드 사진에서
+    # 두산 유니폼(헬멧의 "두산 베어스")이 확인됨.
+    ("김민석", "좌익수"): "53554",
+}
+
 
 def apply_positions(positions: dict[str, list[str]]) -> dict:
     db = load_db()
@@ -28,9 +43,13 @@ def apply_positions(positions: dict[str, list[str]]) -> dict:
                 not_found.append(f"{name}({pos})")
                 continue
             if len(codes) > 1:
-                ambiguous.append(f"{name}({pos}) -> {codes}")
-                continue
-            code = codes[0]
+                override = _HOMONYM_OVERRIDES.get((name, pos))
+                if override not in codes:
+                    ambiguous.append(f"{name}({pos}) -> {codes}")
+                    continue
+                code = override
+            else:
+                code = codes[0]
             if code in seen_code_to_pos and seen_code_to_pos[code] != pos:
                 conflicts.append(f"{name}: {seen_code_to_pos[code]} vs {pos} (같은 선수코드 {code})")
                 continue

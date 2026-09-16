@@ -87,6 +87,18 @@ def _hint_matches(hint: str, team: str, player_code: str | None) -> bool:
     return False
 
 
+def _unambiguous_cost(costs) -> int | None:
+    """동명이인이라 누구인지 못 가렸어도, 후보들의 코스트가 전부 같으면 그 값을 쓴다.
+
+    구분자(동명 칸)를 안 채운 동명이인 쌍이 실제로 있는데(fanmo260901.csv 기준 6쌍 —
+    김도빈/김선기/배찬승/서준오/한재승(P), 김한결(SP)), 이들은 양쪽 다 코스트가 1이라
+    누구든 답이 같다. 그런데도 "못 가렸으니 None"으로 처리하는 바람에 9/1~9/15 등판
+    기록 11건의 코스트가 통째로 공란이 됐다(2026-09-16 확인). 답이 하나로 정해지는
+    경우까지 포기할 이유는 없다."""
+    unique = set(costs)
+    return unique.pop() if len(unique) == 1 else None
+
+
 class CostIndex:
     def __init__(self, rows: list[dict]):
         # (한글포지션, 이름) -> [(동명힌트, 코스트), ...]  (타자, 포지션 정확 일치 tier)
@@ -125,7 +137,9 @@ class CostIndex:
             if len(exact) == 1:
                 return exact[0][1]
             matched = [c for hint, c in exact if _hint_matches(hint, team, player_code)]
-            return matched[0] if len(matched) == 1 else None
+            if len(matched) == 1:
+                return matched[0]
+            return _unambiguous_cost(c for _hint, c in exact)
 
         fallback = self.batter_by_name.get(name)
         if not fallback:
@@ -133,7 +147,9 @@ class CostIndex:
         if len(fallback) == 1:
             return fallback[0][2]
         matched = [c for _pos, hint, c in fallback if _hint_matches(hint, team, player_code)]
-        return matched[0] if len(matched) == 1 else None
+        if len(matched) == 1:
+            return matched[0]
+        return _unambiguous_cost(c for _pos, _hint, c in fallback)
 
     def lookup_pitcher(self, name: str, team: str, player_code: str | None = None) -> int | None:
         candidates = self.pitcher_by_name.get(name)
@@ -142,7 +158,9 @@ class CostIndex:
         if len(candidates) == 1:
             return candidates[0][2]
         matched = [c for _pos, hint, c in candidates if _hint_matches(hint, team, player_code)]
-        return matched[0] if len(matched) == 1 else None
+        if len(matched) == 1:
+            return matched[0]
+        return _unambiguous_cost(c for _pos, _hint, c in candidates)
 
 
 @lru_cache(maxsize=8)
