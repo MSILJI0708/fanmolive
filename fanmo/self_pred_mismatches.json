@@ -5272,5 +5272,725 @@
    "WIN": false,
    "LOSS": true
   }
+ },
+ "20220728LGSK02022:서진용": {
+  "game_id": "20220728LGSK02022",
+  "name": "서진용",
+  "team": "SSG",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20220728LGSK02022:고우석": {
+  "game_id": "20220728LGSK02022",
+  "name": "고우석",
+  "team": "LG",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20220727WOKT02022:김태훈": {
+  "game_id": "20220727WOKT02022",
+  "name": "김태훈",
+  "team": "키움",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20220727WOKT02022:김재웅": {
+  "game_id": "20220727WOKT02022",
+  "name": "김재웅",
+  "team": "키움",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20220727LTOB02022:김도규": {
+  "game_id": "20220727LTOB02022",
+  "name": "김도규",
+  "team": "롯데",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20220727HHSS02022:우규민": {
+  "game_id": "20220727HHSS02022",
+  "name": "우규민",
+  "team": "삼성",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": true,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20220727NCHT02022:한승혁": {
+  "game_id": "20220727NCHT02022",
+  "name": "한승혁",
+  "team": "KIA",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20220728HHSS02022:윤호솔": {
+  "game_id": "20220728HHSS02022",
+  "name": "윤호솔",
+  "team": "한화",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20220728HHSS02022:강재민": {
+  "game_id": "20220728HHSS02022",
+  "name": "강재민",
+  "team": "한화",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20220729WONC02022:김진호": {
+  "game_id": "20220729WONC02022",
+  "name": "김진호",
+  "team": "NC",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20220729WONC02022:요키시": {
+  "game_id": "20220729WONC02022",
+  "name": "요키시",
+  "team": "키움",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20220729OBHH02022:강재민": {
+  "game_id": "20220729OBHH02022",
+  "name": "강재민",
+  "team": "한화",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20220729LTSS02022:구승민": {
+  "game_id": "20220729LTSS02022",
+  "name": "구승민",
+  "team": "롯데",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20220730KTLG02022:고우석": {
+  "game_id": "20220730KTLG02022",
+  "name": "고우석",
+  "team": "LG",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20220730KTLG02022:김재윤": {
+  "game_id": "20220730KTLG02022",
+  "name": "김재윤",
+  "team": "KT",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20220802HTHH02022:신정락": {
+  "game_id": "20220802HTHH02022",
+  "name": "신정락",
+  "team": "한화",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20220802HTHH02022:강재민": {
+  "game_id": "20220802HTHH02022",
+  "name": "강재민",
+  "team": "한화",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20220802HTHH02022:정해영": {
+  "game_id": "20220802HTHH02022",
+  "name": "정해영",
+  "team": "KIA",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20220731LTSS02022:문용익": {
+  "game_id": "20220731LTSS02022",
+  "name": "문용익",
+  "team": "삼성",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20220731LTSS02022:이승현": {
+  "game_id": "20220731LTSS02022",
+  "name": "이승현",
+  "team": "삼성",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20220731LTSS02022:우규민": {
+  "game_id": "20220731LTSS02022",
+  "name": "우규민",
+  "team": "삼성",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20220802SKWO02022:김재웅": {
+  "game_id": "20220802SKWO02022",
+  "name": "김재웅",
+  "team": "키움",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20220802SKWO02022:이영준": {
+  "game_id": "20220802SKWO02022",
+  "name": "이영준",
+  "team": "키움",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20220804KTNC02022:김민수": {
+  "game_id": "20220804KTNC02022",
+  "name": "김민수",
+  "team": "KT",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20220804KTNC02022:김재윤": {
+  "game_id": "20220804KTNC02022",
+  "name": "김재윤",
+  "team": "KT",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20220803HTHH02022:김범수": {
+  "game_id": "20220803HTHH02022",
+  "name": "김범수",
+  "team": "한화",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20220803HTHH02022:윤호솔": {
+  "game_id": "20220803HTHH02022",
+  "name": "윤호솔",
+  "team": "한화",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20220803HTHH02022:윤중현": {
+  "game_id": "20220803HTHH02022",
+  "name": "윤중현",
+  "team": "KIA",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20220805WOLG02022:하영민": {
+  "game_id": "20220805WOLG02022",
+  "name": "하영민",
+  "team": "키움",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20220804SKWO02022:양현": {
+  "game_id": "20220804SKWO02022",
+  "name": "양현",
+  "team": "키움",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20220806OBHT02022:이준영": {
+  "game_id": "20220806OBHT02022",
+  "name": "이준영",
+  "team": "KIA",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20220806OBHT02022:윤중현": {
+  "game_id": "20220806OBHT02022",
+  "name": "윤중현",
+  "team": "KIA",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20220807OBHT02022:한승혁": {
+  "game_id": "20220807OBHT02022",
+  "name": "한승혁",
+  "team": "KIA",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20220807OBHT02022:장원준": {
+  "game_id": "20220807OBHT02022",
+  "name": "장원준",
+  "team": "두산",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20220806SSSK02022:최하늘": {
+  "game_id": "20220806SSSK02022",
+  "name": "최하늘",
+  "team": "삼성",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20220807HHKT02022:이창재": {
+  "game_id": "20220807HHKT02022",
+  "name": "이창재",
+  "team": "KT",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20220807HHKT02022:강재민": {
+  "game_id": "20220807HHKT02022",
+  "name": "강재민",
+  "team": "한화",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20220810LTWO02022:이승호": {
+  "game_id": "20220810LTWO02022",
+  "name": "이승호",
+  "team": "키움",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20220810HTSS02022:오승환": {
+  "game_id": "20220810HTSS02022",
+  "name": "오승환",
+  "team": "삼성",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20220810HTSS02022:한승혁": {
+  "game_id": "20220810HTSS02022",
+  "name": "한승혁",
+  "team": "KIA",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
  }
 }
