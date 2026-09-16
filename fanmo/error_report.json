@@ -1,9 +1,10 @@
 {
- "files_checked": 2024,
+ "files_checked": 3814,
  "issue_counts_by_kind": {
-  "MISSING_PLAYER_CODE": 10806,
-  "INNING_FORMAT": 26444,
-  "DUPLICATE_ROW": 43
+  "MISSING_PLAYER_CODE": 12314,
+  "INNING_FORMAT": 29065,
+  "DUPLICATE_ROW": 45,
+  "CONFLICTING_FLAGS": 1
  },
  "issues": [
   {
@@ -305,85 +306,36 @@
    "date": "20040529",
    "kind": "DUPLICATE_ROW",
    "detail": "타자 이대수(SSG) player_code=72860 완전 동일 행 중복"
+  },
+  {
+   "date": "20170721",
+   "kind": "CONFLICTING_FLAGS",
+   "detail": "투수 차우찬(LG) WIN·HOLD 동시 성립"
   }
  ],
  "self_pred_mismatches": [
   {
-   "game_id": "20100406LGLT0",
-   "name": "강영식",
-   "team": "롯데",
-   "official_wls": "홀",
+   "game_id": "20190404HTSS02019",
+   "name": "김대우",
+   "team": "삼성",
+   "official_wls": "승",
    "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
     "SAVE": false,
     "HOLD": true,
     "WIN": false,
     "LOSS": false
-   }
-  },
-  {
-   "game_id": "20100406LGLT0",
-   "name": "이정훈",
-   "team": "롯데",
-   "official_wls": "세",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": true,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20100406LGLT0",
-   "name": "김광삼",
-   "team": "LG",
-   "official_wls": "패",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
    },
    "official": {
     "SAVE": false,
     "HOLD": false,
-    "WIN": false,
-    "LOSS": true
-   }
-  },
-  {
-   "game_id": "20100403WOLG0",
-   "name": "이상열",
-   "team": "LG",
-   "official_wls": "홀",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": true,
-    "WIN": false,
+    "WIN": true,
     "LOSS": false
    }
   },
   {
-   "game_id": "20100403WOLG0",
-   "name": "오카모토",
-   "team": "LG",
+   "game_id": "20190405WOHT02019",
+   "name": "김윤동",
+   "team": "KIA",
    "official_wls": "승",
    "predicted": {
     "SAVE": false,
@@ -399,8 +351,8 @@
    }
   },
   {
-   "game_id": "20100403WOLG0",
-   "name": "송신영",
+   "game_id": "20190405WOHT02019",
+   "name": "이보근",
    "team": "키움",
    "official_wls": "패",
    "predicted": {
@@ -417,8 +369,26 @@
    }
   },
   {
-   "game_id": "20100404LTHT0",
-   "name": "이동현",
+   "game_id": "20190406NCOB02019",
+   "name": "윤명준",
+   "team": "두산",
+   "official_wls": "홀",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": true,
+    "WIN": false,
+    "LOSS": false
+   }
+  },
+  {
+   "game_id": "20190406WOHT02019",
+   "name": "이민우",
    "team": "KIA",
    "official_wls": "패",
    "predicted": {
@@ -435,81 +405,9 @@
    }
   },
   {
-   "game_id": "20100404LTHT0",
-   "name": "이정민",
-   "team": "롯데",
-   "official_wls": "승",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": true,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20100404LTHT0",
-   "name": "허준혁",
-   "team": "롯데",
-   "official_wls": "세",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": true,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20100406WOSS0",
-   "name": "크루세타",
+   "game_id": "20190407SSSK02019",
+   "name": "최충연",
    "team": "삼성",
-   "official_wls": "승",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": true,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20100406WOSS0",
-   "name": "권오준",
-   "team": "삼성",
-   "official_wls": "홀",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": true,
-    "WIN": false,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20100406WOSS0",
-   "name": "김수경",
-   "team": "키움",
    "official_wls": "패",
    "predicted": {
     "SAVE": false,
@@ -525,206 +423,8 @@
    }
   },
   {
-   "game_id": "20100407LGLT0",
-   "name": "조정훈",
-   "team": "롯데",
-   "official_wls": "승",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": true,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20100407LGLT0",
-   "name": "김사율",
-   "team": "롯데",
-   "official_wls": "세",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": true,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20100407LGLT0",
-   "name": "곤잘레스",
-   "team": "LG",
-   "official_wls": "패",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": true
-   }
-  },
-  {
-   "game_id": "20100407HTSK0",
-   "name": "엄정욱",
-   "team": "SSG",
-   "official_wls": "패",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": true
-   }
-  },
-  {
-   "game_id": "20100407HTSK0",
-   "name": "서재응",
-   "team": "KIA",
-   "official_wls": "승",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": true,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20100407HTSK0",
-   "name": "곽정철",
-   "team": "KIA",
-   "official_wls": "홀",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": true,
-    "WIN": false,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20100407HTSK0",
-   "name": "유동훈",
-   "team": "KIA",
-   "official_wls": "세",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": true,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20100407HHOB0",
-   "name": "히메네스",
-   "team": "두산",
-   "official_wls": "승",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": true,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20100407HHOB0",
-   "name": "고창성",
-   "team": "두산",
-   "official_wls": "홀",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": true,
-    "WIN": false,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20100407HHOB0",
-   "name": "정재훈",
-   "team": "두산",
-   "official_wls": "홀",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": true,
-    "WIN": false,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20100407HHOB0",
-   "name": "임태훈",
-   "team": "두산",
-   "official_wls": "홀",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": true,
-    "WIN": false,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20100407HHOB0",
-   "name": "김혁민",
+   "game_id": "20190412HHWO02019",
+   "name": "이태양",
    "team": "한화",
    "official_wls": "패",
    "predicted": {
@@ -741,8 +441,350 @@
    }
   },
   {
-   "game_id": "20100407WOSS0",
-   "name": "배영수",
+   "game_id": "20190412HTSK02019",
+   "name": "임기준",
+   "team": "KIA",
+   "official_wls": "홀",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": true,
+    "WIN": false,
+    "LOSS": false
+   }
+  },
+  {
+   "game_id": "20190412HTSK02019",
+   "name": "고영창",
+   "team": "KIA",
+   "official_wls": "홀",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": true,
+    "WIN": false,
+    "LOSS": false
+   }
+  },
+  {
+   "game_id": "20190413HTSK02019",
+   "name": "서진용",
+   "team": "SSG",
+   "official_wls": "홀",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": true,
+    "WIN": false,
+    "LOSS": false
+   }
+  },
+  {
+   "game_id": "20190413LTNC02019",
+   "name": "장현식",
+   "team": "NC",
+   "official_wls": "승",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": true,
+    "LOSS": false
+   }
+  },
+  {
+   "game_id": "20190413LTNC02019",
+   "name": "구승민",
+   "team": "롯데",
+   "official_wls": "패",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": true
+   }
+  },
+  {
+   "game_id": "20190414HHWO02019",
+   "name": "오주원",
+   "team": "키움",
+   "official_wls": "패",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": true
+   }
+  },
+  {
+   "game_id": "20190414HHWO02019",
+   "name": "정우람",
+   "team": "한화",
+   "official_wls": "승",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": true,
+    "LOSS": false
+   }
+  },
+  {
+   "game_id": "20190416HTLT02019",
+   "name": "윌랜드",
+   "team": "KIA",
+   "official_wls": "패",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": true
+   }
+  },
+  {
+   "game_id": "20190416LGNC02019",
+   "name": "배재환",
+   "team": "NC",
+   "official_wls": "패",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": true
+   }
+  },
+  {
+   "game_id": "20190416LGNC02019",
+   "name": "고우석",
+   "team": "LG",
+   "official_wls": "승",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": true,
+    "LOSS": false
+   }
+  },
+  {
+   "game_id": "20190416SKOB02019",
+   "name": "정영일",
+   "team": "SSG",
+   "official_wls": "패",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": true
+   }
+  },
+  {
+   "game_id": "20190417SKOB02019",
+   "name": "윤명준",
+   "team": "두산",
+   "official_wls": "승",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": true,
+    "LOSS": false
+   }
+  },
+  {
+   "game_id": "20190417LGNC02019",
+   "name": "배재환",
+   "team": "NC",
+   "official_wls": "패",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": true
+   }
+  },
+  {
+   "game_id": "20190417LGNC02019",
+   "name": "신정락",
+   "team": "LG",
+   "official_wls": "승",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": true,
+    "LOSS": false
+   }
+  },
+  {
+   "game_id": "20190418HHKT02019",
+   "name": "김재윤",
+   "team": "KT",
+   "official_wls": "승",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": true,
+    "LOSS": false
+   }
+  },
+  {
+   "game_id": "20190418HHKT02019",
+   "name": "박상원",
+   "team": "한화",
+   "official_wls": "패",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": true
+   }
+  },
+  {
+   "game_id": "20190418SKOB02019",
+   "name": "후랭코프",
+   "team": "두산",
+   "official_wls": "패",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": true
+   }
+  },
+  {
+   "game_id": "20190419KTLT02019",
+   "name": "서준원",
+   "team": "롯데",
+   "official_wls": "패",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": true
+   }
+  },
+  {
+   "game_id": "20190418HTLT02019",
+   "name": "김윤동",
+   "team": "KIA",
+   "official_wls": "패",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": true
+   }
+  },
+  {
+   "game_id": "20190418WOSS02019",
+   "name": "최지광",
    "team": "삼성",
    "official_wls": "승",
    "predicted": {
@@ -759,10 +801,10 @@
    }
   },
   {
-   "game_id": "20100407WOSS0",
-   "name": "오승환",
-   "team": "삼성",
-   "official_wls": "세",
+   "game_id": "20190418WOSS02019",
+   "name": "한현희",
+   "team": "키움",
+   "official_wls": "패",
    "predicted": {
     "SAVE": false,
     "HOLD": false,
@@ -770,15 +812,375 @@
     "LOSS": false
    },
    "official": {
-    "SAVE": true,
+    "SAVE": false,
     "HOLD": false,
+    "WIN": false,
+    "LOSS": true
+   }
+  },
+  {
+   "game_id": "20190420KTLT02019",
+   "name": "손동현",
+   "team": "KT",
+   "official_wls": "패",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": true
+   }
+  },
+  {
+   "game_id": "20190420WOLG02019",
+   "name": "신정락",
+   "team": "LG",
+   "official_wls": "패",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": true
+   }
+  },
+  {
+   "game_id": "20190420WOLG02019",
+   "name": "한현희",
+   "team": "키움",
+   "official_wls": "승",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": true,
+    "LOSS": false
+   }
+  },
+  {
+   "game_id": "20190421WOLG02019",
+   "name": "김동준",
+   "team": "키움",
+   "official_wls": "패",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": true
+   }
+  },
+  {
+   "game_id": "20190423NCKT02019",
+   "name": "정성곤",
+   "team": "KT",
+   "official_wls": "홀",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": true,
     "WIN": false,
     "LOSS": false
    }
   },
   {
-   "game_id": "20100407WOSS0",
-   "name": "금민철",
+   "game_id": "20190423NCKT02019",
+   "name": "주권",
+   "team": "KT",
+   "official_wls": "홀",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": true,
+    "WIN": false,
+    "LOSS": false
+   }
+  },
+  {
+   "game_id": "20190423OBWO02019",
+   "name": "이형범",
+   "team": "두산",
+   "official_wls": "승",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": true,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": true,
+    "LOSS": false
+   }
+  },
+  {
+   "game_id": "20190424OBWO02019",
+   "name": "한현희",
+   "team": "키움",
+   "official_wls": "승",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": true,
+    "LOSS": false
+   }
+  },
+  {
+   "game_id": "20190424OBWO02019",
+   "name": "이현승",
+   "team": "두산",
+   "official_wls": "패",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": true
+   }
+  },
+  {
+   "game_id": "20190424SKSS02019",
+   "name": "최지광",
+   "team": "삼성",
+   "official_wls": "홀",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": true,
+    "WIN": false,
+    "LOSS": false
+   }
+  },
+  {
+   "game_id": "20190424SKSS02019",
+   "name": "우규민",
+   "team": "삼성",
+   "official_wls": "패",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": true
+   }
+  },
+  {
+   "game_id": "20190424SKSS02019",
+   "name": "하재훈",
+   "team": "SSG",
+   "official_wls": "승",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": true,
+    "LOSS": false
+   }
+  },
+  {
+   "game_id": "20190425OBWO02019",
+   "name": "배영수",
+   "team": "두산",
+   "official_wls": "패",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": true
+   }
+  },
+  {
+   "game_id": "20190427HHNC02019",
+   "name": "서폴드",
+   "team": "한화",
+   "official_wls": "패",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": true
+   }
+  },
+  {
+   "game_id": "20190425SKSS02019",
+   "name": "우규민",
+   "team": "삼성",
+   "official_wls": "패",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": true
+   }
+  },
+  {
+   "game_id": "20190428LGSS02019",
+   "name": "최지광",
+   "team": "삼성",
+   "official_wls": "패",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": true
+   }
+  },
+  {
+   "game_id": "20190428LGSS02019",
+   "name": "정우영",
+   "team": "LG",
+   "official_wls": "승",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": true,
+    "LOSS": false
+   }
+  },
+  {
+   "game_id": "20190428SKKT02019",
+   "name": "이대은",
+   "team": "KT",
+   "official_wls": "패",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": true
+   }
+  },
+  {
+   "game_id": "20190428HTWO02019",
+   "name": "임기준",
+   "team": "KIA",
+   "official_wls": "홀",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": true,
+    "WIN": false,
+    "LOSS": false
+   }
+  },
+  {
+   "game_id": "20190428HTWO02019",
+   "name": "김세현",
+   "team": "KIA",
+   "official_wls": "패",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": true
+   }
+  },
+  {
+   "game_id": "20190501WOSK02019",
+   "name": "김상수",
    "team": "키움",
    "official_wls": "패",
    "predicted": {
