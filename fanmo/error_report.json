@@ -1,5 +1,5 @@
 {
- "files_checked": 3976,
+ "files_checked": 3988,
  "issue_counts_by_kind": {
   "MISSING_PLAYER_CODE": 12081,
   "INNING_FORMAT": 28961,
@@ -356,368 +356,8 @@
  ],
  "self_pred_mismatches": [
   {
-   "game_id": "66660423SSLT02020",
-   "name": "최채흥",
-   "team": "삼성",
-   "official_wls": "승",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": true,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "66660424NCLT02020",
-   "name": "임정호",
-   "team": "NC",
-   "official_wls": "홀",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": true,
-    "WIN": false,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "66660424NCLT02020",
-   "name": "임창민",
-   "team": "NC",
-   "official_wls": "패",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": true
-   }
-  },
-  {
-   "game_id": "66660425HHSS02020",
-   "name": "임준섭",
-   "team": "한화",
-   "official_wls": "패",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": true
-   }
-  },
-  {
-   "game_id": "66660425HTNC02020",
-   "name": "김건태",
-   "team": "NC",
-   "official_wls": "승",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": true,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "66660425HTNC02020",
-   "name": "하준영",
-   "team": "KIA",
-   "official_wls": "패",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": true
-   }
-  },
-  {
-   "game_id": "66660427LGWO02020",
-   "name": "이민호",
-   "team": "LG",
-   "official_wls": "홀",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": true,
-    "WIN": false,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "66660427LGWO02020",
-   "name": "이상규",
-   "team": "LG",
-   "official_wls": "홀",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": true,
-    "WIN": false,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "66660427LGWO02020",
-   "name": "김대유",
-   "team": "LG",
-   "official_wls": "홀",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": true,
-    "WIN": false,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "66660427LGWO02020",
-   "name": "여건욱",
-   "team": "LG",
-   "official_wls": "홀",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": true,
-    "WIN": false,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "66660429HTSS02020",
-   "name": "노성호",
-   "team": "삼성",
-   "official_wls": "패",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": true
-   }
-  },
-  {
-   "game_id": "66660429HTSS02020",
-   "name": "이준영",
-   "team": "KIA",
-   "official_wls": "승",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": true,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "66660427NCHT02020",
-   "name": "이재학",
-   "team": "NC",
-   "official_wls": "패",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": true
-   }
-  },
-  {
-   "game_id": "66660427LTSS02020",
-   "name": "샘슨",
-   "team": "롯데",
-   "official_wls": "승",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": true,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "66660501WOSK02020",
-   "name": "최원태",
-   "team": "키움",
-   "official_wls": "승",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": true,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "66660501HHKT02020",
-   "name": "장시환",
-   "team": "한화",
-   "official_wls": "패",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": true
-   }
-  },
-  {
-   "game_id": "66660501SSLT02020",
-   "name": "박진형",
-   "team": "롯데",
-   "official_wls": "승",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": true,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "66660429OBWO02020",
-   "name": "브리검",
-   "team": "키움",
-   "official_wls": "승",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": true,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20200505WOHT02020",
-   "name": "양현",
-   "team": "키움",
-   "official_wls": "승",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": true,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20200507LTKT02020",
-   "name": "김민수",
-   "team": "KT",
-   "official_wls": "패",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": true
-   }
-  },
-  {
-   "game_id": "20200507HHSK02020",
-   "name": "김주한",
+   "game_id": "20200522HTSK02020",
+   "name": "박희수",
    "team": "SSG",
    "official_wls": "패",
    "predicted": {
@@ -734,9 +374,9 @@
    }
   },
   {
-   "game_id": "20200507WOHT02020",
-   "name": "양현",
-   "team": "키움",
+   "game_id": "20200524KTLG02020",
+   "name": "하준호",
+   "team": "KT",
    "official_wls": "홀",
    "predicted": {
     "SAVE": false,
@@ -752,61 +392,7 @@
    }
   },
   {
-   "game_id": "20200507WOHT02020",
-   "name": "김상수",
-   "team": "키움",
-   "official_wls": "홀",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": true,
-    "WIN": false,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20200507WOHT02020",
-   "name": "이영준",
-   "team": "키움",
-   "official_wls": "패",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": true
-   }
-  },
-  {
-   "game_id": "20200508HHWO02020",
-   "name": "오주원",
-   "team": "키움",
-   "official_wls": "승",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": true,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20200508HHWO02020",
+   "game_id": "20200524HHNC02020",
    "name": "김범수",
    "team": "한화",
    "official_wls": "패",
@@ -824,99 +410,9 @@
    }
   },
   {
-   "game_id": "20200508SKLT02020",
-   "name": "박민호",
+   "game_id": "20200524HTSK02020",
+   "name": "정영일",
    "team": "SSG",
-   "official_wls": "홀",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": true,
-    "WIN": false,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20200510LGNC02020",
-   "name": "박진우",
-   "team": "NC",
-   "official_wls": "홀",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": true,
-    "WIN": false,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20200512KTNC02020",
-   "name": "이상화",
-   "team": "KT",
-   "official_wls": "홀",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": true,
-    "WIN": false,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20200512KTNC02020",
-   "name": "주권",
-   "team": "KT",
-   "official_wls": "홀",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": true,
-    "WIN": false,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20200512KTNC02020",
-   "name": "전유수",
-   "team": "KT",
-   "official_wls": "홀",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": true,
-    "WIN": false,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20200513OBLT02020",
-   "name": "김원중",
-   "team": "롯데",
    "official_wls": "승",
    "predicted": {
     "SAVE": false,
@@ -932,9 +428,9 @@
    }
   },
   {
-   "game_id": "20200513OBLT02020",
-   "name": "이형범",
-   "team": "두산",
+   "game_id": "20200524HTSK02020",
+   "name": "고영창",
+   "team": "KIA",
    "official_wls": "패",
    "predicted": {
     "SAVE": false,
@@ -950,79 +446,7 @@
    }
   },
   {
-   "game_id": "20200513KTNC02020",
-   "name": "이대은",
-   "team": "KT",
-   "official_wls": "패",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": true
-   }
-  },
-  {
-   "game_id": "20200514SKLG02020",
-   "name": "이상규",
-   "team": "LG",
-   "official_wls": "승",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": true,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20200514SKLG02020",
-   "name": "김주온",
-   "team": "SSG",
-   "official_wls": "패",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": true
-   }
-  },
-  {
-   "game_id": "20200514SSWO02020",
-   "name": "김상수",
-   "team": "키움",
-   "official_wls": "패",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": true
-   }
-  },
-  {
-   "game_id": "20200515NCSK02020",
+   "game_id": "20200526SKOB02020",
    "name": "서진용",
    "team": "SSG",
    "official_wls": "패",
@@ -1040,27 +464,27 @@
    }
   },
   {
-   "game_id": "20200515NCSK02020",
-   "name": "강동연",
+   "game_id": "20200528WONC02020",
+   "name": "임규빈",
+   "team": "키움",
+   "official_wls": "홀",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": true,
+    "WIN": false,
+    "LOSS": false
+   }
+  },
+  {
+   "game_id": "20200529NCSS02020",
+   "name": "임정호",
    "team": "NC",
-   "official_wls": "승",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": true,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20200516WOLG22020",
-   "name": "김상수",
-   "team": "키움",
    "official_wls": "홀",
    "predicted": {
     "SAVE": false,
@@ -1076,44 +500,8 @@
    }
   },
   {
-   "game_id": "20200516WOLG22020",
-   "name": "이영준",
-   "team": "키움",
-   "official_wls": "홀",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": true,
-    "WIN": false,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20200517LTHH02020",
-   "name": "안영명",
-   "team": "한화",
-   "official_wls": "승",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": true,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20200517LTHH02020",
-   "name": "김대우",
+   "game_id": "20200530LTOB02020",
+   "name": "송승준",
    "team": "롯데",
    "official_wls": "패",
    "predicted": {
@@ -1130,45 +518,9 @@
    }
   },
   {
-   "game_id": "20200519SKWO02020",
-   "name": "김태훈",
-   "team": "키움",
-   "official_wls": "승",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": true,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": true,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20200520NCOB02020",
-   "name": "함덕주",
+   "game_id": "20200531LTOB02020",
+   "name": "권혁",
    "team": "두산",
-   "official_wls": "승",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": true,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20200520NCOB02020",
-   "name": "강동연",
-   "team": "NC",
    "official_wls": "패",
    "predicted": {
     "SAVE": false,
@@ -1184,13 +536,13 @@
    }
   },
   {
-   "game_id": "20200521HHKT02020",
-   "name": "김범수",
-   "team": "한화",
+   "game_id": "20200531LTOB02020",
+   "name": "이인복",
+   "team": "롯데",
    "official_wls": "승",
    "predicted": {
     "SAVE": false,
-    "HOLD": true,
+    "HOLD": false,
     "WIN": false,
     "LOSS": false
    },
@@ -1202,74 +554,20 @@
    }
   },
   {
-   "game_id": "20200521NCOB02020",
-   "name": "이현승",
-   "team": "두산",
-   "official_wls": "홀",
+   "game_id": "20200603SKNC02020",
+   "name": "박진우",
+   "team": "NC",
+   "official_wls": "승",
    "predicted": {
     "SAVE": false,
-    "HOLD": false,
+    "HOLD": true,
     "WIN": false,
     "LOSS": false
    },
    "official": {
     "SAVE": false,
-    "HOLD": true,
-    "WIN": false,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20200521NCOB02020",
-   "name": "윤명준",
-   "team": "두산",
-   "official_wls": "홀",
-   "predicted": {
-    "SAVE": false,
     "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": true,
-    "WIN": false,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20200521NCOB02020",
-   "name": "권혁",
-   "team": "두산",
-   "official_wls": "홀",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": true,
-    "WIN": false,
-    "LOSS": false
-   }
-  },
-  {
-   "game_id": "20200521SKWO02020",
-   "name": "정영일",
-   "team": "SSG",
-   "official_wls": "홀",
-   "predicted": {
-    "SAVE": false,
-    "HOLD": false,
-    "WIN": false,
-    "LOSS": false
-   },
-   "official": {
-    "SAVE": false,
-    "HOLD": true,
-    "WIN": false,
+    "WIN": true,
     "LOSS": false
    }
   }
