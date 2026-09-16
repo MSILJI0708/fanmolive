@@ -88,8 +88,8 @@
       },
       "games": 6,
       "auto_position": "3루수",
-      "manual_position": "유격수",
-      "effective_position": "유격수"
+      "manual_position": "3루수",
+      "effective_position": "3루수"
     },
     "79456": {
       "name": "이지영",
@@ -248,8 +248,8 @@
       "innings_by_position": {},
       "games": 1,
       "auto_position": "지명타자",
-      "manual_position": null,
-      "effective_position": "지명타자"
+      "manual_position": "좌익수",
+      "effective_position": "좌익수"
     },
     "62700": {
       "name": "하주석",
@@ -450,8 +450,8 @@
       },
       "games": 1,
       "auto_position": "우익수",
-      "manual_position": null,
-      "effective_position": "우익수"
+      "manual_position": "좌익수",
+      "effective_position": "좌익수"
     },
     "64004": {
       "name": "김민혁",
@@ -644,8 +644,8 @@
       },
       "games": 1,
       "auto_position": "유격수",
-      "manual_position": null,
-      "effective_position": "유격수"
+      "manual_position": "1루수",
+      "effective_position": "1루수"
     },
     "62907": {
       "name": "박민우",
@@ -989,7 +989,7 @@
       },
       "games": 10,
       "auto_position": "3루수",
-      "manual_position": null,
+      "manual_position": "3루수",
       "effective_position": "3루수"
     },
     "66704": {
@@ -1209,7 +1209,7 @@
       },
       "games": 8,
       "auto_position": "3루수",
-      "manual_position": null,
+      "manual_position": "3루수",
       "effective_position": "3루수"
     },
     "51100": {
@@ -1246,8 +1246,8 @@
       },
       "games": 8,
       "auto_position": "우익수",
-      "manual_position": null,
-      "effective_position": "우익수"
+      "manual_position": "3루수",
+      "effective_position": "3루수"
     },
     "54166": {
       "name": "김현종",
