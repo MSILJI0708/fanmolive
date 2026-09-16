@@ -3112,5 +3112,383 @@
    "WIN": false,
    "LOSS": false
   }
+ },
+ "20160512KTHT02016:박준표": {
+  "game_id": "20160512KTHT02016",
+  "name": "박준표",
+  "team": "KIA",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20160512KTHT02016:장시환": {
+  "game_id": "20160512KTHT02016",
+  "name": "장시환",
+  "team": "kt",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20160511NCHH02016:윤규진": {
+  "game_id": "20160511NCHH02016",
+  "name": "윤규진",
+  "team": "한화",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20160510SSLG02016:백정현": {
+  "game_id": "20160510SSLG02016",
+  "name": "백정현",
+  "team": "삼성",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20160510OBSK02016:신재웅": {
+  "game_id": "20160510OBSK02016",
+  "name": "신재웅",
+  "team": "SSG",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20160513KTNC02016:최금강": {
+  "game_id": "20160513KTNC02016",
+  "name": "최금강",
+  "team": "NC",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20160513KTNC02016:김재윤": {
+  "game_id": "20160513KTNC02016",
+  "name": "김재윤",
+  "team": "kt",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20160512SSLG02016:이준형": {
+  "game_id": "20160512SSLG02016",
+  "name": "이준형",
+  "team": "LG",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20160514KTNC02016:조무근": {
+  "game_id": "20160514KTNC02016",
+  "name": "조무근",
+  "team": "kt",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20160514LTSS02016:이성민": {
+  "game_id": "20160514LTSS02016",
+  "name": "이성민",
+  "team": "롯데",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20160515HHHT02016:박준표": {
+  "game_id": "20160515HHHT02016",
+  "name": "박준표",
+  "team": "KIA",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20160515OBWO02016:이보근": {
+  "game_id": "20160515OBWO02016",
+  "name": "이보근",
+  "team": "키움",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20160517LGKT02016:윤지웅": {
+  "game_id": "20160517LGKT02016",
+  "name": "윤지웅",
+  "team": "LG",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20160519LGKT02016:심재민": {
+  "game_id": "20160519LGKT02016",
+  "name": "심재민",
+  "team": "kt",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20160520SKHT02016:심동섭": {
+  "game_id": "20160520SKHT02016",
+  "name": "심동섭",
+  "team": "KIA",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
+ },
+ "20160520SKHT02016:박정배": {
+  "game_id": "20160520SKHT02016",
+  "name": "박정배",
+  "team": "SSG",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20160520WOLG02016:김상수": {
+  "game_id": "20160520WOLG02016",
+  "name": "김상수",
+  "team": "키움",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20160520WOLG02016:이보근": {
+  "game_id": "20160520WOLG02016",
+  "name": "이보근",
+  "team": "키움",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20160521KTHH02016:조무근": {
+  "game_id": "20160521KTHH02016",
+  "name": "조무근",
+  "team": "kt",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20160522WOLG02016:김택형": {
+  "game_id": "20160522WOLG02016",
+  "name": "김택형",
+  "team": "키움",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20160521WOLG02016:하영민": {
+  "game_id": "20160521WOLG02016",
+  "name": "하영민",
+  "team": "키움",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
  }
 }
