@@ -848,7 +848,7 @@ footer.notes b { color: var(--ink-0); }
       </div>
     </span>
     · 데이터 출처 <code>api-gw.sports.naver.com</code> (Selenium 불필요, 공개 JSON 응답 직접 호출)
-    · 마지막 업데이트 09월 17일 18:04 (KST)
+    · 마지막 업데이트 09월 17일 18:11 (KST)
   </p>
 </header>
 
@@ -1449,12 +1449,13 @@ function render(tableId, cols, rows) {
       tbody.appendChild(tr);
     });
   }
-  renderBody(rows);
-
   let sortState = { idx: cols.findIndex(c => c.key === 'lp'), dir: -1 };
   function applySort(rowsToSort) {
     const col = cols[sortState.idx];
     const sorted = [...rowsToSort].sort((a, b) => {
+      // 선발 출전 선수를 항상 위로. 어떤 컬럼으로 정렬하든(이름순이든 LP순이든)
+      // 이 기준이 먼저다 — 교체로 나온 선수보다 선발 라인업을 먼저 보게 된다.
+      if (!!a.is_starter !== !!b.is_starter) return a.is_starter ? -1 : 1;
       const av = cellValue(a, col), bv = cellValue(b, col);
       if (typeof av === 'string' || typeof bv === 'string') {
         return sortState.dir * String(av).localeCompare(String(bv), 'ko');
@@ -1466,7 +1467,9 @@ function render(tableId, cols, rows) {
     return sorted;
   }
 
-  let currentRows = rows;
+  // 처음 그릴 때도 정렬을 한 번 태운다 — 그래야 선발 우선 규칙이 첫 화면부터 적용된다
+  // (예전엔 raw 순서 그대로 그려서, 정렬 컬럼을 한 번 눌러야 선발이 위로 올라왔다).
+  let currentRows = applySort(rows);
   trh.querySelectorAll('th').forEach(th => {
     th.addEventListener('click', () => {
       const idx = +th.dataset.idx;
