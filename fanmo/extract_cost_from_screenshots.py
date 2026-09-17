@@ -236,7 +236,12 @@ def detect_rows(img) -> list[int]:
     for y in range(200, 1500):
         n = sum(1 for x in range(_CARD_LEFT, _CARD_RIGHT, step)
                 if (lambda c: c[1] > 60 and c[1] > c[0] + 25 and c[1] > c[2] + 25)(px[x, y]))
-        if n > width * 0.5:
+        # 한 줄에 카드가 6장 다 차 있지 않을 수 있다 — 명단 마지막 줄은 1~2장만 있는
+        # 경우가 흔하다. 예전엔 "초록 띠가 가로 폭의 절반 이상"을 요구해서 2장짜리
+        # 마지막 줄(비율 0.30)을 통째로 버렸고, 그 줄 선수들이 통으로 누락됐다
+        # (실측: 유격수 화면의 김건·이서준). 카드 1장이면 약 0.15이므로 그보다 살짝
+        # 낮게 잡고, 진짜 카드인지는 높이(53px 안팎)와 열별 이름표 검사로 가린다.
+        if n > width * 0.13:
             if start is None:
                 start = y
         else:
@@ -251,7 +256,17 @@ def detect_rows(img) -> list[int]:
     # 된 것(102px, 174px), 잡티(1~6px) 같은 것들이다. 이걸 안 거르면 가짜 행이 생기고,
     # 그 행을 기준으로 별을 찾다가 옆 카드의 별을 세어버린다(실측: 원상현 1코스트 카드가
     # 2코스트로 부풀려짐 — 코스트를 부풀리는 쪽이라 특히 위험하다).
-    return [y for y, h in runs if _ROW_HEIGHT - 12 <= h <= _ROW_HEIGHT + 20]
+    tops = [y for y, h in runs if _ROW_HEIGHT - 12 <= h <= _ROW_HEIGHT + 20]
+
+    # 카드 행 간격은 371px인데, 한 카드에서 초록 띠가 67px 간격으로 두 번 잡히는 경우가
+    # 있다(이름표 아래에 또 다른 초록 요소가 붙어 있을 때). 그러면 같은 카드를 두 번
+    # 읽어 미확정 카드가 배로 불어난다. 행 간격보다 훨씬 가까운 것끼리는 하나로 본다.
+    merged = []
+    for y in tops:
+        if merged and y - merged[-1] < 150:
+            continue
+        merged.append(y)
+    return merged
 
 
 def extract_costs(image_path: str) -> list[dict]:
@@ -338,9 +353,13 @@ def _build_name_code_index() -> dict[str, set[str]]:
         for kind, role in (("batters", "batter"), ("pitchers", "pitcher")):
             for rec in d.get(kind, []):
                 name = rec.get("name")
-                code = rec.get("player_code")
-                if name and code:
-                    index[name].add((role, code))
+                if not name:
+                    continue
+                # 네이버 박스스코어에 player_code가 안 실려 오는 선수가 있다(박종혁,
+                # 김시앙). 코드가 없다고 인덱스에서 빼버리면 이름 보정 후보에도 없어서
+                # 그 선수는 카드에서 이름을 읽어도 통째로 버려진다. 코드는 None으로 두되
+                # 이름은 등록해서, 최소한 "누구인지는 아는" 상태로 만든다.
+                index[name].add((role, rec.get("player_code")))
     return index
 
 
@@ -366,6 +385,12 @@ def resolve_codes(costs: list[tuple[str, int]], name_index: dict[str, set[tuple[
         if not codes:
             unresolved.append((name, stars, f"{'투수' if is_pitcher else '야수'} 기록이 없는 이름"))
             continue
+        if codes == {None}:
+            # player_code가 아예 없는 선수. 동명이인만 아니라면 이름만으로도 CSV에서
+            # 찾을 수 있으므로(구분자는 동명이인일 때만 필요하다) 코드 없이 확정한다.
+            resolved.append((name, "", stars))
+            continue
+        codes.discard(None)
         if len(codes) > 1:
             # 포지션 쪽에서 사진으로 이미 확정해둔 동명이인(박건우/김민석 등)은 그 매핑을
             # 그대로 쓴다 — 같은 사진을 보고 같은 판단을 두 번 할 이유가 없다.
