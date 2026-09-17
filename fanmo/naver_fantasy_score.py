@@ -1108,6 +1108,10 @@ def build_pregame_rows(g: dict) -> tuple[list[dict], list[dict]]:
                 "role": "선발" if name == starting_pitcher else "구원",
                 "stat": _zero_pitcher_stat(), "lp": 0,
                 "is_starter": name == starting_pitcher,
+                # 코스트는 경기 결과와 무관하게 그날 스냅샷으로 정해지므로, 경기 시작
+                # 전에도 넣어준다. 예전엔 박스스코어로 만드는 행에만 넣어서, 경기가
+                # 끝나기 전까지 LP 보드의 코스트 칸이 통째로 비어 있었다.
+                "fanmo_cost": lookup_pitcher_cost(name, team, g["gameId"][:8]),
                 "status": "pregame",
             })
 
@@ -1123,6 +1127,7 @@ def build_pregame_rows(g: dict) -> tuple[list[dict], list[dict]]:
                 "ab": 0, "stat": _zero_batter_stat(), "lp": 0,
                 "is_starter": name in starters,
                 "bat_order": starters.get(name),
+                "fanmo_cost": lookup_batter_cost(name, team, position, g["gameId"][:8]),
                 "status": "pregame",
             })
 
