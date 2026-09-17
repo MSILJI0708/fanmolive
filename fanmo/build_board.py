@@ -51,7 +51,9 @@ for path, ds in zip(paths, file_dates):
     games = len({(r["team"], r["opponent"], r["date"]) for r in batters_}) // 2 if batters_ else 0
     date_index[ds] = {"games": games, "file": os.path.basename(path)}
     if ds == date_str:
-        active_payload = {"batters": batters_, "pitchers": pitchers_}
+        # live: 이 데이터를 수집한 시점의 경기 상황(이닝/점수/주자/투타). 경기가 끝나면
+        # 수집 단계에서 아예 안 담기므로 자연히 빈 배열이 된다.
+        active_payload = {"batters": batters_, "pitchers": pitchers_, "live": d.get("live", [])}
 
 batters = active_payload["batters"]
 pitchers = active_payload["pitchers"]
@@ -454,6 +456,35 @@ section.board.active { display: block; }
   border: 1px solid var(--line);
   background: var(--paper-1);
   color: var(--ink-0);
+}
+/* 진행 중 경기 패널 — 넓은 화면에서는 오른쪽에 붙여 두고, 좁아지면 본문 위로 내린다 */
+.live-panel {
+  position: fixed;
+  top: 96px;
+  right: 12px;
+  width: 232px;
+  z-index: 40;
+  background: var(--paper-1);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 12px;
+}
+.live-head { font-size: 11px; color: var(--ink-1); margin-bottom: 8px; letter-spacing: .02em; }
+.live-asof { color: var(--ink-1); opacity: .8; }
+.live-game { padding: 8px 0; border-top: 1px solid var(--line); }
+.live-game:first-child { border-top: 0; padding-top: 0; }
+.live-inning { font-size: 11px; color: var(--accent); margin-bottom: 4px; }
+.live-score { display: flex; align-items: center; gap: 8px; }
+.live-score table { border-collapse: collapse; font-size: 12px; }
+.live-score td { padding: 1px 6px 1px 0; white-space: nowrap; }
+.live-score td.n { text-align: right; font-variant-numeric: tabular-nums; font-weight: 700; }
+.live-diamond { width: 40px; height: 40px; flex: none; }
+.live-outs { font-size: 11px; color: var(--ink-1); }
+.live-vs { margin-top: 5px; font-size: 11px; color: var(--ink-1); line-height: 1.5; }
+.live-vs b { color: var(--ink-0); font-weight: 600; }
+@media (max-width: 1400px) {
+  .live-panel { position: static; width: auto; margin: 0 auto 14px; max-width: 1280px; }
 }
 .optimizer-note { color: var(--ink-1); font-size: 11px; line-height: 1.5; }
 .optimizer-summary { font-size: 14.5px; margin-bottom: 12px; }
@@ -950,6 +981,14 @@ footer.notes b { color: var(--ink-0); }
     <div class="meta" id="tile-total-meta">타자 __NB__ · 투수 __NP__</div>
   </div>
 </div>
+
+<!-- 진행 중 경기 상황. 보드의 LP는 "마지막 수집 시점"의 값이라 지금 TV로 보는 실시간
+     상황과 몇 분 차이가 난다. 그 차이를 알 수 있도록 LP를 계산한 바로 그 시점의
+     이닝·점수·주자·투타를 함께 보여준다. 경기가 다 끝나면 비어 있으므로 숨겨진다. -->
+<aside class="live-panel" id="live-panel" hidden>
+  <div class="live-head">진행 중 경기 <span class="live-asof" id="live-asof"></span></div>
+  <div id="live-games"></div>
+</aside>
 
 <main>
   <nav class="chapters">
@@ -2260,9 +2299,9 @@ async function switchDate(dateStr) {
     try {
       const resp = await fetch(dateToFile(dateStr));
       const json = await resp.json();
-      ALL_DATA[dateStr] = { batters: json.batters || [], pitchers: json.pitchers || [] };
+      ALL_DATA[dateStr] = { batters: json.batters || [], pitchers: json.pitchers || [], live: json.live || [] };
     } catch (e) {
-      ALL_DATA[dateStr] = { batters: [], pitchers: [] };
+      ALL_DATA[dateStr] = { batters: [], pitchers: [], live: [] };
     }
     if (activeDate !== dateStr) return; // 응답 도착 전에 다른 날짜로 또 바뀌었으면 이 결과는 버린다
     dpBtnLabel.textContent = dateStr;
@@ -2280,12 +2319,79 @@ async function switchDate(dateStr) {
   dhToggle.checked = true;
 
   renderTiles(dateStr);
+  renderLivePanel();
   rebuildBatterTable();
   rebuildPitcherTable();
   if (document.getElementById('chapter-optimizer').classList.contains('active')) runOptimizer();
 }
 
+// --- 진행 중 경기 상황(수집 시점 기준) ---
+// 보드의 LP는 마지막 수집 시점의 값이라 실시간 중계와 몇 분 차이가 난다. 같은 시점의
+// 경기 상황을 나란히 보여주면 "왜 방금 안타가 LP에 없냐"는 오해를 막을 수 있다.
+function renderLivePanel() {
+  const panel = document.getElementById('live-panel');
+  const wrap = document.getElementById('live-games');
+  const games = (data && data.live) || [];
+  if (!games.length) { panel.hidden = true; return; }
+  panel.hidden = false;
+  document.getElementById('live-asof').textContent = '· __LAST_UPDATE__ 기준';
+  wrap.innerHTML = '';
+
+  games.forEach(g => {
+    const box = document.createElement('div');
+    box.className = 'live-game';
+
+    const inn = document.createElement('div');
+    inn.className = 'live-inning';
+    inn.textContent = g.inning || '';
+    box.appendChild(inn);
+
+    const score = document.createElement('div');
+    score.className = 'live-score';
+    const tbl = document.createElement('table');
+    [[g.away_team, g.away_score], [g.home_team, g.home_score]].forEach(([team, run]) => {
+      const tr = document.createElement('tr');
+      const td1 = document.createElement('td'); td1.textContent = team || '';
+      const td2 = document.createElement('td'); td2.className = 'n'; td2.textContent = run;
+      tr.append(td1, td2); tbl.appendChild(tr);
+    });
+    score.appendChild(tbl);
+
+    // 주자 다이아몬드: 1·2·3루를 마름모로 배치하고 주자가 있으면 채운다
+    const bases = g.bases || [false, false, false];
+    const ns = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('class', 'live-diamond');
+    svg.setAttribute('viewBox', '0 0 40 40');
+    [[28, 20], [20, 12], [12, 20]].forEach((pt, i) => {   // 1루(우), 2루(위), 3루(좌)
+      const r = document.createElementNS(ns, 'rect');
+      r.setAttribute('x', pt[0] - 5); r.setAttribute('y', pt[1] - 5);
+      r.setAttribute('width', 10); r.setAttribute('height', 10);
+      r.setAttribute('transform', `rotate(45 ${pt[0]} ${pt[1]})`);
+      r.setAttribute('fill', bases[i] ? 'var(--accent)' : 'transparent');
+      r.setAttribute('stroke', 'var(--ink-1)');
+      svg.appendChild(r);
+    });
+    score.appendChild(svg);
+
+    const outs = document.createElement('span');
+    outs.className = 'live-outs';
+    outs.textContent = `${g.out} out`;
+    score.appendChild(outs);
+    box.appendChild(score);
+
+    if (g.pitcher || g.batter) {
+      const vs = document.createElement('div');
+      vs.className = 'live-vs';
+      vs.innerHTML = `투수 <b>${g.pitcher || '-'}</b><br>타자 <b>${g.batter || '-'}</b>`;
+      box.appendChild(vs);
+    }
+    wrap.appendChild(box);
+  });
+}
+
 renderTiles(activeDate);
+renderLivePanel();
 
 // --- 선수 클릭 → 타석/수비별 포인트 내역 팝업 ---
 const modalOverlay = document.getElementById('player-modal-overlay');

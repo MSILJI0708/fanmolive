@@ -134,9 +134,20 @@ def main():
                   f" 저장을 건너뛰고 기존 파일을 그대로 둡니다.")
             return
 
+    # 보드의 LP는 "이번 수집 시점"의 값이라 지금 TV로 보는 실시간 상황과 몇 분 차이가
+    # 난다. 그 차이를 사용자가 알 수 있도록, LP를 계산한 바로 그 시점의 이닝·점수·주자·
+    # 투타 상황을 같이 저장한다(브라우저가 네이버를 직접 부르면 LP와 시점이 어긋난다).
+    try:
+        from live_state import collect_live_states
+        live = collect_live_states(g["gameId"] for g in fetch_schedule(date_str))
+    except Exception as exc:  # noqa: BLE001
+        print(f"진행 중 경기 상황 수집 실패(무시하고 계속): {exc}")
+        live = []
+
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(
-            {"batters": batters, "pitchers": pitchers, "date": date_str, "round": round_code},
+            {"batters": batters, "pitchers": pitchers, "date": date_str, "round": round_code,
+             "live": live},
             f, ensure_ascii=False,
         )
     print(f"저장 완료: {out_path} (round={round_code})")
