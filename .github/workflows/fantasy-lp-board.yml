@@ -170,7 +170,19 @@ jobs:
             echo "변경 사항 없음, 커밋 생략"
           else
             git commit -m "chore: auto-update LP board ($(date -u +'%Y-%m-%dT%H:%MZ'))"
-            git push
+            # 실행 하나가 2~5분 걸리는데 그 사이 사람이 저장소에 푸시하면, 이 실행이
+            # 체크아웃한 커밋이 뒤처져서 push가 non-fast-forward로 거부된다(실측: 실패
+            # 10건이 전부 사람이 작업하던 시간대에 몰려 있었다. 워크플로우끼리는
+            # concurrency로 이미 직렬화되어 서로 겹치지 않는다).
+            # 여기서 커밋하는 건 전부 수집/생성물이라 "원격 최신 위에 다시 얹기"가
+            # 그대로 성립하므로, rebase 후 재시도하면 안전하게 해결된다.
+            for attempt in 1 2 3; do
+              if git push; then
+                break
+              fi
+              echo "push 거부됨($attempt/3) — 그 사이 원격이 바뀐 것 같다. rebase 후 재시도"
+              git pull --rebase origin main || exit 1
+            done
           fi
 
       - name: Pages 배포용 폴더 구성
