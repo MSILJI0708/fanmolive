@@ -3,13 +3,12 @@ name: KBO/MLB 판타지 LP 보드 자동 갱신
 # 사람이 매번 실행하지 않아도, 정해진 주기로:
 #   0) 지금이 "활성 구간"(오늘 KBO 첫 경기 시작 2시간 전 ~ 그날 경기 전부 종료)인지
 #      check_active_window.py로 확인한다. KBO 활성 구간이면 수집/빌드/커밋/배포를 전부 한다.
-#   0-1) MLB은 KBO 활성 구간과 무관하게 별도로, 마지막 실행 이후 15분이 지났으면 그때만
-#      돌린다(mlb_last_run.txt에 마지막 실행 시각을 저장해 두고 매번 경과 시간을 잰다) —
-#      미국 경기는 한국 시간 기준 거의 하루 내내 걸쳐 있어서 KBO 기준 활성 구간에 얹어가면
-#      경기 시간대를 많이 놓친다.
+#   0-1) MLB 수집 자체는 mlb-collect.yml이 따로 맡는다(한 사이클 235초 중 MLB가 81초를
+#      차지해 KBO 갱신을 그만큼 밀어냈기 때문에 분리했다). 여기서는 그쪽이 새로 수집해
+#      둔 게 있는지만 보고(mlb_last_run.txt vs mlb_last_build.txt) 보드에 반영한다.
 #   1) KBO가 활성 구간이면 오늘 KBO 경기(collect_date가 알아서 시작 전 경기는 건너뜀)를 수집하고
-#   2) MLB이 실행 시점이면(15분 경과) 테스트로 오늘/내일(KST) MLB 경기도 같이 수집하고
-#   3) (KBO 활성 또는 MLB 실행 시점이면) 두 보드를 다시 빌드해서
+#   2) MLB 새 수집분이 있으면 그것도 함께 반영해서
+#   3) (KBO 활성 또는 MLB 새 데이터 또는 과거 백필 시점이면) 두 보드를 다시 빌드해서
 #   4) 수집 데이터는 저장소에 커밋, 완성된 HTML은 GitHub Pages로 배포한다.
 #
 # 트리거 자체는 외부 cron-job.org가 고정 간격으로 이 워크플로우의 workflow_dispatch를
@@ -65,20 +64,22 @@ jobs:
           echo "active=$RESULT" >> "$GITHUB_OUTPUT"
           echo "KBO 활성 구간 판정: $RESULT"
 
-      - name: "MLB 실행 시점인지 확인 (마지막 실행 후 15분 경과)"
+      - name: "MLB 데이터가 새로 들어왔는지 확인 (보드를 다시 빌드할지 판단)"
         id: check_mlb_due
         working-directory: fanmo
         run: |
-          FILE="mlb_last_run.txt"
-          NOW=$(date -u +%s)
-          LAST=$(cat "$FILE" 2>/dev/null || echo 0)
-          ELAPSED_MIN=$(( (NOW - LAST) / 60 ))
-          if [ "$ELAPSED_MIN" -ge 15 ]; then
+          # MLB 수집 자체는 mlb-collect.yml이 따로 하고 커밋만 남긴다. 그 데이터를 보드에
+          # 반영하는 건 이 워크플로우 몫이라, "마지막으로 빌드한 MLB 수집 시각"과 현재
+          # mlb_last_run.txt를 비교해서 새 데이터가 있을 때만 빌드한다. 경과 시간으로
+          # 판단하면 방금 수집이 끝난 직후가 오히려 false가 되어 반영이 한 주기 밀린다.
+          LAST_RUN=$(cat mlb_last_run.txt 2>/dev/null || echo 0)
+          LAST_BUILT=$(cat mlb_last_build.txt 2>/dev/null || echo 0)
+          if [ "$LAST_RUN" != "$LAST_BUILT" ]; then
             echo "due=true" >> "$GITHUB_OUTPUT"
           else
             echo "due=false" >> "$GITHUB_OUTPUT"
           fi
-          echo "MLB 마지막 실행으로부터 ${ELAPSED_MIN}분 경과 -> due=$([ "$ELAPSED_MIN" -ge 15 ] && echo true || echo false)"
+          echo "MLB 수집 시각 $LAST_RUN / 마지막 빌드 $LAST_BUILT -> due=$([ "$LAST_RUN" != "$LAST_BUILT" ] && echo true || echo false)"
 
       - name: "과거(2008~2022) 백필 실행 시점인지 확인 (마지막 실행 후 10분 경과)"
         id: check_historical_due
@@ -110,20 +111,11 @@ jobs:
         timeout-minutes: 6
         run: python daily_pipeline.py --date "$TODAY_KST"
 
-      - name: MLB 오늘 경기 수집 (테스트, 15분 주기, 실패해도 KBO 파이프라인은 계속)
-        if: steps.check_mlb_due.outputs.due == 'true'
-        working-directory: fanmo
-        continue-on-error: true
-        timeout-minutes: 4
-        run: |
-          # MLB는 미국 저녁 경기가 KST로는 다음날 새벽~오전에 걸쳐 끝나서, 네이버가 매기는
-          # gameDate가 "KST 오늘"이 아니라 "KST 내일"인 경우가 대부분이다(예: 미국 현지 저녁
-          # 7시 경기는 KST로 다음날 오전 8시경 끝남). TODAY_KST만 수집하면 이미 다 끝난
-          # 어제자 경기만 계속 재조회하게 돼서, 정작 지금 진행 중/예정인 오늘 밤 경기는 전혀
-          # 못 잡는다 — TODAY_KST와 TODAY_KST+1일 두 날짜를 모두 수집해서 이 시차를 커버한다.
-          python mlb_fantasy_score.py --date "$TODAY_KST"
-          python mlb_fantasy_score.py --date "$TOMORROW_KST"
-          date -u +%s > mlb_last_run.txt
+      # MLB 수집은 mlb-collect.yml로 분리했다. 한 사이클 235초 중 MLB가 81초(35%)를
+      # 차지하는데 KBO 수집은 9초뿐이라, 같이 묶여 직렬로 돌면 KBO 갱신이 그만큼 밀렸다.
+      # 이제 MLB는 별도 concurrency 그룹에서 병렬로 수집·커밋만 하고, 보드 빌드와 Pages
+      # 배포는 여기서 계속 맡는다(Pages는 사이트를 통째로 올리는 방식이라 배포 주체가
+      # 둘이면 서로 덮어쓴다). 그래서 아래 "보드 HTML 빌드"는 MLB 보드도 함께 만든다.
 
       - name: "2001~2022년 과거 데이터 백필 (10분 주기, 한 번에 할 수 있는 만큼만)"
         if: steps.check_historical_due.outputs.due == 'true'
@@ -145,6 +137,8 @@ jobs:
         run: |
           python build_board.py --date "$TODAY_KST"
           python build_mlb_board.py --date "$TODAY_KST" || true
+          # 어느 시점의 MLB 수집분까지 보드에 반영했는지 기록해 둔다(위 check_mlb_due 참고).
+          cp -f mlb_last_run.txt mlb_last_build.txt 2>/dev/null || true
 
       - name: "시즌·통산 기록실 갱신 (KBO 데이터가 실제로 바뀌었을 때만)"
         if: steps.check_active.outputs.active == 'true' || steps.check_historical_due.outputs.due == 'true'
@@ -165,7 +159,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add fanmo/data fanmo/data_mlb_*.json fanmo/position_db.json fanmo/lp_board.html fanmo/lp_board_mlb.html fanmo/mlb_last_run.txt fanmo/position_last_refresh.txt fanmo/season_stats.json fanmo/career_stats.json fanmo/records.html fanmo/active_window_state.json fanmo/self_pred_mismatches.json fanmo/error_report.json fanmo/player fanmo/options.html fanmo/jersey_numbers.json fanmo/jersey_last_refresh.txt fanmo/season_calendar.json fanmo/historical_last_run.txt fanmo/kbo_official_calendar.json fanmo/kbo_player_code_cache.json fanmo/kbo_2001_2007_unresolved_players.json
+          git add fanmo/data fanmo/data_mlb_*.json fanmo/mlb_last_build.txt fanmo/position_db.json fanmo/lp_board.html fanmo/lp_board_mlb.html fanmo/mlb_last_run.txt fanmo/position_last_refresh.txt fanmo/season_stats.json fanmo/career_stats.json fanmo/records.html fanmo/active_window_state.json fanmo/self_pred_mismatches.json fanmo/error_report.json fanmo/player fanmo/options.html fanmo/jersey_numbers.json fanmo/jersey_last_refresh.txt fanmo/season_calendar.json fanmo/historical_last_run.txt fanmo/kbo_official_calendar.json fanmo/kbo_player_code_cache.json fanmo/kbo_2001_2007_unresolved_players.json
           if git diff --cached --quiet; then
             echo "변경 사항 없음, 커밋 생략"
           else

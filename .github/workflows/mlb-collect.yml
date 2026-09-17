@@ -1,0 +1,93 @@
+name: MLB 경기 수집 (KBO 갱신과 분리)
+
+# 왜 분리했나
+# ------------------------------------------------------------------
+# 한 사이클 235초 중 MLB 수집이 81초(35%)를 차지하는데, KBO 수집은 9초뿐이다. 둘이 한
+# 워크플로우에 묶여 있고 concurrency로 직렬화되어 있어서, MLB가 도는 동안 KBO 갱신이
+# 그만큼 통째로 밀렸다. MLB는 15분 주기로만 필요하므로 따로 떼어 병렬로 돌린다.
+#
+# 여기서는 수집과 커밋만 한다. 보드 HTML 빌드와 GitHub Pages 배포는 기존
+# fantasy-lp-board.yml이 계속 맡는다 — Pages 배포는 사이트 전체를 한 번에 올리는
+# 방식이라 두 워크플로우가 동시에 배포하면 서로 덮어쓴다. 수집된 MLB 데이터는 다음
+# KBO 사이클(2~4분 내)에 자동으로 보드에 반영된다.
+#
+# 트리거: cron-job.org가 이 워크플로우의 workflow_dispatch를 따로 호출하게 등록해야
+# 한다(기존 KBO용 호출과 별개). 15분 주기 판정은 아래에서 하므로 호출은 자주 해도 된다.
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: mlb-collect # KBO 워크플로우와 다른 그룹이라 서로를 기다리지 않는다
+  cancel-in-progress: false
+
+jobs:
+  collect-mlb:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 저장소 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Python 설치
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 기준 날짜(KST) 계산
+        run: |
+          echo "TODAY_KST=$(TZ=Asia/Seoul date +%F)" >> "$GITHUB_ENV"
+          echo "TOMORROW_KST=$(TZ=Asia/Seoul date -d '+1 day' +%F)" >> "$GITHUB_ENV"
+
+      - name: "MLB 실행 시점인지 확인 (마지막 실행 후 15분 경과)"
+        id: check_due
+        working-directory: fanmo
+        run: |
+          FILE="mlb_last_run.txt"
+          NOW=$(date -u +%s)
+          LAST=$(cat "$FILE" 2>/dev/null || echo 0)
+          ELAPSED_MIN=$(( (NOW - LAST) / 60 ))
+          if [ "$ELAPSED_MIN" -ge 15 ]; then
+            echo "due=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "due=false" >> "$GITHUB_OUTPUT"
+          fi
+          echo "MLB 마지막 실행으로부터 ${ELAPSED_MIN}분 경과"
+
+      - name: MLB 오늘/내일 경기 수집
+        if: steps.check_due.outputs.due == 'true'
+        working-directory: fanmo
+        continue-on-error: true
+        timeout-minutes: 8
+        run: |
+          # MLB는 미국 저녁 경기가 KST로는 다음날 새벽~오전에 걸쳐 끝나서, 네이버가 매기는
+          # gameDate가 "KST 오늘"이 아니라 "KST 내일"인 경우가 대부분이다. TODAY_KST만
+          # 수집하면 이미 끝난 어제자만 계속 재조회하게 되므로 두 날짜를 모두 본다.
+          python mlb_fantasy_score.py --date "$TODAY_KST"
+          python mlb_fantasy_score.py --date "$TOMORROW_KST"
+          date -u +%s > mlb_last_run.txt
+
+      - name: 수집 결과 커밋 & 푸시
+        if: steps.check_due.outputs.due == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add fanmo/data_mlb_*.json fanmo/mlb_last_run.txt
+          if git diff --cached --quiet; then
+            echo "변경 사항 없음, 커밋 생략"
+          else
+            git commit -m "chore: collect MLB games ($(date -u +'%Y-%m-%dT%H:%MZ'))"
+            # KBO 워크플로우나 사람이 그 사이 푸시하면 non-fast-forward로 거부된다.
+            # 수집물이라 원격 최신 위에 다시 얹으면 그만이므로 rebase 후 재시도한다.
+            for attempt in 1 2 3; do
+              if git push; then
+                break
+              fi
+              echo "push 거부됨($attempt/3) — rebase 후 재시도"
+              git pull --rebase origin main || exit 1
+            done
+          fi
