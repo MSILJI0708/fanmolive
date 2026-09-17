@@ -20,6 +20,7 @@ CSV 컬럼: 동명, 포지션, 이름, 코스트
 from __future__ import annotations
 
 import csv
+import json
 import os
 from functools import lru_cache
 
@@ -74,6 +75,33 @@ PITCHER_POS_CODES = {"SP", "P"}
 TEAM_NAMES = ["KIA", "삼성", "LG", "KT", "두산", "SSG", "한화", "롯데", "NC", "키움"]
 
 
+@lru_cache(maxsize=1)
+def _code_to_team() -> dict:
+    """player_code -> 팀. 수집된 올 시즌 데이터에서 만든다.
+
+    CSV의 '동명' 칸은 player_code인데, 네이버 박스스코어에 player_code가 안 실려 오는
+    선수가 가끔 있다(주로 갓 1군에 올라온 선수). 그러면 코드끼리 비교할 수가 없어서
+    동명이인의 코스트가 통째로 공란이 된다(실측 2026-09-17: NC 김태훈, KIA 이태양).
+    팀 정보는 있으니, 코드가 없을 때만 팀으로 대신 가려낸다."""
+    from data_paths import glob_data_files
+
+    mapping: dict[str, str] = {}
+    for fp in glob_data_files():
+        if "/data_2026" not in fp.replace("\\", "/"):
+            continue
+        try:
+            with open(fp, encoding="utf-8") as f:
+                data = json.load(f)
+        except (OSError, ValueError):
+            continue
+        for kind in ("batters", "pitchers"):
+            for row in data.get(kind, []):
+                code, team = row.get("player_code"), row.get("team")
+                if code and team:
+                    mapping[code] = team
+    return mapping
+
+
 def _hint_matches(hint: str, team: str, player_code: str | None) -> bool:
     """동명 힌트 하나가 지금 조회 중인 선수와 같은 사람을 가리키는지 판정한다.
 
@@ -83,7 +111,12 @@ def _hint_matches(hint: str, team: str, player_code: str | None) -> bool:
     if not hint:
         return False
     if hint.isdigit():
-        return player_code is not None and hint == player_code
+        if player_code is not None:
+            return hint == player_code
+        # 수집 데이터에 player_code가 없으면 코드로는 비교할 수 없다 — 그 코드가 어느 팀
+        # 선수인지를 찾아 팀으로 대신 가린다(같은 팀에 같은 이름이 둘인 경우는 여전히
+        # 못 가리지만, 그때는 어차피 사람이 봐야 한다).
+        return bool(team) and _code_to_team().get(hint) == team
     if not team:
         return False
     for t in TEAM_NAMES:

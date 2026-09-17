@@ -891,6 +891,18 @@ def _today_compact() -> str:
     return date.today().strftime("%Y%m%d")
 
 
+def period_tag() -> str:
+    """지금 속한 코스트 주기의 시작일(YYYYMMDD). 1~15일이면 그 달 1일, 16일 이후면 16일.
+
+    코스트는 1일/16일에 책정되어 그 반월 내내 쓰인다. 그래서 초안 CSV의 이름도 "오늘"이
+    아니라 "이 주기"를 따라가야 한다 — 17일에 다시 뽑았다고 fanmo260917.csv가 생기면
+    같은 주기에 스냅샷이 둘이 되어버린다."""
+    from datetime import date
+
+    today = date.today()
+    return today.replace(day=1 if today.day < 16 else 16).strftime("%Y%m%d")
+
+
 def _latest_dated_screenshot_dir(root: str) -> str | None:
     candidates = [
         d for d in glob.glob(os.path.join(root, "20*-*-*"))
@@ -965,8 +977,14 @@ def main():
     if "--draft" in sys.argv:
         from fanmo_cost import SNAPSHOTS
 
-        base_csv = os.path.join(HERE, SNAPSHOTS[-1][2])
-        out_csv = os.path.join(HERE, "fanmo%s_draft.csv" % _today_compact()[2:])
+        # 이 주기(1일 또는 16일 시작)의 스냅샷이 이미 있으면 그걸 바탕으로 고친다.
+        # 1일/16일에 책정한 값을 그 반월 동안 그대로 쓰되, 나중에 다시 찍어보고 틀린 게
+        # 나오면 그때 바로잡는 방식이다 — 매번 새 스냅샷을 만들면 같은 주기에 파일이
+        # 여러 개 생겨 어느 게 유효한지 알 수 없게 된다.
+        tag = period_tag()
+        current = os.path.join(HERE, "fanmo%s.csv" % tag[2:])
+        base_csv = current if os.path.exists(current) else os.path.join(HERE, SNAPSHOTS[-1][2])
+        out_csv = os.path.join(HERE, "fanmo%s_draft.csv" % tag[2:])
         report = write_draft_csv(all_resolved, base_csv, out_csv)
         print(f"\n=== 초안 CSV 작성: {out_csv} ===")
         print(f"  기준 스냅샷: {SNAPSHOTS[-1][2]} / 전체 {report['total_rows']}행")
