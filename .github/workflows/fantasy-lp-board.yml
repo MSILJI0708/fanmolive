@@ -149,8 +149,28 @@ jobs:
           python build_records_board.py
           python build_player_pages.py
 
-      - name: "데이터 정합성·자체판정 정확도 점검 (KBO 데이터가 실제로 바뀌었을 때만)"
+      - name: "정합성 점검 차례인지 확인 (격회)"
+        id: check_errors_turn
         if: steps.check_active.outputs.active == 'true'
+        working-directory: fanmo
+        run: |
+          # 정합성 점검은 한 번에 22초가 걸리는데, 갱신 주기를 최대한 짧게 가져가는 게
+          # 우선이라 매 사이클 돌리지 않고 한 번 걸러 돌린다. 직전 사이클에 돌렸으면
+          # 이번엔 건너뛰고, 건너뛰었으면 이번에 돌린다. 상태 파일은 커밋해야 다음
+          # 실행이 이어받는다(매 실행이 저장소를 새로 체크아웃하므로).
+          STATE=$(cat error_check_state.txt 2>/dev/null || echo skipped)
+          if [ "$STATE" = "ran" ]; then
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo skipped > error_check_state.txt
+            echo "직전 사이클에 점검했으므로 이번엔 건너뜀"
+          else
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            echo ran > error_check_state.txt
+            echo "이번 사이클에 점검 실행"
+          fi
+
+      - name: "데이터 정합성·자체판정 정확도 점검 (격회, KBO 데이터가 바뀌었을 때만)"
+        if: steps.check_errors_turn.outputs.run == 'true'
         working-directory: fanmo
         run: python detect_errors.py
 
@@ -159,7 +179,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add fanmo/data fanmo/data_mlb_*.json fanmo/mlb_last_build.txt fanmo/position_db.json fanmo/lp_board.html fanmo/lp_board_mlb.html fanmo/mlb_last_run.txt fanmo/position_last_refresh.txt fanmo/season_stats.json fanmo/career_stats.json fanmo/records.html fanmo/active_window_state.json fanmo/self_pred_mismatches.json fanmo/error_report.json fanmo/player fanmo/options.html fanmo/jersey_numbers.json fanmo/jersey_last_refresh.txt fanmo/season_calendar.json fanmo/historical_last_run.txt fanmo/kbo_official_calendar.json fanmo/kbo_player_code_cache.json fanmo/kbo_2001_2007_unresolved_players.json
+          git add fanmo/data fanmo/data_mlb_*.json fanmo/mlb_last_build.txt fanmo/error_check_state.txt fanmo/position_db.json fanmo/lp_board.html fanmo/lp_board_mlb.html fanmo/mlb_last_run.txt fanmo/position_last_refresh.txt fanmo/season_stats.json fanmo/career_stats.json fanmo/records.html fanmo/active_window_state.json fanmo/self_pred_mismatches.json fanmo/error_report.json fanmo/player fanmo/options.html fanmo/jersey_numbers.json fanmo/jersey_last_refresh.txt fanmo/season_calendar.json fanmo/historical_last_run.txt fanmo/kbo_official_calendar.json fanmo/kbo_player_code_cache.json fanmo/kbo_2001_2007_unresolved_players.json
           if git diff --cached --quiet; then
             echo "변경 사항 없음, 커밋 생략"
           else
