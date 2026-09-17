@@ -220,12 +220,12 @@ function Move-NewScreenshots([string]$destFolder, [datetime]$since) {
 }
 
 $launchWait = (Get-MacroSeconds "9up실행" 5) + 30   # 매크로 자체는 짧고, 게임 로딩이 오래 걸린다
-Write-Host "[1/4] 9UP 앱 실행... (${launchWait}초 대기)"
+Write-Host "[1/5] 9UP 앱 실행... (${launchWait}초 대기)"
 Send-ToLDPlayer $LaunchAppHotkey
 Start-Sleep -Seconds $launchWait
 
 $fantasyWait = (Get-MacroSeconds "판모진입" 20) + $MacroMarginSeconds
-Write-Host "[1/4] 판타지 모드 진입... (${fantasyWait}초 대기)"
+Write-Host "[1/5] 판타지 모드 진입... (${fantasyWait}초 대기)"
 Send-ToLDPlayer $FantasyModeHotkey
 Start-Sleep -Seconds $fantasyWait
 
@@ -237,16 +237,40 @@ $dateFolder = Get-Date -Format "yyyy-MM-dd"  # 캡쳐한 날짜별로 폴더를 
                                               # 꼬였던 적이 있었음 — 9/13 예전 사진이 9/15
                                               # 폴더에 남아있던 문제 참고).
 
+# 코스트는 1일/16일에만 바뀌므로 투수 화면도 그날만 찍으면 되지만, 그날 캡쳐가 끝까지
+# 못 갔으면(LD플레이어가 뻗거나 명단이 길어 반복 횟수가 모자랐거나) 다음 갱신일까지
+# 보름 내내 메울 방법이 없다 — 실제로 9/16 투수 캡쳐가 명단 끝에 도달하지 못한 채
+# 끝났는데 17일에는 투수를 아예 안 찍어서 손쓸 수가 없었다. 그래서 "갱신일인가"가 아니라
+# "이번 주기 캡쳐가 끝났는가"로 판단한다. 다 찍혔으면 저절로 안 찍으니 매일 10분씩
+# 낭비되지도 않는다.
+$periodStart = if ($todayDay -ge 16) { (Get-Date -Day 16).Date } else { (Get-Date -Day 1).Date }
+
+function Test-PitcherCaptureDone([string]$folder) {
+    $dirs = Get-ChildItem $ScreenshotRoot -Directory -ErrorAction SilentlyContinue |
+        Where-Object { $_.Name -match '^\d{4}-\d{2}-\d{2}$' -and [datetime]$_.Name -ge $periodStart }
+    foreach ($d in $dirs) {
+        $sub = Join-Path $d.FullName $folder
+        if (-not (Test-Path $sub)) { continue }
+        python (Join-Path $RepoDir "screenshot_dedupe.py") --at-bottom $sub | Out-Null
+        if ($LASTEXITCODE -eq 0) { return $true }
+    }
+    return $false
+}
+
 foreach ($folder in $Targets.Keys) {
     $info = $Targets[$folder]
-    if ($info.MonthlyOnly -and -not $isCostDay) {
-        continue  # 투수 화면은 1일/16일에만
+    if ($info.MonthlyOnly) {
+        if (Test-PitcherCaptureDone $folder) {
+            Write-Host "[2/5] $($info.Label) 건너뜀 — 이번 주기($($periodStart.ToString('MM/dd')) 이후)에 이미 명단 끝까지 찍음"
+            continue
+        }
+        Write-Host "[2/5] $($info.Label): 이번 주기 캡쳐가 아직 안 끝나서 이어서 찍습니다"
     }
 
     $destFolder = Join-Path $ScreenshotRoot "$dateFolder\$folder"
     $selectWait = (Get-MacroSeconds $info.Record 12) + $MacroMarginSeconds
     $captureWait = (Get-MacroSeconds "판모스샷" 50) + $MacroMarginSeconds
-    Write-Host "[2/4] $($info.Label) 선택(${selectWait}초 대기) + 캡쳐(${captureWait}초 대기)..."
+    Write-Host "[2/5] $($info.Label) 선택(${selectWait}초 대기) + 캡쳐(${captureWait}초 대기)..."
     # 한 포지션에서 실패해도 나머지는 계속 진행한다 — 예전엔 마지막 포지션 하나가
     # 포커스 문제로 실패하면서 스크립트 전체가 죽어 뒤 단계(OCR/커밋)까지 날아갔다.
     try {
@@ -294,7 +318,7 @@ foreach ($folder in $Targets.Keys) {
             }
         }
 
-        # 중복 사진 삭제는 여기서 하지 않는다 — OCR이 끝난 뒤에 한다(아래 [4/4]).
+        # 중복 사진 삭제는 여기서 하지 않는다 — OCR이 끝난 뒤에 한다(아래 [5/5]).
         # 거의 같아 보이는 사진이라도 OCR은 장마다 읽어내는 이름이 조금씩 다르다.
         # 실측(2026-09-16): 유격수 9장에서 36명 읽던 걸 유사중복 제거 후 3장으로 줄이면
         # 22명까지 떨어지면서 오지환/이재현 같은 실제 선수가 유실됐다. 즉 중복처럼 보이는
@@ -309,7 +333,7 @@ foreach ($folder in $Targets.Keys) {
     }
 }
 
-Write-Host "[3/4] 스크린샷 OCR 분석 + position_db.json 반영..."
+Write-Host "[3/5] 스크린샷 OCR 분석 + position_db.json 반영..."
 Push-Location $RepoDir
 try {
     $screenshotDateDir = Join-Path $ScreenshotRoot $dateFolder
@@ -320,6 +344,11 @@ try {
     # 안 통함 — 원격이 방금 갱신한 auto_position까지 같이 들고 있어야 하므로). 그래서
     # 매 시도마다 원격의 최신 position_db.json으로 맞춘 다음 그 위에 OCR 결과를 다시
     # 얹는 방식으로 몇 번 재시도한다 — 이러면 애초에 git 차원의 충돌이 안 생긴다.
+    # git 쪽이 실패해도(원격 충돌 등) 코스트 추출/사진 정리는 그대로 진행해야 한다 —
+    # 특히 코스트는 한 달에 두 번뿐이라 이날 못 뽑으면 반달치를 통째로 놓친다. 그래서
+    # git 단계만 따로 감싸고, 실패는 기억해뒀다가 맨 뒤에서 알린다.
+    $gitError = $null
+    try {
     $maxAttempts = 3
     $pushed = $false
     for ($attempt = 1; $attempt -le $maxAttempts; $attempt++) {
@@ -359,12 +388,33 @@ try {
         Write-Host "  $maxAttempts 번 시도해도 push 실패 — 수동으로 확인하세요: git status"
         throw "push 실패"
     }
+    } catch {
+        $gitError = $_
+        Write-Host "  [실패] position_db.json 반영/푸시 실패: $_"
+        Write-Host "  (코스트 추출과 사진 정리는 계속 진행합니다)"
+    }
 
-    # OCR이 끝난 뒤에 디스크 정리 — 여기서 지워야 위 OCR이 모든 장을 다 읽은 뒤가 된다.
-    # 사진 1장당 1.5MB가 넘어서 매일 쌓이면 부담이 되는데, 스크롤이 명단 끝에 닿은 뒤
-    # 찍힌 사진들은 내용이 사실상 같아서 남겨둘 이유가 없다.
-    Write-Host "[4/4] 중복 스크린샷 정리..."
+    # 코스트는 매달 1일/16일에만 갱신되므로 그날만 추출한다. 카드 아래 금색 별 개수가
+    # 곧 코스트라, 포지션용으로 찍어둔 같은 사진을 그대로 재사용한다(별 세기 정확도는
+    # 실측 96%이고, 불일치 3건도 전부 수기 CSV 쪽 오기로 확인됐다).
+    # 다만 이름 OCR이 전체의 20% 정도만 잡아내서 스냅샷을 새로 만들 수는 없다. 그래서
+    # 직전 스냅샷을 복사해두고 읽어낸 것만 덮어쓴 "초안"을 만들고, 실제 등록(파일명 변경
+    # + SNAPSHOTS 추가)은 사람이 변경 목록을 보고 판단한다 — 라이브 점수에 쓰이는
+    # 데이터라 자동으로 갈아끼우지 않는다.
+    # 투수 사진이 오늘 찍혔으면(= 갱신일이거나, 갱신일 캡쳐가 모자라서 오늘 이어 찍었으면)
+    # 코스트도 다시 뽑는다. 타자는 매일 찍으므로 오늘 폴더 하나로 전체가 커버된다.
+    $pitcherShotToday = Test-Path (Join-Path $screenshotDateDir "p")
+    if ($isCostDay -or $pitcherShotToday) {
+        Write-Host "[4/5] 코스트(별 개수) 추출 + 초안 CSV 작성..."
+        python extract_cost_from_screenshots.py $screenshotDateDir --draft
+    }
+
+    # 중복 사진 삭제는 OCR이 다 끝난 뒤에 한다 — 거의 같아 보이는 사진이라도 장마다
+    # 읽어내는 이름이 달라서, 먼저 지우면 실제 선수가 유실된다(실측: 유격수 36명 -> 22명).
+    Write-Host "[5/5] 중복 스크린샷 정리..."
     python screenshot_dedupe.py $screenshotDateDir
+
+    if ($gitError) { throw $gitError }
 } finally {
     Pop-Location
 }
