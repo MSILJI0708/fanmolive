@@ -1299,8 +1299,8 @@
       "innings_by_position": {},
       "games": 1,
       "auto_position": "지명타자",
-      "manual_position": null,
-      "effective_position": "지명타자"
+      "manual_position": "1루수",
+      "effective_position": "1루수"
     },
     "66614": {
       "name": "김규성",
