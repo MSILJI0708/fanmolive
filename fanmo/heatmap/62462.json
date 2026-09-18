@@ -1,1 +1,1 @@
-{"batter":{"2012":{"by_inning":{"6":{},"8":{"AB":2},"9":{"AB":1}},"hits_per_game":{"0":3},"pa_x_hits":{"1|0":3},"pa_x_tb":{"1|0":3},"tb_per_game":{"0":3}}},"name":"손형준","pitcher":{}}
+{"batter":{"2012":{"by_inning":{"6":{"TBW":0},"8":{"AB":2,"TBW":0},"9":{"AB":1,"TBW":0}},"hits_per_game":{"0":3},"pa_x_hits":{"1|0":3},"pa_x_tb":{"1|0":3},"tb_per_game":{"0":3}}},"name":"손형준","pitcher":{}}

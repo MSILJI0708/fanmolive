@@ -1,1 +1,1 @@
-{"batter":{"2025":{"by_inning":{},"hits_per_game":{},"pa_x_hits":{},"pa_x_tb":{},"tb_per_game":{}},"2026":{"by_inning":{"6":{},"8":{"AB":1}},"hits_per_game":{"0":1},"pa_x_hits":{"1|0":1},"pa_x_tb":{"1|0":1},"tb_per_game":{"0":1}}},"name":"오서진","pitcher":{}}
+{"batter":{"2025":{"by_inning":{},"hits_per_game":{},"pa_x_hits":{},"pa_x_tb":{},"tb_per_game":{}},"2026":{"by_inning":{"6":{"TBW":0},"8":{"AB":1,"TBW":0}},"hits_per_game":{"0":1},"pa_x_hits":{"1|0":1},"pa_x_tb":{"1|0":1},"tb_per_game":{"0":1}}},"name":"오서진","pitcher":{}}

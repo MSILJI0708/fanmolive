@@ -1,1 +1,1 @@
-{"batter":{"2023":{"by_inning":{"6":{},"9":{"AB":3}},"hits_per_game":{"0":3},"pa_x_hits":{"1|0":3},"pa_x_tb":{"1|0":3},"tb_per_game":{"0":3}}},"name":"송대현","pitcher":{}}
+{"batter":{"2023":{"by_inning":{"6":{"TBW":0},"9":{"AB":3,"TBW":0}},"hits_per_game":{"0":3},"pa_x_hits":{"1|0":3},"pa_x_tb":{"1|0":3},"tb_per_game":{"0":3}}},"name":"송대현","pitcher":{}}

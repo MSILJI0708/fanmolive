@@ -1,1 +1,1 @@
-{"batter":{"2009":{"by_inning":{"7":{"AB":1},"9":{"AB":3}},"hits_per_game":{"0":3},"pa_x_hits":{"1|0":2,"2|0":1},"pa_x_tb":{"1|0":2,"2|0":1},"tb_per_game":{"0":3}}},"name":"최연오","pitcher":{}}
+{"batter":{"2009":{"by_inning":{"7":{"AB":1,"TBW":0},"9":{"AB":3,"TBW":0}},"hits_per_game":{"0":3},"pa_x_hits":{"1|0":2,"2|0":1},"pa_x_tb":{"1|0":2,"2|0":1},"tb_per_game":{"0":3}}},"name":"최연오","pitcher":{}}

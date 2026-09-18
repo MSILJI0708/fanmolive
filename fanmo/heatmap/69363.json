@@ -1,1 +1,1 @@
-{"batter":{"2024":{"by_inning":{"2":{"AB":2},"3":{"AB":2},"9":{"AB":1}},"hits_per_game":{"0":3},"pa_x_hits":{"1|0":1,"2|0":2},"pa_x_tb":{"1|0":1,"2|0":2},"tb_per_game":{"0":3}}},"name":"박준형","pitcher":{}}
+{"batter":{"2024":{"by_inning":{"2":{"AB":2,"TBW":0},"3":{"AB":2,"TBW":0},"9":{"AB":1,"TBW":0}},"hits_per_game":{"0":3},"pa_x_hits":{"1|0":1,"2|0":2},"pa_x_tb":{"1|0":1,"2|0":2},"tb_per_game":{"0":3}}},"name":"박준형","pitcher":{}}

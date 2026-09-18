@@ -7,9 +7,9 @@
 만드는 것(시즌별):
   타자
     hits_per_game   경기당 안타 수의 분포            {안타수: 경기수}
-    tb_per_game     경기당 루타 수의 분포            {루타수: 경기수}
+    tb_per_game     경기당 루타(사사구 포함) 분포    {루타수: 경기수}
     pa_x_hits       경기당 타석수 x 안타 수          {"타석|안타": 경기수}
-    pa_x_tb         경기당 타석수 x 루타 수          {"타석|루타": 경기수}
+    pa_x_tb         경기당 타석수 x 루타(사사구 포함) {"타석|루타": 경기수}
     by_inning       이닝별 타수/안타/루타/볼넷/사구/희비  {이닝: {...}} -> 타율·OPS 계산
   투수
     per_game        경기당 피안타/피출루/피홈런/자책점 분포  {지표: {값: 경기수}}
@@ -92,7 +92,10 @@ def collect(files):
             names[code] = row.get("name")
             acc = batters[code][season]
             h = s.get("H", 0)
-            tb = _tb(h, s.get("2B", 0), s.get("3B", 0), s.get("HR", 0))
+            # 히트맵의 "루타"는 사사구도 1루로 친다(볼넷·사구도 타석에서 얻어낸 베이스라
+            # 타자의 생산력을 보려면 같이 세는 게 맞다는 요청). 공식 루타(TB)와 다르다.
+            tb = (_tb(h, s.get("2B", 0), s.get("3B", 0), s.get("HR", 0))
+                  + s.get("BB", 0) + s.get("HBP", 0))
             pa = (row.get("ab", 0) + s.get("BB", 0) + s.get("HBP", 0)
                   + s.get("SACFLY", 0) + s.get("SACBUNT", 0))
             if pa == 0:
@@ -118,6 +121,11 @@ def collect(files):
                     bucket["BB"] += 1
                 if tags.get("HBP"):
                     bucket["HBP"] += 1
+                # TB는 공식 루타로 남겨둔다 — 장타율(TB/타수)과 OPS 계산에 쓰이므로 사사구를
+                # 섞으면 OPS가 틀어진다. 화면에 보여줄 "루타(사사구 포함)"는 TBW로 따로 센다.
+                bucket["TBW"] += ((_tb(1, tags.get("2B", 0), tags.get("3B", 0), tags.get("HR", 0))
+                                   if tags.get("H") else 0)
+                                  + (1 if tags.get("BB") else 0) + (1 if tags.get("HBP") else 0))
                 if tags.get("SACFLY"):
                     bucket["SF"] += 1
 

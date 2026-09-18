@@ -346,14 +346,15 @@ function batterHeatmaps(s) {
   const f3 = v => v.toFixed(3).replace(/^0/, '');
   return `
     <div class="hm-card"><h3>경기당 안타</h3><p>한 경기에 안타를 몇 개 쳤는지의 분포. 0과 2+ 칸이 진하면 몰아치기형, 1 칸에 몰리면 꾸준형.</p>${oneD(s.hits_per_game, '안타')}</div>
-    <div class="hm-card"><h3>경기당 루타</h3><p>한 경기 총 진루 베이스(단타1·2루타2·3루타3·홈런4). 오른쪽 꼬리가 길수록 장타로 몰아친다.</p>${oneD(s.tb_per_game, '루타')}</div>
+    <div class="hm-card"><h3>경기당 루타</h3><p>한 경기에 타석에서 얻어낸 베이스(단타1·2루타2·3루타3·홈런4·볼넷/사구1). 공식 루타와 달리 사사구도 센다. 오른쪽 꼬리가 길수록 몰아친다.</p>${oneD(s.tb_per_game, '루타')}</div>
     <div class="hm-card"><h3>타석수 × 안타</h3><p>몇 타석을 받았을 때 몇 안타를 쳤는가(칸 숫자 = 경기 수).</p>${twoD(s.pa_x_hits, '타석', '안타')}</div>
-    <div class="hm-card"><h3>타석수 × 루타</h3><p>몇 타석을 받았을 때 몇 루타를 쳤는가.</p>${twoD(s.pa_x_tb, '타석', '루타')}</div>
-    <div class="hm-card" style="grid-column:1/-1"><h3>이닝별 타격</h3><p>이닝마다의 안타·루타 수와 타율·OPS. 비율은 타수가 적은 이닝(주로 연장)에서 크게 흔들리니 타수와 함께 보자.</p>
+    <div class="hm-card"><h3>타석수 × 루타</h3><p>몇 타석을 받았을 때 몇 루타(사사구 포함)를 얻었는가.</p>${twoD(s.pa_x_tb, '타석', '루타')}</div>
+    <div class="hm-card" style="grid-column:1/-1"><h3>이닝별 타격</h3><p>이닝마다의 안타·루타(사사구 포함) 수와 타율·OPS. OPS는 공식 기준(장타율에 사사구 미포함)이다. 비율은 타수가 적은 이닝(주로 연장)에서 크게 흔들리니 타수와 함께 보자.</p>
       ${byInning(inn, [
         { label: '타수', get: x => x.AB || 0, fmt: v => v },
         { label: '안타', get: x => x.H || 0, fmt: v => v },
-        { label: '루타', get: x => x.TB || 0, fmt: v => v },
+        // 화면의 루타는 사사구 포함(TBW). 아래 OPS의 장타율은 공식 루타(TB)로 계산한다.
+        { label: '루타', get: x => x.TBW || 0, fmt: v => v },
         { label: '타율', get: x => rate(x.H || 0, x.AB || 0), fmt: f3 },
         { label: 'OPS', get: ops, fmt: f3 },
       ])}</div>`;

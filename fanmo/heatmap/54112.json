@@ -1,1 +1,1 @@
-{"batter":{"2024":{"by_inning":{"4":{"AB":1,"H":1,"TB":1},"7":{"AB":1},"8":{"AB":1}},"hits_per_game":{"1":1},"pa_x_hits":{"3|1":1},"pa_x_tb":{"3|1":1},"tb_per_game":{"1":1}}},"name":"최명경","pitcher":{}}
+{"batter":{"2024":{"by_inning":{"4":{"AB":1,"H":1,"TB":1,"TBW":1},"7":{"AB":1,"TBW":0},"8":{"AB":1,"TBW":0}},"hits_per_game":{"1":1},"pa_x_hits":{"3|1":1},"pa_x_tb":{"3|1":1},"tb_per_game":{"1":1}}},"name":"최명경","pitcher":{}}
