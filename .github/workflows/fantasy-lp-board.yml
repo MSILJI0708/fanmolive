@@ -148,6 +148,7 @@ jobs:
           python build_stats.py
           python build_records_board.py
           python build_player_pages.py
+          python build_heatmaps.py
 
       - name: "정합성 점검 차례인지 확인 (격회)"
         id: check_errors_turn
@@ -179,7 +180,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add fanmo/data fanmo/data_mlb_*.json fanmo/mlb_last_build.txt fanmo/error_check_state.txt fanmo/position_db.json fanmo/lp_board.html fanmo/lp_board_mlb.html fanmo/mlb_last_run.txt fanmo/position_last_refresh.txt fanmo/season_stats.json fanmo/career_stats.json fanmo/records.html fanmo/active_window_state.json fanmo/self_pred_mismatches.json fanmo/error_report.json fanmo/player fanmo/options.html fanmo/jersey_numbers.json fanmo/jersey_last_refresh.txt fanmo/season_calendar.json fanmo/historical_last_run.txt fanmo/kbo_official_calendar.json fanmo/kbo_player_code_cache.json fanmo/kbo_2001_2007_unresolved_players.json
+          git add fanmo/data fanmo/data_mlb_*.json fanmo/mlb_last_build.txt fanmo/error_check_state.txt fanmo/position_db.json fanmo/lp_board.html fanmo/lp_board_mlb.html fanmo/mlb_last_run.txt fanmo/position_last_refresh.txt fanmo/season_stats.json fanmo/career_stats.json fanmo/records.html fanmo/active_window_state.json fanmo/self_pred_mismatches.json fanmo/error_report.json fanmo/player fanmo/heatmap fanmo/options.html fanmo/jersey_numbers.json fanmo/jersey_last_refresh.txt fanmo/season_calendar.json fanmo/historical_last_run.txt fanmo/kbo_official_calendar.json fanmo/kbo_player_code_cache.json fanmo/kbo_2001_2007_unresolved_players.json
           if git diff --cached --quiet; then
             echo "변경 사항 없음, 커밋 생략"
           else
@@ -225,6 +226,10 @@ jobs:
           # 만든 player/<이름>/index.html 트리를 그대로 배포 폴더에 옮긴다.
           if [ -d fanmo/player ]; then
             cp -r fanmo/player _site/player
+          fi
+          # 선수 기록실 히트맵 탭 — player.html이 탭을 열 때 heatmap/<코드>.json을 fetch한다.
+          if [ -d fanmo/heatmap ]; then
+            cp -r fanmo/heatmap _site/heatmap
           fi
           # 등번호(동명이인 구분용) — lp_board.html이 fetch로 직접 읽는다.
           if [ -f fanmo/jersey_numbers.json ]; then

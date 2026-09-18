@@ -75,6 +75,33 @@ tbody tr:hover { background: var(--row-alt); }
 .def-more:hover .tip, .def-more:focus .tip { display: block; }
 .def-more .tip div { line-height: 1.6; }
 .def-more .tip .pos { color: var(--ink-1); margin-right: 8px; }
+/* 탭 */
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin-bottom: 4px; }
+.tab { background: none; border: 0; border-bottom: 2px solid transparent; color: var(--ink-1);
+  font: inherit; font-size: 13px; font-weight: 600; padding: 8px 14px; cursor: pointer; }
+.tab.active { color: var(--ink-0); border-bottom-color: var(--accent); }
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+/* 히트맵 — 칸의 색 진하기가 곧 빈도(또는 비율)다 */
+.hm-bar { display: flex; align-items: center; gap: 12px; margin: 12px 0 4px; font-size: 12.5px; }
+.hm-bar select { font: inherit; padding: 3px 6px; background: var(--paper-1); color: var(--ink-0);
+  border: 1px solid var(--line); border-radius: 5px; }
+.hm-note { color: var(--ink-1); font-size: 11.5px; }
+.hm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 14px; margin-top: 10px; }
+.hm-card { border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; background: var(--paper-1); }
+.hm-card h3 { font-size: 12.5px; margin: 0 0 2px; }
+.hm-card p { font-size: 11px; color: var(--ink-1); margin: 0 0 8px; line-height: 1.45; }
+.hm { border-collapse: collapse; width: auto; min-width: 0; font-size: 11px; font-variant-numeric: tabular-nums; }
+.hm th { color: var(--ink-1); font-weight: 500; padding: 2px 5px; text-align: center; white-space: nowrap; border: 0; }
+.hm th.rh { text-align: right; }
+.hm td { width: 30px; height: 24px; text-align: center; padding: 0; border: 1px solid var(--paper-1);
+  border-radius: 3px; white-space: nowrap; }
+.hm td.zero { color: var(--ink-1); opacity: .45; }
+.hm-axis { font-size: 10.5px; color: var(--ink-1); margin-top: 4px; }
+.hm-seg { display: inline-flex; gap: 2px; margin-bottom: 6px; }
+.hm-seg button { font: inherit; font-size: 11px; padding: 2px 8px; border-radius: 4px; cursor: pointer;
+  border: 1px solid var(--line); background: none; color: var(--ink-1); }
+.hm-seg button.on { background: var(--accent); border-color: var(--accent); color: #1a1408; }
 .empty { color: var(--ink-1); font-size: 12.5px; padding: 20px 0; }
 .error { color: var(--hot); font-size: 12.5px; padding: 20px 0; }
 .site-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
@@ -100,10 +127,23 @@ tbody tr:hover { background: var(--row-alt); }
   <p>정규시즌(올스타·포스트시즌 제외) 기록 · 자동 집계</p>
 </header>
 <main>
-  <h2>시즌별</h2>
-  <table id="seasonTbl"><thead></thead><tbody></tbody></table>
-  <h2>통산</h2>
-  <table id="careerTbl"><thead></thead><tbody></tbody></table>
+  <nav class="tabs">
+    <button class="tab active" data-tab="records">기록</button>
+    <button class="tab" data-tab="heatmap">히트맵</button>
+  </nav>
+  <section class="tab-pane active" id="pane-records">
+    <h2>시즌별</h2>
+    <table id="seasonTbl"><thead></thead><tbody></tbody></table>
+    <h2>통산</h2>
+    <table id="careerTbl"><thead></thead><tbody></tbody></table>
+  </section>
+  <section class="tab-pane" id="pane-heatmap">
+    <div class="hm-bar">
+      <label>시즌 <select id="hm-season"></select></label>
+      <span class="hm-note" id="hm-note"></span>
+    </div>
+    <div id="hm-body"><p class="empty">불러오는 중…</p></div>
+  </section>
 </main>
 <script>
 const params = new URLSearchParams(location.search);
@@ -218,10 +258,167 @@ async function main() {
   document.getElementById('title').textContent = name;
   document.getElementById('teamLine').textContent = teams;
 
+  // URL의 role과 실제가 다를 수 있어서(위에서 반대 role로 다시 찾았을 수 있다) 히트맵도
+  // 최종 확정된 role을 따라가게 한다.
+  CURRENT_ROLE = role;
   const cols = role === 'pitchers' ? PITCHER_COLS : BATTER_COLS;
   renderTable('seasonTbl', cols, seasonRows);
   renderTable('careerTbl', cols, careerRow ? [Object.assign({ season: '통산' }, careerRow)] : [], 'career');
 }
+
+// ================= 히트맵 탭 =================
+// 시즌 합계로는 안 보이는 "분포"를 보여준다 — 같은 타율이라도 몰아치기형/꾸준형, 같은
+// 평균자책점이라도 1회에 몰아주고 버티는 투수/난잡하게 흘리는 투수를 구분하려는 목적.
+// 선수가 수천 명이라 데이터는 heatmap/<코드>.json으로 나눠 두고 탭을 열 때만 받는다.
+let HM = null, HM_ROLE = 'batters';
+
+// 0~1 값을 칸 색으로. 강조색(금색) 계열의 투명도로 진하기를 표현한다.
+function heat(v) {
+  if (!(v > 0)) return 'transparent';
+  const a = 0.12 + 0.78 * Math.min(1, v);
+  return `rgba(217,162,77,${a.toFixed(3)})`;
+}
+function hmCell(text, ratio, zero) {
+  return `<td class="${zero ? 'zero' : ''}" style="background:${heat(ratio)}">${text}</td>`;
+}
+const num = k => Number(k);
+
+// 1차원: {값: 경기수} -> 가로 한 줄
+function oneD(counts, label) {
+  const keys = Object.keys(counts || {}).map(num);
+  if (!keys.length) return '<p class="empty">데이터 없음</p>';
+  const maxK = Math.max(...keys);
+  const total = Object.values(counts).reduce((a, b) => a + b, 0);
+  const maxV = Math.max(...Object.values(counts));
+  let head = `<tr><th class="rh">${label}</th>`, body = '<tr><th class="rh">경기</th>', pct = '<tr><th class="rh">비율</th>';
+  for (let k = 0; k <= maxK; k++) {
+    const v = counts[k] || 0;
+    head += `<th>${k}</th>`;
+    body += hmCell(v, v / maxV, !v);
+    pct += `<td class="${v ? '' : 'zero'}" style="font-size:10px">${total ? Math.round(100 * v / total) : 0}%</td>`;
+  }
+  return `<table class="hm">${head}</tr>${body}</tr>${pct}</tr></table>
+    <div class="hm-axis">총 ${total}경기 · 평균 ${(Object.entries(counts).reduce((a, [k, v]) => a + num(k) * v, 0) / total).toFixed(2)}</div>`;
+}
+
+// 2차원: {"행|열": 경기수} -> 격자
+function twoD(counts, rowLabel, colLabel) {
+  const cells = Object.entries(counts || {}).map(([k, v]) => { const [r, c] = k.split('|').map(num); return { r, c, v }; });
+  if (!cells.length) return '<p class="empty">데이터 없음</p>';
+  const rows = [...new Set(cells.map(x => x.r))].sort((a, b) => a - b);
+  const maxC = Math.max(...cells.map(x => x.c));
+  const maxV = Math.max(...cells.map(x => x.v));
+  const at = {}; cells.forEach(x => { at[x.r + '|' + x.c] = x.v; });
+  // 모서리 칸에 "행 \ 열" 식으로 역슬래시를 쓰면, 한글 윈도우 글꼴(맑은 고딕)은 역슬래시를
+  // 원화 기호(₩)로 그려서 "타석 ₩ 안타"로 보인다. 방향 화살표로 대신한다.
+  let html = `<table class="hm"><tr><th class="rh">${rowLabel}↓ ${colLabel}→</th>`;
+  for (let c = 0; c <= maxC; c++) html += `<th>${c}</th>`;
+  html += '</tr>';
+  rows.forEach(r => {
+    html += `<tr><th class="rh">${r}</th>`;
+    for (let c = 0; c <= maxC; c++) { const v = at[r + '|' + c] || 0; html += hmCell(v || '', v / maxV, !v); }
+    html += '</tr>';
+  });
+  return html + '</table>';
+}
+
+// 이닝별 격자(행=지표, 열=이닝). 비율 지표는 표본이 작으면 들쭉날쭉하므로 타수를 같이 보여준다.
+const INNINGS = ['1','2','3','4','5','6','7','8','9','10'];
+const innLabel = i => i === '10' ? '10+' : i;
+function byInning(byInn, metrics) {
+  let html = '<table class="hm"><tr><th class="rh"></th>' + INNINGS.map(i => `<th>${innLabel(i)}</th>`).join('') + '</tr>';
+  metrics.forEach(m => {
+    const vals = INNINGS.map(i => m.get(byInn[i] || {}));
+    const nums = vals.filter(v => v != null && isFinite(v));
+    const max = nums.length ? Math.max(...nums) : 0;
+    html += `<tr><th class="rh">${m.label}</th>` + vals.map(v =>
+      (v == null || !isFinite(v)) ? hmCell('', 0, true) : hmCell(m.fmt(v), max ? v / max : 0, !v)).join('') + '</tr>';
+  });
+  return html + '</table>';
+}
+
+function batterHeatmaps(s) {
+  const inn = s.by_inning || {};
+  const rate = (a, b) => b ? a / b : null;
+  const obp = x => { const d = (x.AB || 0) + (x.BB || 0) + (x.HBP || 0) + (x.SF || 0); return d ? ((x.H || 0) + (x.BB || 0) + (x.HBP || 0)) / d : null; };
+  const slg = x => rate(x.TB || 0, x.AB || 0);
+  const ops = x => { const o = obp(x), s = slg(x); return (o == null || s == null) ? null : o + s; };
+  const f3 = v => v.toFixed(3).replace(/^0/, '');
+  return `
+    <div class="hm-card"><h3>경기당 안타</h3><p>한 경기에 안타를 몇 개 쳤는지의 분포. 0과 2+ 칸이 진하면 몰아치기형, 1 칸에 몰리면 꾸준형.</p>${oneD(s.hits_per_game, '안타')}</div>
+    <div class="hm-card"><h3>경기당 루타</h3><p>한 경기 총 진루 베이스(단타1·2루타2·3루타3·홈런4). 오른쪽 꼬리가 길수록 장타로 몰아친다.</p>${oneD(s.tb_per_game, '루타')}</div>
+    <div class="hm-card"><h3>타석수 × 안타</h3><p>몇 타석을 받았을 때 몇 안타를 쳤는가(칸 숫자 = 경기 수).</p>${twoD(s.pa_x_hits, '타석', '안타')}</div>
+    <div class="hm-card"><h3>타석수 × 루타</h3><p>몇 타석을 받았을 때 몇 루타를 쳤는가.</p>${twoD(s.pa_x_tb, '타석', '루타')}</div>
+    <div class="hm-card" style="grid-column:1/-1"><h3>이닝별 타격</h3><p>이닝마다의 안타·루타 수와 타율·OPS. 비율은 타수가 적은 이닝(주로 연장)에서 크게 흔들리니 타수와 함께 보자.</p>
+      ${byInning(inn, [
+        { label: '타수', get: x => x.AB || 0, fmt: v => v },
+        { label: '안타', get: x => x.H || 0, fmt: v => v },
+        { label: '루타', get: x => x.TB || 0, fmt: v => v },
+        { label: '타율', get: x => rate(x.H || 0, x.AB || 0), fmt: f3 },
+        { label: 'OPS', get: ops, fmt: f3 },
+      ])}</div>`;
+}
+
+function pitcherHeatmaps(s) {
+  const pg = s.per_game || {};
+  const inn = s.by_inning || {};
+  const perOut = key => x => x.OUT ? (x[key] || 0) * 27 / x.OUT : null;   // 9이닝(27아웃) 환산
+  const f2 = v => v.toFixed(2);
+  return `
+    <div class="hm-card"><h3>경기당 피안타</h3><p>한 경기(등판)에 안타를 몇 개 맞았는지의 분포.</p>${oneD(pg.H, '피안타')}</div>
+    <div class="hm-card"><h3>경기당 피출루</h3><p>피안타+볼넷+사구. 주자를 얼마나 내보내는지.</p>${oneD(pg.OB, '피출루')}</div>
+    <div class="hm-card"><h3>경기당 피홈런</h3><p>등판마다 홈런을 몇 개 맞았는지.</p>${oneD(pg.HR, '피홈런')}</div>
+    <div class="hm-card"><h3>경기당 자책점</h3><p>실점(R) 기록은 저장되어 있지 않아 자책점으로 대신한다. 0칸과 큰 값 칸이 둘 다 진하면 기복형.</p>${oneD(pg.ER, '자책')}</div>
+    <div class="hm-card" style="grid-column:1/-1"><h3>이닝별 허용</h3><p>이닝마다 맞은 피안타·피출루·자책점. 아래 두 줄은 그 이닝에 잡은 아웃 수로 9이닝 환산한 값이라, 던진 이닝 수가 달라도 비교할 수 있다.</p>
+      ${byInning(inn, [
+        { label: '아웃', get: x => x.OUT || 0, fmt: v => v },
+        { label: '피안타', get: x => x.H || 0, fmt: v => v },
+        { label: '피출루', get: x => x.OB || 0, fmt: v => v },
+        { label: '자책점', get: x => x.ER || 0, fmt: v => v },
+        { label: '9이닝당 피출루', get: perOut('OB'), fmt: f2 },
+        { label: '9이닝당 자책', get: perOut('ER'), fmt: f2 },
+      ])}</div>`;
+}
+
+function renderHeatmap() {
+  const body = document.getElementById('hm-body');
+  const season = document.getElementById('hm-season').value;
+  const bucket = HM && (HM_ROLE === 'pitchers' ? HM.pitcher : HM.batter);
+  const s = bucket && bucket[season];
+  if (!s) { body.innerHTML = '<p class="empty">이 시즌은 경기 단위 기록이 없어 히트맵을 만들 수 없습니다(1982~2000년 등).</p>'; return; }
+  body.innerHTML = '<div class="hm-grid">' + (HM_ROLE === 'pitchers' ? pitcherHeatmaps(s) : batterHeatmaps(s)) + '</div>';
+}
+
+async function openHeatmap(role) {
+  HM_ROLE = role;
+  if (HM) return;
+  const body = document.getElementById('hm-body');
+  try {
+    const r = await fetch('heatmap/' + encodeURIComponent(CODE) + '.json');
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    HM = await r.json();
+  } catch (e) {
+    body.innerHTML = '<p class="empty">이 선수의 히트맵 데이터가 없습니다(경기 단위 기록이 없는 시즌만 뛴 선수일 수 있습니다).</p>';
+    return;
+  }
+  const bucket = (role === 'pitchers' ? HM.pitcher : HM.batter) || {};
+  const seasons = Object.keys(bucket).sort().reverse();
+  const sel = document.getElementById('hm-season');
+  sel.innerHTML = seasons.map(s => `<option value="${s}">${s}</option>`).join('');
+  sel.onchange = renderHeatmap;
+  document.getElementById('hm-note').textContent = role === 'pitchers'
+    ? '칸이 진할수록 그 값이 자주 나왔다는 뜻'
+    : '칸이 진할수록 그 값이 자주 나왔다는 뜻 · 대수비/대주자로만 나온 경기는 제외';
+  if (!seasons.length) { body.innerHTML = '<p class="empty">히트맵 데이터가 없습니다.</p>'; return; }
+  renderHeatmap();
+}
+
+let CURRENT_ROLE = ROLE;
+document.querySelectorAll('.tab').forEach(btn => btn.addEventListener('click', () => {
+  document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b === btn));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.id === 'pane-' + btn.dataset.tab));
+  if (btn.dataset.tab === 'heatmap') openHeatmap(CURRENT_ROLE);
+}));
 
 main().catch(e => {
   const main = document.querySelector('main');
