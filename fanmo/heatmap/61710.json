@@ -1,1 +1,1 @@
-{"batter":{"2011":{"by_inning":{},"hits_per_game":{"0":2},"pa_x_hits":{"3|0":1,"5|0":1},"pa_x_tb":{"3|0":1,"5|0":1},"tb_per_game":{"0":2}}},"name":"김용호","pitcher":{}}
+{"batter":{"2011":{"by_inning":{"1":{"AB":1,"TBW":0},"2":{"AB":1,"TBW":0},"5":{"AB":1,"TBW":0}},"hits_per_game":{"0":2},"pa_x_hits":{"3|0":1,"5|0":1},"pa_x_tb":{"3|0":1,"5|0":1},"tb_per_game":{"0":2}}},"name":"김용호","pitcher":{}}
