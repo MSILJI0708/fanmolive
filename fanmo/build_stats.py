@@ -16,7 +16,8 @@ import os
 from collections import defaultdict
 
 from data_paths import glob_data_files
-from naver_fantasy_score import outs_to_innings_str
+from naver_fantasy_score import innings_to_outs, outs_to_innings_str
+from position import FIELDING_CHARS
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REGULAR_ROUNDS = {"kbo_r"}
@@ -34,7 +35,10 @@ def _round3(x: float) -> float:
 
 def _new_batter_acc() -> dict:
     d = {k: 0 for k in BATTER_SUM_KEYS}
-    d.update({"name": None, "team": None, "player_code": None, "G": 0, "AB": 0})
+    d.update({"name": None, "team": None, "player_code": None, "G": 0, "AB": 0,
+              # 포지션별 수비이닝. 주포지션(가장 많이 본 자리)만 표에 보여주고
+              # 나머지는 i 버튼 툴팁으로 펼친다.
+              "DEF_INN": defaultdict(float)})
     return d
 
 
@@ -57,6 +61,11 @@ def _finalize_batter(acc: dict) -> dict:
     ops = _round3(obp + slg)
     out = dict(acc)
     out.update({"PA": pa, "TB": tb, "AVG": avg, "OBP": obp, "SLG": slg, "OPS": ops})
+
+    # 수비이닝: 많이 본 순으로 정렬해 담는다. 표에는 주포지션(1순위)만 보여주고
+    # 나머지는 i 버튼 툴팁에서 펼친다. 0.1이닝 미만은 반올림하면 0이 되어 의미가 없으니 버린다.
+    innings = {k: round(v, 1) for k, v in (acc.get("DEF_INN") or {}).items() if round(v, 1) > 0}
+    out["DEF_INN"] = dict(sorted(innings.items(), key=lambda kv: -kv[1]))
     return out
 
 
@@ -96,11 +105,23 @@ def aggregate():
         season = _season_of(date_str.replace("-", ""))
         used_files += 1
 
+        # 그 경기에서 각 팀이 수비한 이닝 = 그 팀 투수들이 던진 이닝의 합. 타자가 어느
+        # 포지션을 봤는지는 박스스코어의 pos("유", "3좌" 처럼 한 경기에 여러 자리를 볼 수도
+        # 있다)에 들어 있으므로, 팀 수비이닝을 그 자리들에 고르게 나눠 배분한다.
+        # position.py가 최근 14일치를 네트워크로 계산하는 것과 같은 방식인데, 여기서는
+        # 이미 저장해 둔 데이터만 써서 시즌 전체를 계산한다.
+        team_def_outs: dict[tuple, int] = defaultdict(int)
+        for row in d.get("pitchers", []):
+            key = (row.get("team"), row.get("date"))
+            team_def_outs[key] += innings_to_outs(row.get("inn"))
+
         for row in d.get("batters", []):
             pc = row.get("player_code")
             if not pc:
                 continue
             s = row["stat"]
+            chars = [c for c in (row.get("pos") or "") if c in FIELDING_CHARS]
+            def_inn = team_def_outs.get((row.get("team"), row.get("date")), 0) / 3
             for bucket, table in ((season_batters[season], "season"), (career_batters, "career")):
                 acc = bucket.setdefault(pc, _new_batter_acc())
                 acc["name"] = row["name"]
@@ -110,6 +131,10 @@ def aggregate():
                 acc["AB"] += row.get("ab", 0)
                 for k in BATTER_SUM_KEYS:
                     acc[k] += s.get(k, 0)
+                if chars and def_inn:
+                    share = def_inn / len(chars)
+                    for c in chars:
+                        acc["DEF_INN"][FIELDING_CHARS[c]] += share
 
         for row in d.get("pitchers", []):
             pc = row.get("player_code")
