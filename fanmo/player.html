@@ -42,12 +42,14 @@ header { padding: 18px 20px 12px; border-bottom: 1px solid var(--line); }
 h1 { font-size: 18px; margin: 0 0 4px; }
 h1 .team { color: var(--ink-1); font-size: 13px; font-weight: 400; margin-left: 6px; }
 header p { margin: 0; color: var(--ink-1); font-size: 12px; }
-main { padding: 12px 20px 32px; overflow-x: auto; }
+main { padding: 10px 16px 24px; overflow-x: auto; }
 h2 { font-size: 13px; color: var(--ink-1); margin: 18px 0 6px; }
-table { border-collapse: collapse; width: 100%; min-width: 480px; font-size: 12.5px; }
-thead th { text-align: right; padding: 6px 8px; border-bottom: 2px solid var(--line); color: var(--ink-1); white-space: nowrap; }
+/* width:100%로 늘리면 남는 가로 공간이 마지막 칸(수비이닝) 앞에 몰려서 OPS와의 간격이
+   과하게 벌어진다. 내용 폭에 맞춰 두고 칸 여백도 조금 줄인다. */
+table { border-collapse: collapse; width: auto; min-width: 480px; max-width: 100%; font-size: 12.5px; }
+thead th { text-align: right; padding: 5px 7px; border-bottom: 2px solid var(--line); color: var(--ink-1); white-space: nowrap; }
 thead th.left { text-align: left; }
-tbody td { padding: 6px 8px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
+tbody td { padding: 4px 7px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
 tbody td.left { text-align: left; }
 tbody tr.career { background: var(--chip-bg); font-weight: 700; }
 tbody tr:hover { background: var(--row-alt); }
@@ -58,12 +60,17 @@ tbody tr:hover { background: var(--row-alt); }
   border: 1px solid var(--line); color: var(--ink-1);
   font-size: 9px; font-style: normal; font-weight: 700; cursor: help; vertical-align: middle;
 }
+.def-more:hover, .def-more:focus { z-index: 50; }
 .def-more .tip {
-  display: none; position: absolute; right: 0; bottom: calc(100% + 6px); z-index: 20;
-  background: var(--bg); border: 1px solid var(--line); border-radius: 6px;
-  padding: 6px 9px; white-space: nowrap; text-align: right;
+  /* 위가 아니라 왼쪽 옆으로 띄운다 — 위로 띄우면 바로 윗줄 기록을 가린다.
+     배경은 반드시 불투명해야 한다(처음엔 존재하지도 않는 var(--bg)를 써서 투명하게
+     나왔고, 뒤 글자가 그대로 비쳐 읽을 수 없었다). */
+  display: none; position: absolute; right: calc(100% + 8px); top: 50%;
+  transform: translateY(-50%); z-index: 50;
+  background: var(--paper-1); border: 1px solid var(--line); border-radius: 6px;
+  padding: 5px 9px; white-space: nowrap; text-align: right;
   font-size: 11.5px; font-weight: 400; color: var(--ink-0);
-  box-shadow: 0 4px 14px rgba(0,0,0,.35);
+  box-shadow: 0 4px 16px rgba(0,0,0,.45);
 }
 .def-more:hover .tip, .def-more:focus .tip { display: block; }
 .def-more .tip div { line-height: 1.6; }
