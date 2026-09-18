@@ -245,9 +245,12 @@ function render() {
     const q = state.q.toLowerCase();
     rows = rows.filter(r => (r.name || '').toLowerCase().includes(q));
   }
-  const defaultKey = state.role === 'batters' ? 'OPS' : 'ERA';
+  // 기본 정렬은 출전량(타자 타석, 투수 이닝) 많은 순. 비율 기록(OPS/ERA)으로 정렬하면
+  // 몇 타석·몇 이닝만 뛴 선수가 극단값으로 맨 위를 차지해서, 주전들을 비교하려면 매번
+  // 정렬을 다시 눌러야 했다. 비율 기록은 컬럼을 눌러 따로 볼 수 있다.
+  const defaultKey = state.role === 'batters' ? 'PA' : 'IP';
   const sortKey = state.sortKey || defaultKey;
-  const dir = state.sortKey ? state.sortDir : (sortKey === 'ERA' ? 1 : -1);
+  const dir = state.sortKey ? state.sortDir : -1;
   rows.sort((a, b) => {
     let av = sortKey === 'IP' ? ipToOuts(a.IP) : a[sortKey];
     let bv = sortKey === 'IP' ? ipToOuts(b.IP) : b[sortKey];
