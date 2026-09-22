@@ -8513,6 +8513,24 @@
     "WIN": false,
     "LOSS": true
    }
+  },
+  {
+   "game_id": "20260922NCSS02026",
+   "name": "신영우",
+   "team": "NC",
+   "official_wls": "패",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": true
+   }
   }
  ]
 }
