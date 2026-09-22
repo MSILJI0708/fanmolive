@@ -990,6 +990,19 @@ def write_review_sheet(cards: list[dict], out_path: str) -> int:
     if not crops:
         return 0
 
+    # 기본 비트맵 폰트는 한글을 못 그려서 라벨이 전부 네모로 깨진다 — 힌트("혹시 OOO?")를
+    # 읽을 수 없으면 검수 시트의 의미가 없으므로 시스템 한글 폰트를 찾아 쓴다.
+    font = None
+    for fp in (r"C:\Windows\Fonts\malgun.ttf", r"C:\Windows\Fonts\gulim.ttc",
+               r"C:\Windows\Fonts\batang.ttc"):
+        if os.path.exists(fp):
+            try:
+                from PIL import ImageFont
+                font = ImageFont.truetype(fp, 20)
+                break
+            except OSError:
+                continue
+
     cols = 8
     cw, ch = crops[0][1].size
     label_h = 30
@@ -1006,7 +1019,7 @@ def write_review_sheet(cards: list[dict], out_path: str) -> int:
             # 예전 로직이 이 이름으로 잘못 확정했을 후보 — 사람이 "맞다/아니다"만
             # 판단하면 되도록 같이 적어준다.
             label += "  ?" + "/".join(card["hints"])
-        draw.text((x + 6, y + ch + 8), label, fill=(255, 220, 120))
+        draw.text((x + 6, y + ch + 6), label, fill=(255, 220, 120), font=font)
     sheet.save(out_path)
     return len(crops)
 
