@@ -877,7 +877,7 @@ footer.notes b { color: var(--ink-0); }
       </div>
     </span>
     · 데이터 출처 <code>api-gw.sports.naver.com</code> (Selenium 불필요, 공개 JSON 응답 직접 호출)
-    · 마지막 업데이트 09월 22일 16:56 (KST)
+    · 마지막 업데이트 09월 22일 16:58 (KST)
   </p>
 </header>
 
@@ -1475,8 +1475,8 @@ function render(tableId, cols, rows) {
     sorted.forEach((row, i) => {
       const tr = document.createElement('tr');
       tr.className = 'clickable';
-      tr.title = '클릭하면 이 선수의 시즌별·통산 기록이 새 창으로 열려요';
-      tr.addEventListener('click', () => openPlayerPage(row));
+      tr.title = '클릭하면 이 선수의 타석/수비별 포인트 내역이 새 창으로 열려요';
+      tr.addEventListener('click', () => openPlayerModalWindow(row));
       const teamRgb = TEAM_COLORS[row.team];
       if (teamRgb) {
         tr.dataset.team = row.team;
@@ -1975,8 +1975,8 @@ function runOptimizer() {
     (bySlot.get(slot) || []).forEach(item => {
       const row = document.createElement('div');
       row.className = 'optimizer-row clickable';
-      row.title = '클릭하면 이 선수의 시즌별·통산 기록이 새 창으로 열려요';
-      row.addEventListener('click', () => openPlayerPage(item.row));
+      row.title = '클릭하면 이 선수의 타석/수비별 포인트 내역이 새 창으로 열려요';
+      row.addEventListener('click', () => openPlayerModalWindow(item.row));
 
       const slotSpan = document.createElement('span');
       slotSpan.className = 'optimizer-slot';
@@ -2264,7 +2264,7 @@ function renderLivePanel() {
   const games = (data && data.live) || [];
   if (!games.length) { panel.hidden = true; return; }
   panel.hidden = false;
-  document.getElementById('live-asof').textContent = '· 09월 22일 16:56 기준';
+  document.getElementById('live-asof').textContent = '· 09월 22일 16:58 기준';
   wrap.innerHTML = '';
 
   games.forEach(g => {
@@ -2759,31 +2759,25 @@ modalViewHistoryBtn.addEventListener('click', () => {
   renderModalBody();
 });
 
-// 이름(행) 클릭 시 그 날 경기만의 카테고리/타임라인 팝업(openPlayerModal, 아래) 대신
-// 시즌별+통산 누적 기록을 보여주는 player.html을 연다 — KBO 공식 기록실처럼 선수
-// 하나를 따로 떼어서 보는 화면. player_code가 없는 행(코스트 CSV 미등록 등)은 열
-// 대상이 없으니 조용히 무시한다. 투수 행에만 있는 role 필드로 타자/투수를 가린다.
-// 실제로 어디에 여는지(현재 탭 대체/새 탭/새 창)는 옵션 페이지(options.html)에서
-// 고른 값을 openPlayerLink()가 공통 처리한다 — 이 함수는 URL만 만든다.
-function openPlayerPage(row) {
-  if (!row.player_code) return;
+// 이름(행) 클릭 시 그 날 경기만의 카테고리/타임라인 팝업(openPlayerModal, 아래)을
+// 새 창으로 연다 — 시즌별·통산 누적 기록을 보여주는 player.html 리다이렉트는
+// records.html(기록실) 전용이고, 여기(판타지 모드)는 그 기능을 쓰지 않는다.
+// 새 창은 이 페이지(lp_board.html) 자체를 다시 열되, 쿼리스트링으로 "어느 날짜의
+// 어느 선수 팝업을 자동으로 띄울지" 알려준다(아래 부트스트랩 코드가 로드 후 처리) —
+// 모달 렌더링 코드를 새 창용으로 따로 만들 필요 없이 그대로 재사용할 수 있다.
+function openPlayerModalWindow(row) {
   const role = row.role ? 'pitchers' : 'batters';
-  openPlayerLink(row.player_code, role, row.name || '');
-}
-
-// 옵션 페이지에서 고른 "선수 기록 열기 방식"(playerLinkMode: replace/tab/window, 기본값
-// window)을 따라 player.html을 연다 — lp_board.html·records.html이 공통으로 쓴다.
-function openPlayerLink(code, role, name) {
-  if (!code) return;
-  const url = 'player.html?code=' + encodeURIComponent(code)
-    + '&role=' + role + '&name=' + encodeURIComponent(name || '');
-  let mode = 'window';
-  try {
-    mode = JSON.parse(localStorage.getItem('kboBoardPrefs_v1') || '{}').playerLinkMode || 'window';
-  } catch (e) { /* 저장값이 깨져 있으면 기본값(새 창)으로 */ }
-  if (mode === 'replace') location.href = url;
-  else if (mode === 'tab') window.open(url, '_blank');
-  else window.open(url, 'player_' + code, 'width=720,height=680,noopener');
+  const params = new URLSearchParams();
+  params.set('openDate', activeDate);
+  params.set('openRole', role);
+  if (row.player_code) params.set('openPlayer', row.player_code);
+  else {
+    // player_code가 없는 행(코스트 CSV 미등록 등)은 이름+소속으로 대신 찾는다.
+    params.set('openName', row.name || '');
+    if (row.team) params.set('openTeam', row.team);
+  }
+  const url = location.pathname + '?' + params.toString();
+  window.open(url, 'fantasy_modal_' + (row.player_code || row.name), 'width=720,height=720');
 }
 
 function openPlayerModal(row) {
@@ -2810,4 +2804,23 @@ modalOverlay.addEventListener('click', e => {
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closePlayerModal();
 });
+
+// openPlayerModalWindow()가 새 창을 열 때 붙이는 쿼리스트링(openDate/openRole/
+// openPlayer 또는 openName+openTeam)을 읽어, 그 새 창이 뜨자마자 해당 선수의
+// 판타지 모드 팝업을 자동으로 띄운다. 날짜가 원래 보던 날짜와 다르면 먼저
+// switchDate로 이동한 뒤(비동기 fetch가 끝나길 기다렸다가) 찾는다.
+(async function openPlayerModalFromQuery() {
+  const params = new URLSearchParams(location.search);
+  const code = params.get('openPlayer');
+  const name = params.get('openName');
+  if (!code && !name) return;
+  const role = params.get('openRole');
+  const dateParam = params.get('openDate');
+  if (dateParam && dateParam !== activeDate) await switchDate(dateParam);
+  const pool = role === 'pitchers' ? (data.pitchers || []) : (data.batters || []);
+  const team = params.get('openTeam');
+  let row = code ? pool.find(r => r.player_code === code) : null;
+  if (!row && name) row = pool.find(r => r.name === name && (!team || r.team === team));
+  if (row) openPlayerModal(row);
+})();
 </script>
