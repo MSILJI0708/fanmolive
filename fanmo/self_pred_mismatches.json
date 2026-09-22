@@ -8134,5 +8134,23 @@
    "WIN": false,
    "LOSS": true
   }
+ },
+ "20260922KTSK02026:아빌라": {
+  "game_id": "20260922KTSK02026",
+  "name": "아빌라",
+  "team": "SSG",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
  }
 }
