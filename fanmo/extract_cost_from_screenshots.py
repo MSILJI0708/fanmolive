@@ -40,6 +40,7 @@ import os
 import re
 import sys
 from collections import Counter, defaultdict
+from functools import lru_cache
 
 from position_override_apply import _HOMONYM_OVERRIDES
 from analyze_position_screenshots import (
@@ -438,6 +439,26 @@ def assign_pitcher_roles(cards: list[dict], folder_pos: str) -> dict[int, str]:
     return {id(c): (folder_pos if i < boundary else other) for i, c in enumerate(cards)}
 
 
+@lru_cache(maxsize=1)
+def _career_names() -> tuple[frozenset, frozenset]:
+    """(역대 타자 이름, 역대 투수 이름). career_stats.json(2005~2026 통산 기록)에서 만든다.
+
+    올 시즌 1군 출전 기록만으로 후보를 만들면 9UP 등록 명단을 다 못 덮는다 — 1군에
+    거의 못 나온 선수(박진우·고승완 등)가 후보에 없어서, 글자를 정확히 읽어도 "가까운
+    남"으로 치환돼 버린다. 이 명단은 그 인정용으로만 쓴다(correct_name의 exact_only)."""
+    path = os.path.join(HERE, "career_stats.json")
+    if not os.path.exists(path):
+        return frozenset(), frozenset()
+    try:
+        with open(path, encoding="utf-8") as f:
+            cs = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return frozenset(), frozenset()
+    def names(kind):
+        return frozenset(r["name"] for r in cs.get(kind, []) if r.get("name"))
+    return names("batters"), names("pitchers")
+
+
 def scan_root(root: str, name_index: dict[str, set[tuple[str, str]]]) -> dict[str, list[tuple[str, int]]]:
     """폴더(1b,2b,...) -> [(이름, 별개수), ...]
 
@@ -446,6 +467,7 @@ def scan_root(root: str, name_index: dict[str, set[tuple[str, str]]]) -> dict[st
     보정이 안 됐다."""
     batters = {n for n, entries in name_index.items() if any(r == "batter" for r, _ in entries)}
     pitchers = {n for n, entries in name_index.items() if any(r == "pitcher" for r, _ in entries)}
+    known_batters, known_pitchers = _career_names()
     library = load_template_library()
     photos = load_homonym_photos()
     # 이름 -> 그 역할(투수/야수)에서 가능한 코드들. 후보가 둘 이상이면 동명이인이라
@@ -464,6 +486,7 @@ def scan_root(root: str, name_index: dict[str, set[tuple[str, str]]]) -> dict[st
         if not os.path.isdir(dir_path):
             continue
         known = pitchers if _is_pitcher_pos(csv_pos) else batters
+        exact_only = known_pitchers if _is_pitcher_pos(csv_pos) else known_batters
         pairs = []
         cards = []
         # 파일명은 캡쳐 시각순이라, 정렬하면 화면에 나온 명단 순서 그대로가 된다.
@@ -485,14 +508,22 @@ def scan_root(root: str, name_index: dict[str, set[tuple[str, str]]]) -> dict[st
         templates: dict[str, list] = {n: list(v) for n, v in library.items() if n in known}
         undecided = []
         for card in cards:
-            corrected = (correct_name(card["raw_name"], known)
+            corrected = (correct_name(card["raw_name"], known, exact_only=exact_only)
                          if card["raw_name"] else None)
             if corrected is None:
+                # 자동 확정은 안 했지만 거리 2 후보가 잡히면, 예전 로직이었다면 그 이름으로
+                # 잘못 확정됐을 카드다 — 코스트가 낮아도 반드시 사람이 봐야 한다.
+                card["hints"] = name_hints(card["raw_name"], known) if card["raw_name"] else []
                 undecided.append(card)
                 continue
             pairs.append((card_pos[id(card)] if card_pos else csv_pos, corrected, card["stars"],
                           _pick_code(card, corrected, codes_of, _is_pitcher_pos(csv_pos), photos)))
-            if len(templates.get(corrected, ())) < 3:
+            # 글자가 그대로 읽힌 카드(보정 0)만 템플릿으로 남긴다. 보정을 거친 이름으로
+            # 템플릿을 만들면, 그 보정이 틀렸을 때(알려진 명단에 없는 선수가 남의 이름으로
+            # 치환됐을 때) 그 사람의 이름표 그림이 남의 이름으로 영구 등록돼 다음 회차부터는
+            # 이미지 매칭만으로도 같은 오류가 재생산된다 — 실측으로 확인된 오염이다
+            # (고승완 카드가 '고승민' 템플릿으로 누적됨, 2026-09-22).
+            if corrected == card["raw_name"] and len(templates.get(corrected, ())) < 3:
                 sig = ink_signature(label_image(card))
                 if sig:
                     templates.setdefault(corrected, []).append(sig)
@@ -503,9 +534,11 @@ def scan_root(root: str, name_index: dict[str, set[tuple[str, str]]]) -> dict[st
         for card in undecided:
             corrected = match_by_image(card, templates)
             if corrected is None:
-                # 1코스트는 기본값이라 놓쳐도 손해가 없지만, 2코스트 이상은 그 선수가
-                # 1로 잘못 내려가므로 사람이 눈으로 확인하도록 따로 남긴다.
-                if card["stars"] >= 2:
+                # 1코스트는 "그냥 못 읽어서 빠지는" 것이면 기본값이라 손해가 없다. 하지만
+                # 거리 2 후보가 잡힌 카드는 성격이 다르다 — 그대로 두면 예전처럼 남의
+                # 이름으로 확정돼 그 선수의 진짜 코스트를 덮어쓴다. 누락은 안전하지만
+                # 오배정은 안전하지 않으므로, 힌트가 있으면 코스트와 무관하게 검수로 보낸다.
+                if card["stars"] >= 2 or card.get("hints"):
                     _unread_cards.append(card)
                 continue
             pairs.append((card_pos[id(card)] if card_pos else csv_pos, corrected, card["stars"],
@@ -558,7 +591,13 @@ def write_draft_csv(resolved: list[tuple[str, str, str, int]], base_csv: str, ou
     for row in rows:
         by_name.setdefault((row.get("이름") or "").strip(), []).append(row)
 
-    changed, added, skipped = [], [], []
+    changed, added, skipped, suspicious = [], [], [], []
+    # 같은 선수가 두 포지션에 잡히면(= 이름 오독으로 남의 카드가 섞인 것) 나중에 처리된
+    # 쪽이 먼저 쓴 값을 덮어쓴다. 실측 4건(고승민 2B5 vs DH1, 최원준 RF4 vs DH1,
+    # 김주원 SS3 vs LF1, 박민우 2B4 vs SS1) 모두 "낮은 쪽이 오독"이었으므로, 코스트가
+    # 높은 것부터 처리하고 이미 쓴 행을 더 낮은 값으로 되돌리지 않는다.
+    resolved = sorted(resolved, key=lambda r: -r[3])
+    written: dict[int, int] = {}
 
     # 같은 포지션에 같은 이름인 동명이인은 사진만으로는 끝내 못 가린다 — 유니폼도 같고
     # 이름표도 같아서(예: 삼성 이승현 두 명) 기계가 고를 근거가 없다. 사람이 한 번 확인해
@@ -610,17 +649,37 @@ def write_draft_csv(resolved: list[tuple[str, str, str, int]], base_csv: str, ou
         # (실측: p/rp 폴더가 같은 276명을 담고 있고 교집합이 275명) 어느 폴더에서 읽었는지로
         # 선발/구원을 판단할 수 없다. 그대로 뒀다간 구원투수가 SP로 뒤바뀐다.
         new_pos = old_pos if _is_pitcher_pos(pos) else pos
+        prev_written = written.get(id(target))
+        if prev_written is not None and cost < prev_written:
+            suspicious.append(f"{name}: 이번에 {prev_written}코스트로 읽은 행을 {new_pos} {cost}"
+                              f"(으)로 되돌리려 해서 무시했습니다 — 이름 오독 의심")
+            continue
+
         if old_cost != str(cost) or old_pos != new_pos:
             changed.append(f"{name}: {old_pos} {old_cost} -> {new_pos} {cost}")
+            # 이름을 잘못 읽어 "남의 카드"가 이 선수 행에 덮어써지면 늘 같은 모양으로
+            # 나타난다 — 엉뚱한 포지션으로 옮겨가면서 코스트가 뚝 떨어진다(2026-09-16
+            # 스냅샷 실측: 고승완→고승민 2B5→DH1, 이원준→최원준 RF2→DH1,
+            # 김주오→김주원 SS4→LF1). 진짜 코스트 변동은 보통 한 단계씩 움직이고
+            # 포지션도 웬만해선 그대로다. 그래서 이 두 형태만 따로 모아 경고한다.
+            if old_cost.isdigit():
+                drop = int(old_cost) - cost
+                if old_pos != new_pos and drop > 0:
+                    suspicious.append(f"{name}: {old_pos} {old_cost} -> {new_pos} {cost} "
+                                      f"(포지션이 바뀌며 하락 — 이름 오독 의심)")
+                elif drop >= 2:
+                    suspicious.append(f"{name}: {old_cost} -> {cost} (2단계 이상 하락)")
             target["코스트"] = str(cost)
             target["포지션"] = new_pos
+        written[id(target)] = cost
 
     with open(out_csv, "w", encoding="utf-8-sig", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fields)
         writer.writeheader()
         writer.writerows(rows)
 
-    return {"changed": changed, "added": added, "skipped": skipped, "total_rows": len(rows)}
+    return {"changed": changed, "added": added, "skipped": skipped,
+            "suspicious": suspicious, "total_rows": len(rows)}
 
 
 def _to_jamo(text: str) -> str:
@@ -649,16 +708,12 @@ def _edit_distance(a: str, b: str) -> int:
     return prev[-1]
 
 
-def correct_name(name: str, candidates: set[str], max_jamo_distance: int = 2) -> str | None:
-    """OCR이 흘린 이름을 실제 선수명으로 되돌린다. 확정 못 하면 None.
+AUTO_CORRECT_DISTANCE = 1   # 이 거리까지만 자동 확정
+HINT_DISTANCE = 2           # 여기까지는 "사람이 봐야 하는 위험 후보"로만 취급
 
-    이 게임 폰트에서 tesseract는 받침을 자주 빠뜨리거나 비슷한 자음으로 잘못 읽는다
-    ("김현수" -> "기혀수", "고승민" -> "고숲민", "문보경" -> "무보경"). 음절 단위로 비교하면
-    세 글자가 통째로 다른 것처럼 보이지만, 자모로 풀어쓰면 받침 한두 개 차이일 뿐이다.
-    글자 수가 같고 자모 거리가 가장 가까운 후보가 유일할 때만 고친다 — 후보가 둘 이상
-    비슷하면 잘못 고칠 위험이 있으니 손대지 않는다."""
-    if name in candidates:
-        return name
+
+def _nearest(name: str, candidates: set[str], max_jamo_distance: int):
+    """글자 수가 같은 후보 중 자모 거리가 가장 가까운 것들과 그 거리를 돌려준다."""
     target = _to_jamo(name)
     best, best_d = [], max_jamo_distance + 1
     for cand in candidates:
@@ -669,9 +724,50 @@ def correct_name(name: str, candidates: set[str], max_jamo_distance: int = 2) ->
             best, best_d = [cand], d
         elif d == best_d:
             best.append(cand)
+    return best, best_d
+
+
+def correct_name(name: str, candidates: set[str],
+                 max_jamo_distance: int = AUTO_CORRECT_DISTANCE,
+                 exact_only: frozenset = frozenset()) -> str | None:
+    """OCR이 흘린 이름을 실제 선수명으로 되돌린다. 확정 못 하면 None.
+
+    이 게임 폰트에서 tesseract는 받침을 자주 빠뜨리거나 비슷한 자음으로 잘못 읽는다
+    ("김현수" -> "기혀수", "고승민" -> "고숲민", "문보경" -> "무보경"). 음절 단위로 비교하면
+    세 글자가 통째로 다른 것처럼 보이지만, 자모로 풀어쓰면 받침 한두 개 차이일 뿐이다.
+    글자 수가 같고 자모 거리가 가장 가까운 후보가 유일할 때만 고친다 — 후보가 둘 이상
+    비슷하면 잘못 고칠 위험이 있으니 손대지 않는다.
+
+    거리 2까지 자동으로 고치면 안 된다(2026-09-22에 실측으로 확인). 후보 명단은 올 시즌
+    1군 출전 기록이 있는 선수뿐인데 9UP은 그보다 넓은 명단을 등록하므로, 명단에 없는
+    선수는 "가까운 남"으로 치환될 수밖에 없다. 3글자 이름에서 자모 거리 2는 한 음절이
+    통째로 다른 수준(고승완→고승민, 이원준→최원준, 김주오→김주원)이라 다른 사람이
+    되어버리고, 그 사람의 진짜 코스트까지 덮어쓴다(고승민 5→1, 최원준 2→1, 김주원 4→1).
+    그래서 거리 1까지만 자동으로 고치고, 거리 2는 확정하지 않고 사람에게 넘긴다.
+
+    exact_only는 "글자가 정확히 읽혔을 때 그 이름을 인정만 해주는" 넓은 명단이다
+    (career_stats.json의 역대 선수 3,230명). 보정 후보로는 쓰지 않는 게 핵심이다 —
+    후보로 넣으면 은퇴 선수 이름이 현역 선수 오독을 끌어당겨 새 오류를 만든다. 반대로
+    인정만 해주면, 올 시즌 1군 기록이 없어 candidates에 빠져 있던 선수(박진우·고승완·
+    이원준·장시환 등 실측 12건 중 11건)가 남의 이름으로 치환되는 것을 원천 차단한다."""
+    if name in candidates or name in exact_only:
+        return name
+    best, best_d = _nearest(name, candidates, max_jamo_distance)
     if best_d <= max_jamo_distance and len(best) == 1:
         return best[0]
     return None
+
+
+def name_hints(name: str, candidates: set[str],
+               max_jamo_distance: int = HINT_DISTANCE) -> list[str]:
+    """확정은 못 했지만 "이 선수일 수도 있다"는 후보. 검수 시트에 같이 적어준다.
+
+    후보가 잡힌다는 건 곧 예전 로직이라면 그 이름으로 잘못 확정됐을 카드라는 뜻이라,
+    1코스트여도 반드시 사람 눈을 거쳐야 하는 위험군이다."""
+    if not name or name in candidates:
+        return []
+    best, best_d = _nearest(name, candidates, max_jamo_distance)
+    return sorted(best) if best_d <= max_jamo_distance else []
 
 
 def _is_pitcher_pos(pos: str) -> bool:
@@ -905,7 +1001,12 @@ def write_review_sheet(cards: list[dict], out_path: str) -> int:
         x = (i % cols) * (cw + gap)
         y = (i // cols) * (ch + label_h + gap)
         sheet.paste(im, (x, y))
-        draw.text((x + 6, y + ch + 8), f"#{i + 1}  {card['stars']}코스트", fill=(255, 220, 120))
+        label = f"#{i + 1}  {card['stars']}코스트"
+        if card.get("hints"):
+            # 예전 로직이 이 이름으로 잘못 확정했을 후보 — 사람이 "맞다/아니다"만
+            # 판단하면 되도록 같이 적어준다.
+            label += "  ?" + "/".join(card["hints"])
+        draw.text((x + 6, y + ch + 8), label, fill=(255, 220, 120))
     sheet.save(out_path)
     return len(crops)
 
@@ -969,6 +1070,22 @@ def main():
         for name, stars, reason in unresolved:
             all_unresolved.append((csv_pos, name, stars, reason))
 
+    # 9UP은 야수 한 명을 한 포지션에만 올린다. 그런데 이름을 잘못 읽으면 "남의 카드"가
+    # 그 선수 이름으로 잡혀서, 같은 이름이 두 포지션에 동시에 나타난다(실측 2026-09-16:
+    # 고승민 2B5+DH1, 박민우 2B4+SS1+C1, 최원준 RF4+DH1, 김주원 SS3+LF1 — 네 건 모두
+    # 낮은 쪽이 오독이었다). 덮어쓰기 전에 이 모순부터 알려준다.
+    dup_pos: dict[str, list] = defaultdict(list)
+    for csv_pos, name, code, stars in all_resolved:
+        if not _is_pitcher_pos(csv_pos):
+            dup_pos[name].append((csv_pos, stars))
+    conflicts = {n: v for n, v in dup_pos.items() if len({p for p, _ in v}) > 1}
+    if conflicts:
+        print(f"\n=== [확인 필요] 한 선수가 두 포지션에 잡힘 {len(conflicts)}명 "
+              f"— 이름 오독으로 남의 카드가 섞여 들어왔을 가능성이 큽니다 ===")
+        for name, v in sorted(conflicts.items()):
+            detail = ", ".join(f"{p} {s}코스트" for p, s in sorted(v))
+            print(f"  {name}\t{detail}")
+
     print(f"\n=== 매칭 성공 {len(all_resolved)}건 ===")
     for csv_pos, name, code, stars in sorted(all_resolved):
         print(f"  {csv_pos}\t{name}\t{code}\t{stars}코스트")
@@ -983,6 +1100,8 @@ def main():
     for card in sorted(_unread_cards, key=lambda c: (-c["stars"], c["path"], c["col"])):
         label = (f"'{card['raw_name']}'로 읽혀 보정 실패" if card["raw_name"]
                  else "이름 글자를 못 찾음")
+        if card.get("hints"):
+            label += f" [혹시 {'/'.join(card['hints'])}?]"
         print(f"  {label}\t{card['stars']}코스트\t"
               f"{os.path.basename(card['path'])} ({card['col'] + 1}번째 카드)")
     if not critical and not _unread_cards:
@@ -1016,6 +1135,11 @@ def main():
         print(f"  코스트(또는 포지션) 바뀐 선수: {len(report['changed'])}명")
         for c in report["changed"]:
             print("   ", c)
+        if report["suspicious"]:
+            print(f"\n  [확인 필요] 이름 오독으로 남의 코스트를 덮어썼을 수 있는 변화 "
+                  f"{len(report['suspicious'])}건 — 등록 전에 이 선수들만 사진과 맞춰 보세요:")
+            for s in report["suspicious"]:
+                print("   ", s)
         print(f"  새로 추가된 선수: {len(report['added'])}명")
         for a in report["added"]:
             print("   ", a)
