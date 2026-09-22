@@ -77,8 +77,8 @@
       },
       "games": 3,
       "auto_position": "우익수",
-      "manual_position": null,
-      "effective_position": "우익수"
+      "manual_position": "좌익수",
+      "effective_position": "좌익수"
     },
     "52103": {
       "name": "최원영",
@@ -225,8 +225,8 @@
       },
       "games": 7,
       "auto_position": "우익수",
-      "manual_position": "좌익수",
-      "effective_position": "좌익수"
+      "manual_position": "우익수",
+      "effective_position": "우익수"
     },
     "65703": {
       "name": "이도윤",
@@ -916,8 +916,8 @@
       },
       "games": 3,
       "auto_position": "중견수",
-      "manual_position": null,
-      "effective_position": "중견수"
+      "manual_position": "좌익수",
+      "effective_position": "좌익수"
     },
     "51417": {
       "name": "김현준",
