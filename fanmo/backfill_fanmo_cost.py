@@ -18,22 +18,31 @@ def backfill_file(path: str, date_str: str | None) -> tuple[int, int]:
 
     matched = 0
     total = 0
+    changed = False
     for row in data.get("batters", []):
         total += 1
         cost = lookup_batter_cost(row.get("name", ""), row.get("team", ""), row.get("position", ""),
                                    date_str, row.get("player_code"))
-        row["fanmo_cost"] = cost
+        if row.get("fanmo_cost") != cost or "fanmo_cost" not in row:
+            row["fanmo_cost"] = cost
+            changed = True
         if cost is not None:
             matched += 1
     for row in data.get("pitchers", []):
         total += 1
         cost = lookup_pitcher_cost(row.get("name", ""), row.get("team", ""), date_str, row.get("player_code"))
-        row["fanmo_cost"] = cost
+        if row.get("fanmo_cost") != cost or "fanmo_cost" not in row:
+            row["fanmo_cost"] = cost
+            changed = True
         if cost is not None:
             matched += 1
 
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False)
+    # 값이 그대로면 파일을 건드리지 않는다. 예전엔 무조건 다시 썼더니, 코스트 개념이
+    # 없던 2001~2007년 데이터 1,034개에까지 "fanmo_cost": null이 새로 박혀서 의미 없는
+    # 변경이 저장소에 쌓였다(2026-09-22).
+    if changed:
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False)
     return matched, total
 
 
