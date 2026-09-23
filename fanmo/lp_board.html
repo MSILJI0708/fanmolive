@@ -877,7 +877,7 @@ footer.notes b { color: var(--ink-0); }
       </div>
     </span>
     · 데이터 출처 <code>api-gw.sports.naver.com</code> (Selenium 불필요, 공개 JSON 응답 직접 호출)
-    · 마지막 업데이트 09월 24일 01:33 (KST)
+    · 마지막 업데이트 09월 24일 01:46 (KST)
   </p>
 </header>
 
@@ -2264,7 +2264,7 @@ function renderLivePanel() {
   const games = (data && data.live) || [];
   if (!games.length) { panel.hidden = true; return; }
   panel.hidden = false;
-  document.getElementById('live-asof').textContent = '· 09월 24일 01:33 기준';
+  document.getElementById('live-asof').textContent = '· 09월 24일 01:46 기준';
   wrap.innerHTML = '';
 
   games.forEach(g => {
