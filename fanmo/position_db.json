@@ -361,7 +361,7 @@
       "innings_by_position": {},
       "games": 1,
       "auto_position": "지명타자",
-      "manual_position": null,
+      "manual_position": "지명타자",
       "effective_position": "지명타자"
     },
     "67006": {
@@ -968,8 +968,8 @@
       },
       "games": 2,
       "auto_position": "유격수",
-      "manual_position": null,
-      "effective_position": "유격수"
+      "manual_position": "3루수",
+      "effective_position": "3루수"
     },
     "69992": {
       "name": "최정원",
@@ -1450,8 +1450,8 @@
       },
       "games": 3,
       "auto_position": "우익수",
-      "manual_position": "좌익수",
-      "effective_position": "좌익수"
+      "manual_position": "우익수",
+      "effective_position": "우익수"
     },
     "52103": {
       "name": "최원영",
@@ -1969,7 +1969,7 @@
       },
       "games": 1,
       "auto_position": "포수",
-      "manual_position": null,
+      "manual_position": "포수",
       "effective_position": "포수"
     },
     "56952": {
