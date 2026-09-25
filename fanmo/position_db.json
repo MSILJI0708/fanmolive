@@ -2,6 +2,338 @@
   "as_of": "2026-09-25",
   "window_days": 14,
   "players": {
+    "67905": {
+      "name": "천재환",
+      "team": "NC",
+      "innings_by_position": {
+        "중견수": 39.0,
+        "좌익수": 21.0,
+        "우익수": 44.0
+      },
+      "games": 12,
+      "auto_position": "우익수",
+      "manual_position": "중견수",
+      "effective_position": "중견수"
+    },
+    "56949": {
+      "name": "고준휘",
+      "team": "NC",
+      "innings_by_position": {
+        "좌익수": 9.0
+      },
+      "games": 2,
+      "auto_position": "좌익수",
+      "manual_position": null,
+      "effective_position": "좌익수"
+    },
+    "69992": {
+      "name": "최정원",
+      "team": "NC",
+      "innings_by_position": {
+        "중견수": 87.0,
+        "2루수": 8.0
+      },
+      "games": 11,
+      "auto_position": "중견수",
+      "manual_position": "중견수",
+      "effective_position": "중견수"
+    },
+    "62907": {
+      "name": "박민우",
+      "team": "NC",
+      "innings_by_position": {
+        "2루수": 79.0
+      },
+      "games": 12,
+      "auto_position": "2루수",
+      "manual_position": "2루수",
+      "effective_position": "2루수"
+    },
+    "66965": {
+      "name": "도태훈",
+      "team": "NC",
+      "innings_by_position": {
+        "2루수": 17.0,
+        "유격수": 17.0,
+        "1루수": 9.0
+      },
+      "games": 5,
+      "auto_position": "2루수",
+      "manual_position": "3루수",
+      "effective_position": "3루수"
+    },
+    "56950": {
+      "name": "블레인",
+      "team": "NC",
+      "innings_by_position": {
+        "1루수": 95.0
+      },
+      "games": 12,
+      "auto_position": "1루수",
+      "manual_position": "1루수",
+      "effective_position": "1루수"
+    },
+    "51344": {
+      "name": "김휘집",
+      "team": "NC",
+      "innings_by_position": {
+        "3루수": 82.0,
+        "유격수": 22.0
+      },
+      "games": 12,
+      "auto_position": "3루수",
+      "manual_position": "3루수",
+      "effective_position": "3루수"
+    },
+    "63963": {
+      "name": "권희동",
+      "team": "NC",
+      "innings_by_position": {
+        "우익수": 17.0,
+        "좌익수": 79.0
+      },
+      "games": 12,
+      "auto_position": "좌익수",
+      "manual_position": "좌익수",
+      "effective_position": "좌익수"
+    },
+    "51991": {
+      "name": "오장한",
+      "team": "NC",
+      "innings_by_position": {
+        "우익수": 18.0
+      },
+      "games": 5,
+      "auto_position": "우익수",
+      "manual_position": null,
+      "effective_position": "우익수"
+    },
+    "68912": {
+      "name": "김형준",
+      "team": "NC",
+      "innings_by_position": {
+        "포수": 87.0
+      },
+      "games": 11,
+      "auto_position": "포수",
+      "manual_position": "포수",
+      "effective_position": "포수"
+    },
+    "50903": {
+      "name": "한재환",
+      "team": "NC",
+      "innings_by_position": {
+        "1루수": 17.0,
+        "2루수": 9.0
+      },
+      "games": 3,
+      "auto_position": "1루수",
+      "manual_position": "1루수",
+      "effective_position": "1루수"
+    },
+    "50902": {
+      "name": "김한별",
+      "team": "NC",
+      "innings_by_position": {
+        "유격수": 71.0,
+        "3루수": 8.0,
+        "2루수": 9.0
+      },
+      "games": 10,
+      "auto_position": "유격수",
+      "manual_position": "3루수",
+      "effective_position": "3루수"
+    },
+    "64006": {
+      "name": "심우준",
+      "team": "한화",
+      "innings_by_position": {
+        "유격수": 71.0
+      },
+      "games": 8,
+      "auto_position": "유격수",
+      "manual_position": "유격수",
+      "effective_position": "유격수"
+    },
+    "52769": {
+      "name": "권광민",
+      "team": "한화",
+      "innings_by_position": {
+        "좌익수": 9.0
+      },
+      "games": 3,
+      "auto_position": "좌익수",
+      "manual_position": null,
+      "effective_position": "좌익수"
+    },
+    "54730": {
+      "name": "페라자",
+      "team": "한화",
+      "innings_by_position": {
+        "우익수": 28.0
+      },
+      "games": 6,
+      "auto_position": "우익수",
+      "manual_position": "우익수",
+      "effective_position": "우익수"
+    },
+    "53705": {
+      "name": "최원준",
+      "team": "한화",
+      "innings_by_position": {},
+      "games": 2,
+      "auto_position": "지명타자",
+      "manual_position": null,
+      "effective_position": "지명타자"
+    },
+    "55767": {
+      "name": "한지윤",
+      "team": "한화",
+      "innings_by_position": {
+        "좌익수": 71.0
+      },
+      "games": 9,
+      "auto_position": "좌익수",
+      "manual_position": "좌익수",
+      "effective_position": "좌익수"
+    },
+    "69766": {
+      "name": "유로결",
+      "team": "한화",
+      "innings_by_position": {
+        "중견수": 9.0,
+        "좌익수": 11.0
+      },
+      "games": 4,
+      "auto_position": "좌익수",
+      "manual_position": null,
+      "effective_position": "좌익수"
+    },
+    "68050": {
+      "name": "강백호",
+      "team": "한화",
+      "innings_by_position": {
+        "1루수": 46.0
+      },
+      "games": 9,
+      "auto_position": "1루수",
+      "manual_position": "지명타자",
+      "effective_position": "지명타자"
+    },
+    "52764": {
+      "name": "허인서",
+      "team": "한화",
+      "innings_by_position": {
+        "포수": 70.0
+      },
+      "games": 9,
+      "auto_position": "포수",
+      "manual_position": "포수",
+      "effective_position": "포수"
+    },
+    "54795": {
+      "name": "황영묵",
+      "team": "한화",
+      "innings_by_position": {
+        "2루수": 9.0
+      },
+      "games": 2,
+      "auto_position": "2루수",
+      "manual_position": "2루수",
+      "effective_position": "2루수"
+    },
+    "66704": {
+      "name": "김태연",
+      "team": "한화",
+      "innings_by_position": {
+        "우익수": 17.0,
+        "1루수": 33.0
+      },
+      "games": 7,
+      "auto_position": "1루수",
+      "manual_position": "1루수",
+      "effective_position": "1루수"
+    },
+    "50709": {
+      "name": "박정현",
+      "team": "한화",
+      "innings_by_position": {
+        "3루수": 66.5,
+        "유격수": 4.5
+      },
+      "games": 9,
+      "auto_position": "3루수",
+      "manual_position": "유격수",
+      "effective_position": "유격수"
+    },
+    "50707": {
+      "name": "최인호",
+      "team": "한화",
+      "innings_by_position": {
+        "중견수": 79.0
+      },
+      "games": 9,
+      "auto_position": "중견수",
+      "manual_position": "중견수",
+      "effective_position": "중견수"
+    },
+    "68743": {
+      "name": "정은원",
+      "team": "한화",
+      "innings_by_position": {
+        "2루수": 45.0
+      },
+      "games": 6,
+      "auto_position": "2루수",
+      "manual_position": null,
+      "effective_position": "2루수"
+    },
+    "56793": {
+      "name": "최유빈",
+      "team": "한화",
+      "innings_by_position": {
+        "유격수": 4.5,
+        "2루수": 12.5
+      },
+      "games": 6,
+      "auto_position": "2루수",
+      "manual_position": "2루수",
+      "effective_position": "2루수"
+    },
+    "65703": {
+      "name": "이도윤",
+      "team": "한화",
+      "innings_by_position": {
+        "2루수": 36.0,
+        "유격수": 8.0
+      },
+      "games": 5,
+      "auto_position": "2루수",
+      "manual_position": "2루수",
+      "effective_position": "2루수"
+    },
+    "51762": {
+      "name": "장규현",
+      "team": "한화",
+      "innings_by_position": {
+        "포수": 18.0
+      },
+      "games": 5,
+      "auto_position": "포수",
+      "manual_position": "포수",
+      "effective_position": "포수"
+    },
+    "68700": {
+      "name": "이원석",
+      "team": "한화",
+      "innings_by_position": {
+        "중견수": 9.0
+      },
+      "games": 2,
+      "auto_position": "중견수",
+      "manual_position": null,
+      "effective_position": "중견수"
+    },
     "62415": {
       "name": "박해민",
       "team": "LG",
@@ -431,19 +763,6 @@
       "manual_position": "유격수",
       "effective_position": "유격수"
     },
-    "67905": {
-      "name": "천재환",
-      "team": "NC",
-      "innings_by_position": {
-        "좌익수": 16.5,
-        "우익수": 44.0,
-        "중견수": 34.5
-      },
-      "games": 11,
-      "auto_position": "우익수",
-      "manual_position": "중견수",
-      "effective_position": "중견수"
-    },
     "50600": {
       "name": "홍종표",
       "team": "NC",
@@ -456,65 +775,6 @@
       "manual_position": "2루수",
       "effective_position": "2루수"
     },
-    "62907": {
-      "name": "박민우",
-      "team": "NC",
-      "innings_by_position": {
-        "2루수": 70.0
-      },
-      "games": 11,
-      "auto_position": "2루수",
-      "manual_position": "2루수",
-      "effective_position": "2루수"
-    },
-    "51344": {
-      "name": "김휘집",
-      "team": "NC",
-      "innings_by_position": {
-        "유격수": 22.0,
-        "3루수": 73.0
-      },
-      "games": 11,
-      "auto_position": "3루수",
-      "manual_position": "3루수",
-      "effective_position": "3루수"
-    },
-    "50903": {
-      "name": "한재환",
-      "team": "NC",
-      "innings_by_position": {
-        "1루수": 8.0,
-        "2루수": 9.0
-      },
-      "games": 2,
-      "auto_position": "2루수",
-      "manual_position": "1루수",
-      "effective_position": "1루수"
-    },
-    "51991": {
-      "name": "오장한",
-      "team": "NC",
-      "innings_by_position": {
-        "우익수": 9.0
-      },
-      "games": 4,
-      "auto_position": "우익수",
-      "manual_position": null,
-      "effective_position": "우익수"
-    },
-    "66965": {
-      "name": "도태훈",
-      "team": "NC",
-      "innings_by_position": {
-        "유격수": 17.0,
-        "1루수": 9.0,
-        "2루수": 8.0
-      },
-      "games": 4,
-      "auto_position": "유격수",
-      "manual_position": "3루수",
-      "effective_position": "3루수"
-    },
     "56909": {
       "name": "신재인",
       "team": "NC",
@@ -526,26 +786,6 @@
       "auto_position": "3루수",
       "manual_position": "1루수",
       "effective_position": "1루수"
-    },
-    "56950": {
-      "name": "블레인",
-      "team": "NC",
-      "innings_by_position": {
-        "1루수": 95.0
-      },
-      "games": 11,
-      "auto_position": "1루수",
-      "manual_position": "1루수",
-      "effective_position": "1루수"
-    },
-    "56949": {
-      "name": "고준휘",
-      "team": "NC",
-      "innings_by_position": {},
-      "games": 1,
-      "auto_position": "지명타자",
-      "manual_position": null,
-      "effective_position": "지명타자"
     },
     "64022": {
       "name": "안중열",
@@ -570,17 +810,6 @@
       "manual_position": null,
       "effective_position": "우익수"
     },
-    "68912": {
-      "name": "김형준",
-      "team": "NC",
-      "innings_by_position": {
-        "포수": 78.0
-      },
-      "games": 10,
-      "auto_position": "포수",
-      "manual_position": "포수",
-      "effective_position": "포수"
-    },
     "51996": {
       "name": "오태양",
       "team": "NC",
@@ -589,30 +818,6 @@
         "좌익수": 9.0
       },
       "games": 9,
-      "auto_position": "중견수",
-      "manual_position": "중견수",
-      "effective_position": "중견수"
-    },
-    "63963": {
-      "name": "권희동",
-      "team": "NC",
-      "innings_by_position": {
-        "좌익수": 79.0,
-        "우익수": 8.0
-      },
-      "games": 11,
-      "auto_position": "좌익수",
-      "manual_position": "좌익수",
-      "effective_position": "좌익수"
-    },
-    "69992": {
-      "name": "최정원",
-      "team": "NC",
-      "innings_by_position": {
-        "중견수": 78.0,
-        "2루수": 8.0
-      },
-      "games": 10,
       "auto_position": "중견수",
       "manual_position": "중견수",
       "effective_position": "중견수"
@@ -1191,163 +1396,6 @@
       "manual_position": "유격수",
       "effective_position": "유격수"
     },
-    "54730": {
-      "name": "페라자",
-      "team": "한화",
-      "innings_by_position": {
-        "우익수": 28.0
-      },
-      "games": 5,
-      "auto_position": "우익수",
-      "manual_position": "우익수",
-      "effective_position": "우익수"
-    },
-    "69766": {
-      "name": "유로결",
-      "team": "한화",
-      "innings_by_position": {
-        "중견수": 9.0,
-        "좌익수": 11.0
-      },
-      "games": 3,
-      "auto_position": "좌익수",
-      "manual_position": null,
-      "effective_position": "좌익수"
-    },
-    "50707": {
-      "name": "최인호",
-      "team": "한화",
-      "innings_by_position": {
-        "중견수": 71.0
-      },
-      "games": 8,
-      "auto_position": "중견수",
-      "manual_position": "중견수",
-      "effective_position": "중견수"
-    },
-    "68700": {
-      "name": "이원석",
-      "team": "한화",
-      "innings_by_position": {
-        "중견수": 9.0
-      },
-      "games": 1,
-      "auto_position": "중견수",
-      "manual_position": null,
-      "effective_position": "중견수"
-    },
-    "53705": {
-      "name": "최원준",
-      "team": "한화",
-      "innings_by_position": {},
-      "games": 1,
-      "auto_position": "지명타자",
-      "manual_position": null,
-      "effective_position": "지명타자"
-    },
-    "55767": {
-      "name": "한지윤",
-      "team": "한화",
-      "innings_by_position": {
-        "좌익수": 63.0
-      },
-      "games": 8,
-      "auto_position": "좌익수",
-      "manual_position": "좌익수",
-      "effective_position": "좌익수"
-    },
-    "68050": {
-      "name": "강백호",
-      "team": "한화",
-      "innings_by_position": {
-        "1루수": 38.0
-      },
-      "games": 8,
-      "auto_position": "1루수",
-      "manual_position": "지명타자",
-      "effective_position": "지명타자"
-    },
-    "66704": {
-      "name": "김태연",
-      "team": "한화",
-      "innings_by_position": {
-        "우익수": 9.0,
-        "1루수": 33.0
-      },
-      "games": 6,
-      "auto_position": "1루수",
-      "manual_position": "1루수",
-      "effective_position": "1루수"
-    },
-    "52764": {
-      "name": "허인서",
-      "team": "한화",
-      "innings_by_position": {
-        "포수": 62.0
-      },
-      "games": 8,
-      "auto_position": "포수",
-      "manual_position": "포수",
-      "effective_position": "포수"
-    },
-    "56793": {
-      "name": "최유빈",
-      "team": "한화",
-      "innings_by_position": {
-        "유격수": 4.5,
-        "2루수": 12.5
-      },
-      "games": 5,
-      "auto_position": "2루수",
-      "manual_position": "2루수",
-      "effective_position": "2루수"
-    },
-    "51762": {
-      "name": "장규현",
-      "team": "한화",
-      "innings_by_position": {
-        "포수": 18.0
-      },
-      "games": 4,
-      "auto_position": "포수",
-      "manual_position": "포수",
-      "effective_position": "포수"
-    },
-    "65703": {
-      "name": "이도윤",
-      "team": "한화",
-      "innings_by_position": {
-        "2루수": 28.0,
-        "유격수": 8.0
-      },
-      "games": 4,
-      "auto_position": "2루수",
-      "manual_position": "2루수",
-      "effective_position": "2루수"
-    },
-    "50709": {
-      "name": "박정현",
-      "team": "한화",
-      "innings_by_position": {
-        "3루수": 58.5,
-        "유격수": 4.5
-      },
-      "games": 8,
-      "auto_position": "3루수",
-      "manual_position": "유격수",
-      "effective_position": "유격수"
-    },
-    "64006": {
-      "name": "심우준",
-      "team": "한화",
-      "innings_by_position": {
-        "유격수": 63.0
-      },
-      "games": 7,
-      "auto_position": "유격수",
-      "manual_position": "유격수",
-      "effective_position": "유격수"
-    },
     "78513": {
       "name": "전준우",
       "team": "롯데",
@@ -1412,19 +1460,6 @@
       "auto_position": "1루수",
       "manual_position": "지명타자",
       "effective_position": "지명타자"
-    },
-    "50902": {
-      "name": "김한별",
-      "team": "NC",
-      "innings_by_position": {
-        "유격수": 62.0,
-        "3루수": 8.0,
-        "2루수": 9.0
-      },
-      "games": 9,
-      "auto_position": "유격수",
-      "manual_position": "3루수",
-      "effective_position": "3루수"
     },
     "66662": {
       "name": "신범수",
@@ -1501,28 +1536,6 @@
       "auto_position": "포수",
       "manual_position": "포수",
       "effective_position": "포수"
-    },
-    "68743": {
-      "name": "정은원",
-      "team": "한화",
-      "innings_by_position": {
-        "2루수": 45.0
-      },
-      "games": 5,
-      "auto_position": "2루수",
-      "manual_position": null,
-      "effective_position": "2루수"
-    },
-    "52769": {
-      "name": "권광민",
-      "team": "한화",
-      "innings_by_position": {
-        "좌익수": 9.0
-      },
-      "games": 2,
-      "auto_position": "좌익수",
-      "manual_position": null,
-      "effective_position": "좌익수"
     },
     "55509": {
       "name": "박건우",
@@ -2181,17 +2194,6 @@
       "auto_position": "지명타자",
       "manual_position": "지명타자",
       "effective_position": "지명타자"
-    },
-    "54795": {
-      "name": "황영묵",
-      "team": "한화",
-      "innings_by_position": {
-        "2루수": 9.0
-      },
-      "games": 1,
-      "auto_position": "2루수",
-      "manual_position": "2루수",
-      "effective_position": "2루수"
     },
     "64166": {
       "name": "배정대",
