@@ -8531,6 +8531,24 @@
     "WIN": false,
     "LOSS": true
    }
+  },
+  {
+   "game_id": "20260927HHLT02026",
+   "name": "주현상",
+   "team": "한화",
+   "official_wls": "승",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": true,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": true,
+    "LOSS": false
+   }
   }
  ]
 }
