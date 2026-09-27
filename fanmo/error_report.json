@@ -8549,6 +8549,24 @@
     "WIN": true,
     "LOSS": false
    }
+  },
+  {
+   "game_id": "20260927WONC02026",
+   "name": "이준혁",
+   "team": "NC",
+   "official_wls": "패",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": true
+   }
   }
  ]
 }
