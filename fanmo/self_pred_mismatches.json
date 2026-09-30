@@ -8350,5 +8350,23 @@
    "WIN": false,
    "LOSS": true
   }
+ },
+ "20260930WOLT02026:현도훈": {
+  "game_id": "20260930WOLT02026",
+  "name": "현도훈",
+  "team": "롯데",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
  }
 }
