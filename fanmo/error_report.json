@@ -8801,6 +8801,42 @@
     "WIN": true,
     "LOSS": false
    }
+  },
+  {
+   "game_id": "20261001KTHT02026",
+   "name": "정해영",
+   "team": "KIA",
+   "official_wls": "패",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": true
+   }
+  },
+  {
+   "game_id": "20261001KTHT02026",
+   "name": "오원석",
+   "team": "KT",
+   "official_wls": "승",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": true,
+    "LOSS": false
+   }
   }
  ]
 }
