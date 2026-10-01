@@ -281,7 +281,7 @@
       },
       "games": 7,
       "auto_position": "2루수",
-      "manual_position": null,
+      "manual_position": "2루수",
       "effective_position": "2루수"
     },
     "64006": {
@@ -383,8 +383,8 @@
       },
       "games": 6,
       "auto_position": "2루수",
-      "manual_position": null,
-      "effective_position": "2루수"
+      "manual_position": "3루수",
+      "effective_position": "3루수"
     },
     "78224": {
       "name": "김재환",
@@ -506,7 +506,7 @@
       },
       "games": 2,
       "auto_position": "3루수",
-      "manual_position": null,
+      "manual_position": "3루수",
       "effective_position": "3루수"
     },
     "79109": {
@@ -782,8 +782,8 @@
       },
       "games": 5,
       "auto_position": "3루수",
-      "manual_position": "1루수",
-      "effective_position": "1루수"
+      "manual_position": "3루수",
+      "effective_position": "3루수"
     },
     "68646": {
       "name": "한준수",
