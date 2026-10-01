@@ -8422,5 +8422,23 @@
    "WIN": false,
    "LOSS": true
   }
+ },
+ "20261001NCOB02026:타카다": {
+  "game_id": "20261001NCOB02026",
+  "name": "타카다",
+  "team": "두산",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": true,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
  }
 }
