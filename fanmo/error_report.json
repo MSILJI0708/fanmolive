@@ -4,7 +4,7 @@
   "MISSING_PLAYER_CODE": 12081,
   "INNING_FORMAT": 28961,
   "DUPLICATE_ROW": 46,
-  "CONFLICTING_FLAGS": 2,
+  "CONFLICTING_FLAGS": 1,
   "UNKNOWN_ROUND": 9
  },
  "issues": [
@@ -312,11 +312,6 @@
    "date": "20170721",
    "kind": "CONFLICTING_FLAGS",
    "detail": "투수 차우찬(LG) WIN·HOLD 동시 성립"
-  },
-  {
-   "date": "20261001",
-   "kind": "CONFLICTING_FLAGS",
-   "detail": "투수 타카다(두산) WIN·HOLD 동시 성립"
   },
   {
    "date": "20200421",
@@ -8787,6 +8782,24 @@
     "HOLD": false,
     "WIN": false,
     "LOSS": true
+   }
+  },
+  {
+   "game_id": "20261001NCOB02026",
+   "name": "타카다",
+   "team": "두산",
+   "official_wls": "승",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": true,
+    "WIN": true,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": true,
+    "LOSS": false
    }
   }
  ]
