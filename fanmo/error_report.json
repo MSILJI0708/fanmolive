@@ -4,7 +4,7 @@
   "MISSING_PLAYER_CODE": 12081,
   "INNING_FORMAT": 28961,
   "DUPLICATE_ROW": 46,
-  "CONFLICTING_FLAGS": 1,
+  "CONFLICTING_FLAGS": 2,
   "UNKNOWN_ROUND": 9
  },
  "issues": [
@@ -312,6 +312,11 @@
    "date": "20170721",
    "kind": "CONFLICTING_FLAGS",
    "detail": "투수 차우찬(LG) WIN·HOLD 동시 성립"
+  },
+  {
+   "date": "20261001",
+   "kind": "CONFLICTING_FLAGS",
+   "detail": "투수 타카다(두산) WIN·HOLD 동시 성립"
   },
   {
    "date": "20200421",
