@@ -8837,6 +8837,24 @@
     "WIN": true,
     "LOSS": false
    }
+  },
+  {
+   "game_id": "20261003OBSS02026",
+   "name": "백정현",
+   "team": "삼성",
+   "official_wls": "승",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": true,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": true,
+    "LOSS": false
+   }
   }
  ]
 }
