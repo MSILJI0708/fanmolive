@@ -24,13 +24,17 @@ permissions:
   pages: write # GitHub Pages 배포에 필요
   id-token: write # GitHub Pages 배포(OIDC)에 필요
 
-concurrency:
-  group: fantasy-lp-board
-  cancel-in-progress: false # 겹치면 취소하지 않고 순서대로(커밋 충돌 방지)
-
+# 동시성은 "실행 전체"가 아니라 잡마다 따로 건다. 실행 전체에 걸면, Pages 배포가 한 번
+# 멈췄을 때(실측 2026-10-02: deploy 잡이 github-pages 환경을 기다린 채 18시간 넘게 큐에
+# 남았다) 그 실행이 그룹을 계속 점유해서 뒤따르는 갱신이 전부 취소된다 — 수집은 멀쩡히
+# 할 수 있는데도 보드가 통째로 멈춰 섰다. 잡 단위로 나눠두면 배포가 막혀도 수집·커밋은
+# 계속 돌고, 배포는 다음 실행이 밀린 것을 취소하고 새로 하면서 저절로 풀린다.
 jobs:
   collect-and-build:
     runs-on: ubuntu-latest
+    concurrency:
+      group: fantasy-lp-board-collect
+      cancel-in-progress: false # 겹치면 취소하지 않고 순서대로(커밋 충돌 방지)
     # cron-job.org가 몇 분 간격으로 계속 호출하는데, 네이버 API가 (특히 라이브 경기 중)
     # 느려지면 한 번의 실행이 오래 걸릴 수 있다. cancel-in-progress: false라 뒤에 쌓인
     # 실행들이 이 실행 하나가 끝날 때까지 전부 대기하므로, 여기서 상한을 걸어두지 않으면
@@ -252,6 +256,13 @@ jobs:
     needs: collect-and-build
     if: needs.collect-and-build.outputs.do_work == 'true'
     runs-on: ubuntu-latest
+    # 배포는 "최신 것 하나만" 올라가면 된다(3분마다 갱신되는 보드라 밀린 배포는 의미가 없다).
+    # cancel-in-progress: true 라서, 배포가 멈춰 큐에 남아도 다음 실행의 배포가 그걸 취소하고
+    # 자기 것을 올린다 — 사람이 손대지 않아도 풀린다.
+    concurrency:
+      group: fantasy-lp-board-pages
+      cancel-in-progress: true
+    timeout-minutes: 10 # Pages가 응답을 안 줄 때 영원히 붙잡고 있지 않도록
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
