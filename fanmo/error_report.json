@@ -8927,6 +8927,24 @@
     "WIN": false,
     "LOSS": true
    }
+  },
+  {
+   "game_id": "20261004LTKT02026",
+   "name": "김정운",
+   "team": "KT",
+   "official_wls": "홀",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": true,
+    "WIN": false,
+    "LOSS": false
+   }
   }
  ]
 }
