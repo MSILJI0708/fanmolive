@@ -8530,5 +8530,23 @@
    "WIN": true,
    "LOSS": false
   }
+ },
+ "20261004SKNC02026:이용준": {
+  "game_id": "20261004SKNC02026",
+  "name": "이용준",
+  "team": "NC",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
  }
 }
