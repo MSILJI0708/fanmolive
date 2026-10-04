@@ -8548,5 +8548,23 @@
    "WIN": false,
    "LOSS": false
   }
+ },
+ "20261004HTLG02026:우강훈": {
+  "game_id": "20261004HTLG02026",
+  "name": "우강훈",
+  "team": "LG",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
  }
 }
