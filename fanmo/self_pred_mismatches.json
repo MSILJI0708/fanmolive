@@ -8584,5 +8584,59 @@
    "WIN": false,
    "LOSS": false
   }
+ },
+ "20261005HTLG02026:이우찬": {
+  "game_id": "20261005HTLG02026",
+  "name": "이우찬",
+  "team": "LG",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20261005HTLG02026:김강률": {
+  "game_id": "20261005HTLG02026",
+  "name": "김강률",
+  "team": "LG",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
+ },
+ "20261005HTLG02026:김진수": {
+  "game_id": "20261005HTLG02026",
+  "name": "김진수",
+  "team": "LG",
+  "official_wls": "홀",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  }
  }
 }
