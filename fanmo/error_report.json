@@ -9035,6 +9035,42 @@
     "WIN": true,
     "LOSS": false
    }
+  },
+  {
+   "game_id": "20261006SSHT02026",
+   "name": "이의리",
+   "team": "KIA",
+   "official_wls": "홀",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": true,
+    "WIN": false,
+    "LOSS": false
+   }
+  },
+  {
+   "game_id": "20261006SSHT02026",
+   "name": "이태양",
+   "team": "KIA",
+   "official_wls": "홀",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": true,
+    "WIN": false,
+    "LOSS": false
+   }
   }
  ]
 }
