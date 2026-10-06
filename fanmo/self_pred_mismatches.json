@@ -8638,5 +8638,41 @@
    "WIN": false,
    "LOSS": false
   }
+ },
+ "20261006OBLT02026:이이무라": {
+  "game_id": "20261006OBLT02026",
+  "name": "이이무라",
+  "team": "롯데",
+  "official_wls": "패",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": true
+  }
+ },
+ "20261006OBLT02026:타카다": {
+  "game_id": "20261006OBLT02026",
+  "name": "타카다",
+  "team": "두산",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
  }
 }
