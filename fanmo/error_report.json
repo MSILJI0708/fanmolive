@@ -9071,6 +9071,24 @@
     "WIN": false,
     "LOSS": false
    }
+  },
+  {
+   "game_id": "20261009LGLT02026",
+   "name": "최준용",
+   "team": "롯데",
+   "official_wls": "승",
+   "predicted": {
+    "SAVE": false,
+    "HOLD": true,
+    "WIN": false,
+    "LOSS": false
+   },
+   "official": {
+    "SAVE": false,
+    "HOLD": false,
+    "WIN": true,
+    "LOSS": false
+   }
   }
  ]
 }
