@@ -8764,5 +8764,23 @@
    "WIN": true,
    "LOSS": false
   }
+ },
+ "20261010SKHT02026:이의리": {
+  "game_id": "20261010SKHT02026",
+  "name": "이의리",
+  "team": "KIA",
+  "official_wls": "승",
+  "predicted": {
+   "SAVE": false,
+   "HOLD": true,
+   "WIN": false,
+   "LOSS": false
+  },
+  "official": {
+   "SAVE": false,
+   "HOLD": false,
+   "WIN": true,
+   "LOSS": false
+  }
  }
 }
