@@ -36,35 +36,51 @@ def load_raw(path: str) -> list[dict]:
 
 
 def aggregate(games: list[dict]) -> dict:
-    """경기별 조각을 선수별로 합친다."""
+    """경기별 조각을 (선수, 그 경기 소속팀) 단위로 합친다.
+
+    시즌 중 이적한 선수는 구단마다 한 줄씩 따로 나온다(예: 데이비슨 NC / 키움). 경기마다
+    박스스코어에서 그날의 소속팀을 받아 두므로, 키를 "코드@팀"으로 잡으면 자연히 갈린다.
+    """
     bat: dict[str, dict] = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
     pit: dict[str, dict] = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
     meta: dict[str, dict] = {}
     appear: dict[str, dict] = defaultdict(lambda: {"선발": 0, "구원": 0})
     # 자책점은 공식값(경기별)을 유형별 실점 비율로 나눠 담는다.
     er_split: dict[str, dict] = defaultdict(lambda: defaultdict(float))
+    # 중계로 추적한 수비 아웃·실책(코드@팀). 이적 선수의 공식 수비 합계를 나누는 데 쓴다.
+    dfn: dict[str, dict] = defaultdict(lambda: {"outs": 0, "e": 0})
 
     for g in games:
         if not g:
             continue
-        for code, m in (g.get("meta") or {}).items():
-            cur = meta.setdefault(code, {"name": m.get("name"), "team": m.get("team")})
-            cur["team"] = m.get("team") or cur.get("team")
+        gmeta = g.get("meta") or {}
+
+        def key_of(code):
+            return f"{code}@{(gmeta.get(code) or {}).get('team') or ''}"
+
+        for code, m in gmeta.items():
+            k = key_of(code)
+            meta.setdefault(k, {"code": code, "name": m.get("name"), "team": m.get("team") or ""})
             if m.get("role"):
-                appear[code][m["role"]] += 1
+                appear[k][m["role"]] += 1
+
+        for code, v in (g.get("defense") or {}).items():
+            dfn[key_of(code)]["outs"] += v.get("outs", 0)
+            dfn[key_of(code)]["e"] += v.get("e", 0)
 
         for key, vals in (g.get("batters") or {}).items():
             code, kind = key.split("|", 1)
             for stat, n in vals.items():
-                bat[code][kind][stat] += n
+                bat[key_of(code)][kind][stat] += n
         for key, vals in (g.get("pitchers") or {}).items():
             code, kind = key.split("|", 1)
             for stat, n in vals.items():
-                pit[code][kind][stat] += n
+                pit[key_of(code)][kind][stat] += n
 
         runs = g.get("pitcher_runs") or {}
-        for code, er in (g.get("pitcher_er") or {}).items():
-            by_kind = runs.get(code) or {}
+        for pcode, er in (g.get("pitcher_er") or {}).items():
+            by_kind = runs.get(pcode) or {}
+            code = key_of(pcode)
             total = sum(by_kind.values())
             if not er:
                 continue
@@ -79,22 +95,70 @@ def aggregate(games: list[dict]) -> dict:
             for k, v in by_kind.items():
                 er_split[code][k] += er * v / total
 
-    return {"bat": bat, "pit": pit, "meta": meta, "appear": appear, "er": er_split}
+    return {"bat": bat, "pit": pit, "meta": meta, "appear": appear, "er": er_split, "def": dfn}
+
+
+def _split_total(total: int, weights: dict[str, int]) -> dict[str, int]:
+    """정수 합계를 가중치대로 나눈다(최대 나머지 방식이라 합이 정확히 total로 맞는다)."""
+    wsum = sum(weights.values())
+    if not wsum:
+        return {k: 0 for k in weights}
+    raw = {k: total * w / wsum for k, w in weights.items()}
+    out = {k: int(v) for k, v in raw.items()}
+    for k in sorted(raw, key=lambda k: raw[k] - out[k], reverse=True)[: total - sum(out.values())]:
+        out[k] += 1
+    return out
+
+
+def _defense_by_team(agg: dict, defense: dict, teams_of: dict, meta: dict) -> dict[str, dict]:
+    """이적 선수의 KBO 공식 수비 합계를 구단별로 나눈다.
+
+    KBO 기록실은 이적 선수를 현재 소속팀 아래 시즌 합계 한 줄로만 보여 준다(실측:
+    데이비슨|키움 2334아웃 = 중계 추적 NC 1059 + 키움 1275). 그래서 공식 합계는 그대로 두고,
+    문자중계로 추적한 구단별 수비 아웃·실책 비율대로 나눈다.
+    """
+    out: dict[str, dict] = {}
+    by_code: dict[str, list[str]] = defaultdict(list)
+    for key, m in meta.items():
+        by_code[m["code"]].append(key)
+    for code, keys in by_code.items():
+        if len(teams_of[code]) < 2:
+            continue
+        name = meta[keys[0]]["name"]
+        rec = next((defense[f"{name}|{_kbo_team(meta[k]['team'])}"] for k in keys
+                    if f"{name}|{_kbo_team(meta[k]['team'])}" in defense), None)
+        if not rec:
+            continue
+        outs = _split_total(rec["def_outs"], {k: agg["def"][k]["outs"] for k in keys})
+        errs = _split_total(rec["errors"], {k: agg["def"][k]["e"] for k in keys})
+        for k in keys:
+            out[k] = {"def_outs": outs[k], "errors": errs[k]}
+    return out
 
 
 def build_rows(agg: dict, defense: dict) -> dict:
     """화면에 바로 뿌릴 수 있는 형태로 정리한다."""
     meta, appear = agg["meta"], agg["appear"]
 
+    # 한 시즌에 두 구단 이상에서 뛴 선수 — 화면에 표시해 둔다.
+    teams_of: dict[str, set] = defaultdict(set)
+    for m in meta.values():
+        teams_of[m["code"]].add(m["team"])
+
+    split_def = _defense_by_team(agg, defense, teams_of, meta)
+
     bat_rows = []
-    for code, kinds in agg["bat"].items():
-        m = meta.get(code) or {}
+    for key, kinds in agg["bat"].items():
+        m = meta.get(key) or {}
+        code = m.get("code") or key.split("@")[0]
         name, team = m.get("name") or code, m.get("team") or ""
-        def_rec = defense.get(f"{name}|{_kbo_team(team)}") or {}
+        def_rec = (split_def.get(key) if teams_of[code] and len(teams_of[code]) > 1
+                   else defense.get(f"{name}|{_kbo_team(team)}")) or {}
         total_pa = sum(k.get("pa", 0) for k in kinds.values())
         if not total_pa:
             continue
         row = {"code": code, "name": name, "team": team,
+               "multi": len(teams_of[code]) > 1,
                "def_outs": def_rec.get("def_outs"), "errors": def_rec.get("errors"),
                "splits": {}}
         for kind in PITCHER_KINDS:
@@ -112,21 +176,22 @@ def build_rows(agg: dict, defense: dict) -> dict:
         bat_rows.append(row)
 
     pit_rows = []
-    for code, kinds in agg["pit"].items():
-        m = meta.get(code) or {}
+    for key, kinds in agg["pit"].items():
+        m = meta.get(key) or {}
+        code = m.get("code") or key.split("@")[0]
         name, team = m.get("name") or code, m.get("team") or ""
         total_bf = sum(k.get("tbf", 0) for k in kinds.values())
         if not total_bf:
             continue
-        ap = appear.get(code) or {}
-        row = {"code": code, "name": name, "team": team,
+        ap = appear.get(key) or {}
+        row = {"code": code, "name": name, "team": team, "multi": len(teams_of[code]) > 1,
                "gs": ap.get("선발", 0), "gr": ap.get("구원", 0), "splits": {}}
         for kind in BATTER_KINDS:
             s = kinds.get(kind) or {}
             row["splits"][kind] = {
                 "outs": s.get("outs", 0), "ip": outs_to_ip(s.get("outs", 0)),
-                "r": s.get("r", 0), "er": round(agg["er"].get(code, {}).get(kind, 0.0), 1),
-                "tbf": s.get("tbf", 0), "h": s.get("h", 0), "d": s.get("d", 0),
+                "r": s.get("r", 0), "er": round(agg["er"].get(key, {}).get(kind, 0.0), 1),
+                "tbf": s.get("tbf", 0), "ab": s.get("ab", 0), "h": s.get("h", 0), "d": s.get("d", 0),
                 "t": s.get("t", 0), "hr": s.get("hr", 0), "bb": s.get("bb", 0),
                 "ibb": s.get("ibb", 0), "hbp": s.get("hbp", 0), "so": s.get("so", 0),
             }
@@ -201,6 +266,8 @@ th.grp{text-align:center;border-bottom:1px solid var(--line);cursor:default;
 th.left,td.left{text-align:left}
 tbody tr:hover{background:var(--chip)}
 td.name{font-weight:650}
+.multi{display:inline-block;margin-left:5px;padding:0 5px;border-radius:4px;font-size:10.5px;
+  font-weight:600;background:var(--chip);color:var(--ink-1);vertical-align:1px}
 td.sep,th.sep{border-left:2px solid var(--line)}
 .kind{color:var(--ink-1);font-weight:700}
 .note{margin-top:14px;font-size:12px;color:var(--ink-1);line-height:1.85}
@@ -243,6 +310,10 @@ if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}}
   <p class="note">
     <b>유형 구분.</b> 투수는 우투 / 좌투 / 언더(우언·좌언 합산), 타자는 우타 / 좌타로 나눕니다.
     양손 타자는 "항상 투수가 던진 손의 반대쪽 타석에 선다"고 보고 환산했습니다.<br>
+    <b>이적 선수.</b> 시즌 중 소속팀이 바뀐 선수는 구단별로 한 줄씩 나눠 적고 이름 옆에 "이적"
+    표시를 달았습니다(그 경기의 박스스코어상 소속 기준). KBO 기록실은 이적 선수의 수비 기록을 시즌
+    합계 한 줄로만 주기 때문에, 그 합계를 문자중계로 추적한 구단별 수비 아웃·실책 비율대로 나눴습니다
+    (합계는 공식 기록과 같습니다).<br>
     <b>유효타석</b>은 타석에서 희생번트 성공을 뺀 값, <b>도루기회</b>는 도루 시도(도루+도루실패)입니다.<br>
     <b>유형별로 나눌 수 없는 기록.</b> 타자의 수비이닝·실책은 수비 중 기록이라 상대 투수가 없고,
     투수의 선발·구원 등판은 한 경기에서 양쪽 타자를 모두 상대하므로 유형별로 쪼개면 중복됩니다.
@@ -270,7 +341,7 @@ const BAT_COLS = [
   ['ibb','고의사구'],['so','삼진'],['sb','도루'],['cs','도실'],['sba','도루기회'],
 ];
 const PIT_COLS = [
-  ['ip','이닝'],['r','실점'],['er','자책'],['tbf','상대타자'],['h','피안타'],['d','피2루타'],
+  ['ip','이닝'],['r','실점'],['er','자책'],['tbf','상대타자'],['ab','타수'],['h','피안타'],['d','피2루타'],
   ['t','피3루타'],['hr','피홈런'],['bb','볼넷'],['ibb','고의사구'],['hbp','사구'],['so','삼진'],
 ];
 
@@ -326,7 +397,8 @@ function render(){
   head.push('</tr>');
 
   const body = list.map(r => {
-    const tds = [`<td class="left name">${r.name}</td><td class="left">${r.team||''}</td>`];
+    const tag = r.multi ? '<span class="multi" title="시즌 중 이적 — 구단별로 나눠 표시">이적</span>' : '';
+    const tds = [`<td class="left name">${r.name}${tag}</td><td class="left">${r.team||''}</td>`];
     kinds.forEach(k => cols.forEach(([key],i) => {
       const v = cellVal(r,k,key);
       tds.push(`<td class="${i===0?'sep':''}">${v===0?'<span style="opacity:.35">0</span>':v}</td>`);

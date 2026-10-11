@@ -349,6 +349,7 @@ def parse_game(game_id: str) -> dict | None:
 
                 p = pit_cell(rc, bk)
                 p["tbf"] += 1
+                p["ab"] += st["ab"]
                 p["h"] += st["h"]; p["d"] += st["d"]; p["t"] += st["t"]; p["hr"] += st["hr"]
                 p["bb"] += st["bb"]; p["ibb"] += st["ibb"]; p["hbp"] += st["hbp"]; p["so"] += st["so"]
 
@@ -480,8 +481,10 @@ def parse_game(game_id: str) -> dict | None:
     # 근사치다. 선수별 팀/이름도 이때 같이 챙긴다.
     meta: dict[str, dict] = {}
     pitcher_er: dict[str, int] = {}
+    defense: dict[str, dict] = {}
     try:
         rd = fetch_record(game_id)
+        defense = track_defense(groups, entry, rd)
         info = rd.get("gameInfo") or {}
         team_of = {"home": info.get("hName", ""), "away": info.get("aName", "")}
         for side in ("home", "away"):
@@ -503,8 +506,133 @@ def parse_game(game_id: str) -> dict | None:
         "pitchers": {f"{c}|{k}": dict(v) for (c, k), v in pit_rows.items()},
         "pitcher_runs": {c: dict(v) for c, v in pit_game_runs.items()},
         "pitcher_er": pitcher_er,
+        "defense": defense,
         "meta": meta,
     }
+
+
+_POS_CHAR = {"투": "투수", "포": "포수", "一": "1루수", "二": "2루수", "三": "3루수",
+             "유": "유격수", "좌": "좌익수", "중": "중견수", "우": "우익수"}
+_FIELD_POS = "투수|포수|1루수|2루수|3루수|유격수|좌익수|중견수|우익수"
+_SWAP_RE = re.compile(r"^(?:\S+) (?P<out>[^ :]+) : (?P<pos>\S+) (?P<in>[^ :()]+) \(으\)로 교체$")
+_MOVE_RE = re.compile(r"^(?:\S+) (?P<name>[^ :]+) : (?P<pos>[^ (]+)\(으\)로 수비위치 변경$")
+_ERR_PAREN_RE = re.compile(r"\(([^)]*실책[^)]*)\)")
+# "(유격수 포구 실책)", "(3루수 송구 실책->1루수)", "(투수 견제 송구 실책->1루수)" 등.
+_ERR_POS_RE = re.compile(rf"({_FIELD_POS}) (?:[가-힣]+ ){{0,2}}실책")
+
+
+def track_defense(groups: list[dict], entry: dict, rd: dict) -> dict[str, dict]:
+    """문자중계로 매 순간의 수비 배치를 따라가며 선수별 수비 아웃·실책을 센다.
+
+    KBO 기록실은 시즌 중 이적한 선수의 수비 기록을 현재 소속팀 아래 시즌 합계 한 줄로만
+    보여 줘서 구단별로 나눌 수 없다. 그래서 경기마다 직접 계산한다.
+    - 출발점: 박스스코어는 타순마다 출전 순서대로 적히므로, 각 타순의 첫 선수가 선발이고
+      그 포지션 기록(예: "좌우" = 좌익수로 나와 우익수로 이동)의 첫 글자가 시작 포지션이다.
+    - 교체: "A : [포지션] B (으)로 교체"는 A가 빠지고 B가 그 포지션에, "A : [포지션](으)로
+      수비위치 변경"은 A가 그 포지션으로 옮긴다. 대타·대주자는 포지션 없이 들어온다.
+    - 아웃카운트가 늘면 그 순간 수비 중인 9명 모두에게 더한다(지명타자 제외).
+    - 실책은 "(유격수 포구 실책)"처럼 적힌 포지션의 그 순간 선수에게 붙인다.
+    """
+    out: dict[str, dict] = defaultdict(lambda: {"outs": 0, "e": 0})
+    side_of = {c: v.get("side") for c, v in entry.items()}
+    fielders = {"home": {}, "away": {}}   # 포지션 -> 선수 코드
+
+    box = rd.get("battersBoxscore") or {}
+    for side in ("home", "away"):
+        slots_seen = set()
+        for b in box.get(side) or []:
+            code, pos, slot = b.get("playerCode"), b.get("pos") or "", b.get("batOrder")
+            if slot in slots_seen:
+                continue
+            slots_seen.add(slot)
+            if code and pos and pos[0] in _POS_CHAR:
+                fielders[side][_POS_CHAR[pos[0]]] = code
+        sp = ((rd.get("pitchersBoxscore") or {}).get(side) or [])
+        if sp and sp[0].get("pcode"):
+            fielders[side]["투수"] = sp[0]["pcode"]
+
+    def resolve(name, prefer_side=None):
+        cands = [c for c, v in entry.items() if v.get("name") == name and v.get("played")]
+        if len(cands) > 1:
+            # 동명이인: 지금 수비 배치에 들어 있는 쪽, 그다음 지정한 팀 쪽을 고른다.
+            placed = [c for c in cands if any(c in f.values() for f in fielders.values())]
+            if prefer_side:
+                cands = ([c for c in placed if side_of.get(c) == prefer_side]
+                         or [c for c in cands if side_of.get(c) == prefer_side] or cands)
+            elif placed:
+                cands = placed
+        return cands[0] if cands else None
+
+    def place(side, pos, code):
+        f = fielders[side]
+        for k in [k for k, v in f.items() if v == code]:
+            del f[k]
+        if pos in _POS_CHAR.values():
+            f[pos] = code
+
+    def remove(code):
+        for f in fielders.values():
+            for k in [k for k, v in f.items() if v == code]:
+                del f[k]
+
+    def side_holding(code):
+        for sd, f in fielders.items():
+            if code in f.values():
+                return sd
+        return side_of.get(code)
+
+    half_key, prev_out = None, 0
+    for g in groups:
+        hk = (g.get("inn"), g.get("homeOrAway"))
+        if hk != half_key:
+            half_key, prev_out = hk, 0
+        field_side = "home" if str(g.get("homeOrAway")) == "0" else "away"
+        seen_err: set[str] = set()
+        for opt in g.get("textOptions") or []:
+            text = opt.get("text") or ""
+            ty = opt.get("type")
+            if ty == 2:
+                m = _SWAP_RE.match(text)
+                if m:
+                    oc = resolve(m.group("out"), field_side if m.group("pos") not in ("대타", "대주자") else None)
+                    sd = side_holding(oc) if oc else None
+                    ic = resolve(m.group("in"), sd)
+                    if oc:
+                        remove(oc)
+                    if ic:
+                        place(sd or side_of.get(ic), m.group("pos"), ic)
+                    continue
+                m = _MOVE_RE.match(text)
+                if m:
+                    c = resolve(m.group("name"), field_side)
+                    if c:
+                        place(side_of.get(c), m.group("pos"), c)
+                    continue
+            # 투수 교체는 문구 없이 넘어가는 경기가 있다(실측 20260509KTWO02026: 이닝 시작
+            # 교체 문구 누락). 이벤트마다 실려 오는 현재 투수로 마운드를 맞춘다. 반이닝
+            # 머리글(type 0)의 투수 칸은 엉뚱한 값이 와서 쓰지 않는다.
+            cur_p = (opt.get("currentGameState") or {}).get("pitcher")
+            if ty not in (0, 99) and cur_p and fielders[field_side].get("투수") != cur_p:
+                place(field_side, "투수", cur_p)
+            if "실책" in text:
+                parens = _ERR_PAREN_RE.findall(text)
+                spots = [p for chunk in parens for p in _ERR_POS_RE.findall(chunk)] if parens                     else _ERR_POS_RE.findall(text)
+                for pos in spots:
+                    if pos in seen_err:
+                        continue
+                    seen_err.add(pos)
+                    c = fielders[field_side].get(pos)
+                    if c:
+                        out[c]["e"] += 1
+            try:
+                cur_out = int((opt.get("currentGameState") or {}).get("out"))
+            except (TypeError, ValueError):
+                continue
+            if cur_out > prev_out:
+                for c in fielders[field_side].values():
+                    out[c]["outs"] += cur_out - prev_out
+                prev_out = cur_out
+    return {c: dict(v) for c, v in out.items()}
 
 
 def collect_season(year: int, workers: int = 8, limit: int | None = None) -> list[dict]:
