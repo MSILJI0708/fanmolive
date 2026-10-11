@@ -100,10 +100,26 @@ jobs:
           fi
           echo "과거 백필 마지막 실행으로부터 ${ELAPSED_MIN}분 경과 -> due=$([ "$ELAPSED_MIN" -ge 10 ] && echo true || echo false)"
 
+      # 투타 유형별 전적(splits.html)은 이 워크플로우가 만들지 않고 사람이 로컬에서 만들어
+      # 커밋한다. 경기도 백필도 없는 날에는 배포 자체가 돌지 않아 고친 페이지가 사이트에
+      # 안 올라가므로(실측 2026-10-11), 마지막으로 배포한 파일의 해시와 다르면 배포한다.
+      - name: "투타 유형별 전적 페이지가 바뀌었는지 확인"
+        id: check_splits_due
+        working-directory: fanmo
+        run: |
+          CUR=$(sha256sum splits.html 2>/dev/null | cut -d' ' -f1)
+          LAST=$(cat splits_deployed.txt 2>/dev/null || echo none)
+          if [ -n "$CUR" ] && [ "$CUR" != "$LAST" ]; then
+            echo "$CUR" > splits_deployed.txt
+            echo "due=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "due=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: "이번에 뭐라도 할 게 있는지 종합 판정"
         id: combine
         run: |
-          if [ "${{ steps.check_active.outputs.active }}" = "true" ] || [ "${{ steps.check_mlb_due.outputs.due }}" = "true" ] || [ "${{ steps.check_historical_due.outputs.due }}" = "true" ]; then
+          if [ "${{ steps.check_active.outputs.active }}" = "true" ] || [ "${{ steps.check_mlb_due.outputs.due }}" = "true" ] || [ "${{ steps.check_historical_due.outputs.due }}" = "true" ] || [ "${{ steps.check_splits_due.outputs.due }}" = "true" ]; then
             echo "do_work=true" >> "$GITHUB_OUTPUT"
           else
             echo "do_work=false" >> "$GITHUB_OUTPUT"
@@ -184,7 +200,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add fanmo/data fanmo/data_mlb_*.json fanmo/mlb_last_build.txt fanmo/error_check_state.txt fanmo/position_db.json fanmo/lp_board.html fanmo/lp_board_mlb.html fanmo/mlb_last_run.txt fanmo/position_last_refresh.txt fanmo/season_stats.json fanmo/career_stats.json fanmo/records.html fanmo/active_window_state.json fanmo/self_pred_mismatches.json fanmo/error_report.json fanmo/player fanmo/heatmap fanmo/options.html fanmo/jersey_numbers.json fanmo/jersey_last_refresh.txt fanmo/season_calendar.json fanmo/historical_last_run.txt fanmo/kbo_official_calendar.json fanmo/kbo_player_code_cache.json fanmo/kbo_2001_2007_unresolved_players.json
+          git add fanmo/data fanmo/data_mlb_*.json fanmo/mlb_last_build.txt fanmo/error_check_state.txt fanmo/position_db.json fanmo/lp_board.html fanmo/lp_board_mlb.html fanmo/mlb_last_run.txt fanmo/position_last_refresh.txt fanmo/season_stats.json fanmo/career_stats.json fanmo/records.html fanmo/active_window_state.json fanmo/self_pred_mismatches.json fanmo/error_report.json fanmo/player fanmo/heatmap fanmo/options.html fanmo/jersey_numbers.json fanmo/jersey_last_refresh.txt fanmo/season_calendar.json fanmo/historical_last_run.txt fanmo/kbo_official_calendar.json fanmo/kbo_player_code_cache.json fanmo/kbo_2001_2007_unresolved_players.json fanmo/splits_deployed.txt
           if git diff --cached --quiet; then
             echo "변경 사항 없음, 커밋 생략"
           else
