@@ -378,6 +378,18 @@ function totalOf(row, key){
   return kinds.reduce((a,k)=> a + (Number(cellVal(row,k,key))||0), 0);
 }
 
+// 정렬용 값. 이닝은 "75 1/3" 같은 표시 문자열이 아니라 아웃카운트로 비교하고(그래야 9 2/3이
+// 75 1/3보다 앞에 오지 않는다), 시즌 전체 칸(선발·구원·수비이닝·실책)은 행에서 직접 읽는다.
+function sortVal(row, kind, key){
+  if (kind === '*'){
+    if (key === 'def') return row.def_outs == null ? -1 : row.def_outs;
+    if (key === 'err') return row.errors == null ? -1 : row.errors;
+    return row[key] || 0;
+  }
+  if (key === 'ip') return cellVal(row, kind, 'outs');
+  return cellVal(row, kind, key);
+}
+
 function render(){
   const rows = DATA[tab];
   const kinds = tab === 'batters' ? PK : BK;
@@ -396,8 +408,7 @@ function render(){
   if (sortKey){
     const [kind, key] = sortKey;
     list = list.slice().sort((a,b)=>{
-      const av = kind === '*' ? totalOf(a,key) : cellVal(a,kind,key);
-      const bv = kind === '*' ? totalOf(b,key) : cellVal(b,kind,key);
+      const av = sortVal(a,kind,key), bv = sortVal(b,kind,key);
       if (typeof av === 'string' || typeof bv === 'string')
         return sortDir * String(av).localeCompare(String(bv),'ko');
       return sortDir * ((Number(bv)||0) - (Number(av)||0));
