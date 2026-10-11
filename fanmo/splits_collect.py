@@ -262,6 +262,9 @@ def parse_game(game_id: str) -> dict | None:
     # 주자가 출루한 타석을 기억해 둔다 — 홈인할 때 "누가 내보낸 주자인가"로 실점을 매긴다.
     runner_origin: dict[str, tuple[str, str]] = {}
     pit_game_runs: dict[str, dict[str, int]] = defaultdict(lambda: defaultdict(int))
+    # 그중 자책으로 보이는 실점(실책·포일로 나간 주자의 득점, 실책·포일로 들어온 득점 제외).
+    # 최종 자책점은 경기별 공식값이고, 이건 우타/좌타로 나눌 때의 기준으로만 쓴다.
+    pit_game_er: dict[str, dict[str, int]] = defaultdict(lambda: defaultdict(int))
 
     def bat_cell(bcode, pkind):
         return bat_rows.setdefault((bcode, pkind), defaultdict(int))
@@ -359,6 +362,7 @@ def parse_game(game_id: str) -> dict | None:
                     b["rbi"] += 1
                     pit_cell(rc, rbk)["r"] += 1
                     pit_game_runs[rc][rbk] += 1
+                    pit_game_er[rc][rbk] += 1
                     # 홈런 타자는 루상에 남지 않으므로 책임 큐에 넣지 않는다.
 
                 # 병살타로 들어온 점수는 타점이 아니다. 반면 타자의 타구가 실책이 되어
@@ -372,7 +376,8 @@ def parse_game(game_id: str) -> dict | None:
                     if not st["hr"] and rbk:
                         # 타자 쪽 득점은 실제 상대 투수 유형으로, 투수 쪽 실점은 책임
                         # 투수 토큰으로 갈라 들고 다닌다.
-                        runner_origin[nm] = ((pcode, bk), (rc, rbk))
+                        on_err = (not st["h"]) and any(x in desc for x in ("실책", "포일", "타격방해"))
+                        runner_origin[nm] = ((pcode, bk), (rc, rbk), on_err)
                         resp.append((rc, rbk))
                         pa_reached, pa_runner = True, nm
 
@@ -425,6 +430,9 @@ def parse_game(game_id: str) -> dict | None:
                         opc, obk = charged
                         pit_cell(opc, obk)["r"] += 1
                         pit_game_runs[opc][obk] += 1
+                        unearned = (origin and origin[2]) or "실책" in desc or "포일" in desc
+                        if not unearned:
+                            pit_game_er[opc][obk] += 1
                     continue
 
                 if len(codes) == 1 and pk:
@@ -481,6 +489,7 @@ def parse_game(game_id: str) -> dict | None:
     # 근사치다. 선수별 팀/이름도 이때 같이 챙긴다.
     meta: dict[str, dict] = {}
     pitcher_er: dict[str, int] = {}
+    pitcher_r: dict[str, int] = {}
     defense: dict[str, dict] = {}
     try:
         rd = fetch_record(game_id)
@@ -495,6 +504,7 @@ def parse_game(game_id: str) -> dict | None:
                 if p.get("pcode"):
                     meta[p["pcode"]] = {"name": p.get("name"), "team": team_of[side]}
                     pitcher_er[p["pcode"]] = int(p.get("er") or 0)
+                    pitcher_r[p["pcode"]] = int(p.get("r") or 0)
                     starters = (rd.get("pitchersBoxscore") or {}).get(side) or []
                     meta[p["pcode"]]["role"] = "선발" if starters and starters[0] is p else "구원"
     except Exception as exc:  # noqa: BLE001
@@ -505,6 +515,8 @@ def parse_game(game_id: str) -> dict | None:
         "batters": {f"{c}|{k}": dict(v) for (c, k), v in bat_rows.items()},
         "pitchers": {f"{c}|{k}": dict(v) for (c, k), v in pit_rows.items()},
         "pitcher_runs": {c: dict(v) for c, v in pit_game_runs.items()},
+        "pitcher_er_est": {c: dict(v) for c, v in pit_game_er.items()},
+        "pitcher_r": pitcher_r,
         "pitcher_er": pitcher_er,
         "defense": defense,
         "meta": meta,

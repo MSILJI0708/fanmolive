@@ -46,7 +46,7 @@ def aggregate(games: list[dict]) -> dict:
     meta: dict[str, dict] = {}
     appear: dict[str, dict] = defaultdict(lambda: {"선발": 0, "구원": 0})
     # 자책점은 공식값(경기별)을 유형별 실점 비율로 나눠 담는다.
-    er_split: dict[str, dict] = defaultdict(lambda: defaultdict(float))
+    er_split: dict[str, dict] = defaultdict(lambda: defaultdict(int))
     # 중계로 추적한 수비 아웃·실책(코드@팀). 이적 선수의 공식 수비 합계를 나누는 데 쓴다.
     dfn: dict[str, dict] = defaultdict(lambda: {"outs": 0, "e": 0})
 
@@ -77,25 +77,46 @@ def aggregate(games: list[dict]) -> dict:
             for stat, n in vals.items():
                 pit[key_of(code)][kind][stat] += n
 
+        # 실점·자책점은 경기별 공식 박스스코어(네이버 record) 값을 그대로 쓰고, 우타/좌타로
+        # 나누는 것만 중계로 정한다. 둘 다 정수로 나눈다.
         runs = g.get("pitcher_runs") or {}
-        for pcode, er in (g.get("pitcher_er") or {}).items():
-            by_kind = runs.get(pcode) or {}
-            code = key_of(pcode)
-            total = sum(by_kind.values())
-            if not er:
-                continue
-            if total <= 0:
-                # 실점은 없는데 자책이 잡힌 희귀한 경우. 상대한 타자 비중으로 나눈다.
-                tbf = {k: (pit[code][k].get("tbf") or 0) for k in BATTER_KINDS}
-                tot2 = sum(tbf.values())
-                for k, v in tbf.items():
-                    if tot2:
-                        er_split[code][k] += er * v / tot2
-                continue
-            for k, v in by_kind.items():
-                er_split[code][k] += er * v / total
+        er_est = g.get("pitcher_er_est") or {}
+        off_r = g.get("pitcher_r") or {}
+        gtbf: dict[str, dict] = defaultdict(dict)
+        for pkey, vals in (g.get("pitchers") or {}).items():
+            pc, kind = pkey.split("|", 1)
+            gtbf[pc][kind] = vals.get("tbf", 0)
+        for pcode in set(off_r) | set(runs):
+            k = key_of(pcode)
+            mine = {kd: runs.get(pcode, {}).get(kd, 0) for kd in BATTER_KINDS}
+            # 실점: 중계로 센 유형별 실점이 공식 합과 다르면(전 시즌 1건) 그 비율로 맞춘다.
+            r_tot = off_r.get(pcode, sum(mine.values()))
+            r_split = _alloc(r_tot, mine, gtbf.get(pcode, {}))
+            for kd, n in r_split.items():
+                pit[k][kd]["r_off"] += n
+            # 자책점: 실점 하나하나의 자책 판정(er_est)을 공식 자책점 합에 맞춘다.
+            er = int((g.get("pitcher_er") or {}).get(pcode, 0) or 0)
+            est = {kd: min(er_est.get(pcode, {}).get(kd, 0), r_split[kd]) for kd in BATTER_KINDS}
+            if sum(est.values()) >= er:
+                e_split = _alloc(er, est, r_split)
+            else:
+                room = {kd: r_split[kd] - est[kd] for kd in BATTER_KINDS}
+                extra = _alloc(er - sum(est.values()), room, gtbf.get(pcode, {}))
+                e_split = {kd: est[kd] + extra[kd] for kd in BATTER_KINDS}
+            for kd, n in e_split.items():
+                er_split[k][kd] += n
 
     return {"bat": bat, "pit": pit, "meta": meta, "appear": appear, "er": er_split, "def": dfn}
+
+
+def _alloc(total: int, weights: dict, fallback: dict | None = None) -> dict[str, int]:
+    """정수 total을 유형별 가중치대로 나눈다. 가중치가 모두 0이면 fallback(상대 타자 수)으로."""
+    w = {k: weights.get(k, 0) for k in BATTER_KINDS}
+    if not sum(w.values()):
+        w = {k: (fallback or {}).get(k, 0) for k in BATTER_KINDS}
+    if not sum(w.values()):
+        w = {k: 1 for k in BATTER_KINDS}
+    return _split_total(total, w)
 
 
 def _split_total(total: int, weights: dict[str, int]) -> dict[str, int]:
@@ -190,7 +211,7 @@ def build_rows(agg: dict, defense: dict) -> dict:
             s = kinds.get(kind) or {}
             row["splits"][kind] = {
                 "outs": s.get("outs", 0), "ip": outs_to_ip(s.get("outs", 0)),
-                "r": s.get("r", 0), "er": round(agg["er"].get(key, {}).get(kind, 0.0), 1),
+                "r": s.get("r_off", 0), "er": int(agg["er"].get(key, {}).get(kind, 0)),
                 "tbf": s.get("tbf", 0), "ab": s.get("ab", 0), "h": s.get("h", 0), "d": s.get("d", 0),
                 "t": s.get("t", 0), "hr": s.get("hr", 0), "bb": s.get("bb", 0),
                 "ibb": s.get("ibb", 0), "hbp": s.get("hbp", 0), "so": s.get("so", 0),
@@ -319,9 +340,10 @@ if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}}
     투수의 선발·구원 등판은 한 경기에서 양쪽 타자를 모두 상대하므로 유형별로 쪼개면 중복됩니다.
     그래서 이 네 가지는 맨 오른쪽 <b>시즌 전체</b> 칸에만 넣었습니다. 수비 기록은 KBO 공식
     기록실 값을 그대로 가져왔습니다.<br>
-    <b>자책점.</b> "실책이 없었다면 어땠을까"를 따지는 기록원 판단이라 중계 문구만으로는 재현할 수
-    없습니다. 그래서 경기별 공식 자책점을 그 경기의 유형별 실점 비율대로 나눴습니다 —
-    선수의 시즌 합계는 공식 기록과 정확히 같고, 좌우 분해만 근사치입니다.<br>
+    <b>실점·자책점.</b> 경기별 공식 기록(네이버 기록 탭)의 값을 그대로 가져와 우타/좌타로 정수 단위로
+    나눴습니다. 자책 여부는 실점마다 판정하고(실책·포일·타격방해로 나간 주자의 득점과 실책·포일로 들어온
+    득점은 비자책), 그 결과를 경기별 공식 자책점에 맞췄습니다. 선수 합계는 공식 기록과 정확히 같고,
+    기록원 판단이 들어가는 일부 경기에서 좌우 배분만 어긋날 수 있습니다.<br>
     <b>공식 기록 규칙 반영.</b> 타석 도중 투수가 바뀐 뒤의 볼넷(교체 시점 2-0·2-1·3-0·3-1·3-2),
     2스트라이크 이후 대타의 삼진, 승계주자 실점(내보낸 주자 수 기준, 야수선택 승계 포함)은
     공식 기록원과 같은 방식으로 귀속했습니다.<br>
