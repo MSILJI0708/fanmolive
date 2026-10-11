@@ -124,6 +124,7 @@ footer { padding: 16px 24px 40px; color: var(--ink-1); font-size: 11px; }
   <nav class="site-nav">
     <a href="index.html">← LP 보드</a>
     <a href="mlb.html">⚾ MLB 실험판</a>
+    <a href="splits.html">🆚 투타 유형별</a>
     <a href="options.html">⚙️ 설정</a>
   </nav>
   <p>정규시즌(올스타·포스트시즌 제외) 누적 기록 · 자동 집계</p>

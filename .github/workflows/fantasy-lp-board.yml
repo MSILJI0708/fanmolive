@@ -218,6 +218,12 @@ jobs:
           if [ -f fanmo/options.html ]; then
             cp fanmo/options.html _site/options.html
           fi
+          # 투타 상대 유형별 전적(splits.html) — 시즌 전 경기 문자중계를 훑는 무거운 수집이라
+          # 이 30분 주기에서는 다시 만들지 않고, 로컬에서 만든 결과물을 그대로 배포한다
+          # (fanmo/splits_collect.py → fanmo/build_splits_board.py).
+          if [ -f fanmo/splits.html ]; then
+            cp fanmo/splits.html _site/splits.html
+          fi
           # player.html(선수 개별 기록 팝업 창)은 season_stats.json/career_stats.json을
           # fetch로 직접 읽으므로, records.html처럼 데이터를 내장하지 않는 대신 이 두
           # JSON을 배포 폴더에도 그대로 복사해 둬야 한다.

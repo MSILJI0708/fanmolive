@@ -922,6 +922,7 @@ footer.notes b { color: var(--ink-0); }
   <nav class="site-nav">
     <a href="mlb.html">⚾ MLB 실험판</a>
     <a href="records.html">📊 기록실</a>
+    <a href="splits.html">🆚 투타 유형별</a>
     <a href="options.html">⚙️ 설정</a>
   </nav>
   <p class="sub">
