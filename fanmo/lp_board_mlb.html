@@ -1,5 +1,5 @@
 <!doctype html>
-<title>MLB 판타지 LP 보드(실험) · 2026-10-21</title>
+<title>MLB 판타지 LP 보드(실험) · 2026-10-22</title>
 <style>
 :root {
   --paper-0: #f3f1ea;
@@ -420,7 +420,7 @@ footer.notes b { color: var(--ink-0); }
     <select id="date-select" class="date-select"></select>
     · 데이터 출처 <code>api-gw.sports.naver.com</code> (Selenium 불필요, 공개 JSON 응답 직접 호출)
     · <a href="index.html">← KBO 보드로</a>
-    · 마지막 업데이트 10월 21일 23:51 (KST)
+    · 마지막 업데이트 10월 22일 00:03 (KST)
   </p>
 </header>
 
@@ -436,7 +436,7 @@ footer.notes b { color: var(--ink-0); }
   <div class="tile">
     <div class="label">경기 수</div>
     <div class="value num" id="tile-games">0</div>
-    <div class="meta" id="tile-games-meta">2026-10-21 KBO 전 경기</div>
+    <div class="meta" id="tile-games-meta">2026-10-22 KBO 전 경기</div>
   </div>
   <div class="tile">
     <div class="label">타자 최고 LP</div>
@@ -511,7 +511,7 @@ footer.notes b { color: var(--ink-0); }
 <script>
 const ALL_DATA = JSON.parse(document.getElementById('lp-data').textContent);
 const AVAILABLE_DATES = Object.keys(ALL_DATA).sort().reverse();
-let activeDate = '2026-10-21';
+let activeDate = '2026-10-22';
 let data = ALL_DATA[activeDate] || { batters: [], pitchers: [] };
 
 const POSITION_GROUPS = {
