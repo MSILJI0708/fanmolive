@@ -148,13 +148,19 @@ jobs:
         working-directory: fanmo
         continue-on-error: true
         run: |
+          # 실행 주석(annotation)으로도 내보낸다 — 커밋은 리베이스가 꼬이면 조용히 실패할 수
+          # 있는데, 주석은 공개 저장소면 토큰 없이도 API로 읽을 수 있어서 더 확실하다.
+          tail -c 1500 logs/last_collect.log | tr '\n\r' '  ' \
+            | sed 's/^/::error title=KBO 수집 실패::/'
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -f logs/last_collect.log || exit 0
           git diff --cached --quiet && exit 0
           git commit -m "chore: KBO 수집 실패 로그 ($(date -u +'%Y-%m-%dT%H:%MZ'))"
-          git pull --rebase -q || exit 0
-          git push || true
+          for i in 1 2 3; do
+            git pull --rebase && git push && break
+            sleep 5
+          done
 
       # MLB 수집은 mlb-collect.yml로 분리했다. 한 사이클 235초 중 MLB가 81초(35%)를
       # 차지하는데 KBO 수집은 9초뿐이라, 같이 묶여 직렬로 돌면 KBO 갱신이 그만큼 밀렸다.
