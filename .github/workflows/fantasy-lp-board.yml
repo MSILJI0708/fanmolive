@@ -135,7 +135,26 @@ jobs:
         if: steps.check_active.outputs.active == 'true'
         working-directory: fanmo
         timeout-minutes: 6
-        run: python daily_pipeline.py --date "$TODAY_KST"
+        run: |
+          set -o pipefail
+          mkdir -p logs
+          python daily_pipeline.py --date "$TODAY_KST" 2>&1 | tee logs/last_collect.log
+
+      # 수집이 실패하면 그 로그만 따로 커밋해 둔다. Actions 로그는 저장소 밖에 있어서
+      # 나중에(혹은 손에 토큰이 없을 때) 원인을 확인하기 어렵고, 실패가 반복될수록
+      # "왜 멈췄는지"를 모르는 시간이 길어진다. 실패했을 때만 돌고, 푸시가 안 되면 조용히 넘어간다.
+      - name: "수집 실패 로그 남기기"
+        if: failure() && steps.check_active.outputs.active == 'true'
+        working-directory: fanmo
+        continue-on-error: true
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f logs/last_collect.log || exit 0
+          git diff --cached --quiet && exit 0
+          git commit -m "chore: KBO 수집 실패 로그 ($(date -u +'%Y-%m-%dT%H:%MZ'))"
+          git pull --rebase -q || exit 0
+          git push || true
 
       # MLB 수집은 mlb-collect.yml로 분리했다. 한 사이클 235초 중 MLB가 81초(35%)를
       # 차지하는데 KBO 수집은 9초뿐이라, 같이 묶여 직렬로 돌면 KBO 갱신이 그만큼 밀렸다.
