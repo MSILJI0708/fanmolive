@@ -37,6 +37,12 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: pip
+          cache-dependency-path: fanmo/requirements.txt
+
+      # 네이버 API가 HTTP/2로만 응답한다(fanmo/requirements.txt 참고).
+      - name: 의존성 설치
+        run: pip install -r fanmo/requirements.txt
 
       - name: 기준 날짜(KST) 계산
         run: |

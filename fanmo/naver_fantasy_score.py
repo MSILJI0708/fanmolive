@@ -34,6 +34,7 @@ import json
 import os
 import re
 import ssl
+import threading
 import urllib.request
 from collections import Counter, defaultdict
 
@@ -98,11 +99,36 @@ GAME_URL = "https://api-gw.sports.naver.com/schedule/games/{game_id}"
 RECORD_URL = "https://api-gw.sports.naver.com/schedule/games/{game_id}/record"
 
 
+# 네이버 API 게이트웨이는 2026-10-26부터 HTTP/2로만 응답한다. HTTP/1.1로 보내면 TLS
+# 핸드셰이크까지는 되고 요청도 받아간 뒤 아무 응답도 주지 않아서, 호출이 전부 타임아웃으로
+# 죽는다(실측: 10/26 17:34 KST 이후 모든 수집 실패). 표준 라이브러리 urllib은 HTTP/1.1만
+# 할 줄 알아서 httpx + h2 로 갈아탔다.
+#
+# 클라이언트를 한 번 만들어 재사용하는 이유는 연결 재사용 때문이다 — 수집은 경기별로 여러
+# 스레드가 동시에 호출하는데, 매번 새 연결을 열면 TLS 핸드셰이크 비용이 그대로 쌓인다.
+# httpx.Client는 스레드 안전하다.
+_CLIENT = None
+_CLIENT_LOCK = threading.Lock()
+
+
+def _client():
+    global _CLIENT
+    if _CLIENT is None:
+        with _CLIENT_LOCK:
+            if _CLIENT is None:
+                import httpx
+
+                _CLIENT = httpx.Client(
+                    http2=True, headers=HEADERS, timeout=15,
+                    limits=httpx.Limits(max_connections=16, max_keepalive_connections=8),
+                )
+    return _CLIENT
+
+
 def fetch_json(url: str) -> dict:
-    ctx = ssl.create_default_context()
-    req = urllib.request.Request(url, headers=HEADERS)
-    with urllib.request.urlopen(req, context=ctx, timeout=15) as resp:
-        return json.loads(resp.read())
+    resp = _client().get(url)
+    resp.raise_for_status()
+    return resp.json()
 
 
 def fetch_schedule(date_str: str) -> list[dict]:

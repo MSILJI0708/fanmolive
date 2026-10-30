@@ -52,7 +52,13 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      # 전부 표준 라이브러리만 쓰므로(urllib, json, ssl, http.server 등) pip install 단계가 필요 없다.
+          cache: pip
+          cache-dependency-path: fanmo/requirements.txt
+
+      # 네이버 API가 HTTP/2로만 응답해서 httpx[http2]가 필요하다(fanmo/requirements.txt 참고).
+      # 나머지는 전부 표준 라이브러리(json, ssl, http.server 등)다.
+      - name: 의존성 설치
+        run: pip install -r fanmo/requirements.txt
 
       - name: 기준 날짜(KST) 계산
         run: |
