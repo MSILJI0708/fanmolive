@@ -174,6 +174,19 @@ jobs:
                   print(f"[진단] {label}: {r.status_code} {r.http_version} {len(r.text)}바이트")
               except Exception as exc:
                   print(f"[진단] {label}: 실패 {type(exc).__name__} {exc}")
+          # 네이버가 막혔을 때 대안이 될 수 있는지 — KBO 공식 사이트도 러너에서 되는지 본다.
+          try:
+              import urllib.parse
+              body = urllib.parse.urlencode({"leId": 1, "srId": 0, "seasonId": 2026,
+                                             "gameMonth": "10"}).encode()
+              req = urllib.request.Request(
+                  "https://www.koreabaseball.com/ws/Schedule.asmx/GetScheduleList", data=body,
+                  headers={"User-Agent": "Mozilla/5.0",
+                           "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
+                           "Referer": "https://www.koreabaseball.com/Schedule/Schedule.aspx"})
+              print(f"[진단] kbo공식: {len(urllib.request.urlopen(req, timeout=10).read())}바이트")
+          except Exception as exc:
+              print(f"[진단] kbo공식: 실패 {type(exc).__name__} {exc}")
           PY
           # 실행 주석(annotation)으로도 내보낸다 — 커밋은 리베이스가 꼬이면 조용히 실패할 수
           # 있는데, 주석은 공개 저장소면 토큰 없이도 API로 읽을 수 있어서 더 확실하다.
