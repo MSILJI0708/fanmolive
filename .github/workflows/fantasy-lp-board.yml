@@ -148,9 +148,36 @@ jobs:
         working-directory: fanmo
         continue-on-error: true
         run: |
+          # 실패 원인을 두 갈래로 가른다: HTTP/2를 실제로 쓰고 있는지(h2 설치 여부)와
+          # 러너 IP에서 네이버가 응답을 주는지. 둘 다 로그 끝에 붙여서 주석으로 내보낸다.
+          python - >> logs/last_collect.log 2>&1 <<'PY' || true
+          import httpx, urllib.request
+          try:
+              import h2; h2v = h2.__version__
+          except Exception as exc:
+              h2v = f"없음({exc})"
+          print(f"[진단] httpx={httpx.__version__} h2={h2v}")
+          try:
+              ip = urllib.request.urlopen("https://api.ipify.org", timeout=10).read().decode()
+          except Exception as exc:
+              ip = f"조회실패({exc})"
+          print(f"[진단] runner_ip={ip}")
+          url = ("https://api-gw.sports.naver.com/schedule/games?fields=basic"
+                 "&upperCategoryId=kbaseball&categoryId=kbo"
+                 "&fromDate=2026-10-30&toDate=2026-10-30&size=20")
+          hdr = {"User-Agent": "Mozilla/5.0", "Referer": "https://m.sports.naver.com/"}
+          for use_h2 in (True, False):
+              label = "h2" if use_h2 else "h1"
+              try:
+                  with httpx.Client(http2=use_h2, timeout=10, headers=hdr) as c:
+                      r = c.get(url)
+                  print(f"[진단] {label}: {r.status_code} {r.http_version} {len(r.text)}바이트")
+              except Exception as exc:
+                  print(f"[진단] {label}: 실패 {type(exc).__name__} {exc}")
+          PY
           # 실행 주석(annotation)으로도 내보낸다 — 커밋은 리베이스가 꼬이면 조용히 실패할 수
           # 있는데, 주석은 공개 저장소면 토큰 없이도 API로 읽을 수 있어서 더 확실하다.
-          tail -c 1500 logs/last_collect.log | tr '\n\r' '  ' \
+          tail -c 1200 logs/last_collect.log | tr '\n\r' '  ' \
             | sed 's/^/::error title=KBO 수집 실패::/'
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
