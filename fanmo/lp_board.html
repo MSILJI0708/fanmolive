@@ -878,7 +878,7 @@ footer.notes b { color: var(--ink-0); }
       </div>
     </span>
     · 데이터 출처 <code>api-gw.sports.naver.com</code> (Selenium 불필요, 공개 JSON 응답 직접 호출)
-    · 마지막 업데이트 11월 03일 22:54 (KST)
+    · 마지막 업데이트 11월 03일 22:58 (KST)
   </p>
 </header>
 
@@ -970,6 +970,7 @@ footer.notes b { color: var(--ink-0); }
         총 코스트 한도
         <input type="number" id="optimizer-budget" min="1" step="1" value="40" />
       </label>
+      <span class="optimizer-note" id="optimizer-budget-reason"></span>
       <span class="optimizer-note">타자 9명(포지션별 1명 + 지명타자 1명, 이미 쓴 8명 제외 아무 타자나) +
         선발투수 2명 + 구원투수 3명 = 총 14명. 코스트 정보가 없는 선수는 후보에서 빠지고,
         투수는 그날 실제로 선발/구원으로 등판한 기록 기준으로만 후보가 됩니다.</span>
@@ -1943,8 +1944,7 @@ function solveOptimalRoster(batters, pitchers, budget) {
 function runOptimizer() {
   const container = document.getElementById('optimizer-result');
   const budgetInput = document.getElementById('optimizer-budget');
-  const budget = Math.max(1, Math.min(999, Math.round(Number(budgetInput.value) || 40)));
-  savePrefs({ optimizerBudget: budget });
+  const budget = Math.max(1, Math.min(999, Math.round(Number(budgetInput.value) || defaultBudgetFor(activeDate))));
 
   const result = solveOptimalRoster(data.batters || [], data.pitchers || [], budget);
   container.innerHTML = '';
@@ -2013,8 +2013,32 @@ function runOptimizer() {
   container.appendChild(list);
 }
 
+// 라인업 제출 코스트 한도는 평소 40이지만, 기간에 따라 운영 측이 바꾼다(예: 한국시리즈
+// 기간에는 99 — 사실상 제한 없음). 한도는 "그 날짜의 규칙"이라 날짜를 바꿀 때마다 그 날의
+// 한도로 다시 맞춘다. 예전에는 마지막으로 쓴 값을 브라우저에 저장해 두고 계속 썼는데,
+// 그러면 한국시리즈 날짜를 열어도 저장된 40이 덮어써서 규칙이 반영되지 않는다.
+// 입력칸을 직접 고치면 그 날짜를 보는 동안만 그 값으로 계산한다.
+const DEFAULT_BUDGET = 40;
+const BUDGET_PERIODS = [
+  { from: '2026-11-03', to: '2026-11-11', budget: 99, label: '한국시리즈 기간' },
+];
+function budgetPeriodFor(dateStr) {
+  return BUDGET_PERIODS.find(p => p.from <= dateStr && dateStr <= p.to) || null;
+}
+function defaultBudgetFor(dateStr) {
+  const period = budgetPeriodFor(dateStr);
+  return period ? period.budget : DEFAULT_BUDGET;
+}
+function applyDefaultBudget(dateStr) {
+  const period = budgetPeriodFor(dateStr);
+  document.getElementById('optimizer-budget').value = defaultBudgetFor(dateStr);
+  document.getElementById('optimizer-budget-reason').textContent = period
+    ? `${period.label}(${period.from.slice(5).replace('-', '/')}~${period.to.slice(5).replace('-', '/')}) 한도 ${period.budget}`
+    : '';
+}
+
 const optimizerBudgetInput = document.getElementById('optimizer-budget');
-if (savedPrefs.optimizerBudget) optimizerBudgetInput.value = savedPrefs.optimizerBudget;
+applyDefaultBudget(activeDate);
 optimizerBudgetInput.addEventListener('input', () => {
   if (document.getElementById('chapter-optimizer').classList.contains('active')) runOptimizer();
 });
@@ -2248,6 +2272,7 @@ async function switchDate(dateStr) {
   [...roleChipsWrap.children].forEach(c => c.classList.toggle('active', c.textContent === '전체'));
   posModeSelect.value = '3';
   dhToggle.checked = true;
+  applyDefaultBudget(dateStr);
 
   renderTiles(dateStr);
   renderLivePanel();
@@ -2265,7 +2290,7 @@ function renderLivePanel() {
   const games = (data && data.live) || [];
   if (!games.length) { panel.hidden = true; return; }
   panel.hidden = false;
-  document.getElementById('live-asof').textContent = '· 11월 03일 22:54 기준';
+  document.getElementById('live-asof').textContent = '· 11월 03일 22:58 기준';
   wrap.innerHTML = '';
 
   games.forEach(g => {
