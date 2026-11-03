@@ -203,8 +203,10 @@ jobs:
           git add -f logs/last_collect.log || exit 0
           git diff --cached --quiet && exit 0
           git commit -m "chore: KBO 수집 실패 로그 ($(date -u +'%Y-%m-%dT%H:%MZ'))"
+          # 수집 단계가 position_db.json 같은 생성 파일을 건드려 작업 트리가 지저분해서
+          # 그냥 rebase하면 "unstaged changes"로 막힌다(실측). --autostash로 비켜간다.
           for i in 1 2 3; do
-            git pull --rebase && git push && break
+            git pull --rebase --autostash && git push && break
             sleep 5
           done
 
