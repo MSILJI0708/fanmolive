@@ -131,6 +131,24 @@ def fetch_json(url: str) -> dict:
     return resp.json()
 
 
+# 포스트시즌 경기 ID는 앞 8자리가 날짜가 아니다. 정규시즌은 "20261030SSHT02026"처럼
+# YYYYMMDD로 시작하지만, 포스트시즌은 시리즈 코드 네 자리 + MMDD로 시작하고 연도는 맨 뒤
+# 네 자리에 있다(예: "77771103SSKT02026" = 2026-11-03 한국시리즈).
+#   4444 와일드카드(kbo_ps_wd)  3333 준플레이오프(kbo_ps_sp)
+#   5555 플레이오프(kbo_ps_po)  7777 한국시리즈(kbo_ps_ks)
+# 앞 8자리를 그대로 날짜로 쓰면 "77771103" 같은 없는 날짜가 되어 코스트 스냅샷을 못 찾고
+# 그 경기 출전 선수 전원의 코스트가 빈칸이 된다(실측: 10/14 와일드카드 25명 전원 누락).
+_PS_ID_PREFIXES = {"3333", "4444", "5555", "7777"}
+
+
+def date_of_game_id(game_id: str) -> str:
+    """경기 ID에서 YYYYMMDD를 꺼낸다(정규시즌·포스트시즌 양쪽 형식 모두)."""
+    gid = str(game_id or "")
+    if len(gid) >= 12 and gid[:4] in _PS_ID_PREFIXES:
+        return gid[-4:] + gid[4:8]
+    return gid[:8]
+
+
 def fetch_schedule(date_str: str) -> list[dict]:
     return fetch_json(SCHEDULE_URL.format(date=date_str))["result"]["games"]
 
@@ -507,7 +525,7 @@ def process_game(
                 "ab": int(p.get("ab") or 0), "stat": stat,
                 "lp": score_batter(stat),
                 "fanmo_cost": lookup_batter_cost(
-                    name, team_name[side], row_position, game_id[:8], player_code),
+                    name, team_name[side], row_position, date_of_game_id(game_id), player_code),
                 "_error_innings": list(etc["error_innings"].get(name, [])),
             })
 
@@ -564,7 +582,7 @@ def process_game(
                 "role": "선발" if is_starter else "구원",
                 "stat": stat, "lp": score_pitcher(stat),
                 "fanmo_cost": lookup_pitcher_cost(
-                    name, team_name[side], game_id[:8], pitcher_player_code),
+                    name, team_name[side], date_of_game_id(game_id), pitcher_player_code),
                 "_wls": wls,  # _merge_relay_stats에서 블론 억제 판정에만 쓰고 반환 전에 지운다
             })
 
@@ -1137,7 +1155,7 @@ def build_pregame_rows(g: dict) -> tuple[list[dict], list[dict]]:
                 # 코스트는 경기 결과와 무관하게 그날 스냅샷으로 정해지므로, 경기 시작
                 # 전에도 넣어준다. 예전엔 박스스코어로 만드는 행에만 넣어서, 경기가
                 # 끝나기 전까지 LP 보드의 코스트 칸이 통째로 비어 있었다.
-                "fanmo_cost": lookup_pitcher_cost(name, team, g["gameId"][:8]),
+                "fanmo_cost": lookup_pitcher_cost(name, team, date_of_game_id(g["gameId"])),
                 "status": "pregame",
             })
 
@@ -1153,7 +1171,7 @@ def build_pregame_rows(g: dict) -> tuple[list[dict], list[dict]]:
                 "ab": 0, "stat": _zero_batter_stat(), "lp": 0,
                 "is_starter": name in starters,
                 "bat_order": starters.get(name),
-                "fanmo_cost": lookup_batter_cost(name, team, position, g["gameId"][:8]),
+                "fanmo_cost": lookup_batter_cost(name, team, position, date_of_game_id(g["gameId"])),
                 "status": "pregame",
             })
 
@@ -1337,7 +1355,8 @@ def main():
     position_map = None if args.no_position else load_position_map()
 
     if args.game_id:
-        date_str = args.game_id[:4] + "-" + args.game_id[4:6] + "-" + args.game_id[6:8]
+        _d = date_of_game_id(args.game_id)
+        date_str = _d[:4] + "-" + _d[4:6] + "-" + _d[6:8]
         batters, pitchers = process_game(args.game_id, position_map=position_map)
     elif args.date:
         date_str = args.date

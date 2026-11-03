@@ -131,10 +131,16 @@ jobs:
             echo "do_work=false" >> "$GITHUB_OUTPUT"
           fi
 
+      # 수집이 실패해도 작업 전체를 멈추지 않는다. 네이버가 GitHub 러너 IP를 막은 뒤로
+      # (2026-10-26~) 이 단계가 매번 실패하는데, 그 때문에 뒤의 빌드·배포까지 건너뛰면서
+      # 다른 경로(로컬 수집 후 푸시)로 들어온 데이터조차 사이트에 못 올라갔다. 수집은 실패할
+      # 수 있어도, 저장소에 있는 데이터로 보드를 다시 만들어 배포하는 일은 계속돼야 한다.
       - name: "KBO 오늘 경기 수집 (기준일: KST 오늘)"
+        id: collect_kbo
         if: steps.check_active.outputs.active == 'true'
         working-directory: fanmo
         timeout-minutes: 6
+        continue-on-error: true
         run: |
           set -o pipefail
           mkdir -p logs
@@ -144,7 +150,7 @@ jobs:
       # 나중에(혹은 손에 토큰이 없을 때) 원인을 확인하기 어렵고, 실패가 반복될수록
       # "왜 멈췄는지"를 모르는 시간이 길어진다. 실패했을 때만 돌고, 푸시가 안 되면 조용히 넘어간다.
       - name: "수집 실패 로그 남기기"
-        if: failure() && steps.check_active.outputs.active == 'true'
+        if: steps.collect_kbo.outcome == 'failure'
         working-directory: fanmo
         continue-on-error: true
         run: |
