@@ -15,43 +15,43 @@
   2026-10-23 일정 조회 실패: The read operation timed out
 [2/2] 2026-11-05 경기 데이터 수집 중...
 Traceback (most recent call last):
-  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
     yield
-  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/httpx/_transports/default.py", line 250, in handle_request
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/httpx/_transports/default.py", line 250, in handle_request
     resp = self._pool.handle_request(req)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/httpcore/_sync/connection_pool.py", line 256, in handle_request
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/httpcore/_sync/connection_pool.py", line 256, in handle_request
     raise exc from None
-  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/httpcore/_sync/connection_pool.py", line 236, in handle_request
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/httpcore/_sync/connection_pool.py", line 236, in handle_request
     response = connection.handle_request(
                ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/httpcore/_sync/connection.py", line 103, in handle_request
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/httpcore/_sync/connection.py", line 103, in handle_request
     return self._connection.handle_request(request)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/httpcore/_sync/http2.py", line 187, in handle_request
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/httpcore/_sync/http2.py", line 187, in handle_request
     raise exc
-  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/httpcore/_sync/http2.py", line 150, in handle_request
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/httpcore/_sync/http2.py", line 150, in handle_request
     status, headers = self._receive_response(
                       ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/httpcore/_sync/http2.py", line 294, in _receive_response
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/httpcore/_sync/http2.py", line 294, in _receive_response
     event = self._receive_stream_event(request, stream_id)
             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/httpcore/_sync/http2.py", line 336, in _receive_stream_event
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/httpcore/_sync/http2.py", line 336, in _receive_stream_event
     self._receive_events(request, stream_id)
-  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/httpcore/_sync/http2.py", line 364, in _receive_events
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/httpcore/_sync/http2.py", line 364, in _receive_events
     events = self._read_incoming_data(request)
              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/httpcore/_sync/http2.py", line 455, in _read_incoming_data
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/httpcore/_sync/http2.py", line 455, in _read_incoming_data
     raise exc
-  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/httpcore/_sync/http2.py", line 441, in _read_incoming_data
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/httpcore/_sync/http2.py", line 441, in _read_incoming_data
     data = self._network_stream.read(self.READ_NUM_BYTES, timeout)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/httpcore/_backends/sync.py", line 126, in read
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/httpcore/_backends/sync.py", line 126, in read
     with map_exceptions(exc_map):
          ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/contextlib.py", line 158, in __exit__
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/contextlib.py", line 158, in __exit__
     self.gen.throw(value)
-  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/httpcore/_exceptions.py", line 14, in map_exceptions
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/httpcore/_exceptions.py", line 14, in map_exceptions
     raise to_exc(exc) from exc
 httpcore.ReadTimeout: The read operation timed out
 
@@ -75,34 +75,34 @@ Traceback (most recent call last):
   File "/home/runner/work/fanmolive/fanmolive/fanmo/naver_fantasy_score.py", line 129, in fetch_json
     resp = _client().get(url)
            ^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/httpx/_client.py", line 1053, in get
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/httpx/_client.py", line 1053, in get
     return self.request(
            ^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/httpx/_client.py", line 825, in request
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/httpx/_client.py", line 825, in request
     return self.send(request, auth=auth, follow_redirects=follow_redirects)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/httpx/_client.py", line 914, in send
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/httpx/_client.py", line 914, in send
     response = self._send_handling_auth(
                ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/httpx/_client.py", line 942, in _send_handling_auth
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/httpx/_client.py", line 942, in _send_handling_auth
     response = self._send_handling_redirects(
                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/httpx/_client.py", line 979, in _send_handling_redirects
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/httpx/_client.py", line 979, in _send_handling_redirects
     response = self._send_single_request(request)
                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/httpx/_client.py", line 1014, in _send_single_request
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/httpx/_client.py", line 1014, in _send_single_request
     response = transport.handle_request(request)
                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/httpx/_transports/default.py", line 249, in handle_request
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/httpx/_transports/default.py", line 249, in handle_request
     with map_httpcore_exceptions():
          ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/contextlib.py", line 158, in __exit__
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/contextlib.py", line 158, in __exit__
     self.gen.throw(value)
-  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
+  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
     raise mapped_exc(message) from exc
 httpx.ReadTimeout: The read operation timed out
 [진단] httpx=0.28.1 h2=4.4.1
-[진단] runner_ip=172.185.143.255
+[진단] runner_ip=20.64.24.246
 [진단] h2: 실패 ReadTimeout The read operation timed out
 [진단] h1: 실패 ReadTimeout The read operation timed out
 [진단] kbo공식: 실패 HTTPError HTTP Error 500: Internal Server Error
