@@ -102,7 +102,7 @@ Traceback (most recent call last):
     raise mapped_exc(message) from exc
 httpx.ReadTimeout: The read operation timed out
 [진단] httpx=0.28.1 h2=4.4.1
-[진단] runner_ip=132.196.62.254
+[진단] runner_ip=20.29.29.17
 [진단] h2: 실패 ReadTimeout The read operation timed out
 [진단] h1: 실패 ReadTimeout The read operation timed out
 [진단] kbo공식: 실패 HTTPError HTTP Error 500: Internal Server Error
