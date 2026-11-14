@@ -1,4 +1,5 @@
-[1/2] 2026-11-14 기준 최근 14일 수비 기록으로 포지션 갱신 중...
+[1/2] 2026-11-15 기준 최근 14일 수비 기록으로 포지션 갱신 중...
+  2026-11-15 일정 조회 실패: The read operation timed out
   2026-11-14 일정 조회 실패: The read operation timed out
   2026-11-13 일정 조회 실패: The read operation timed out
   2026-11-12 일정 조회 실패: The read operation timed out
@@ -12,8 +13,7 @@
   2026-11-04 일정 조회 실패: The read operation timed out
   2026-11-03 일정 조회 실패: The read operation timed out
   2026-11-02 일정 조회 실패: The read operation timed out
-  2026-11-01 일정 조회 실패: The read operation timed out
-[2/2] 2026-11-14 경기 데이터 수집 중...
+[2/2] 2026-11-15 경기 데이터 수집 중...
 Traceback (most recent call last):
   File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
     yield
@@ -102,7 +102,7 @@ Traceback (most recent call last):
     raise mapped_exc(message) from exc
 httpx.ReadTimeout: The read operation timed out
 [진단] httpx=0.28.1 h2=4.4.1
-[진단] runner_ip=57.151.137.184
+[진단] runner_ip=52.176.19.197
 [진단] h2: 실패 ReadTimeout The read operation timed out
 [진단] h1: 실패 ReadTimeout The read operation timed out
 [진단] kbo공식: 실패 HTTPError HTTP Error 500: Internal Server Error
