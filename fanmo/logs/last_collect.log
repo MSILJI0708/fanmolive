@@ -6,12 +6,12 @@
   2026-11-21 일정 조회 실패: The read operation timed out
   2026-11-20 일정 조회 실패: The read operation timed out
   2026-11-19 일정 조회 실패: The read operation timed out
-  2026-11-18 일정 조회 실패: Server disconnected
+  2026-11-18 일정 조회 실패: The read operation timed out
   2026-11-17 일정 조회 실패: The read operation timed out
   2026-11-16 일정 조회 실패: The read operation timed out
   2026-11-15 일정 조회 실패: The read operation timed out
   2026-11-14 일정 조회 실패: The read operation timed out
-  2026-11-13 일정 조회 실패: Server disconnected
+  2026-11-13 일정 조회 실패: The read operation timed out
   2026-11-12 일정 조회 실패: The read operation timed out
 [2/2] 2026-11-25 경기 데이터 수집 중...
 Traceback (most recent call last):
@@ -43,9 +43,17 @@ Traceback (most recent call last):
              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/httpcore/_sync/http2.py", line 455, in _read_incoming_data
     raise exc
-  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/httpcore/_sync/http2.py", line 443, in _read_incoming_data
-    raise RemoteProtocolError("Server disconnected")
-httpcore.RemoteProtocolError: Server disconnected
+  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/httpcore/_sync/http2.py", line 441, in _read_incoming_data
+    data = self._network_stream.read(self.READ_NUM_BYTES, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/httpcore/_backends/sync.py", line 126, in read
+    with map_exceptions(exc_map):
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/contextlib.py", line 158, in __exit__
+    self.gen.throw(value)
+  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/httpcore/_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ReadTimeout: The read operation timed out
 
 The above exception was the direct cause of the following exception:
 
@@ -92,9 +100,9 @@ Traceback (most recent call last):
     self.gen.throw(value)
   File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
     raise mapped_exc(message) from exc
-httpx.RemoteProtocolError: Server disconnected
+httpx.ReadTimeout: The read operation timed out
 [진단] httpx=0.28.1 h2=4.4.1
-[진단] runner_ip=3.41.210.132
+[진단] runner_ip=20.163.192.219
 [진단] h2: 실패 ReadTimeout The read operation timed out
 [진단] h1: 실패 ReadTimeout The read operation timed out
 [진단] kbo공식: 실패 HTTPError HTTP Error 500: Internal Server Error
